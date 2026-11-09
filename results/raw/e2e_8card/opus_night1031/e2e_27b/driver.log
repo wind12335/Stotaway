@@ -1,0 +1,17 @@
+[e2e] b1 kind=base iters=18 start 05:00:05
+[e2e] b1 kind=base rc=0 iters=18 med(it3+)=37159.7 fallbacks_r0=0 val= validation loss at iteration 18 on test set | lm loss value: 9.432261E-02 | lm loss PPL: 1.098914E+00 |  05:12:58
+[e2e] n1 kind=fnull iters=18 start 05:12:59
+[e2e] n1 kind=fnull rc=1 iters=18 med(it3+)=37000.8 fallbacks_r0=0 val= validation loss at iteration 18 on test set | lm loss value: 9.425902E-02 | lm loss PPL: 1.098844E+00 |  05:25:56
+[e2e] f1 kind=fbag iters=18 start 05:25:56
+[e2e] f1 kind=fbag rc=1 iters=18 med(it3+)=35080.6 fallbacks_r0=0 val= validation loss at iteration 18 on test set | lm loss value: 9.427164E-02 | lm loss PPL: 1.098858E+00 |  05:38:05
+[e2e] w1 kind=fatw iters=18 start 05:38:05
+[e2e] w1 kind=fatw rc=1 iters=18 med(it3+)=35217.7 fallbacks_r0=0 val= validation loss at iteration 18 on test set | lm loss value: 9.427164E-02 | lm loss PPL: 1.098858E+00 |  05:50:31
+[e2e] b2 kind=base iters=18 start 05:50:31
+[e2e] b2 kind=base rc=0 iters=18 med(it3+)=37123.2 fallbacks_r0=0 val= validation loss at iteration 18 on test set | lm loss value: 9.431282E-02 | lm loss PPL: 1.098903E+00 |  06:03:28
+[e2e] n2 kind=fnull iters=18 start 06:03:28
+[e2e] n2 kind=fnull rc=1 iters=18 med(it3+)=37033.9 fallbacks_r0=0 val= validation loss at iteration 18 on test set | lm loss value: 9.428771E-02 | lm loss PPL: 1.098876E+00 |  06:16:19
+[e2e] f2 kind=fbag iters=18 start 06:16:19
+[e2e] f2 kind=fbag rc=1 iters=18 med(it3+)=34981.8 fallbacks_r0=0 val= validation loss at iteration 18 on test set | lm loss value: 9.423825E-02 | lm loss PPL: 1.098822E+00 |  06:28:28
+[e2e] w2 kind=fatw iters=18 start 06:28:28
+[e2e] w2 kind=fatw rc=1 iters=18 med(it3+)=35340.0 fallbacks_r0=0 val= validation loss at iteration 18 on test set | lm loss value: 9.423825E-02 | lm loss PPL: 1.098822E+00 |  06:40:46
+E2E DONE

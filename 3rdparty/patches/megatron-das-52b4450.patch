@@ -1,0 +1,105 @@
+diff --git a/hcu_megatron/core/distributed/param_and_grad_buffer.py b/hcu_megatron/core/distributed/param_and_grad_buffer.py
+index 0dcc613..dd34432 100755
+--- a/hcu_megatron/core/distributed/param_and_grad_buffer.py
++++ b/hcu_megatron/core/distributed/param_and_grad_buffer.py
+@@ -5,6 +5,20 @@
+ import logging
+ from contextlib import nullcontext
+ from functools import wraps
++import os  # MGD t21 (10-24): MGD_COMM_STREAM gate
++
++_MGD_COMM_STREAM = None
++
++
++def _mgd_comm_stream():
++    """MGD t21: one shared comm stream for ALL bucket groups (single
++    stream preserves NCCL issue order)."""
++    global _MGD_COMM_STREAM
++    if _MGD_COMM_STREAM is None:
++        _MGD_COMM_STREAM = torch.cuda.Stream(
++            device=torch.cuda.current_device())
++    return _MGD_COMM_STREAM
++
+ from typing import Dict, List, Optional, Tuple
+ 
+ import torch
+@@ -240,18 +254,28 @@ class _ParamAndGradBucketGroup:
+             self.ddp_config.overlap_grad_reduce
+             and self.ddp_config.num_distributed_optimizer_instances == 1
+         )
++        # MGD t21 (10-24): MGD_COMM_STREAM=1 extends the comm-stream overlap
++        # to the SINGLE-DistOpt case (stock Megatron runs grad RS/AR on the
++        # main stream, serial with backward compute -- hipprof verdict 10:
++        # step is 99.5% single-stream busy, 43% RCCL).  Default off = stock.
+         if (
+-            self.ddp_config.num_distributed_optimizer_instances > 1
+-            and self.ddp_config.overlap_grad_reduce
++            self.ddp_config.overlap_grad_reduce
++            and (
++                self.ddp_config.num_distributed_optimizer_instances > 1
++                or int(os.environ.get("MGD_COMM_STREAM", "0"))
++            )
+         ):
+             # Assign a communication stream if we have multiple DistOpt instances and we
+             # need to overlap communication.
+-            stream_context = torch.cuda.stream(self.communication_stream)
++            cs = getattr(self, "communication_stream", None)
++            if cs is None:
++                cs = self.communication_stream = _mgd_comm_stream()
++            stream_context = torch.cuda.stream(cs)
+ 
+             # The RS/AR communication stream needs to wait for the current stream
+             # to complete its gradient computation before launching the next
+             # gradient reduction collective.
+-            self.communication_stream.wait_stream(torch.cuda.current_stream())
++            cs.wait_stream(torch.cuda.current_stream())
+         else:
+             stream_context = nullcontext()
+ 
+@@ -394,8 +418,20 @@ class _ParamAndGradBucketGroup:
+             self.start_grad_sync(force_all_reduce=force_all_reduce)
+         # When using multiple DistOpt instances, we don't need to sync here as we launch
+         # communications on a separate communication stream.
+-        if self.ddp_config.num_distributed_optimizer_instances > 1:
+-            torch.cuda.current_stream().wait_stream(self.communication_stream)
++        # MGD t21 (10-24): same branch for MGD_COMM_STREAM=1 (single DistOpt).
++        if (
++            self.ddp_config.num_distributed_optimizer_instances > 1
++            or int(os.environ.get("MGD_COMM_STREAM", "0"))
++        ):
++            torch.cuda.current_stream().wait_stream(
++                getattr(self, "communication_stream", None) or _mgd_comm_stream())
++            # MGD t21: single-DistOpt path re-enters start_grad_sync next iter,
++            # which asserts grad_reduce_handle is None -- drain it here (the
++            # stock multi-instance branch skips this because its start path
++            # differs; ours does not).
++            if getattr(self, "grad_reduce_handle", None) is not None:
++                self.grad_reduce_handle.wait()
++                self.grad_reduce_handle = None
+             self._copy_back_extra_main_grads()
+             self.grad_reduce_finished = True
+             return
+diff --git a/hcu_megatron/core/recompute.py b/hcu_megatron/core/recompute.py
+index 4e180f8..e4affd9 100644
+--- a/hcu_megatron/core/recompute.py
++++ b/hcu_megatron/core/recompute.py
+@@ -122,6 +122,11 @@ def checkpointed_forward(
+         nonlocal hidden_states, context
+         cf = custom(start, end)
+         args = (hidden_states, attention_mask, context, context_mask, rotary_pos_emb, padding_mask)
++        # [mgd fix] hoisted from the checkpoint branch below: the
++        # no-checkpoint else-branch also appends micro_sp_idx_, which was
++        # previously defined only inside the checkpoint branch
++        # (UnboundLocalError under block recompute).
++        micro_sp_idx_ = None if micro_sp_idx is None else torch.tensor([micro_sp_idx], device='cuda', dtype=torch.int32)
+         if use_checkpoint:
+             # Precision-aware activation checkpoint: TE under FP8/FP4,
+             # tensor_parallel under BF16/FP16/FP32.
+@@ -134,7 +139,6 @@ def checkpointed_forward(
+                     *args,
+                 )
+             else:
+-                micro_sp_idx_ = None if micro_sp_idx is None else torch.tensor([micro_sp_idx], device='cuda', dtype=torch.int32)
+                 args = args + (micro_sp_idx_,)
+                 hidden_states, context = tensor_parallel.checkpoint(
+                     cf, self.config.distribute_saved_activations, *args

@@ -1,0 +1,118 @@
+[vsp] arm=stock TP=8 PP=1 M-bucket=16384 model=/root/private_data/stowaway/3rdparty/models/LLAMA3-70B
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+WARNING 11-02 16:29:58 [worker_base.py:40] VLLM_RANK0_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK0_NUMA = -1
+WARNING 11-02 16:29:59 [worker_base.py:40] VLLM_RANK3_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK3_NUMA = -1
+WARNING 11-02 16:29:59 [worker_base.py:40] VLLM_RANK6_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK6_NUMA = -1
+WARNING 11-02 16:29:59 [worker_base.py:40] VLLM_RANK5_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK5_NUMA = -1
+WARNING 11-02 16:29:59 [worker_base.py:40] VLLM_RANK7_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK7_NUMA = -1
+WARNING 11-02 16:29:59 [worker_base.py:40] VLLM_RANK4_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK4_NUMA = -1
+WARNING 11-02 16:30:00 [worker_base.py:40] VLLM_RANK1_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK1_NUMA = -1
+WARNING 11-02 16:30:00 [worker_base.py:40] VLLM_RANK2_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK2_NUMA = -1
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 5 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 1 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 2 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 4 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 3 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 7 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 6 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 2 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 5 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 4 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 1 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 3 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 6 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 7 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 6 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 1 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 3 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 2 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 4 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 5 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 7 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+Loading safetensors checkpoint shards:   0% Completed | 0/30 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:   3% Completed | 1/30 [00:08<04:07,  8.54s/it]
+Loading safetensors checkpoint shards:   7% Completed | 2/30 [00:15<03:31,  7.57s/it]
+Loading safetensors checkpoint shards:  10% Completed | 3/30 [00:26<04:05,  9.08s/it]
+Loading safetensors checkpoint shards:  13% Completed | 4/30 [00:37<04:12,  9.73s/it]
+Loading safetensors checkpoint shards:  17% Completed | 5/30 [00:48<04:18, 10.32s/it]
+Loading safetensors checkpoint shards:  20% Completed | 6/30 [00:59<04:10, 10.43s/it]
+Loading safetensors checkpoint shards:  23% Completed | 7/30 [01:09<04:00, 10.45s/it]
+Loading safetensors checkpoint shards:  27% Completed | 8/30 [01:20<03:55, 10.70s/it]
+Loading safetensors checkpoint shards:  30% Completed | 9/30 [01:29<03:35, 10.24s/it]
+Loading safetensors checkpoint shards:  33% Completed | 10/30 [01:40<03:27, 10.37s/it]
+Loading safetensors checkpoint shards:  37% Completed | 11/30 [01:49<03:10, 10.02s/it]
+Loading safetensors checkpoint shards:  40% Completed | 12/30 [02:00<03:05, 10.29s/it]
+Loading safetensors checkpoint shards:  43% Completed | 13/30 [02:11<02:56, 10.38s/it]
+Loading safetensors checkpoint shards:  47% Completed | 14/30 [02:22<02:47, 10.46s/it]
+Loading safetensors checkpoint shards:  50% Completed | 15/30 [02:30<02:28,  9.92s/it]
+Loading safetensors checkpoint shards:  53% Completed | 16/30 [02:41<02:22, 10.15s/it]
+Loading safetensors checkpoint shards:  57% Completed | 17/30 [02:51<02:13, 10.26s/it]
+Loading safetensors checkpoint shards:  60% Completed | 18/30 [03:02<02:04, 10.38s/it]
+Loading safetensors checkpoint shards:  63% Completed | 19/30 [03:13<01:56, 10.64s/it]
+Loading safetensors checkpoint shards:  67% Completed | 20/30 [03:24<01:45, 10.58s/it]
+Loading safetensors checkpoint shards:  70% Completed | 21/30 [03:34<01:35, 10.61s/it]
+Loading safetensors checkpoint shards:  73% Completed | 22/30 [03:45<01:26, 10.75s/it]
+Loading safetensors checkpoint shards:  77% Completed | 23/30 [03:56<01:14, 10.66s/it]
+Loading safetensors checkpoint shards:  80% Completed | 24/30 [04:07<01:04, 10.76s/it]
+Loading safetensors checkpoint shards:  83% Completed | 25/30 [04:18<00:53, 10.76s/it]
+Loading safetensors checkpoint shards:  87% Completed | 26/30 [04:27<00:41, 10.28s/it]
+Loading safetensors checkpoint shards:  90% Completed | 27/30 [04:38<00:31, 10.42s/it]
+Loading safetensors checkpoint shards:  93% Completed | 28/30 [04:48<00:20, 10.48s/it]
+Loading safetensors checkpoint shards:  97% Completed | 29/30 [04:59<00:10, 10.60s/it]
+Loading safetensors checkpoint shards: 100% Completed | 30/30 [05:01<00:00,  8.10s/it]
+Loading safetensors checkpoint shards: 100% Completed | 30/30 [05:01<00:00, 10.06s/it]
+
+WARNING 11-02 16:35:55 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 16:35:55 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 16:35:55 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 16:35:55 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 16:35:55 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 16:35:55 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 16:35:56 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 16:35:56 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+[vsp] gate stock: first ids [481, 62, 15, 13, 15, 13, 15, 13]
+[vsp] stock ttft r0 n1 isl16384: 2.185s 7498 tok/s
+[vsp] stock ttft2 r0 n1 isl32768: 4.975s 6587 tok/s
+[vsp] stock thru r0 n16 isl16384: 34.971s 7496 tok/s
+[vsp] done -> results/raw/vllm/smoke_M16384/vsp.csv
+/usr/local/lib/python3.11/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 16:36:48.574378  1162 ProcessGroupNCCL.cpp:5068] Guessing device ID based on global rank. This can cause a hang if rank to GPU mapping is heterogeneous. You can specify device_id in init_process_group()
+W1102 16:36:50.658779  1162 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+/usr/local/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked shared_memory objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

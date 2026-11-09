@@ -1,0 +1,261 @@
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/optimizer/__init__.py:25: UserWarning: Transformer Engine and Apex are not installed. Falling back to Torch optimizers.
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/distributed/fsdp/src/megatron_fsdp/mixed_precision.py:115: UserWarning: Transformer Engine and Apex are not installed. Falling back to local implementations of multi_tensor_applier and multi_tensor_scale
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/optimizer/optimizer.py:29: UserWarning: Transformer Engine and Apex are not installed. Falling back to local implementations of multi_tensor_applier and multi_tensor_scale
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/optimizer/clip_grads.py:32: UserWarning: Transformer Engine and Apex are not installed. Falling back to local implementations of multi_tensor_applier, multi_tensor_l2norm, and multi_tensor_scale
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/hyper_comm_grid.py:26: UserWarning: absl.logging is not installed. Using logging.getLogger(__name__) instead. Please install absl.logging with `pip install absl-py` to use absl.logging.
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/models/backends.py:34: UserWarning: Apex is not installed. Falling back to Torch Norm
+  warnings.warn("Apex is not installed. Falling back to Torch Norm")
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/models/gpt/gpt_layer_specs.py:74: UserWarning: Apex is not installed. Falling back to Torch Norm
+  warnings.warn("Apex is not installed. Falling back to Torch Norm")
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/training/utils/common_utils.py:27: UserWarning: Transformer Engine and Apex are not installed. Falling back to local implementations of multi_tensor_applier and multi_tensor_l2norm
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/extensions/transformer_engine_spec_provider.py:88: UserWarning: Only transformer-engine>=1.7.0 supports MoE experts, but your version is 0.0.0. Use local linear implementation instead.
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/hcu_megatron/core/tensor_parallel/layers.py:12: UserWarning: flux is NOT installed
+  warnings.warn("flux is NOT installed")
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/models/gpt/heterogeneous/heterogeneous_layer_specs.py:68: UserWarning: Apex is not installed. Falling back to Torch Norm
+  warnings.warn("Apex is not installed. Falling back to Torch Norm")
+[mgd-brs] bound: ['layers', 'mappings', 'param_and_grad_buffer'] MIN_MB=128.0 DRY=False
+[opus-dx] mgd_brs_patch routed to opus_dxv.dxv_op
+WARNING: TensorBoard writing requested but is not available (are you using PyTorch 1.1.0 or later?), no TensorBoard logs will be written.
+WARNING: one_logger package is required to enable e2e metrics tracking. please go to https://confluence.nvidia.com/display/MLWFO/Package+Repositories for details to install it
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I1029 20:13:09.268549 430817 ProcessGroupNCCL.cpp:1671] [PG ID 0 PG GUID 0 Rank 7] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.268596 430817 ProcessGroupNCCL.cpp:2000] [PG ID 0 PG GUID 0 Rank 7] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.268711 430817 ProcessGroupNCCL.cpp:980] [PG ID 0 PG GUID 0 Rank 7] ProcessGroupNCCL initialization options: size: 8, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 0
+I1029 20:13:09.268734 430817 ProcessGroupNCCL.cpp:990] [PG ID 0 PG GUID 0 Rank 7] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.269800 430817 ProcessGroupNCCL.cpp:1671] [PG ID 1 PG GUID 15 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.269819 430817 ProcessGroupNCCL.cpp:2000] [PG ID 1 PG GUID 15 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.269888 430817 ProcessGroupNCCL.cpp:980] [PG ID 1 PG GUID 15 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 15
+I1029 20:13:09.269896 430817 ProcessGroupNCCL.cpp:990] [PG ID 1 PG GUID 15 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+I1029 20:13:09.277534 430817 ProcessGroupNCCL.cpp:1671] [PG ID 2 PG GUID 31 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.277555 430817 ProcessGroupNCCL.cpp:2000] [PG ID 2 PG GUID 31 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.277608 430817 ProcessGroupNCCL.cpp:980] [PG ID 2 PG GUID 31 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 31
+I1029 20:13:09.277616 430817 ProcessGroupNCCL.cpp:990] [PG ID 2 PG GUID 31 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+I1029 20:13:09.278816 430817 ProcessGroupNCCL.cpp:1671] [PG ID 3 PG GUID 40 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.278834 430817 ProcessGroupNCCL.cpp:2000] [PG ID 3 PG GUID 40 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.278878 430817 ProcessGroupNCCL.cpp:980] [PG ID 3 PG GUID 40 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 40
+I1029 20:13:09.278885 430817 ProcessGroupNCCL.cpp:990] [PG ID 3 PG GUID 40 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.279079 430817 ProcessGroupNCCL.cpp:1671] [PG ID 4 PG GUID 41 Rank 7] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.279093 430817 ProcessGroupNCCL.cpp:2000] [PG ID 4 PG GUID 41 Rank 7] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.279141 430817 ProcessGroupNCCL.cpp:980] [PG ID 4 PG GUID 41 Rank 7] ProcessGroupNCCL initialization options: size: 8, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 41
+I1029 20:13:09.279148 430817 ProcessGroupNCCL.cpp:990] [PG ID 4 PG GUID 41 Rank 7] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.279330 430817 ProcessGroupNCCL.cpp:1671] [PG ID 5 PG GUID 42 Rank 7] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.279343 430817 ProcessGroupNCCL.cpp:2000] [PG ID 5 PG GUID 42 Rank 7] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.279392 430817 ProcessGroupNCCL.cpp:980] [PG ID 5 PG GUID 42 Rank 7] ProcessGroupNCCL initialization options: size: 8, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 42
+I1029 20:13:09.279397 430817 ProcessGroupNCCL.cpp:990] [PG ID 5 PG GUID 42 Rank 7] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.280104 430817 ProcessGroupNCCL.cpp:1671] [PG ID 6 PG GUID 64 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.280120 430817 ProcessGroupNCCL.cpp:2000] [PG ID 6 PG GUID 64 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.280169 430817 ProcessGroupNCCL.cpp:980] [PG ID 6 PG GUID 64 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 64
+I1029 20:13:09.280176 430817 ProcessGroupNCCL.cpp:990] [PG ID 6 PG GUID 64 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.280318 430817 ProcessGroupNCCL.cpp:1671] [PG ID 7 PG GUID 65 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.280330 430817 ProcessGroupNCCL.cpp:2000] [PG ID 7 PG GUID 65 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.280370 430817 ProcessGroupNCCL.cpp:980] [PG ID 7 PG GUID 65 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 65
+I1029 20:13:09.280377 430817 ProcessGroupNCCL.cpp:990] [PG ID 7 PG GUID 65 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.280505 430817 ProcessGroupNCCL.cpp:1671] [PG ID 8 PG GUID 66 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.280517 430817 ProcessGroupNCCL.cpp:2000] [PG ID 8 PG GUID 66 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.280562 430817 ProcessGroupNCCL.cpp:980] [PG ID 8 PG GUID 66 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 66
+I1029 20:13:09.280570 430817 ProcessGroupNCCL.cpp:990] [PG ID 8 PG GUID 66 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.280741 430817 ProcessGroupNCCL.cpp:1671] [PG ID 9 PG GUID 67 Rank 7] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.280754 430817 ProcessGroupNCCL.cpp:2000] [PG ID 9 PG GUID 67 Rank 7] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.280797 430817 ProcessGroupNCCL.cpp:980] [PG ID 9 PG GUID 67 Rank 7] ProcessGroupNCCL initialization options: size: 8, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 67
+I1029 20:13:09.280804 430817 ProcessGroupNCCL.cpp:990] [PG ID 9 PG GUID 67 Rank 7] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.280972 430817 ProcessGroupNCCL.cpp:1671] [PG ID 10 PG GUID 68 Rank 7] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.280988 430817 ProcessGroupNCCL.cpp:2000] [PG ID 10 PG GUID 68 Rank 7] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.281038 430817 ProcessGroupNCCL.cpp:980] [PG ID 10 PG GUID 68 Rank 7] ProcessGroupNCCL initialization options: size: 8, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 68
+I1029 20:13:09.281045 430817 ProcessGroupNCCL.cpp:990] [PG ID 10 PG GUID 68 Rank 7] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.281219 430817 ProcessGroupNCCL.cpp:1671] [PG ID 11 PG GUID 69 Rank 7] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.281234 430817 ProcessGroupNCCL.cpp:2000] [PG ID 11 PG GUID 69 Rank 7] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.281275 430817 ProcessGroupNCCL.cpp:980] [PG ID 11 PG GUID 69 Rank 7] ProcessGroupNCCL initialization options: size: 8, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 69
+I1029 20:13:09.281281 430817 ProcessGroupNCCL.cpp:990] [PG ID 11 PG GUID 69 Rank 7] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.281634 430817 ProcessGroupNCCL.cpp:1671] [PG ID 12 PG GUID 77 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.281649 430817 ProcessGroupNCCL.cpp:2000] [PG ID 12 PG GUID 77 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.281692 430817 ProcessGroupNCCL.cpp:980] [PG ID 12 PG GUID 77 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 77
+I1029 20:13:09.281699 430817 ProcessGroupNCCL.cpp:990] [PG ID 12 PG GUID 77 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.281863 430817 ProcessGroupNCCL.cpp:1671] [PG ID 13 PG GUID 78 Rank 7] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.281875 430817 ProcessGroupNCCL.cpp:2000] [PG ID 13 PG GUID 78 Rank 7] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.281920 430817 ProcessGroupNCCL.cpp:980] [PG ID 13 PG GUID 78 Rank 7] ProcessGroupNCCL initialization options: size: 8, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 78
+I1029 20:13:09.281927 430817 ProcessGroupNCCL.cpp:990] [PG ID 13 PG GUID 78 Rank 7] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.282089 430817 ProcessGroupNCCL.cpp:1671] [PG ID 14 PG GUID 79 Rank 7] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.282102 430817 ProcessGroupNCCL.cpp:2000] [PG ID 14 PG GUID 79 Rank 7] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.282150 430817 ProcessGroupNCCL.cpp:980] [PG ID 14 PG GUID 79 Rank 7] ProcessGroupNCCL initialization options: size: 8, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 79
+I1029 20:13:09.282157 430817 ProcessGroupNCCL.cpp:990] [PG ID 14 PG GUID 79 Rank 7] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.282323 430817 ProcessGroupNCCL.cpp:1671] [PG ID 15 PG GUID 80 Rank 7] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.282337 430817 ProcessGroupNCCL.cpp:2000] [PG ID 15 PG GUID 80 Rank 7] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.282377 430817 ProcessGroupNCCL.cpp:980] [PG ID 15 PG GUID 80 Rank 7] ProcessGroupNCCL initialization options: size: 8, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 80
+I1029 20:13:09.282384 430817 ProcessGroupNCCL.cpp:990] [PG ID 15 PG GUID 80 Rank 7] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1029 20:13:09.282912 430817 ProcessGroupNCCL.cpp:1671] [PG ID 16 PG GUID 95 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.282927 430817 ProcessGroupNCCL.cpp:2000] [PG ID 16 PG GUID 95 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.282967 430817 ProcessGroupNCCL.cpp:980] [PG ID 16 PG GUID 95 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 95
+I1029 20:13:09.282974 430817 ProcessGroupNCCL.cpp:990] [PG ID 16 PG GUID 95 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+I1029 20:13:09.283808 430817 ProcessGroupNCCL.cpp:1671] [PG ID 17 PG GUID 97 Rank 7] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1029 20:13:09.283823 430817 ProcessGroupNCCL.cpp:2000] [PG ID 17 PG GUID 97 Rank 7] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1029 20:13:09.283864 430817 ProcessGroupNCCL.cpp:980] [PG ID 17 PG GUID 97 Rank 7] ProcessGroupNCCL initialization options: size: 8, global rank: 7, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 97
+I1029 20:13:09.283872 430817 ProcessGroupNCCL.cpp:990] [PG ID 17 PG GUID 97 Rank 7] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+W1029 20:13:09.513108 430817 HIPAllocatorConfig.h:37] Warning: expandable_segments not supported on this platform (function operator())
+I1029 20:13:09.594823 430817 ProcessGroupNCCL.cpp:1058] [PG ID 0 PG GUID 0(default_pg) Rank 7] Using non-blocking mode: 0
+I1029 20:13:15.646306 430817 ProcessGroupNCCL.cpp:3083] [PG ID 0 PG GUID 0(default_pg) Rank 7] ProcessGroupNCCL broadcast unique ID through store took 6051.43 ms
+I1029 20:13:15.646351 430817 NCCLUtils.cpp:92] Rank 7: creating NCCL communicator with mode: blocking
+I1029 20:13:17.382443 430817 ProcessGroupNCCL.cpp:3117] [PG ID 0 PG GUID 0(default_pg) Rank 7] NCCL_DEBUG: N/A
+INFO:megatron.core.timers:(min, max) time across ranks (ms):
+    startup-program-entry-spread ...................: (43.42, 5931.94)
+    startup-library-setup ..........................: (13.07, 343.57)
+    startup-program-setup ..........................: (1266.22, 2107.99)
+    startup-in-process-setup .......................: (0.00, 0.00)
+    startup-in-job-setup ...........................: (114.11, 123.30)
+    startup-initialize-megatron ....................: (1951.68, 9005.02)
+    startup-set-jit-fusion-options .................: (1638.17, 1986.93)
+    all-reduce-start-timestamps-tensor .............: (1.16, 349.92)
+    startup-megatron-init-local ....................: (4053.88, 11116.41)
+    startup-megatron-init-global ...................: (12437.36, 12437.40)
+ > number of parameters on (tensor, pipeline) model parallel rank (7, 0): 1640051712
+INFO:megatron.core.timers:(min, max) time across ranks (ms):
+    model-and-optimizer-setup ......................: (341.39, 341.56)
+    train/valid/test-data-iterators-setup ..........: (1638.51, 3000.08)
+I1029 20:13:24.934757 430817 ProcessGroupNCCL.cpp:1058] [PG ID 5 PG GUID 42(TENSOR_MODEL_PARALLEL_GROUP) Rank 7] Using non-blocking mode: 0
+I1029 20:13:24.986887 430817 ProcessGroupNCCL.cpp:3083] [PG ID 5 PG GUID 42(TENSOR_MODEL_PARALLEL_GROUP) Rank 7] ProcessGroupNCCL broadcast unique ID through store took 52.0784 ms
+I1029 20:13:24.986917 430817 NCCLUtils.cpp:92] Rank 7: creating NCCL communicator with mode: blocking
+I1029 20:13:27.958595 430817 ProcessGroupNCCL.cpp:3117] [PG ID 5 PG GUID 42(TENSOR_MODEL_PARALLEL_GROUP) Rank 7] NCCL_DEBUG: N/A
+I1029 20:14:18.816900 430817 ProcessGroupNCCL.cpp:1058] [PG ID 17 PG GUID 97(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 7] Using non-blocking mode: 0
+I1029 20:14:18.827895 430817 ProcessGroupNCCL.cpp:3083] [PG ID 17 PG GUID 97(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 7] ProcessGroupNCCL broadcast unique ID through store took 10.957 ms
+I1029 20:14:18.827919 430817 NCCLUtils.cpp:92] Rank 7: creating NCCL communicator with mode: blocking
+I1029 20:14:21.101070 430817 ProcessGroupNCCL.cpp:3117] [PG ID 17 PG GUID 97(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 7] NCCL_DEBUG: N/A
+I1029 20:14:21.355253 430817 ProcessGroupNCCL.cpp:1058] [PG ID 1 PG GUID 15(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] Using non-blocking mode: 0
+I1029 20:14:21.355482 430817 ProcessGroupNCCL.cpp:3083] [PG ID 1 PG GUID 15(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.03717 ms
+I1029 20:14:21.355500 430817 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1029 20:14:21.703995 430817 ProcessGroupNCCL.cpp:3117] [PG ID 1 PG GUID 15(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] NCCL_DEBUG: N/A
+I1029 20:14:21.709568 430817 ProcessGroupNCCL.cpp:1058] [PG ID 4 PG GUID 41(MODEL_PARALLEL_GROUP) Rank 7] Using non-blocking mode: 0
+I1029 20:14:21.709690 430817 ProcessGroupNCCL.cpp:3083] [PG ID 4 PG GUID 41(MODEL_PARALLEL_GROUP) Rank 7] ProcessGroupNCCL broadcast unique ID through store took 0.099292 ms
+I1029 20:14:21.709708 430817 NCCLUtils.cpp:92] Rank 7: creating NCCL communicator with mode: blocking
+I1029 20:14:24.045660 430817 ProcessGroupNCCL.cpp:3117] [PG ID 4 PG GUID 41(MODEL_PARALLEL_GROUP) Rank 7] NCCL_DEBUG: N/A
+ [2026-10-29 20:14:24.061237] iteration        1/      12 | consumed samples:           64 | elapsed time per iteration (ms): 59132.4 | throughput per GPU (TFLOP/s/GPU): 41.6 | learning rate: 3.000000E-05 | global batch size:    64 | lm loss: 1.346418E+01 | loss scale: 1.0 | grad norm: 17.965 | number of skipped iterations:   0 | number of nan iterations:   0 |
+[Rank 7] (after 1 iterations) memory (MB) | allocated: 29557.86 | max allocated: 35859.26 | reserved: 36636.00 | max reserved: 36636.00
+ [2026-10-29 20:15:00.262299] iteration        2/      12 | consumed samples:          128 | elapsed time per iteration (ms): 47666.6 | throughput per GPU (TFLOP/s/GPU): 51.6 | learning rate: 2.945315E-05 | global batch size:    64 | lm loss: 1.346270E+01 | loss scale: 1.0 | grad norm: 18.415 | number of skipped iterations:   0 | number of nan iterations:   0 |
+[Rank 7] (after 2 iterations) memory (MB) | allocated: 29557.86 | max allocated: 36879.94 | reserved: 45032.00 | max reserved: 45032.00
+ [2026-10-29 20:15:36.402989] iteration        3/      12 | consumed samples:          192 | elapsed time per iteration (ms): 36140.5 | throughput per GPU (TFLOP/s/GPU): 68.1 | learning rate: 2.785692E-05 | global batch size:    64 | lm loss: 3.916204E+00 | loss scale: 1.0 | grad norm: 19.754 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2026-10-29 20:16:12.570408] iteration        4/      12 | consumed samples:          256 | elapsed time per iteration (ms): 36167.2 | throughput per GPU (TFLOP/s/GPU): 68.0 | learning rate: 2.534062E-05 | global batch size:    64 | lm loss: 1.365085E+00 | loss scale: 1.0 | grad norm: 5.112 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2026-10-29 20:16:48.751218] iteration        5/      12 | consumed samples:          320 | elapsed time per iteration (ms): 36180.6 | throughput per GPU (TFLOP/s/GPU): 68.0 | learning rate: 2.210810E-05 | global batch size:    64 | lm loss: 6.959385E-01 | loss scale: 1.0 | grad norm: 3.258 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2026-10-29 20:17:24.897555] iteration        6/      12 | consumed samples:          384 | elapsed time per iteration (ms): 36146.2 | throughput per GPU (TFLOP/s/GPU): 68.1 | learning rate: 1.842125E-05 | global batch size:    64 | lm loss: 4.652180E-01 | loss scale: 1.0 | grad norm: 2.499 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2026-10-29 20:18:01.045698] iteration        7/      12 | consumed samples:          448 | elapsed time per iteration (ms): 36148.0 | throughput per GPU (TFLOP/s/GPU): 68.1 | learning rate: 1.457875E-05 | global batch size:    64 | lm loss: 3.647423E-01 | loss scale: 1.0 | grad norm: 2.208 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2026-10-29 20:18:37.217422] iteration        8/      12 | consumed samples:          512 | elapsed time per iteration (ms): 36171.5 | throughput per GPU (TFLOP/s/GPU): 68.0 | learning rate: 1.089190E-05 | global batch size:    64 | lm loss: 3.071033E-01 | loss scale: 1.0 | grad norm: 1.975 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2026-10-29 20:19:13.361149] iteration        9/      12 | consumed samples:          576 | elapsed time per iteration (ms): 36143.6 | throughput per GPU (TFLOP/s/GPU): 68.1 | learning rate: 7.659380E-06 | global batch size:    64 | lm loss: 2.518033E-01 | loss scale: 1.0 | grad norm: 1.810 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2026-10-29 20:19:49.476500] iteration       10/      12 | consumed samples:          640 | elapsed time per iteration (ms): 36115.2 | throughput per GPU (TFLOP/s/GPU): 68.1 | learning rate: 5.143077E-06 | global batch size:    64 | lm loss: 2.155569E-01 | loss scale: 1.0 | grad norm: 1.700 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2026-10-29 20:20:25.659676] iteration       11/      12 | consumed samples:          704 | elapsed time per iteration (ms): 36183.0 | throughput per GPU (TFLOP/s/GPU): 68.0 | learning rate: 3.546845E-06 | global batch size:    64 | lm loss: 1.921982E-01 | loss scale: 1.0 | grad norm: 1.562 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2026-10-29 20:21:01.855003] iteration       12/      12 | consumed samples:          768 | elapsed time per iteration (ms): 36195.2 | throughput per GPU (TFLOP/s/GPU): 68.0 | learning rate: 3.000000E-06 | global batch size:    64 | lm loss: 1.943196E-01 | loss scale: 1.0 | grad norm: 1.500 | number of skipped iterations:   0 | number of nan iterations:   0 |
+INFO:megatron.core.timers:(min, max) time across ranks (ms):
+    evaluate .......................................: (19750.15, 19750.35)
+----------------------------------------------------------------------------------------------------------------
+ validation loss at iteration 12 on validation set | lm loss value: 1.865405E-01 | lm loss PPL: 1.205073E+00 | 
+----------------------------------------------------------------------------------------------------------------
+INFO:megatron.core.timers:(min, max) time across ranks (ms):
+    evaluate .......................................: (19122.07, 19122.44)
+----------------------------------------------------------------------------------------------------------
+ validation loss at iteration 12 on test set | lm loss value: 2.022514E-01 | lm loss PPL: 1.224156E+00 | 
+----------------------------------------------------------------------------------------------------------
+I1029 20:21:42.124053 430817 ProcessGroupNCCL.cpp:1515] [PG ID 10 PG GUID 68 Rank 7] ProcessGroupNCCL destructor entered.
+I1029 20:21:42.124213 430817 ProcessGroupNCCL.cpp:1441] [PG ID 10 PG GUID 68 Rank 7] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:42.133713 430817 ProcessGroupNCCL.cpp:1449] [PG ID 10 PG GUID 68 Rank 7] ProcessGroupNCCL aborts successfully.
+I1029 20:21:42.133752 430817 ProcessGroupNCCL.cpp:2029] [PG ID 10 PG GUID 68 Rank 7] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:42.133817 430817 ProcessGroupNCCL.cpp:1699] [PG ID 10 PG GUID 68 Rank 7] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:42.143795 430817 ProcessGroupNCCL.cpp:1515] [PG ID 0 PG GUID 0(default_pg) Rank 7] ProcessGroupNCCL destructor entered.
+I1029 20:21:42.143823 430817 ProcessGroupNCCL.cpp:1441] [PG ID 0 PG GUID 0(default_pg) Rank 7] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:42.150957 443645 NCCLUtils.cpp:315] Aborting ncclComm_ 0x557b24159cc0 with reason: No abort reason provided.
+I1029 20:21:42.174409 430817 ProcessGroupNCCL.cpp:1449] [PG ID 0 PG GUID 0(default_pg) Rank 7] ProcessGroupNCCL aborts successfully.
+I1029 20:21:42.174513 430817 ProcessGroupNCCL.cpp:2029] [PG ID 0 PG GUID 0(default_pg) Rank 7] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:42.174594 430817 ProcessGroupNCCL.cpp:1699] [PG ID 0 PG GUID 0(default_pg) Rank 7] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.457667 430817 ProcessGroupNCCL.cpp:1515] [PG ID 15 PG GUID 80 Rank 7] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.460958 430817 ProcessGroupNCCL.cpp:1441] [PG ID 15 PG GUID 80 Rank 7] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.470700 430817 ProcessGroupNCCL.cpp:1449] [PG ID 15 PG GUID 80 Rank 7] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.472640 430817 ProcessGroupNCCL.cpp:2029] [PG ID 15 PG GUID 80 Rank 7] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.472801 430817 ProcessGroupNCCL.cpp:1699] [PG ID 15 PG GUID 80 Rank 7] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.472837 430817 ProcessGroupNCCL.cpp:1515] [PG ID 7 PG GUID 65 Rank 0] ProcessGroupNCCL destructor entered.
+W1029 20:21:43.472851 430817 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+I1029 20:21:43.472952 430817 ProcessGroupNCCL.cpp:1441] [PG ID 7 PG GUID 65 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.479511 430817 ProcessGroupNCCL.cpp:1449] [PG ID 7 PG GUID 65 Rank 0] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.479563 430817 ProcessGroupNCCL.cpp:2029] [PG ID 7 PG GUID 65 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.479653 430817 ProcessGroupNCCL.cpp:1699] [PG ID 7 PG GUID 65 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.479681 430817 ProcessGroupNCCL.cpp:1515] [PG ID 13 PG GUID 78 Rank 7] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.479693 430817 ProcessGroupNCCL.cpp:1441] [PG ID 13 PG GUID 78 Rank 7] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.489564 430817 ProcessGroupNCCL.cpp:1449] [PG ID 13 PG GUID 78 Rank 7] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.489599 430817 ProcessGroupNCCL.cpp:2029] [PG ID 13 PG GUID 78 Rank 7] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.489660 430817 ProcessGroupNCCL.cpp:1699] [PG ID 13 PG GUID 78 Rank 7] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.489683 430817 ProcessGroupNCCL.cpp:1515] [PG ID 11 PG GUID 69 Rank 7] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.489694 430817 ProcessGroupNCCL.cpp:1441] [PG ID 11 PG GUID 69 Rank 7] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.489809 430817 ProcessGroupNCCL.cpp:1449] [PG ID 11 PG GUID 69 Rank 7] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.489833 430817 ProcessGroupNCCL.cpp:2029] [PG ID 11 PG GUID 69 Rank 7] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.489884 430817 ProcessGroupNCCL.cpp:1699] [PG ID 11 PG GUID 69 Rank 7] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.489900 430817 ProcessGroupNCCL.cpp:1515] [PG ID 8 PG GUID 66 Rank 0] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.489912 430817 ProcessGroupNCCL.cpp:1441] [PG ID 8 PG GUID 66 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.499621 430817 ProcessGroupNCCL.cpp:1449] [PG ID 8 PG GUID 66 Rank 0] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.499652 430817 ProcessGroupNCCL.cpp:2029] [PG ID 8 PG GUID 66 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.499729 430817 ProcessGroupNCCL.cpp:1699] [PG ID 8 PG GUID 66 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.499756 430817 ProcessGroupNCCL.cpp:1515] [PG ID 4 PG GUID 41(MODEL_PARALLEL_GROUP) Rank 7] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.499768 430817 ProcessGroupNCCL.cpp:1441] [PG ID 4 PG GUID 41(MODEL_PARALLEL_GROUP) Rank 7] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.499943 443703 NCCLUtils.cpp:315] Aborting ncclComm_ 0x557b57a8d0d0 with reason: No abort reason provided.
+I1029 20:21:43.530011 430817 ProcessGroupNCCL.cpp:1449] [PG ID 4 PG GUID 41(MODEL_PARALLEL_GROUP) Rank 7] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.530076 430817 ProcessGroupNCCL.cpp:2029] [PG ID 4 PG GUID 41(MODEL_PARALLEL_GROUP) Rank 7] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.530150 430817 ProcessGroupNCCL.cpp:1699] [PG ID 4 PG GUID 41(MODEL_PARALLEL_GROUP) Rank 7] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.530190 430817 ProcessGroupNCCL.cpp:1515] [PG ID 9 PG GUID 67 Rank 7] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.530202 430817 ProcessGroupNCCL.cpp:1441] [PG ID 9 PG GUID 67 Rank 7] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.535336 430817 ProcessGroupNCCL.cpp:1449] [PG ID 9 PG GUID 67 Rank 7] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.535398 430817 ProcessGroupNCCL.cpp:2029] [PG ID 9 PG GUID 67 Rank 7] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.535488 430817 ProcessGroupNCCL.cpp:1699] [PG ID 9 PG GUID 67 Rank 7] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.535521 430817 ProcessGroupNCCL.cpp:1515] [PG ID 17 PG GUID 97(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 7] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.535531 430817 ProcessGroupNCCL.cpp:1441] [PG ID 17 PG GUID 97(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 7] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.539940 443719 NCCLUtils.cpp:315] Aborting ncclComm_ 0x557b56c7c9d0 with reason: No abort reason provided.
+I1029 20:21:43.563156 430817 ProcessGroupNCCL.cpp:1449] [PG ID 17 PG GUID 97(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 7] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.563201 430817 ProcessGroupNCCL.cpp:2029] [PG ID 17 PG GUID 97(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 7] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.563287 430817 ProcessGroupNCCL.cpp:1699] [PG ID 17 PG GUID 97(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 7] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.563318 430817 ProcessGroupNCCL.cpp:1515] [PG ID 14 PG GUID 79 Rank 7] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.563329 430817 ProcessGroupNCCL.cpp:1441] [PG ID 14 PG GUID 79 Rank 7] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.570081 430817 ProcessGroupNCCL.cpp:1449] [PG ID 14 PG GUID 79 Rank 7] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.570111 430817 ProcessGroupNCCL.cpp:2029] [PG ID 14 PG GUID 79 Rank 7] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.570179 430817 ProcessGroupNCCL.cpp:1699] [PG ID 14 PG GUID 79 Rank 7] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.570222 430817 ProcessGroupNCCL.cpp:1515] [PG ID 2 PG GUID 31 Rank 0] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.570233 430817 ProcessGroupNCCL.cpp:1441] [PG ID 2 PG GUID 31 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.579227 430817 ProcessGroupNCCL.cpp:1449] [PG ID 2 PG GUID 31 Rank 0] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.579272 430817 ProcessGroupNCCL.cpp:2029] [PG ID 2 PG GUID 31 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.579339 430817 ProcessGroupNCCL.cpp:1699] [PG ID 2 PG GUID 31 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.579365 430817 ProcessGroupNCCL.cpp:1515] [PG ID 16 PG GUID 95 Rank 0] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.579375 430817 ProcessGroupNCCL.cpp:1441] [PG ID 16 PG GUID 95 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.579476 430817 ProcessGroupNCCL.cpp:1449] [PG ID 16 PG GUID 95 Rank 0] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.579501 430817 ProcessGroupNCCL.cpp:2029] [PG ID 16 PG GUID 95 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.579557 430817 ProcessGroupNCCL.cpp:1699] [PG ID 16 PG GUID 95 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.579586 430817 ProcessGroupNCCL.cpp:1515] [PG ID 6 PG GUID 64 Rank 0] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.579595 430817 ProcessGroupNCCL.cpp:1441] [PG ID 6 PG GUID 64 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.587170 430817 ProcessGroupNCCL.cpp:1449] [PG ID 6 PG GUID 64 Rank 0] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.587208 430817 ProcessGroupNCCL.cpp:2029] [PG ID 6 PG GUID 64 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.587277 430817 ProcessGroupNCCL.cpp:1699] [PG ID 6 PG GUID 64 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.587299 430817 ProcessGroupNCCL.cpp:1515] [PG ID 12 PG GUID 77 Rank 0] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.587309 430817 ProcessGroupNCCL.cpp:1441] [PG ID 12 PG GUID 77 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.590175 430817 ProcessGroupNCCL.cpp:1449] [PG ID 12 PG GUID 77 Rank 0] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.590199 430817 ProcessGroupNCCL.cpp:2029] [PG ID 12 PG GUID 77 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.590260 430817 ProcessGroupNCCL.cpp:1699] [PG ID 12 PG GUID 77 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.590301 430817 ProcessGroupNCCL.cpp:1515] [PG ID 5 PG GUID 42(TENSOR_MODEL_PARALLEL_GROUP) Rank 7] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.590310 430817 ProcessGroupNCCL.cpp:1441] [PG ID 5 PG GUID 42(TENSOR_MODEL_PARALLEL_GROUP) Rank 7] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.600272 443767 NCCLUtils.cpp:315] Aborting ncclComm_ 0x557b2c653ea0 with reason: No abort reason provided.
+I1029 20:21:43.630565 430817 ProcessGroupNCCL.cpp:1449] [PG ID 5 PG GUID 42(TENSOR_MODEL_PARALLEL_GROUP) Rank 7] ProcessGroupNCCL aborts successfully.
+I1029 20:21:43.630625 430817 ProcessGroupNCCL.cpp:2029] [PG ID 5 PG GUID 42(TENSOR_MODEL_PARALLEL_GROUP) Rank 7] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:43.630705 430817 ProcessGroupNCCL.cpp:1699] [PG ID 5 PG GUID 42(TENSOR_MODEL_PARALLEL_GROUP) Rank 7] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:43.631063 430817 ProcessGroupNCCL.cpp:1515] [PG ID 1 PG GUID 15(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] ProcessGroupNCCL destructor entered.
+I1029 20:21:43.631083 430817 ProcessGroupNCCL.cpp:1441] [PG ID 1 PG GUID 15(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:43.631265 443794 NCCLUtils.cpp:315] Aborting ncclComm_ 0x557b5770b2c0 with reason: No abort reason provided.
+I1029 20:21:44.137543 430817 ProcessGroupNCCL.cpp:1449] [PG ID 1 PG GUID 15(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1029 20:21:44.137614 430817 ProcessGroupNCCL.cpp:2029] [PG ID 1 PG GUID 15(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:44.137703 430817 ProcessGroupNCCL.cpp:1699] [PG ID 1 PG GUID 15(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1029 20:21:44.139398 430817 ProcessGroupNCCL.cpp:1515] [PG ID 3 PG GUID 40 Rank 0] ProcessGroupNCCL destructor entered.
+I1029 20:21:44.139434 430817 ProcessGroupNCCL.cpp:1441] [PG ID 3 PG GUID 40 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1029 20:21:44.155203 430817 ProcessGroupNCCL.cpp:1449] [PG ID 3 PG GUID 40 Rank 0] ProcessGroupNCCL aborts successfully.
+I1029 20:21:44.155256 430817 ProcessGroupNCCL.cpp:2029] [PG ID 3 PG GUID 40 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1029 20:21:44.155337 430817 ProcessGroupNCCL.cpp:1699] [PG ID 3 PG GUID 40 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+W1029 20:21:48.462486 430817 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+/root/private_data/tri-dist-hygon/bench/opus/opus_arm_inner.sh: line 113: 430817 Segmentation fault      python -u ${OPUS_PRELUDE:-/root/private_data/tri-dist-hygon/bench/mgd_prelude2.py} /root/private_data/lyc/Megatron-LM-das/pretrain_gpt.py --seq-length 4096 --num-layers ${NL:-32} --hidden-size 5120 --ffn-hidden-size 17408 --num-attention-heads 40 --max-position-embeddings 40960 --num-query-groups 8 --group-query-attention --swiglu --qk-layernorm --normalization RMSNorm --no-persist-layer-norm --no-masked-softmax-fusion --no-gradient-accumulation-fusion --recompute-granularity full --recompute-method uniform --recompute-num-layers 1 --no-bias-dropout-fusion --no-bias-swiglu-fusion --position-embedding-type rope --no-rope-fusion --untie-embeddings-and-output-weights --transformer-impl local --use-mcore-models --micro-batch-size ${MBS:-8} --global-batch-size $GBS --train-iters ${TRAIN_ITERS:-25} --weight-decay 0.1 --adam-beta1 0.9 --adam-beta2 0.95 --init-method-std 0.02 --clip-grad 1.0 --bf16 --disable-bias-linear --attention-dropout 0 --hidden-dropout 0 --lr 3.0e-5 --lr-decay-style cosine --min-lr 3.0e-6 --lr-warmup-iters 1 --ckpt-format torch --ddp-average-in-collective --overlap-grad-reduce --tensor-model-parallel-size 8 --pipeline-model-parallel-size 1 --context-parallel-size 1 --use-distributed-optimizer --sequence-parallel --mock-data --tokenizer-type HuggingFaceTokenizer --tokenizer-model /root/private_data/SothisAI/model/ExternalSource/Qwen3.6-27B/main/Qwen3.6-27B --vocab-size 248320 $([ -z "${MGD_QUIET:-}" ] && echo --log-throughput) $([ -n "${MGD_NOCHECK:-}" ] && echo --no-check-for-nan-in-loss-and-grad) $([ -n "${MGD_RERUNOFF:-}" ] && echo --rerun-mode disabled) $([ -n "${MGD_CGRAPH:-}" ] && echo --cuda-graph-impl full_iteration --no-overlap-p2p-communication) --eval-iters 2 --log-interval $([ -n "${MGD_QUIET:-}" ] && echo 1000 || echo 1) --save-interval 1000 --eval-interval 1000 $([ -z "${MGD_QUIET:-}" ] && echo "--tensorboard-dir ${LOGDIR}/tb") --rank ${RANK} --world-size ${WORLD_SIZE} --local-rank ${LOCAL_RANK} --dist-url tcp://localhost:${DIST_PORT:-29711}
+EXIT 139

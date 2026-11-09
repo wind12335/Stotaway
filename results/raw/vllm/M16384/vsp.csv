@@ -1,0 +1,65 @@
+ts,arm,M,tp,pp,cell,rep,nreq,isl,wall_s,tok_s,note
+2026-11-02 16:49:37,stock,16384,8,1,ttft,0,1,16384,2.1846,7499.7,
+2026-11-02 16:49:39,stock,16384,8,1,ttft,1,1,16384,2.1855,7496.6,
+2026-11-02 16:49:41,stock,16384,8,1,ttft,2,1,16384,2.1859,7495.4,
+2026-11-02 16:49:46,stock,16384,8,1,ttft2,0,1,32768,4.9754,6586.0,
+2026-11-02 16:49:51,stock,16384,8,1,ttft2,1,1,32768,4.9747,6586.9,
+2026-11-02 16:49:56,stock,16384,8,1,ttft2,2,1,32768,4.9742,6587.6,
+2026-11-02 16:50:31,stock,16384,8,1,thru,0,16,16384,34.9726,7495.7,
+2026-11-02 16:51:06,stock,16384,8,1,thru,1,16,16384,35.0166,7486.3,
+2026-11-02 16:54:26,rccl,16384,8,1,ttft,0,1,16384,2.1165,7741.2,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=49.45 mode=rccl
+2026-11-02 16:54:28,rccl,16384,8,1,ttft,1,1,16384,2.1177,7736.7,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=49.45 mode=rccl
+2026-11-02 16:54:30,rccl,16384,8,1,ttft,2,1,16384,2.1197,7729.3,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=49.45 mode=rccl
+2026-11-02 16:54:35,rccl,16384,8,1,ttft2,0,1,32768,4.8403,6769.8,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=49.45 mode=rccl
+2026-11-02 16:54:40,rccl,16384,8,1,ttft2,1,1,32768,4.8399,6770.4,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=49.45 mode=rccl
+2026-11-02 16:54:44,rccl,16384,8,1,ttft2,2,1,32768,4.8401,6770.1,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=49.45 mode=rccl
+2026-11-02 16:55:18,rccl,16384,8,1,thru,0,16,16384,33.8852,7736.2,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=49.45 mode=rccl
+2026-11-02 16:55:52,rccl,16384,8,1,thru,1,16,16384,33.9381,7724.2,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=49.45 mode=rccl
+2026-11-02 16:59:11,dx,16384,8,1,ttft,0,1,16384,1.902,8614.0,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=126.63 mode=dx
+2026-11-02 16:59:13,dx,16384,8,1,ttft,1,1,16384,1.8681,8770.4,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=126.63 mode=dx
+2026-11-02 16:59:15,dx,16384,8,1,ttft,2,1,16384,1.862,8799.3,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=126.63 mode=dx
+2026-11-02 16:59:19,dx,16384,8,1,ttft2,0,1,32768,4.3341,7560.5,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=126.63 mode=dx
+2026-11-02 16:59:24,dx,16384,8,1,ttft2,1,1,32768,4.366,7505.3,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=126.63 mode=dx
+2026-11-02 16:59:28,dx,16384,8,1,ttft2,2,1,32768,4.3376,7554.3,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=126.63 mode=dx
+2026-11-02 16:59:58,dx,16384,8,1,thru,0,16,16384,29.9045,8766.0,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=126.63 mode=dx
+2026-11-02 17:00:28,dx,16384,8,1,thru,1,16,16384,29.9405,8755.5,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=126.63 mode=dx
+2026-11-02 17:03:50,plan,16384,8,1,ttft,0,1,16384,2.0491,7995.5,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=136.15 mode=plan
+2026-11-02 17:03:52,plan,16384,8,1,ttft,1,1,16384,2.0532,7979.8,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=136.15 mode=plan
+2026-11-02 17:03:54,plan,16384,8,1,ttft,2,1,16384,2.0506,7989.8,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=136.15 mode=plan
+2026-11-02 17:03:58,plan,16384,8,1,ttft2,0,1,32768,4.7023,6968.5,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=136.15 mode=plan
+2026-11-02 17:04:03,plan,16384,8,1,ttft2,1,1,32768,4.7109,6955.8,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=136.15 mode=plan
+2026-11-02 17:04:08,plan,16384,8,1,ttft2,2,1,32768,4.7045,6965.2,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=136.15 mode=plan
+2026-11-02 17:04:41,plan,16384,8,1,thru,0,16,16384,32.817,7988.1,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=136.15 mode=plan
+2026-11-02 17:05:14,plan,16384,8,1,thru,1,16,16384,32.8777,7973.3,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=136.15 mode=plan
+2026-11-02 17:13:20,stock,16384,8,1,ttft,0,1,16384,2.1855,7496.8,
+2026-11-02 17:13:22,stock,16384,8,1,ttft,1,1,16384,2.1855,7496.6,
+2026-11-02 17:13:24,stock,16384,8,1,ttft,2,1,16384,2.1858,7495.8,
+2026-11-02 17:13:29,stock,16384,8,1,ttft2,0,1,32768,4.9746,6587.1,
+2026-11-02 17:13:34,stock,16384,8,1,ttft2,1,1,32768,4.9754,6586.0,
+2026-11-02 17:13:39,stock,16384,8,1,ttft2,2,1,32768,4.9749,6586.6,
+2026-11-02 17:14:14,stock,16384,8,1,thru,0,16,16384,34.9733,7495.6,
+2026-11-02 17:14:49,stock,16384,8,1,thru,1,16,16384,35.0172,7486.2,
+2026-11-02 17:18:06,rccl,16384,8,1,ttft,0,1,16384,2.1172,7738.6,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=47.57 mode=rccl
+2026-11-02 17:18:08,rccl,16384,8,1,ttft,1,1,16384,2.1184,7734.1,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=47.57 mode=rccl
+2026-11-02 17:18:10,rccl,16384,8,1,ttft,2,1,16384,2.1192,7731.3,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=47.57 mode=rccl
+2026-11-02 17:18:15,rccl,16384,8,1,ttft2,0,1,32768,4.8433,6765.7,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=47.57 mode=rccl
+2026-11-02 17:18:20,rccl,16384,8,1,ttft2,1,1,32768,4.8402,6770.0,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=47.57 mode=rccl
+2026-11-02 17:18:24,rccl,16384,8,1,ttft2,2,1,32768,4.8449,6763.4,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=47.57 mode=rccl
+2026-11-02 17:18:58,rccl,16384,8,1,thru,0,16,16384,33.997,7710.8,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=47.57 mode=rccl
+2026-11-02 17:19:32,rccl,16384,8,1,thru,1,16,16384,33.9458,7722.4,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=47.57 mode=rccl
+2026-11-02 17:22:52,dx,16384,8,1,ttft,0,1,16384,1.8971,8636.4,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=131.77 mode=dx
+2026-11-02 17:22:54,dx,16384,8,1,ttft,1,1,16384,1.8763,8732.3,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=131.77 mode=dx
+2026-11-02 17:22:56,dx,16384,8,1,ttft,2,1,16384,1.8824,8703.8,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=131.77 mode=dx
+2026-11-02 17:23:00,dx,16384,8,1,ttft2,0,1,32768,4.3233,7579.3,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=131.77 mode=dx
+2026-11-02 17:23:05,dx,16384,8,1,ttft2,1,1,32768,4.3559,7522.7,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=131.77 mode=dx
+2026-11-02 17:23:09,dx,16384,8,1,ttft2,2,1,32768,4.3827,7476.7,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=131.77 mode=dx
+2026-11-02 17:23:39,dx,16384,8,1,thru,0,16,16384,29.8922,8769.7,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=131.77 mode=dx
+2026-11-02 17:24:09,dx,16384,8,1,thru,1,16,16384,29.8082,8794.4,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=131.77 mode=dx
+2026-11-02 17:27:28,plan,16384,8,1,ttft,0,1,16384,2.0491,7995.8,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=135.48 mode=plan
+2026-11-02 17:27:30,plan,16384,8,1,ttft,1,1,16384,2.0486,7997.9,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=135.48 mode=plan
+2026-11-02 17:27:32,plan,16384,8,1,ttft,2,1,16384,2.0504,7990.8,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=135.48 mode=plan
+2026-11-02 17:27:36,plan,16384,8,1,ttft2,0,1,32768,4.7089,6958.7,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=135.48 mode=plan
+2026-11-02 17:27:41,plan,16384,8,1,ttft2,1,1,32768,4.7028,6967.8,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=135.48 mode=plan
+2026-11-02 17:27:46,plan,16384,8,1,ttft2,2,1,32768,4.7046,6965.1,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=135.48 mode=plan
+2026-11-02 17:28:19,plan,16384,8,1,thru,0,16,16384,32.9274,7961.3,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=135.48 mode=plan
+2026-11-02 17:28:52,plan,16384,8,1,thru,1,16,16384,32.8634,7976.8,[vllm_sp] sp_forwards=44 stock_forwards=36 sp_host_s=135.48 mode=plan

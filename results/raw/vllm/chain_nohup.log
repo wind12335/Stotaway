@@ -1,0 +1,24 @@
+[vsp] start M=16384 2026-11-02 16:38:45
+[vsp] arm=stock start 16:38:45
+[vsp] arm=stock rc=0 16:42:27
+[vsp] arm=dx start 16:42:47
+[vsp] arm=dx rc=0 16:46:24
+## vLLM llama3-70B TP8 prefill, M = 16384（每格为所有遍的中位，单位 s；括号内 = 原版 / 该臂）
+
+| 臂 | ttft | ttft2 | thru |
+|---|---|---|---|
+| stock | 2.185（1.000×） | 4.977（1.000×） | 34.971（1.000×） |
+| dx | 1.855（1.178×） | 4.289（1.160×） | 29.903（1.169×） |
+
+输出检查（贪心 32 个 token，对 stock）：
+- dx: 第一个不同的 token 位置 = 3，相同前缀上 max|logprob 差| = 0.3157
+[chain] smoke OK -> full set 16:46:45
+[vsp] start M=16384 2026-11-02 16:46:49
+[vsp] arm=stock start 16:46:49
+[vsp] arm=stock rc=0 16:51:18
+[vsp] arm=rccl start 16:51:38
+[vsp] arm=rccl rc=0 16:56:02
+[vsp] arm=dx start 16:56:22
+[vsp] arm=dx rc=0 17:00:40
+[vsp] arm=plan start 17:01:00
+[vsp] arm=plan rc=0 17:05:25

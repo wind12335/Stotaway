@@ -1,0 +1,7 @@
+ts,arm,M,tp,pp,cell,rep,nreq,isl,wall_s,tok_s,note
+2026-11-02 17:49:01,stock,16384,4,2,ttft,0,1,16384,3.1982,5122.9,
+2026-11-02 17:49:09,stock,16384,4,2,ttft2,0,1,32768,7.4797,4380.9,
+2026-11-02 17:50:00,stock,16384,4,2,thru,0,16,16384,51.339,5106.1,
+2026-11-02 17:53:24,dx,16384,4,2,ttft,0,1,16384,2.7936,5864.8,[vllm_sp] sp_forwards=22 stock_forwards=35 sp_host_s=58.92 mode=dx
+2026-11-02 17:53:30,dx,16384,4,2,ttft2,0,1,32768,6.621,4949.1,[vllm_sp] sp_forwards=22 stock_forwards=35 sp_host_s=58.92 mode=dx
+2026-11-02 17:54:15,dx,16384,4,2,thru,0,16,16384,44.6001,5877.7,[vllm_sp] sp_forwards=22 stock_forwards=35 sp_host_s=58.92 mode=dx

@@ -1,0 +1,7 @@
+[vehf3] fallt1 kind=fallt iters=12 start 22:44:06
+[vehf3] fallt1 kind=fallt rc=1 iters=12 med(it3+)=34532.4 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022966E-01 | lm loss PPL: 1.224211E+00 |  22:52:39
+[vehf3] fdk3 kind=fdk iters=12 start 22:52:39
+[vehf3] fdk3 kind=fdk rc=1 iters=12 med(it3+)=36009.6 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022966E-01 | lm loss PPL: 1.224211E+00 |  23:01:50
+[vehf3] fallt2 kind=fallt iters=12 start 23:01:50
+[vehf3] fallt2 kind=fallt rc=1 iters=12 med(it3+)=34560.5 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022311E-01 | lm loss PPL: 1.224131E+00 |  23:10:23
+VEHF3 DONE

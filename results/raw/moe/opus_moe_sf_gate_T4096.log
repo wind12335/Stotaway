@@ -1,0 +1,27 @@
+/usr/local/lib/python3.11/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+[moesf] slice0 skew=1.182 T=4096 | correctness 3/3 PASS overflow=0 | out ours 6.96e-03/rccl 6.96e-03 dx ours 7.36e-03/rccl 7.36e-03 dlogit ours 5.68e-03/rccl 5.68e-03 dW1 ours 1.03e-02/rccl 1.03e-02 dW2 ours 1.27e-02/rccl 1.25e-01
+[moesf] slice0 fwd: ours 8.665 rccl 10.383 -> x1.198 | fwd+bwd: ours 21.822 rccl 25.529 -> x1.170 ms
+[moesf] slice1 skew=1.325 T=4096 | correctness 3/3 PASS overflow=0 | out ours 8.03e-03/rccl 1.32e-02 dx ours 7.19e-03/rccl 9.05e-03 dlogit ours 5.10e-03/rccl 5.10e-03 dW1 ours 1.07e-02/rccl 3.11e-02 dW2 ours 1.28e-02/rccl 1.65e-02
+[moesf] slice1 fwd: ours 8.809 rccl 11.031 -> x1.252 | fwd+bwd: ours 22.526 rccl 27.183 -> x1.207 ms
+[moesf] slice2 skew=1.557 T=4096 | correctness 3/3 PASS overflow=0 | out ours 6.16e-03/rccl 6.16e-03 dx ours 6.77e-03/rccl 6.77e-03 dlogit ours 6.37e-03/rccl 6.37e-03 dW1 ours 1.05e-02/rccl 1.05e-02 dW2 ours 1.20e-02/rccl 8.40e-02
+[moesf] slice2 fwd: ours 9.045 rccl 12.065 -> x1.334 | fwd+bwd: ours 23.240 rccl 29.345 -> x1.263 ms
+[moesf] slice3 skew=1.823 T=4096 | correctness 3/3 PASS overflow=0 | out ours 6.73e-03/rccl 1.41e-02 dx ours 7.24e-03/rccl 8.97e-03 dlogit ours 4.63e-03/rccl 5.82e-03 dW1 ours 1.09e-02/rccl 2.04e-02 dW2 ours 1.35e-02/rccl 1.44e-01
+[moesf] slice3 fwd: ours 9.554 rccl 13.041 -> x1.365 | fwd+bwd: ours 24.760 rccl 31.780 -> x1.284 ms
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 11:28:30.789402  1173 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 11:28:30.823657  1843 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=28, addr=[localhost]:36100, remote=[localhost]:29961): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /home/pytorch/torch/csrc/distributed/c10d/Utils.hpp:697 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x88 (0x7fb1bdf6f9d8 in /usr/local/lib/python3.11/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x5b7b37e (0x7fa98ab4137e in /usr/local/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: <unknown function> + 0x5b7c460 (0x7fa98ab42460 in /usr/local/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: <unknown function> + 0x5b7cd97 (0x7fa98ab42d97 in /usr/local/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so)
+frame #4: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x331 (0x7fa98ab3f161 in /usr/local/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so)
+frame #5: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x3c4 (0x7fa95981d4f4 in /usr/local/lib/python3.11/site-packages/torch/lib/libtorch_hip.so)
+frame #6: <unknown function> + 0xdc253 (0x7fb1c8ad2253 in /lib/x86_64-linux-gnu/libstdc++.so.6)
+frame #7: <unknown function> + 0x9cb84 (0x7fb26c9d1b84 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #8: <unknown function> + 0x129ecc (0x7fb26ca5eecc in /lib/x86_64-linux-gnu/libc.so.6)
+W1102 11:28:30.828989  1843 ProcessGroupNCCL.cpp:1771] [PG ID 0 PG GUID 0(default_pg) Rank 3] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+rc=0
+ALL DONE

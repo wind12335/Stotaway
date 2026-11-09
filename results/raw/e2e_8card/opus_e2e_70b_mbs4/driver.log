@@ -1,0 +1,9 @@
+[e2e] b1 kind=base iters=14 start 23:05:06
+[e2e] b1 kind=base rc=0 iters=14 med(it3+)=9670.2 fallbacks_r0=0 val= validation loss at iteration 14 on test set | lm loss value: 2.083964E-01 | lm loss PPL: 1.231701E+00 |  23:09:07
+[e2e] f1 kind=fbag iters=14 start 23:09:07
+[e2e] f1 kind=fbag rc=1 iters=14 med(it3+)=9091.3 fallbacks_r0=0 val= validation loss at iteration 14 on test set | lm loss value: 2.083974E-01 | lm loss PPL: 1.231703E+00 |  23:12:25
+[e2e] b2 kind=base iters=14 start 23:12:25
+[e2e] b2 kind=base rc=0 iters=14 med(it3+)=9639.9 fallbacks_r0=0 val= validation loss at iteration 14 on test set | lm loss value: 2.083964E-01 | lm loss PPL: 1.231701E+00 |  23:15:55
+[e2e] f2 kind=fbag iters=14 start 23:15:55
+[e2e] f2 kind=fbag rc=1 iters=14 med(it3+)=9097.8 fallbacks_r0=0 val= validation loss at iteration 14 on test set | lm loss value: 2.083974E-01 | lm loss PPL: 1.231703E+00 |  23:19:10
+E2E DONE

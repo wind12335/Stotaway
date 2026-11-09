@@ -1,0 +1,11 @@
+[vehf7] cps1 kind=fcps iters=12 start 00:33:18
+[vehf7] cps1 kind=fcps rc=1 iters=12 med(it3+)=35284.6 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022966E-01 | lm loss PPL: 1.224211E+00 |  00:42:01
+[vehf7] cpq1 kind=fcpq iters=12 start 00:42:01
+[vehf7] cpq1 kind=fcpq rc=1 iters=12 med(it3+)=34842.5 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022660E-01 | lm loss PPL: 1.224174E+00 |  00:50:38
+[vehf7] ref2 kind=fbag iters=12 start 00:50:38
+[vehf7] ref2 kind=fbag rc=1 iters=12 med(it3+)=34471.0 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022660E-01 | lm loss PPL: 1.224174E+00 |  00:59:12
+[vehf7] cps2 kind=fcps iters=12 start 00:59:12
+[vehf7] cps2 kind=fcps rc=1 iters=12 med(it3+)=35285.7 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022959E-01 | lm loss PPL: 1.224210E+00 |  01:07:55
+[vehf7] cpq2 kind=fcpq iters=12 start 01:07:55
+[vehf7] cpq2 kind=fcpq rc=1 iters=12 med(it3+)=34779.1 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022959E-01 | lm loss PPL: 1.224210E+00 |  01:16:41
+VEHF7 DONE

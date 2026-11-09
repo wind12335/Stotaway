@@ -1,0 +1,625 @@
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+/tmp/sw_vllm_site/transformers/loss/loss_for_object_detection.py:28: UserWarning: A NumPy version >=1.26.4 and <2.7.0 is required for this version of SciPy (detected version 1.25.0)
+  from scipy.optimize import linear_sum_assignment
+/tmp/sw_vllm_site/transformers/loss/loss_for_object_detection.py:28: UserWarning: A NumPy version >=1.26.4 and <2.7.0 is required for this version of SciPy (detected version 1.25.0)
+  from scipy.optimize import linear_sum_assignment
+/tmp/sw_vllm_site/transformers/loss/loss_for_object_detection.py:28: UserWarning: A NumPy version >=1.26.4 and <2.7.0 is required for this version of SciPy (detected version 1.25.0)
+  from scipy.optimize import linear_sum_assignment
+/tmp/sw_vllm_site/transformers/loss/loss_for_object_detection.py:28: UserWarning: A NumPy version >=1.26.4 and <2.7.0 is required for this version of SciPy (detected version 1.25.0)
+  from scipy.optimize import linear_sum_assignment
+/tmp/sw_vllm_site/transformers/loss/loss_for_object_detection.py:28: UserWarning: A NumPy version >=1.26.4 and <2.7.0 is required for this version of SciPy (detected version 1.25.0)
+  from scipy.optimize import linear_sum_assignment
+/tmp/sw_vllm_site/transformers/loss/loss_for_object_detection.py:28: UserWarning: A NumPy version >=1.26.4 and <2.7.0 is required for this version of SciPy (detected version 1.25.0)
+  from scipy.optimize import linear_sum_assignment
+/tmp/sw_vllm_site/transformers/loss/loss_for_object_detection.py:28: UserWarning: A NumPy version >=1.26.4 and <2.7.0 is required for this version of SciPy (detected version 1.25.0)
+  from scipy.optimize import linear_sum_assignment
+/tmp/sw_vllm_site/transformers/loss/loss_for_object_detection.py:28: UserWarning: A NumPy version >=1.26.4 and <2.7.0 is required for this version of SciPy (detected version 1.25.0)
+  from scipy.optimize import linear_sum_assignment
+[vllm_sp] installed: mode=dx buckets=[16384] R=8
+[vsp] arm=dx TP=8 PP=2 M-bucket=16384 model=/root/private_data/stowaway/3rdparty/models/LLAMA3-70B
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+WARNING 11-02 20:43:12 [worker_base.py:40] VLLM_RANK1_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK1_NUMA = -1
+`torch_dtype` is deprecated! Use `dtype` instead!
+WARNING 11-02 20:43:12 [worker_base.py:40] VLLM_RANK6_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK6_NUMA = -1
+WARNING 11-02 20:43:12 [worker_base.py:40] VLLM_RANK3_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK3_NUMA = -1
+WARNING 11-02 20:43:12 [worker_base.py:40] VLLM_RANK5_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK5_NUMA = -1
+WARNING 11-02 20:43:13 [worker_base.py:40] VLLM_RANK0_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK0_NUMA = -1
+WARNING 11-02 20:43:13 [worker_base.py:40] VLLM_RANK7_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK7_NUMA = -1
+WARNING 11-02 20:43:13 [worker_base.py:40] VLLM_RANK2_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK2_NUMA = -1
+WARNING 11-02 20:43:13 [worker_base.py:40] VLLM_RANK4_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK4_NUMA = -1
+[Gloo] Rank 0 is connected to 15 peer ranks. Expected number of connected peer ranks is : 15
+[Gloo] Rank 1 is connected to 15 peer ranks. Expected number of connected peer ranks is : 15
+[Gloo] Rank 2 is connected to 15 peer ranks. Expected number of connected peer ranks is : 15
+[Gloo] Rank 3 is connected to 15 peer ranks. Expected number of connected peer ranks is : 15
+[Gloo] Rank 4 is connected to 15 peer ranks. Expected number of connected peer ranks is : 15
+[Gloo] Rank 5 is connected to 15 peer ranks. Expected number of connected peer ranks is : 15
+[Gloo] Rank 6 is connected to 15 peer ranks. Expected number of connected peer ranks is : 15
+[Gloo] Rank 7 is connected to 15 peer ranks. Expected number of connected peer ranks is : 15
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+[Gloo] Rank 1 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 2 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 3 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 4 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 5 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 6 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 7 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+RCCL version : 2.22.3-HEAD:19c80f7
+HIP version  : 6.3.26102-a22a51fa
+ROCm version : 6.3.3.0-0-c1d64df
+Hostname     : vcjob-2117231891400871938-liqsh2-14400-worker-0
+Librccl path : /opt/dtk-26.04/lib/librccl.so.1
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+open fd: No such file or directory
+open lockfd: No such file or directory
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+RCCL version : 2.22.3-HEAD:19c80f7
+HIP version  : 6.3.26102-a22a51fa
+ROCm version : 6.3.3.0-0-c1d64df
+Hostname     : vcjob-2117231891400871938-liqsh2-14400-worker-0
+Librccl path : /opt/dtk-26.04/lib/librccl.so.1
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+RCCL version : 2.22.3-HEAD:19c80f7
+HIP version  : 6.3.26102-a22a51fa
+ROCm version : 6.3.3.0-0-c1d64df
+Hostname     : vcjob-2117231891400871938-liqsh2-14400-worker-0
+Librccl path : /opt/dtk-26.04/lib/librccl.so.1
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+RCCL version : 2.22.3-HEAD:19c80f7
+HIP version  : 6.3.26102-a22a51fa
+ROCm version : 6.3.3.0-0-c1d64df
+Hostname     : vcjob-2117231891400871938-liqsh2-14400-worker-0
+Librccl path : /opt/dtk-26.04/lib/librccl.so.1
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+RCCL version : 2.22.3-HEAD:19c80f7
+HIP version  : 6.3.26102-a22a51fa
+ROCm version : 6.3.3.0-0-c1d64df
+Hostname     : vcjob-2117231891400871938-liqsh2-14400-worker-0
+Librccl path : /opt/dtk-26.04/lib/librccl.so.1
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+RCCL version : 2.22.3-HEAD:19c80f7
+HIP version  : 6.3.26102-a22a51fa
+ROCm version : 6.3.3.0-0-c1d64df
+Hostname     : vcjob-2117231891400871938-liqsh2-14400-worker-0
+Librccl path : /opt/dtk-26.04/lib/librccl.so.1
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+RCCL version : 2.22.3-HEAD:19c80f7
+HIP version  : 6.3.26102-a22a51fa
+ROCm version : 6.3.3.0-0-c1d64df
+Hostname     : vcjob-2117231891400871938-liqsh2-14400-worker-0
+Librccl path : /opt/dtk-26.04/lib/librccl.so.1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+RCCL version : 2.22.3-HEAD:19c80f7
+HIP version  : 6.3.26102-a22a51fa
+ROCm version : 6.3.3.0-0-c1d64df
+Hostname     : vcjob-2117231891400871938-liqsh2-14400-worker-0
+Librccl path : /opt/dtk-26.04/lib/librccl.so.1
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 7 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 1 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 2 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 6 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 5 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 3 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+[Gloo] Rank 4 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+Loading safetensors checkpoint shards:   0% Completed | 0/30 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:   3% Completed | 1/30 [00:02<01:02,  2.17s/it]
+Loading safetensors checkpoint shards:   7% Completed | 2/30 [00:03<00:49,  1.78s/it]
+Loading safetensors checkpoint shards:  10% Completed | 3/30 [00:06<00:57,  2.13s/it]
+Loading safetensors checkpoint shards:  13% Completed | 4/30 [00:08<01:01,  2.35s/it]
+Loading safetensors checkpoint shards:  17% Completed | 5/30 [00:11<01:00,  2.42s/it]
+Loading safetensors checkpoint shards:  20% Completed | 6/30 [00:14<00:59,  2.48s/it]
+Loading safetensors checkpoint shards:  23% Completed | 7/30 [00:16<00:59,  2.58s/it]
+Loading safetensors checkpoint shards:  27% Completed | 8/30 [00:19<00:57,  2.61s/it]
+Loading safetensors checkpoint shards:  30% Completed | 9/30 [00:21<00:51,  2.46s/it]
+Loading safetensors checkpoint shards:  33% Completed | 10/30 [00:24<00:50,  2.50s/it]
+Loading safetensors checkpoint shards:  37% Completed | 11/30 [00:26<00:43,  2.30s/it]
+Loading safetensors checkpoint shards:  40% Completed | 12/30 [00:26<00:30,  1.68s/it]
+Loading safetensors checkpoint shards:  73% Completed | 22/30 [00:28<00:04,  1.92it/s]
+Loading safetensors checkpoint shards:  77% Completed | 23/30 [00:31<00:05,  1.34it/s]
+Loading safetensors checkpoint shards:  80% Completed | 24/30 [00:34<00:06,  1.05s/it]
+Loading safetensors checkpoint shards:  83% Completed | 25/30 [00:37<00:06,  1.29s/it]
+Loading safetensors checkpoint shards:  87% Completed | 26/30 [00:37<00:04,  1.09s/it]
+Loading safetensors checkpoint shards: 100% Completed | 30/30 [00:37<00:00,  1.25s/it]
+
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+WARNING 11-02 20:45:19 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 20:45:19 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 20:45:19 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 20:45:19 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 20:45:19 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 20:45:19 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+/tmp/sw_vllm_site/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 20:45:20.056144 25427 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+/tmp/sw_vllm_site/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 20:45:20.077010 25426 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+/tmp/sw_vllm_site/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 20:45:20.081561 25433 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+/tmp/sw_vllm_site/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 20:45:20.096892 25429 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+WARNING 11-02 20:45:20 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+/tmp/sw_vllm_site/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 20:45:20.125954 25431 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+/tmp/sw_vllm_site/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 20:45:20.145748 25432 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+/tmp/sw_vllm_site/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 20:45:20.347163 25428 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+WARNING 11-02 20:45:23 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+/tmp/sw_vllm_site/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 20:45:23.553936 25430 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25426:25426 [0] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25430:25430 [4] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25431:25431 [5] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25429:25429 [3] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25428:25428 [2] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25432:25432 [6] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25433:25433 [7] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:170 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+
+vcjob-2117231891400871938-liqsh2-14400-worker-0:25427:25427 [1] /data/jenkins_workspace/workspace/rccl_release/build/hipify/src/init.cc:191 NCCL WARN Missing "iommu=pt" from kernel command line which can lead to system instablity or hang!
+[vsp] gate dx: first ids [481, 62, 15, 87, 15, 35, 62, 15]
+[vsp] dx ttft r0 n1 isl16384: 1.923s 8520 tok/s
+[vsp] dx ttft r1 n1 isl16384: 1.926s 8508 tok/s
+[vsp] dx ttft r2 n1 isl16384: 1.924s 8514 tok/s
+[vsp] dx ttft2 r0 n1 isl32768: 4.487s 7303 tok/s
+[vsp] dx ttft2 r1 n1 isl32768: 4.483s 7309 tok/s
+[vsp] dx ttft2 r2 n1 isl32768: 4.519s 7252 tok/s
+[vsp] dx thru r0 n16 isl16384: 31.088s 8432 tok/s
+[vsp] dx thru r1 n16 isl16384: 31.113s 8426 tok/s
+[vllm_sp] sp_forwards=44 stock_forwards=35 sp_host_s=88.58 mode=dx
+[vsp] done -> /root/private_data/stowaway/results/raw/dual16_runs/vllm_rdma_liqsh2-14400/vsp.csv
+[vllm_sp] sp_forwards=44 stock_forwards=35 sp_host_s=88.58 mode=dx
+W1102 20:47:34.289925 25426 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+/usr/local/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked shared_memory objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

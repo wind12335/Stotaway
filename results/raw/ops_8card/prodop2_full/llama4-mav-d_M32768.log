@@ -1,0 +1,22 @@
+[fg] triton_dist from /root/private_data/tri-dist-hygon-opus/triton_dist/__init__.py
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.923e-02 rel(rccl,fp32)=2.008e-02 rel(ours,fp32)=7.184e-03 -> PASS
+[fg2] K=2048 stock 5.977 (gemm 2.105 + rccl-rs 3.918) | dx-rs 2.882 | gemm+dx-rs 5.041 | dx-fused 3.361 -> fused/gemm+dx x1.500 | b2b/op gemm+dx 6.773 fused 3.257 x2.080
+[fg2-bwd] K=2048 ag 2.592 | dgrad 1.706 | wgrad NN(contig copy) 8.016 (copy alone 4.586) | wgrad TN(view, stock) 1.585 -> NN/TN x5.06
+/usr/local/lib/python3.11/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1031 21:31:48.475697 2942500 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1031 21:31:48.503532 2943148 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=29, addr=[localhost]:36892, remote=[localhost]:29983): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /home/pytorch/torch/csrc/distributed/c10d/Utils.hpp:697 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x88 (0x7fbdee96f9d8 in /usr/local/lib/python3.11/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x5b7b37e (0x7fb5bb74137e in /usr/local/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: <unknown function> + 0x5b7c460 (0x7fb5bb742460 in /usr/local/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: <unknown function> + 0x5b7cd97 (0x7fb5bb742d97 in /usr/local/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so)
+frame #4: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x331 (0x7fb5bb73f161 in /usr/local/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so)
+frame #5: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x3c4 (0x7fb58a41d4f4 in /usr/local/lib/python3.11/site-packages/torch/lib/libtorch_hip.so)
+frame #6: <unknown function> + 0xdc253 (0x7fbdf9592253 in /lib/x86_64-linux-gnu/libstdc++.so.6)
+frame #7: <unknown function> + 0x9cb84 (0x7fbdfbf62b84 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #8: <unknown function> + 0x129ecc (0x7fbdfbfefecc in /lib/x86_64-linux-gnu/libc.so.6)
+W1031 21:31:48.507643 2943148 ProcessGroupNCCL.cpp:1771] [PG ID 0 PG GUID 0(default_pg) Rank 5] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+rc=0

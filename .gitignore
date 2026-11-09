@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.so
+# local checkouts / model dirs / symlinks (see 3rdparty/README.md)
+3rdparty/Megatron-LM-das
+3rdparty/tokenizers/
+3rdparty/models/
+# new runs (the paper's raw logs under results/raw are tracked)
+results/raw/e2e_8card/*_mbs*_*/
+results/raw/e2e_moe/
+results/raw/dual16_runs/
+.ipynb_checkpoints/
+3rdparty/pyenv_vllm16.tar.gz
+3rdparty/pysite

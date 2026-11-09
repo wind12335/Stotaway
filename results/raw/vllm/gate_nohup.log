@@ -1,0 +1,16 @@
+[gate] stock start 17:29:37
+[gate] stock rc=0 17:32:43
+[gate] rccl start 17:32:58
+[gate] rccl rc=0 17:36:11
+[gate] dx start 17:36:26
+[gate] dx rc=0 17:39:41
+[gate] plan start 17:39:56
+[gate] plan rc=0 17:43:14
+## 自然文本输出检查（M = 16384，每臂 4 个提示 × 48 个贪心 token，对 stock）
+
+| 臂 | 与 stock 完全相同的 token | 各提示第一个不同位置 | 首 token logprob 差（只来自 prefill） | 相同前缀上 max logprob 差 |
+|---|---|---|---|---|
+| dx | 192/192 | 无 / 无 / 无 / 无 | 0.0000 | 0.0090 |
+| plan | 192/192 | 无 / 无 / 无 / 无 | 0.0000 | 0.0090 |
+| rccl | 192/192 | 无 / 无 / 无 / 无 | 0.0000 | 0.0027 |
+[gate] ALL DONE 17:43:29

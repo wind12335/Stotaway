@@ -1,0 +1,7 @@
+[vehf5] fbag1 kind=fbag iters=12 start 23:28:53
+[vehf5] fbag1 kind=fbag rc=1 iters=12 med(it3+)=34087.5 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.023175E-01 | lm loss PPL: 1.224237E+00 |  23:37:18
+[vehf5] fallt3 kind=fallt iters=12 start 23:37:18
+[vehf5] fallt3 kind=fallt rc=1 iters=12 med(it3+)=34666.8 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022311E-01 | lm loss PPL: 1.224131E+00 |  23:45:54
+[vehf5] fbag2 kind=fbag iters=12 start 23:45:54
+[vehf5] fbag2 kind=fbag rc=1 iters=12 med(it3+)=34361.5 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022311E-01 | lm loss PPL: 1.224131E+00 |  23:54:27
+VEHF5 DONE

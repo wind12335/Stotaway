@@ -1,0 +1,99 @@
+=== qwen3-8b M=8192 N=4096 K=1536
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.473e-02 rel(ours,fp32)=7.174e-03 -> PASS
+[fg2] K=1536 stock 1.269 (gemm 0.436 + rccl-rs 0.881) | dx-rs 1.094 | gemm+dx-rs 1.520 | dx-fused 1.611 -> fused/gemm+dx x0.944 | b2b/op gemm+dx 1.861 fused 1.538 x1.210 | b2b/op stock 1.215 fused 1.538 x0.790
+=== qwen3-8b M=16384 N=4096 K=1536
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.576e-02 rel(ours,fp32)=7.174e-03 -> PASS
+[fg2] K=1536 stock 2.348 (gemm 0.764 + rccl-rs 1.627) | dx-rs 1.444 | gemm+dx-rs 2.314 | dx-fused 1.797 -> fused/gemm+dx x1.288 | b2b/op gemm+dx 2.960 fused 2.042 x1.450 | b2b/op stock 2.302 fused 2.042 x1.127
+=== qwen3-8b M=32768 N=4096 K=1536
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.600e-02 rel(ours,fp32)=7.174e-03 -> PASS
+[fg2] K=1536 stock 6.957 (gemm 3.854 + rccl-rs 3.151) | dx-rs 2.514 | gemm+dx-rs 6.608 | dx-fused 2.801 -> fused/gemm+dx x2.359 | b2b/op gemm+dx 7.605 fused 3.466 x2.194 | b2b/op stock 6.900 fused 3.466 x1.991
+=== llama3-8b M=8192 N=4096 K=1792
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.582e-02 rel(ours,fp32)=6.624e-03 -> PASS
+[fg2] K=1792 stock 1.312 (gemm 0.477 + rccl-rs 0.876) | dx-rs 1.131 | gemm+dx-rs 1.519 | dx-fused 1.412 -> fused/gemm+dx x1.076 | b2b/op gemm+dx 2.003 fused 1.505 x1.331 | b2b/op stock 1.263 fused 1.505 x0.839
+=== llama3-8b M=16384 N=4096 K=1792
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.688e-02 rel(ours,fp32)=7.174e-03 -> PASS
+[fg2] K=1792 stock 2.432 (gemm 0.850 + rccl-rs 1.625) | dx-rs 1.459 | gemm+dx-rs 2.390 | dx-fused 1.896 -> fused/gemm+dx x1.261 | b2b/op gemm+dx 3.049 fused 2.100 x1.452 | b2b/op stock 2.386 fused 2.100 x1.136
+=== llama3-8b M=32768 N=4096 K=1792
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.699e-02 rel(ours,fp32)=7.174e-03 -> PASS
+[fg2] K=1792 stock 4.753 (gemm 1.644 + rccl-rs 3.149) | dx-rs 2.505 | gemm+dx-rs 4.364 | dx-fused 2.814 -> fused/gemm+dx x1.551 | b2b/op gemm+dx 5.235 fused 3.797 x1.379 | b2b/op stock 4.706 fused 3.797 x1.239
+=== qwen3-32b M=8192 N=5120 K=1280
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.591e-02 rel(ours,fp32)=6.208e-03 -> PASS
+[fg2] K=1280 stock 1.444 (gemm 0.424 + rccl-rs 1.057) | dx-rs 1.045 | gemm+dx-rs 1.576 | dx-fused 1.333 -> fused/gemm+dx x1.182 | b2b/op gemm+dx 2.024 fused 1.327 x1.524 | b2b/op stock 1.397 fused 1.327 x1.052
+=== qwen3-32b M=16384 N=5120 K=1280
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.454e-02 rel(ours,fp32)=6.390e-03 -> PASS
+[fg2] K=1280 stock 2.811 (gemm 0.797 + rccl-rs 2.055) | dx-rs 1.828 | gemm+dx-rs 2.912 | dx-fused 2.060 -> fused/gemm+dx x1.413 | b2b/op gemm+dx 3.330 fused 2.309 x1.442 | b2b/op stock 2.733 fused 2.309 x1.183
+=== qwen3-32b M=32768 N=5120 K=1280
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.682e-02 rel(ours,fp32)=6.390e-03 -> PASS
+[fg2] K=1280 stock 5.412 (gemm 1.530 + rccl-rs 3.923) | dx-rs 2.901 | gemm+dx-rs 4.550 | dx-fused 3.406 -> fused/gemm+dx x1.336 | b2b/op gemm+dx 5.883 fused 4.527 x1.299 | b2b/op stock 5.366 fused 4.527 x1.185
+=== llama4-mav-d M=8192 N=5120 K=2048
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.815e-02 rel(ours,fp32)=7.017e-03 -> PASS
+[fg2] K=2048 stock 1.575 (gemm 0.558 + rccl-rs 1.056) | dx-rs 1.039 | gemm+dx-rs 1.817 | dx-fused 1.385 -> fused/gemm+dx x1.312 | b2b/op gemm+dx 2.190 fused 1.532 x1.429 | b2b/op stock 1.541 fused 1.532 x1.005
+=== llama4-mav-d M=16384 N=5120 K=2048
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.807e-02 rel(ours,fp32)=7.017e-03 -> PASS
+[fg2] K=2048 stock 3.101 (gemm 1.113 + rccl-rs 2.032) | dx-rs 1.760 | gemm+dx-rs 3.152 | dx-fused 2.033 -> fused/gemm+dx x1.550 | b2b/op gemm+dx 3.697 fused 2.181 x1.695 | b2b/op stock 3.058 fused 2.181 x1.402
+=== llama4-mav-d M=32768 N=5120 K=2048
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.923e-02 rel(rccl,fp32)=2.008e-02 rel(ours,fp32)=7.184e-03 -> PASS
+[fg2] K=2048 stock 5.984 (gemm 2.100 + rccl-rs 3.921) | dx-rs 2.880 | gemm+dx-rs 4.971 | dx-fused 3.362 -> fused/gemm+dx x1.479 | b2b/op gemm+dx 6.672 fused 3.280 x2.034 | b2b/op stock 5.929 fused 3.280 x1.807
+=== gemma3-27b M=8192 N=5376 K=2688
+[fg] correctness ops=32 fails=1 rel(ours,rccl)=2.206e-02 rel(rccl,fp32)=1.916e-02 rel(ours,fp32)=7.227e-03 -> FAIL
+[fg2] K=2688 stock 1.918 (gemm 0.854 + rccl-rs 1.107) | dx-rs 1.067 | gemm+dx-rs 2.193 | dx-fused 1.731 -> fused/gemm+dx x1.267 | b2b/op gemm+dx 2.580 fused 1.639 x1.574 | b2b/op stock 1.872 fused 1.639 x1.142
+=== gemma3-27b M=16384 N=5376 K=2688
+[fg] correctness ops=32 fails=1 rel(ours,rccl)=2.098e-02 rel(rccl,fp32)=2.062e-02 rel(ours,fp32)=7.378e-03 -> FAIL
+[fg2] K=2688 stock 3.680 (gemm 1.595 + rccl-rs 2.138) | dx-rs 1.847 | gemm+dx-rs 3.586 | dx-fused 2.694 -> fused/gemm+dx x1.331 | b2b/op gemm+dx 4.247 fused 2.615 x1.624 | b2b/op stock 3.619 fused 2.615 x1.384
+=== gemma3-27b M=32768 N=5376 K=2688
+[fg] correctness ops=32 fails=5 rel(ours,rccl)=2.206e-02 rel(rccl,fp32)=2.027e-02 rel(ours,fp32)=7.438e-03 -> FAIL
+[fg2] K=2688 stock 7.148 (gemm 3.082 + rccl-rs 4.108) | dx-rs 3.098 | gemm+dx-rs 6.114 | dx-fused 4.491 -> fused/gemm+dx x1.362 | b2b/op gemm+dx 7.911 fused 4.370 x1.810 | b2b/op stock 7.093 fused 4.370 x1.623
+=== mistral3-d M=8192 N=7168 K=2048
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.562e-02 rel(rccl,fp32)=1.815e-02 rel(ours,fp32)=7.090e-03 -> PASS
+[fg2] K=2048 stock 2.205 (gemm 0.816 + rccl-rs 1.436) | dx-rs 1.366 | gemm+dx-rs 2.338 | dx-fused 1.637 -> fused/gemm+dx x1.428 | b2b/op gemm+dx 2.838 fused 1.955 x1.452 | b2b/op stock 2.160 fused 1.955 x1.105
+=== mistral3-d M=16384 N=7168 K=2048
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.786e-02 rel(rccl,fp32)=1.807e-02 rel(ours,fp32)=7.090e-03 -> PASS
+[fg2] K=2048 stock 4.250 (gemm 1.520 + rccl-rs 2.774) | dx-rs 2.229 | gemm+dx-rs 3.827 | dx-fused 2.541 -> fused/gemm+dx x1.506 | b2b/op gemm+dx 4.975 fused 3.312 x1.502 | b2b/op stock 4.204 fused 3.312 x1.269
+=== mistral3-d M=32768 N=7168 K=2048
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.935e-02 rel(rccl,fp32)=2.008e-02 rel(ours,fp32)=7.184e-03 -> PASS
+[fg2] K=2048 stock 8.325 (gemm 2.932 + rccl-rs 5.431) | dx-rs 3.907 | gemm+dx-rs 6.845 | dx-fused 4.831 -> fused/gemm+dx x1.417 | b2b/op gemm+dx 9.000 fused 6.461 x1.393 | b2b/op stock 8.270 fused 6.461 x1.280
+=== dsv3-d M=8192 N=7168 K=2304
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.961e-02 rel(rccl,fp32)=1.776e-02 rel(ours,fp32)=7.028e-03 -> PASS
+[fg2] K=2304 stock 2.364 (gemm 0.972 + rccl-rs 1.438) | dx-rs 1.364 | gemm+dx-rs 2.431 | dx-fused 2.103 -> fused/gemm+dx x1.156 | b2b/op gemm+dx 3.010 fused 2.001 x1.504 | b2b/op stock 2.311 fused 2.001 x1.155
+=== dsv3-d M=16384 N=7168 K=2304
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.829e-02 rel(rccl,fp32)=1.842e-02 rel(ours,fp32)=7.123e-03 -> PASS
+[fg2] K=2304 stock 4.544 (gemm 1.815 + rccl-rs 2.773) | dx-rs 2.285 | gemm+dx-rs 4.111 | dx-fused 2.614 -> fused/gemm+dx x1.573 | b2b/op gemm+dx 5.139 fused 2.895 x1.775 | b2b/op stock 4.494 fused 2.895 x1.552
+=== dsv3-d M=32768 N=7168 K=2304
+[fg] correctness ops=32 fails=1 rel(ours,rccl)=2.128e-02 rel(rccl,fp32)=2.005e-02 rel(ours,fp32)=7.292e-03 -> FAIL
+[fg2] K=2304 stock 8.935 (gemm 3.515 + rccl-rs 5.432) | dx-rs 3.901 | gemm+dx-rs 7.511 | dx-fused 4.920 -> fused/gemm+dx x1.527 | b2b/op gemm+dx 9.620 fused 4.801 x2.004 | b2b/op stock 8.857 fused 4.801 x1.845
+=== llama3-70b M=8192 N=8192 K=3584
+[fg] correctness ops=32 fails=7 rel(ours,rccl)=2.222e-02 rel(rccl,fp32)=2.016e-02 rel(ours,fp32)=7.882e-03 -> FAIL
+[fg2] K=3584 stock 3.139 (gemm 1.554 + rccl-rs 1.624) | dx-rs 1.465 | gemm+dx-rs 3.164 | dx-fused 2.338 -> fused/gemm+dx x1.354 | b2b/op gemm+dx 3.664 fused 2.224 x1.647 | b2b/op stock 3.101 fused 2.224 x1.394
+=== llama3-70b M=16384 N=8192 K=3584
+[fg] correctness ops=32 fails=13 rel(ours,rccl)=2.290e-02 rel(rccl,fp32)=2.090e-02 rel(ours,fp32)=8.552e-03 -> FAIL
+[fg2] K=3584 stock 6.171 (gemm 3.058 + rccl-rs 3.148) | dx-rs 2.527 | gemm+dx-rs 5.782 | dx-fused 4.422 -> fused/gemm+dx x1.308 | b2b/op gemm+dx 6.751 fused 4.292 x1.573 | b2b/op stock 6.139 fused 4.292 x1.430
+=== llama3-70b M=32768 N=8192 K=3584
+[fg] correctness ops=32 fails=21 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.201e-02 rel(ours,fp32)=8.807e-03 -> FAIL
+[fg2] K=3584 stock 12.200 (gemm 6.064 + rccl-rs 6.178) | dx-rs 4.305 | gemm+dx-rs 10.398 | dx-fused 7.708 -> fused/gemm+dx x1.349 | b2b/op gemm+dx 12.540 fused 7.574 x1.656 | b2b/op stock 12.146 fused 7.574 x1.604
+=== qwen25-72b M=8192 N=8192 K=3696
+[fg] correctness ops=32 fails=12 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.100e-02 rel(ours,fp32)=8.022e-03 -> FAIL
+[fg2] K=3696 stock 3.858 (gemm 2.273 + rccl-rs 1.620) | dx-rs 1.460 | gemm+dx-rs 3.833 | dx-fused 3.073 -> fused/gemm+dx x1.247 | b2b/op gemm+dx 4.445 fused 2.979 x1.492 | b2b/op stock 3.807 fused 2.979 x1.278
+=== qwen25-72b M=16384 N=8192 K=3696
+[fg] correctness ops=32 fails=13 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.186e-02 rel(ours,fp32)=8.032e-03 -> FAIL
+[fg2] K=3696 stock 7.543 (gemm 4.440 + rccl-rs 3.154) | dx-rs 2.562 | gemm+dx-rs 7.200 | dx-fused 5.955 -> fused/gemm+dx x1.209 | b2b/op gemm+dx 8.001 fused 5.833 x1.372 | b2b/op stock 7.468 fused 5.833 x1.280
+=== qwen25-72b M=32768 N=8192 K=3696
+[fg] correctness ops=32 fails=23 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.247e-02 rel(ours,fp32)=8.279e-03 -> FAIL
+[fg2] K=3696 stock 14.854 (gemm 8.758 + rccl-rs 6.172) | dx-rs 4.257 | gemm+dx-rs 13.806 | dx-fused 10.477 -> fused/gemm+dx x1.318 | b2b/op gemm+dx 15.589 fused 10.351 x1.506 | b2b/op stock 14.774 fused 10.351 x1.427
+=== mistral-l-2407 M=8192 N=12288 K=3584
+[fg] correctness ops=32 fails=8 rel(ours,rccl)=2.222e-02 rel(rccl,fp32)=2.243e-02 rel(ours,fp32)=8.498e-03 -> FAIL
+[fg2] K=3584 stock 4.608 (gemm 2.238 + rccl-rs 2.402) | dx-rs 2.016 | gemm+dx-rs 4.294 | dx-fused 3.299 -> fused/gemm+dx x1.302 | b2b/op gemm+dx 5.175 fused 3.167 x1.634 | b2b/op stock 4.546 fused 3.167 x1.435
+=== mistral-l-2407 M=16384 N=12288 K=3584
+[fg] correctness ops=32 fails=16 rel(ours,rccl)=2.290e-02 rel(rccl,fp32)=2.171e-02 rel(ours,fp32)=8.552e-03 -> FAIL
+[fg2] K=3584 stock 9.237 (gemm 4.610 + rccl-rs 4.673) | dx-rs 3.440 | gemm+dx-rs 8.103 | dx-fused 5.427 -> fused/gemm+dx x1.493 | b2b/op gemm+dx 9.549 fused 5.312 x1.798 | b2b/op stock 9.164 fused 5.312 x1.725
+=== mistral-l-2407 M=32768 N=12288 K=3584
+[fg] correctness ops=32 fails=27 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.230e-02 rel(ours,fp32)=8.807e-03 -> FAIL
+[fg2] K=3584 stock 18.169 (gemm 9.049 + rccl-rs 9.163) | dx-rs 6.093 | gemm+dx-rs 15.324 | dx-fused 10.886 -> fused/gemm+dx x1.408 | b2b/op gemm+dx 19.493 fused 10.741 x1.815 | b2b/op stock 18.085 fused 10.741 x1.684
+=== llama31-405b M=8192 N=16384 K=6656
+[fg] correctness ops=32 fails=32 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.360e-02 rel(ours,fp32)=1.010e-02 -> FAIL
+[fg2] K=6656 stock 8.590 (gemm 5.481 + rccl-rs 3.148) | dx-rs 2.594 | gemm+dx-rs 8.207 | dx-fused 7.040 -> fused/gemm+dx x1.166 | b2b/op gemm+dx 9.136 fused 6.918 x1.321 | b2b/op stock 8.535 fused 6.918 x1.234
+=== llama31-405b M=16384 N=16384 K=6656
+[fg] correctness ops=32 fails=32 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.737e-02 rel(ours,fp32)=1.010e-02 -> FAIL
+[fg2] K=6656 stock 17.221 (gemm 11.104 + rccl-rs 6.178) | dx-rs 4.297 | gemm+dx-rs 16.105 | dx-fused 12.357 -> fused/gemm+dx x1.303 | b2b/op gemm+dx 17.690 fused 12.235 x1.446 | b2b/op stock 17.137 fused 12.235 x1.401
+=== llama31-405b M=32768 N=16384 K=6656
+[fg] correctness ops=32 fails=32 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.737e-02 rel(ours,fp32)=1.020e-02 -> FAIL
+[fg2] K=6656 stock 33.630 (gemm 21.572 + rccl-rs 12.131) | dx-rs 8.006 | gemm+dx-rs 30.219 | dx-fused 23.551 -> fused/gemm+dx x1.283 | b2b/op gemm+dx 34.869 fused 23.380 x1.491 | b2b/op stock 33.557 fused 23.380 x1.435

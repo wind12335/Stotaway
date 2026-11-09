@@ -1,0 +1,42 @@
+=== mistral3-d M=32768 N=7168 K=2048 rep1 heap12G
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.935e-02 rel(rccl,fp32)=2.008e-02 rel(ours,fp32)=7.184e-03 -> PASS
+[fg2] K=2048 stock 8.318 (gemm 2.929 + rccl-rs 5.431) | dx-rs 3.907 | gemm+dx-rs 6.856 | dx-fused 4.753 -> fused/gemm+dx x1.443 | b2b/op gemm+dx 8.696 fused 6.576 x1.322
+=== mistral3-d M=32768 N=7168 K=2048 rep2 heap12G
+[fg] correctness ops=32 fails=0 rel(ours,rccl)=1.935e-02 rel(rccl,fp32)=2.008e-02 rel(ours,fp32)=7.184e-03 -> PASS
+[fg2] K=2048 stock 8.323 (gemm 2.931 + rccl-rs 5.432) | dx-rs 3.892 | gemm+dx-rs 6.847 | dx-fused 4.815 -> fused/gemm+dx x1.422 | b2b/op gemm+dx 8.940 fused 6.506 x1.374
+=== dsv3-d M=32768 N=7168 K=2304 rep1 heap12G
+[fg] correctness ops=32 fails=1 rel(ours,rccl)=2.128e-02 rel(rccl,fp32)=2.005e-02 rel(ours,fp32)=7.292e-03 -> FAIL
+[fg2] K=2304 stock 8.918 (gemm 3.512 + rccl-rs 5.433) | dx-rs 3.900 | gemm+dx-rs 7.508 | dx-fused 4.926 -> fused/gemm+dx x1.524 | b2b/op gemm+dx 9.335 fused 4.799 x1.945
+=== dsv3-d M=32768 N=7168 K=2304 rep2 heap12G
+[fg] correctness ops=32 fails=1 rel(ours,rccl)=2.128e-02 rel(rccl,fp32)=2.005e-02 rel(ours,fp32)=7.292e-03 -> FAIL
+[fg2] K=2304 stock 8.910 (gemm 3.512 + rccl-rs 5.443) | dx-rs 3.940 | gemm+dx-rs 7.461 | dx-fused 4.929 -> fused/gemm+dx x1.514 | b2b/op gemm+dx 9.674 fused 4.799 x2.016
+=== llama3-70b M=32768 N=8192 K=3584 rep1 heap12G
+[fg] correctness ops=32 fails=21 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.201e-02 rel(ours,fp32)=8.807e-03 -> FAIL
+[fg2] K=3584 stock 12.195 (gemm 6.064 + rccl-rs 6.175) | dx-rs 4.291 | gemm+dx-rs 10.397 | dx-fused 7.708 -> fused/gemm+dx x1.349 | b2b/op gemm+dx 12.686 fused 7.569 x1.676
+=== llama3-70b M=32768 N=8192 K=3584 rep2 heap12G
+[fg] correctness ops=32 fails=21 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.201e-02 rel(ours,fp32)=8.807e-03 -> FAIL
+[fg2] K=3584 stock 12.197 (gemm 6.065 + rccl-rs 6.178) | dx-rs 4.339 | gemm+dx-rs 10.613 | dx-fused 7.701 -> fused/gemm+dx x1.378 | b2b/op gemm+dx 12.701 fused 7.574 x1.677
+=== qwen25-72b M=32768 N=8192 K=3696 rep1 heap12G
+[fg] correctness ops=32 fails=23 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.247e-02 rel(ours,fp32)=8.279e-03 -> FAIL
+[fg2] K=3696 stock 14.848 (gemm 8.733 + rccl-rs 6.179) | dx-rs 4.318 | gemm+dx-rs 13.415 | dx-fused 10.498 -> fused/gemm+dx x1.278 | b2b/op gemm+dx 15.477 fused 10.353 x1.495
+=== qwen25-72b M=32768 N=8192 K=3696 rep2 heap12G
+[fg] correctness ops=32 fails=23 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.247e-02 rel(ours,fp32)=8.279e-03 -> FAIL
+[fg2] K=3696 stock 14.868 (gemm 8.752 + rccl-rs 6.176) | dx-rs 4.333 | gemm+dx-rs 13.325 | dx-fused 10.484 -> fused/gemm+dx x1.271 | b2b/op gemm+dx 15.571 fused 10.357 x1.503
+=== mistral-l-2407 M=32768 N=12288 K=3584 rep1 heap12G
+[fg] correctness ops=32 fails=27 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.230e-02 rel(ours,fp32)=8.807e-03 -> FAIL
+[fg2] K=3584 stock 18.177 (gemm 9.068 + rccl-rs 9.161) | dx-rs 6.086 | gemm+dx-rs 15.412 | dx-fused 10.889 -> fused/gemm+dx x1.415 | b2b/op gemm+dx 18.793 fused 10.733 x1.751
+=== mistral-l-2407 M=32768 N=12288 K=3584 rep2 heap12G
+[fg] correctness ops=32 fails=27 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.230e-02 rel(ours,fp32)=8.807e-03 -> FAIL
+[fg2] K=3584 stock 18.189 (gemm 9.075 + rccl-rs 9.151) | dx-rs 6.078 | gemm+dx-rs 15.343 | dx-fused 10.878 -> fused/gemm+dx x1.411 | b2b/op gemm+dx 18.837 fused 10.733 x1.755
+=== llama31-405b M=16384 N=16384 K=6656 rep1 heap12G
+[fg] correctness ops=32 fails=32 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.737e-02 rel(ours,fp32)=1.010e-02 -> FAIL
+[fg2] K=6656 stock 17.223 (gemm 11.099 + rccl-rs 6.183) | dx-rs 4.279 | gemm+dx-rs 16.182 | dx-fused 12.354 -> fused/gemm+dx x1.310 | b2b/op gemm+dx 17.443 fused 12.234 x1.426
+=== llama31-405b M=16384 N=16384 K=6656 rep2 heap12G
+[fg] correctness ops=32 fails=32 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.737e-02 rel(ours,fp32)=1.010e-02 -> FAIL
+[fg2] K=6656 stock 17.224 (gemm 11.136 + rccl-rs 6.177) | dx-rs 4.311 | gemm+dx-rs 16.089 | dx-fused 12.359 -> fused/gemm+dx x1.302 | b2b/op gemm+dx 18.020 fused 12.237 x1.473
+=== llama31-405b M=32768 N=16384 K=6656 rep1 heap12G
+[fg] correctness ops=32 fails=32 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.737e-02 rel(ours,fp32)=1.020e-02 -> FAIL
+[fg2] K=6656 stock 33.594 (gemm 21.572 + rccl-rs 12.144) | dx-rs 7.968 | gemm+dx-rs 30.753 | dx-fused 23.559 -> fused/gemm+dx x1.305 | b2b/op gemm+dx 34.974 fused 23.396 x1.495
+=== llama31-405b M=32768 N=16384 K=6656 rep2 heap12G
+[fg] correctness ops=32 fails=32 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.737e-02 rel(ours,fp32)=1.020e-02 -> FAIL
+[fg2] K=6656 stock 33.605 (gemm 21.558 + rccl-rs 12.151) | dx-rs 7.942 | gemm+dx-rs 30.979 | dx-fused 23.563 -> fused/gemm+dx x1.315 | b2b/op gemm+dx 34.852 fused 23.392 x1.490

@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DCU 训练整步的通信×GEMM 重叠 与 整步分派器 — 原理图解</title>
+<style>
+.viz-root{
+  color-scheme:light;
+  --page:#f9f9f7; --surface-1:#fcfcfb;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --series-1:#2a78d6; --series-2:#eb6834; --series-3:#1baf7a; --series-4:#eda100;
+  --idle:#d6d5cf; --seq-1:#cde2fb; --seq-2:#86b6ef; --seq-3:#3987e5; --seq-4:#1c5cab; --seq-5:#0d366b;
+  --good:#006300; --critical:#d03b3b; --on-fill:#ffffff; --on-yellow:#0b0b0b;
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])) .viz-root{
+    color-scheme:dark;
+    --page:#0d0d0d; --surface-1:#1a1a19;
+    --text-primary:#f0efec; --text-secondary:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10);
+    --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500;
+    --idle:#383835; --seq-1:#184f95; --seq-2:#256abf; --seq-3:#3987e5; --seq-4:#86b6ef; --seq-5:#cde2fb;
+    --good:#0ca30c; --critical:#d03b3b; --on-fill:#ffffff; --on-yellow:#0b0b0b;
+  }
+}
+:root[data-theme="dark"] .viz-root{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface-1:#1a1a19;
+  --text-primary:#f0efec; --text-secondary:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10);
+  --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500;
+  --idle:#383835; --seq-1:#184f95; --seq-2:#256abf; --seq-3:#3987e5; --seq-4:#86b6ef; --seq-5:#cde2fb;
+  --good:#0ca30c; --critical:#d03b3b; --on-fill:#ffffff; --on-yellow:#0b0b0b;
+}
+*{box-sizing:border-box}
+body{margin:0}
+.viz-root{background:var(--page);color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;min-height:100vh}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 20px 80px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+h1{font-size:26px;margin:0 0 6px;font-weight:650}
+h2{font-size:20px;margin:44px 0 6px;font-weight:650}
+h3{font-size:16px;margin:22px 0 6px;font-weight:600}
+p,li{color:var(--text-secondary);font-size:15px}
+p strong,li strong{color:var(--text-primary)}
+.sub{color:var(--text-secondary);margin:0}
+.card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:18px 18px 12px;margin:14px 0}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:18px 0}
+.tile{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.tile .v{font-size:34px;font-weight:650;color:var(--text-primary);line-height:1.15}
+.tile .k{font-size:13px;color:var(--text-secondary)}
+.tile .n{font-size:12px;color:var(--muted);margin-top:4px}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 10px}
+button.seg{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid var(--axis);background:transparent;color:var(--text-secondary);cursor:pointer}
+button.seg[aria-pressed="true"]{background:var(--text-primary);color:var(--surface-1);border-color:var(--text-primary)}
+button.seg:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--series-1);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--text-secondary);margin:2px 0 6px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:inherit}
+.t-axis{fill:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+.t-lab{fill:var(--text-secondary);font-size:12px}
+.t-pri{fill:var(--text-primary);font-size:12px}
+.t-in{fill:var(--on-fill);font-size:11px;font-weight:600;pointer-events:none}
+.t-dk{fill:#0b0b0b;font-size:12px;pointer-events:none}
+.t-in-y{fill:var(--on-yellow);font-size:11px;font-weight:600;pointer-events:none}
+.box{fill:var(--surface-1);stroke:var(--axis);stroke-width:1}
+.box-em{fill:var(--surface-1);stroke:var(--series-1);stroke-width:1.5}
+.ln{stroke:var(--axis);stroke-width:1;fill:none}
+.ln-em{stroke:var(--text-secondary);stroke-width:1.5;fill:none}
+.grid{stroke:var(--grid);stroke-width:1}
+details{margin:6px 0 2px}
+summary{cursor:pointer;color:var(--text-secondary);font-size:13px}
+table{border-collapse:collapse;font-size:13px;margin:8px 0;width:100%}
+th,td{border-bottom:1px solid var(--grid);padding:5px 8px;text-align:left;color:var(--text-secondary)}
+th{color:var(--text-primary);font-weight:600}
+td.num{font-variant-numeric:tabular-nums;text-align:right}
+.note{font-size:13px;color:var(--muted)}
+.flag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--axis);color:var(--text-secondary);margin-left:6px;vertical-align:2px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){.cmp{grid-template-columns:1fr}}
+#tip{position:fixed;pointer-events:none;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 4px 16px rgba(0,0,0,.12);display:none;z-index:10;max-width:280px;color:var(--text-secondary)}
+#tip b{color:var(--text-primary);font-size:13px}
+input[type=range]{width:min(520px,100%)}
+.kbd{font-variant-numeric:tabular-nums;color:var(--text-primary);font-weight:600}
+ol.steps li{margin:4px 0}
+</style>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>让通信藏进 GEMM：DCU 训练整步的重叠方法与整步分派器</h1>
+    <p class="sub">海光 DCU 8 卡（gfx936），Megatron TP+SP 训练。基线 = 原版（vendor GEMM + RCCL，串行），从不改动。</p>
+  </div>
+  <button class="seg" id="theme" aria-pressed="false" title="切换深浅色">深色</button>
+</header>
+
+<div class="tiles">
+  <div class="tile"><div class="k">70B 整步，纯重叠收益（对空对照）</div><div class="v">1.077×</div><div class="n">17498 vs 18838 ms/步；对原版总差 1.083×，其中 0.59% 不来自重叠</div></div>
+  <div class="tile"><div class="k">27B 整步（对原版）</div><div class="v">1.06×</div><div class="n">34315 vs 36649 ms/步（4 轮）；27B 空对照还没测</div></div>
+  <div class="tile"><div class="k">算子级 GEMM+RS（70B 形状）</div><div class="v">1.15–1.31×</div><div class="n">M8192–32768，孤立测、位级正确</div></div>
+</div>
+<p class="note">图里的"我们"指一种方法：<strong>vendor GEMM 不动，按置换序分块直推</strong>，用在训练一步的 4 个通信位置；外加一个按形状决定开关的<strong>整步分派器</strong>。</p>
+
+<!-- ============ 1 timeline ============ -->
+<h2>1　一次 GEMM+ReduceScatter：串行 vs 分块直推</h2>
+<p>Row-parallel 层（o_proj、fc2）算完 GEMM 后要做 ReduceScatter（RS）：每个 rank 把输出切成 8 份，第 d 份要和其他 7 个 rank 的第 d 份相加，结果留在 rank d。原版先算完整个 GEMM，再调 RCCL 做 RS，两段串行，而且 RCCL 的内核本身也占 CU。</p>
+<p>我们把 GEMM 按输出行切成 8 块，<strong>先算要发给别人的 7 块，每算完一块就交给拷贝引擎（DMA，不占 CU）推到它的归属 rank</strong>，本地那块最后算。传输于是藏在后面几块 GEMM 的计算时间里，最后只剩一次 fp32 求和。</p>
+<div class="card">
+  <div class="legend" id="tl-legend"></div>
+  <svg id="tl" viewBox="0 0 960 250" role="img" aria-label="串行与分块直推的时间线对比"></svg>
+  <p class="note">数字：70B 形状 M32768，rank0 实测（F6）。串行总时长 10.14 ms 为实测；串行内部 GEMM / RS 的切分是示意。我们一侧的块内 GEMM 合计 7.07、等到达 0.07、求和 0.58 ms 为实测。块 GEMM 比整块慢约 10–14%，原因是并发拷贝抢显存带宽，这是重叠付出的代价。</p>
+  <details><summary>表格视图</summary><table id="tl-table"></table></details>
+</div>
+
+<!-- ============ 2 architecture ============ -->
+<h2>2　架构：和 FlashOverlap 正好反过来</h2>
+<p>FlashOverlap / flux 的思路是<strong>改 GEMM 内核</strong>（CUTLASS 里给 tile 分组、重排、每组完成发信号），通信直接调现成的 NCCL。我们反过来：<strong>GEMM 一行不改</strong>（vendor 库当黑盒，在调用层切块），<strong>换掉的是通信</strong>，改成对称堆单边推送 + 拷贝引擎 + 流上的条件等待。</p>
+<p>这样选是有平台依据的：DCU 上 vendor GEMM 约 361 TF，Triton / 手写 GEMM 只有 106–172 TF（差 2–5×）。凡是要改 GEMM 的方案，在 DCU 上先输在 GEMM 本身；三个开源方案移植过来只有 0.3–0.9×。</p>
+<div class="cmp">
+  <div class="card"><h3 style="margin-top:0">FlashOverlap / flux：计算侧分解</h3><svg id="arch-fo" viewBox="0 0 440 300" role="img" aria-label="FlashOverlap 架构"></svg></div>
+  <div class="card"><h3 style="margin-top:0">我们：通信侧分解</h3><svg id="arch-us" viewBox="0 0 440 300" role="img" aria-label="我们的架构"></svg></div>
+</div>
+<div class="card">
+  <h3 style="margin-top:0">一块数据从产出到被消费，经过哪些步骤</h3>
+  <svg id="proto" viewBox="0 0 960 230" role="img" aria-label="票据协议流程"></svg>
+  <p class="note">票据协议沿用 paper #1 引擎的规则：只等自己堆里的格子；ack 必须由远端写进等待方的格子（写自己格子会互相自旋死锁）；票值单调递增、永不复位；槽位只有在读者 ack 之后才能重写。全程没有全员栅栏。</p>
+  <details><summary>实现对应（代码）</summary>
+  <table>
+    <tr><th>环节</th><th>实现</th></tr>
+    <tr><td>对称堆</td><td>dushmem（DCU 版 NVSHMEM）：只负责分配和换算对端地址</td></tr>
+    <tr><td>推送</td><td>hipMemcpyAsync D2D 写对端堆地址，走拷贝引擎</td></tr>
+    <tr><td>票据</td><td>同一条流上、紧跟数据的 4 字节拷贝</td></tr>
+    <tr><td>等待</td><td>hipStreamWaitValue32，设备侧等待，host 不阻塞</td></tr>
+    <tr><td>ack</td><td>Triton 原子交换小核，写对端格子</td></tr>
+    <tr><td>GEMM / 求和</td><td>torch.matmul（hipBLAS）/ Triton fp32 求和小核</td></tr>
+  </table>
+  <p class="note">代码：tri-dist-hygon-opus/triton_dist/kernels/dcu/gemm_rs_dx.py。移植到 NVIDIA 的对应接口：NVSHMEM 或 CUDA IPC、cudaMemcpyAsync、cuStreamWaitValue32。</p>
+  </details>
+</div>
+
+<!-- ============ 3 permutation grid ============ -->
+<h2>3　为什么按"置换序"推：同一时刻，每个目的地只收一份</h2>
+<p>8 个 rank 每人要把 7 块分别推给 7 个对端，一共 7 步。<strong>按 rank 序</strong>（大家都先发 0 号、再发 1 号……）时，第一步 7 个人同时往同一个目的地写，形成 incast（多对一）。<strong>按置换序</strong>（第 j 步发给 r+j）时，每一步每个目的地恰好只收 1 份。</p>
+<p>实测（F2 / F7）：8 卡同时按置换序推，对任意对端都是 <strong>139–143 GB/s/rank</strong>，和对端是谁无关；改成 incast 发送序后，孤立测慢 10–19%，流水线中慢 30–70%。旧说法"8 卡单播扇出墙 17–25 GB/s"其实是 incast 造成的。</p>
+<div class="card">
+  <div class="ctrl" role="group" aria-label="发送顺序">
+    <button class="seg" data-perm="perm" aria-pressed="true">置换序（第 j 步发给 r+j）</button>
+    <button class="seg" data-perm="rank" aria-pressed="false">rank 序（incast）</button>
+  </div>
+  <div class="legend" id="pg-legend"></div>
+  <svg id="pg" viewBox="0 0 960 330" role="img" aria-label="8 个 rank × 7 步的发送目的地表"></svg>
+  <p class="note" id="pg-note"></p>
+  <p class="note">先例：AMD MORI 的 gemm_ar（2026-09-17 公开）用 `+rank` 旋转避免多个 rank 同时写一个目的地，属于同一设计动机，论文必须引用。我们补上的是交换机拓扑上的实测定律（任意对端同带宽，只有 incast 慢）。</p>
+</div>
+
+<!-- ============ 4 skew ============ -->
+<h2>4　有 rank 迟到时：只等落后者那一块</h2>
+<p>训练里各 rank 进入同一个 op 的时刻不一样。设最慢的 rank 晚了 δ。原版 RCCL 是集合操作，全员要等它，<strong>δ 几乎全额转嫁</strong>（实测斜率 0.96）。我们只有"落后者推来的那一块"会晚到，其余 6 块照常到达，前面块的 GEMM 能把这段等待遮住。设能遮住的时间为 W，</p>
+<p style="text-align:center"><strong>曝露 = max(0, δ − W)</strong></p>
+<p>W 取决于消费顺序：固定顺序时 W ≈ 1.1 ms；把落后块排在最后消费，W 扩大到剩余 6 块 GEMM 的时间，约 2.5 ms。</p>
+<div class="card">
+  <label for="delta" class="t-lab">迟到量 δ：<span class="kbd" id="delta-v"></span> µs</label><br>
+  <input id="delta" type="range" min="0" max="3000" step="50" value="1500">
+  <div class="legend" id="sk-legend"></div>
+  <svg id="sk" viewBox="0 0 960 300" role="img" aria-label="迟到量与曝露的关系"></svg>
+  <p class="note">直线是模型（斜率与 W 由 F11 的 X2 实测拟合：70B gate_up M8192，迟到 rank3，两轮）。实测点：δ=2000 µs 时，固定序曝露 0.86 ms，最后消费曝露约 0；原版从 4.45 涨到 6.37 ms。</p>
+  <p class="note">车内实测迟到分布（F13，27B，14.7 万个 op）：p50 156 µs，p90 555 µs，p99 1686 µs，96.7% 的 op 落在 W_fixed 以内。也就是说车辆里大多数偏斜已经被结构性吸收。迟到者每次都不同（自相关 −0.011），所以"预测谁迟到"没有用，这条路线已经降级。</p>
+  <details><summary>表格视图</summary><table id="sk-table"></table></details>
+</div>
+
+<!-- ============ 5 call sites ============ -->
+<h2>5　同一个机制，用在训练一步的 4 个位置</h2>
+<p>开 SP 之后，TP 的通信只有 RS 和 AG 两种。我们在 4 个位置用同一套"分块 + 置换直推 + 票据"，区别只在方向和推送的是什么：</p>
+<div class="card">
+  <svg id="sites" viewBox="0 0 960 270" role="img" aria-label="Transformer 层中 4 个通信位置"></svg>
+  <table>
+    <tr><th>位置</th><th>原版</th><th>我们</th><th>开关</th><th>算子级</th></tr>
+    <tr><td>① 独立 RS（反向梯度等）</td><td>RCCL RS</td><td>纯置换直推 RS</td><td>纯 RS</td><td>134–537 MB 1.27–1.57×；33.6 MB 0.58×</td></tr>
+    <tr><td>② 前向 o_proj / fc2</td><td>GEMM → RCCL RS</td><td>分块 GEMM，算完即推</td><td>row</td><td>1.09–1.31×</td></tr>
+    <tr><td>③ 反向 row-parallel</td><td>RCCL AG → dgrad</td><td>置换直推 AG，每块到达即 dgrad</td><td>bwd</td><td>1.15–1.24×</td></tr>
+    <tr><td>④ 前向 QKV / fc1</td><td>RCCL AG → GEMM</td><td>置换直推 AG，每块到达即 GEMM</td><td>col</td><td>M≥16384 1.08–1.21×；小 M 输</td></tr>
+  </table>
+</div>
+
+<!-- ============ 6 control plane ============ -->
+<h2>6　为什么孤立测赢、进了训练反而输：控制面</h2>
+<p>列并行融合（位置④）在 27B 上孤立测 QKV 1.29×，车内单个 op 的设备时间也确实更快，但<strong>整步慢了 1–3%</strong>。原因在 host：拷贝引擎要 host 先定好字节数再入队，融合调用每次要发约 60 次 host API。车里引擎队列满了以后会反压 host，再加上跨 rank 的 ack 链（我等对端 ack，对端的 ack 又要等它自己的 host 发完被堵住的 push），host 入队时间被拉长到超过设备时间，GPU 就开始空等。</p>
+<div class="card">
+  <div class="legend" id="cp-legend"></div>
+  <svg id="cp" viewBox="0 0 960 280" role="img" aria-label="host 入队时间与设备时间对比"></svg>
+  <p class="note">27B 车内实测（F17 / F19），每个调用的中位数。同样一次 42 MB 的 push，空闲设备上 host 只花 0.056 ms，在车里却要约 0.6 ms。push 本身不慢，慢在队列反压和 ack 链。</p>
+  <details><summary>表格视图</summary><table id="cp-table"></table></details>
+</div>
+<p>另外两处独立测到的控制面损失：RCCL 为可变 splits 自己要多付 0.56–0.73 ms（count 交换 + host 同步）；Megatron MoE 每层 a2a 前有一次 D2H 同步，host 每层阻塞 17.7–22 ms。所以我们把<strong>控制面列为计算争用、传输、同步等待之外的第四类损失</strong>。</p>
+
+<!-- ============ 7 dispatcher ============ -->
+<h2>7　整步分派器：按形状决定开哪些融合</h2>
+<p>最优配置随形状变：列并行在 27B 整步输 1–3%，在 70B 同批赢 0.58%。静态规则管不住这种情况，所以在训练开头直接用<strong>整步时间</strong>做决定。</p>
+<div class="card">
+  <svg id="flow" viewBox="0 0 960 200" role="img" aria-label="分派器流程"></svg>
+  <ol class="steps">
+    <li>预热 2 步，所有路径建好上下文、编好内核。</li>
+    <li>从全关开始，依次打开 row → bwd → col。每个候选测一次，保留的条件是步时比当前最好的低 0.3% 以上。</li>
+    <li>每次探测 = 3 步：第 1 步切换配置，后 2 步流水运行并计时，只在边界同步。各 rank 取 MAX 后统一决策，所有 rank 的开关完全一致。</li>
+    <li>没被选中的路径释放它的对称堆和流，并恢复原版函数（F29 修复，见下）。</li>
+  </ol>
+</div>
+<div class="card">
+  <div class="ctrl" role="group" aria-label="形状">
+    <button class="seg" data-at="27" aria-pressed="true">27B</button>
+    <button class="seg" data-at="70" aria-pressed="false">70B</button>
+  </div>
+  <svg id="at" viewBox="0 0 960 230" role="img" aria-label="分派器每次探测相对全关的步时变化"></svg>
+  <p class="note" id="at-note"></p>
+  <details><summary>表格视图</summary><table id="at-table"></table></details>
+</div>
+<div class="card">
+  <h3 style="margin-top:0">已知缺陷与修复</h3>
+  <p>27B 上第一次选对了（row+bwd，关 col），但选完后比同批手动设成同配置的 fbag 慢 2.4%；之后两次复跑干脆选错，误开了 col（F31）。诊断（F29）：</p>
+  <ul>
+    <li>预热全开后直接钉成同配置：慢 2.6%。所以问题不在探测本身。</li>
+    <li>预热时不开 col，再钉成同配置：慢 0.6%。</li>
+    <li>结论：col 关掉后，它的上下文仍常驻，占约 2.0%；包装层和其余部分约 0.6%。</li>
+  </ul>
+  <p>同一个残留也会污染决策：col 上下文常驻时，每个"不开 col"的探针都被拖慢约 2%，col 看起来像白送。所以光是"丢弃时释放"不够。修复改为预热不开 col，到 +col 探针时才建它的上下文，丢弃时释放。验证批在跑，通过门：两次都丢 col，且选后与同批 fbag 差 ≤0.5%。</p>
+  <p class="note">探针协议定律<span class="flag">待验证</span>：设想是"单次同步迭代从空队列起跑，看不到稳态下 host 入队慢于设备时造成的空泡，会高估入队重的路径"。它的原始依据（F25）后来被更正作废。10-31 的对照批被上面的残留问题混淆，无法判定，修复后再测。</p>
+</div>
+
+<!-- ============ 8 results ============ -->
+<h2>8　结果（加速比，参考线 = 1.0×，左侧为输）</h2>
+<div class="card">
+  <div class="ctrl" role="group" aria-label="结果集">
+    <button class="seg" data-res="op" aria-pressed="true">算子级</button>
+    <button class="seg" data-res="e2e" aria-pressed="false">整步</button>
+  </div>
+  <svg id="res" viewBox="0 0 960 330" role="img" aria-label="加速比条形图"></svg>
+  <p class="note" id="res-note"></p>
+  <details><summary>表格视图</summary><table id="res-table"></table></details>
+</div>
+
+<!-- ============ 9 boundaries ============ -->
+<h2>9　诚实边界（写论文时的措辞底线）</h2>
+<div class="card">
+<table>
+  <tr><th>点</th><th>状态</th><th>措辞</th></tr>
+  <tr><td>置换序两两交换</td><td>经典算法（MPI pairwise exchange）</td><td>引用，不 claim</td></tr>
+  <tr><td>GEMM 分块产出 = 推送顺序</td><td>MORI gemm_ar 已有（改写 GEMM，推理）</td><td>claim 差别：vendor GEMM 黑盒、本地块最后、训练</td></tr>
+  <tr><td>无全员栅栏的票据协议</td><td>MORI / DeepEP 有同类</td><td>不单独作为新颖点</td></tr>
+  <tr><td>反向直推 AG + 到达即 dgrad</td><td>四篇对照都没有</td><td>可 claim</td></tr>
+  <tr><td>偏斜模型 max(0, δ−W) + 落后块最后消费</td><td>四篇都没有</td><td>可 claim</td></tr>
+  <tr><td>真实训练整步（含 recompute）</td><td>四篇都没有</td><td>可 claim；纯重叠部分待空对照</td></tr>
+  <tr><td>控制面作为第四类损失</td><td>DMA-Latte 测过单次 DMA 的控制相位</td><td>claim "整步分类 + 跨 rank ack 链"</td></tr>
+  <tr><td>整步在线分派器</td><td>FiCCO 离线启发式、MORI 静态阈值</td><td>可 claim；探针定律待验证</td></tr>
+  <tr><td>小 M、小载荷</td><td>会输（AG M≤8192、纯 RS 33.6 MB、70B MBS2 整步）</td><td>如实报告，由分派器退回 RCCL</td></tr>
+</table>
+</div>
+
+</div>
+<div id="tip" role="tooltip"></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const NS="http://www.w3.org/2000/svg";
+const root=document.documentElement;
+const tip=document.getElementById("tip");
+function S(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+function T(parent,x,y,str,cls,anchor){const t=S("text",{x:x,y:y,class:cls||"t-lab"},parent);if(anchor)t.setAttribute("text-anchor",anchor);t.textContent=str;return t;}
+function clear(el){while(el.firstChild)el.removeChild(el.firstChild);}
+function cssv(n){return getComputedStyle(document.querySelector(".viz-root")).getPropertyValue(n).trim();}
+function showTip(ev,lines){clear(tip);lines.forEach((l,i)=>{const d=document.createElement("div");if(i===0){const b=document.createElement("b");b.textContent=l;d.appendChild(b);}else d.textContent=l;tip.appendChild(d);});tip.style.display="block";moveTip(ev);}
+function moveTip(ev){let x=ev.clientX+14,y=ev.clientY+14;if(ev.type==="focus"){const r=ev.target.getBoundingClientRect();x=r.right+8;y=r.top;}const w=tip.offsetWidth,h=tip.offsetHeight;if(x+w>innerWidth-8)x=innerWidth-w-8;if(y+h>innerHeight-8)y=innerHeight-h-8;tip.style.left=x+"px";tip.style.top=y+"px";}
+function hideTip(){tip.style.display="none";}
+function hover(el,lines){el.setAttribute("tabindex","0");el.style.cursor="default";el.addEventListener("pointermove",e=>showTip(e,lines));el.addEventListener("pointerleave",hideTip);el.addEventListener("focus",e=>showTip(e,lines));el.addEventListener("blur",hideTip);}
+function legend(id,items){const el=document.getElementById(id);clear(el);items.forEach(([c,lab])=>{const s=document.createElement("span");const i=document.createElement("i");i.style.background="var("+c+")";s.appendChild(i);s.appendChild(document.createTextNode(lab));el.appendChild(s);});}
+function table(id,head,rows){const t=document.getElementById(id);clear(t);const tr=document.createElement("tr");head.forEach(h=>{const th=document.createElement("th");th.textContent=h;tr.appendChild(th);});t.appendChild(tr);rows.forEach(r=>{const tr2=document.createElement("tr");r.forEach((c,i)=>{const td=document.createElement("td");td.textContent=c;if(i>0&&typeof c==="number")td.className="num";tr2.appendChild(td);});t.appendChild(tr2);});}
+function seg(group,attr,cb){const bs=document.querySelectorAll("button[data-"+attr+"]");bs.forEach(b=>b.addEventListener("click",()=>{bs.forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));cb(b.dataset[attr]);}));}
+function rbar(parent,x,y,w,h,fill,r){ // rounded data-end (right), square at baseline (left)
+  r=Math.min(r||4,w,h/2); if(w<=0)return null;
+  const d="M"+x+","+y+"H"+(x+w-r)+"Q"+(x+w)+","+y+" "+(x+w)+","+(y+r)+"V"+(y+h-r)+"Q"+(x+w)+","+(y+h)+" "+(x+w-r)+","+(y+h)+"H"+x+"Z";
+  return S("path",{d:d,fill:fill},parent);
+}
+function lbar(parent,x,y,w,h,fill,r){ // rounded on the left (negative bars), square at baseline (right)
+  r=Math.min(r||4,w,h/2); if(w<=0)return null;
+  const d="M"+(x+w)+","+y+"H"+(x+r)+"Q"+x+","+y+" "+x+","+(y+r)+"V"+(y+h-r)+"Q"+x+","+(y+h)+" "+(x+r)+","+(y+h)+"H"+(x+w)+"Z";
+  return S("path",{d:d,fill:fill},parent);
+}
+
+/* theme toggle */
+const tb=document.getElementById("theme");
+function isDark(){const a=root.getAttribute("data-theme");if(a)return a==="dark";return matchMedia("(prefers-color-scheme: dark)").matches;}
+function syncThemeBtn(){tb.textContent=isDark()?"浅色":"深色";tb.setAttribute("aria-pressed",isDark()?"true":"false");}
+tb.addEventListener("click",()=>{root.setAttribute("data-theme",isDark()?"light":"dark");syncThemeBtn();});
+syncThemeBtn();
+
+/* ---------- 1 timeline ---------- */
+(function(){
+  const svg=document.getElementById("tl");
+  legend("tl-legend",[["--series-1","GEMM（计算流，占 CU）"],["--series-2","通信"],["--series-3","fp32 求和"],["--idle","等待到达"]]);
+  const X0=150,X1=930,TMAX=10.6,sx=t=>X0+(X1-X0)*t/TMAX;
+  for(let t=0;t<=10;t+=2){S("line",{x1:sx(t),x2:sx(t),y1:16,y2:220,class:"grid"},svg);T(svg,sx(t),236,t+" ms","t-axis","middle");}
+  const lane=(y,lab,sub)=>{T(svg,X0-10,y+15,lab,"t-pri","end");if(sub)T(svg,X0-10,y+30,sub,"t-axis","end");};
+  // stock
+  T(svg,16,30,"原版（串行）","t-pri");
+  lane(40,"计算流","CU");
+  const sg=6.455, st=10.141;
+  let r=rbar(svg,sx(0),40,sx(sg)-sx(0)-2,24,"var(--series-1)");hover(r,["GEMM（整块）","约 6.5 ms（切分示意）"]);
+  T(svg,sx(sg/2),56,"GEMM","t-in","middle");
+  r=rbar(svg,sx(sg),40,sx(st)-sx(sg),24,"var(--series-2)");hover(r,["RCCL ReduceScatter","约 3.7 ms（切分示意），同样占 CU"]);
+  T(svg,sx((sg+st)/2),56,"RCCL RS","t-in","middle");
+  T(svg,sx(st)+6,56,"10.14 ms","t-pri");
+  // ours
+  T(svg,16,108,"我们（分块直推）","t-pri");
+  lane(118,"计算流","CU");lane(160,"拷贝引擎","DMA，不占 CU");
+  const bg=7.07/8, push=0.475, rows=[];
+  for(let i=0;i<8;i++){
+    const a=i*bg, own=(i===7);
+    const lab=own?"本地块":"→ r+"+(i+1);
+    r=rbar(svg,sx(a),118,sx(a+bg)-sx(a)-2,24,"var(--series-1)");
+    hover(r,["块 "+(i+1)+" GEMM（"+lab+"）",(bg).toFixed(2)+" ms",own?"本地块排最后，自己不用推":"算完立刻交给拷贝引擎"]);
+    if(sx(a+bg)-sx(a)>40)T(svg,sx(a+bg/2),134,own?"本地":"r+"+(i+1),"t-in","middle");
+    rows.push(["块 "+(i+1)+" GEMM",+a.toFixed(3),+(a+bg).toFixed(3)]);
+    if(!own){
+      const p0=a+bg;
+      r=rbar(svg,sx(p0),160,sx(p0+push)-sx(p0)-2,20,"var(--series-2)");
+      hover(r,["推送块 "+(i+1)+" → rank r+"+(i+1),"约 "+push+" ms（67 MB @ ~141 GB/s）","与后续块 GEMM 并行"]);
+      S("line",{x1:sx(p0),x2:sx(p0),y1:142,y2:160,class:"ln"},svg);
+      rows.push(["推送 → r+"+(i+1),+p0.toFixed(3),+(p0+push).toFixed(3)]);
+    }
+  }
+  const g=7.07,w=0.07,s=0.582;
+  r=rbar(svg,sx(g),118,Math.max(3,sx(g+w)-sx(g)-1),24,"var(--idle)");hover(r,["等到达","0.02–0.07 ms（实测）","几乎全部传输都被 GEMM 遮住"]);
+  r=rbar(svg,sx(g+w),118,sx(g+w+s)-sx(g+w),24,"var(--series-3)");hover(r,["一次 fp32 求和","0.58 ms（实测）","8 份一次读完相加"]);
+  T(svg,sx(g+w+s)+6,134,"7.72 ms（1.31×）","t-pri");
+  T(svg,sx(0),205,"→ 别人推给我的 7 块按同样的置换序落进我的对称堆槽位；票据跟在数据后面。","t-lab");
+  rows.push(["等到达",g,+(g+w).toFixed(3)],["求和",+(g+w).toFixed(3),+(g+w+s).toFixed(3)]);
+  table("tl-table",["段（我们，rank0）","开始 ms","结束 ms"],rows.concat([["原版合计",0,10.141]]));
+})();
+
+/* ---------- 2 architecture ---------- */
+function archBox(svg,x,y,w,h,title,sub,em){S("rect",{x:x,y:y,width:w,height:h,rx:8,class:em?"box-em":"box"},svg);T(svg,x+w/2,y+(sub?h/2-3:h/2+4),title,"t-pri","middle");if(sub)T(svg,x+w/2,y+h/2+14,sub,"t-axis","middle");}
+function arrow(svg,x1,y1,x2,y2,lab,em){const id="ah"+Math.random().toString(36).slice(2,7);const m=S("marker",{id:id,viewBox:"0 0 10 10",refX:9,refY:5,markerWidth:7,markerHeight:7,orient:"auto-start-reverse"},S("defs",{},svg));S("path",{d:"M0,0L10,5L0,10z",fill:em?cssv("--text-secondary")||"#52514e":cssv("--axis")||"#c3c2b7"},m);S("line",{x1:x1,y1:y1,x2:x2,y2:y2,class:em?"ln-em":"ln","marker-end":"url(#"+id+")"},svg);if(lab)T(svg,(x1+x2)/2+6,(y1+y2)/2-4,lab,"t-axis");}
+function drawArch(){
+  const fo=document.getElementById("arch-fo");clear(fo);
+  archBox(fo,20,16,400,44,"host：一次 GEMM 调用 + 一次 NCCL 调用","");
+  archBox(fo,20,96,250,70,"改写的 GEMM 内核（CUTLASS）","tile 分组、重排、每组完成发信号",true);
+  archBox(fo,290,96,130,70,"NCCL","现成集合通信");
+  archBox(fo,20,206,400,44,"GPU 计算单元（SM / CU）","两者都在这里跑");
+  arrow(fo,140,60,140,96,"");arrow(fo,355,60,355,96,"");
+  arrow(fo,270,131,290,131,"",true);
+  arrow(fo,140,166,140,206,"");arrow(fo,355,166,355,206,"");
+  T(fo,220,284,"需要能改的高性能 GEMM 模板","t-axis","middle");
+  const us=document.getElementById("arch-us");clear(us);
+  archBox(us,20,16,400,44,"host：8 次块 GEMM + 7 次推送 + 票据/等待","这里是控制面开销的来源");
+  archBox(us,20,96,190,70,"vendor GEMM","hipBLAS 黑盒，一行不改");
+  archBox(us,230,96,190,70,"拷贝引擎（DMA）","单边推送，不占 CU",true);
+  archBox(us,20,206,190,44,"计算单元（CU）","");
+  archBox(us,230,206,190,44,"对端对称堆（dushmem）","槽位 / 票据 / ack");
+  arrow(us,115,60,115,96,"");arrow(us,325,60,325,96,"");
+  arrow(us,210,131,230,131,"",true);
+  arrow(us,115,166,115,206,"");arrow(us,325,166,325,206,"",true);
+  T(us,220,284,"需要单边内存 + 拷贝引擎 + 流上条件等待","t-axis","middle");
+}
+drawArch();
+
+/* protocol strip */
+(function(){
+  const svg=document.getElementById("proto");
+  const steps=[["① 块 GEMM 算完","发送方计算流"],["② 推数据块","拷贝引擎 → 对端槽位"],["③ 推 4B 票据","同一条流，紧跟数据"],["④ 等票据","接收方 WaitValue（设备侧）"],["⑤ 读槽位求和","接收方计算流"],["⑥ 回写 ack","原子交换写进发送方格子"]];
+  const w=140,gap=18,y=40;
+  steps.forEach((s,i)=>{const x=10+i*(w+gap);archBox(svg,x,y,w,64,s[0],s[1],i===1||i===3);if(i<steps.length-1)arrow(svg,x+w,y+32,x+w+gap,y+32,"");});
+  S("path",{d:"M"+(10+5*(w+gap)+w/2)+","+(y+64)+" V170 H"+(10+w/2)+" V"+(y+64),class:"ln"},svg);
+  T(svg,480,190,"ack 回来之前，发送方不会重写这个槽位（下一个 op 的同一块要先等它）","t-lab","middle");
+  T(svg,480,212,"所有等待都在设备侧，host 不需要知道对端什么时候准备好","t-axis","middle");
+})();
+
+/* ---------- 3 permutation grid ---------- */
+(function(){
+  const svg=document.getElementById("pg");
+  const R=8,J=7;
+  function dests(mode){const g=[];for(let r=0;r<R;r++){const row=[];const others=[];for(let d=0;d<R;d++)if(d!==r)others.push(d);for(let j=0;j<J;j++)row.push(mode==="perm"?(r+j+1)%R:others[j]);g.push(row);}return g;}
+  function draw(mode){
+    clear(svg);
+    const g=dests(mode);
+    const indeg=[];for(let j=0;j<J;j++){const c=new Array(R).fill(0);for(let r=0;r<R;r++)c[g[r][j]]++;indeg.push(c);}
+    const X0=110,Y0=40,cw=112,ch=30;
+    const seq=["--seq-1","--seq-2","--seq-3","--seq-4","--seq-5"];
+    const lvl=k=>k<=1?0:k<=2?1:k<=4?2:k<=6?3:4;
+    for(let j=0;j<J;j++)T(svg,X0+j*cw+cw/2,Y0-12,"第 "+(j+1)+" 步","t-axis","middle");
+    for(let r=0;r<R;r++){
+      T(svg,X0-12,Y0+r*ch+ch/2+4,"rank "+r,"t-lab","end");
+      for(let j=0;j<J;j++){
+        const d=g[r][j],k=indeg[j][d],L=lvl(k);
+        const rect=S("rect",{x:X0+j*cw+1,y:Y0+r*ch+1,width:cw-2,height:ch-2,rx:4,fill:"var("+seq[L]+")"},svg);
+        rect.dataset.j=j;rect.dataset.d=d;
+        const cls=isDark()?(L<=1?"t-pri":L===2?"t-in":"t-dk"):(L<=1?"t-pri":"t-in");
+        T(svg,X0+j*cw+cw/2,Y0+r*ch+ch/2+4,"→ "+d,cls,"middle");
+        hover(rect,["rank "+r+" 第 "+(j+1)+" 步 → rank "+d,"这一步 rank "+d+" 同时收 "+k+" 份",k>1?"多对一（incast）：接收端链路被挤":"每个目的地只收 1 份"]);
+        rect.addEventListener("pointerenter",()=>{svg.querySelectorAll("rect[data-j]").forEach(c=>{c.style.opacity=(c.dataset.j==j&&c.dataset.d==d)?"1":"0.35";});});
+        rect.addEventListener("pointerleave",()=>{svg.querySelectorAll("rect[data-j]").forEach(c=>c.style.opacity="1");});
+      }
+    }
+    const yb=Y0+R*ch+22;
+    T(svg,X0-12,yb+4,"最挤的目的地","t-lab","end");
+    for(let j=0;j<J;j++){const m=Math.max.apply(null,indeg[j]);T(svg,X0+j*cw+cw/2,yb+4,"收 "+m+" 份",m>1?"t-pri":"t-axis","middle");}
+    const worst=Math.max.apply(null,indeg.map(c=>Math.max.apply(null,c)));
+    document.getElementById("pg-note").textContent=mode==="perm"
+      ?"置换序：7 步里每一步每个目的地都只收 1 份，56 次推送互不冲突。"
+      :"rank 序：第 1 步有 "+worst+" 个 rank 同时写 rank 0，接收端成为瓶颈；后面几步依次轮到下一个目的地。";
+  }
+  legend("pg-legend",[["--seq-1","同时收 1 份"],["--seq-2","2 份"],["--seq-3","3–4 份"],["--seq-4","5–6 份"],["--seq-5","7 份"]]);
+  let cur="perm";draw(cur);
+  seg("pg","perm",m=>{cur=m;draw(m);});
+  window.__redrawPG=()=>draw(cur);
+})();
+
+/* ---------- 4 skew ---------- */
+(function(){
+  const svg=document.getElementById("sk"),inp=document.getElementById("delta"),dv=document.getElementById("delta-v");
+  const series=[
+    {k:"stock",lab:"原版 RCCL：0.96·δ",c:"--series-2",f:d=>0.96*d},
+    {k:"fixed",lab:"我们，固定消费序：max(0, δ−1100)",c:"--series-3",f:d=>Math.max(0,d-1100)},
+    {k:"last",lab:"我们，落后块最后消费：max(0, δ−2500)",c:"--series-1",f:d=>Math.max(0,d-2500)}];
+  legend("sk-legend",series.map(s=>[s.c,s.lab]));
+  const X0=70,X1=900,Y0=20,Y1=250,DM=3000,EM=3000;
+  const sx=d=>X0+(X1-X0)*d/DM, sy=e=>Y1-(Y1-Y0)*e/EM;
+  function draw(){
+    clear(svg);
+    const d0=+inp.value;dv.textContent=d0;
+    for(let e=0;e<=3000;e+=1000){S("line",{x1:X0,x2:X1,y1:sy(e),y2:sy(e),class:"grid"},svg);T(svg,X0-8,sy(e)+4,(e/1000)+" ms","t-axis","end");}
+    for(let d=0;d<=3000;d+=500)T(svg,sx(d),Y1+18,d+"","t-axis","middle");
+    T(svg,(X0+X1)/2,Y1+36,"迟到量 δ（µs）","t-axis","middle");
+    T(svg,X0,Y0-6,"多付的时间（曝露）","t-axis");
+    S("line",{x1:X0,x2:X1,y1:Y1,y2:Y1,stroke:"var(--axis)","stroke-width":1},svg);
+    [1100,2500].forEach((w,i)=>{S("line",{x1:sx(w),x2:sx(w),y1:Y0,y2:Y1,class:"grid"},svg);T(svg,sx(w)+4,Y0+12+i*14,(i?"W_最后≈2.5 ms":"W_固定≈1.1 ms"),"t-axis");});
+    series.forEach(s=>{let p="";for(let d=0;d<=DM;d+=25){p+=(d?"L":"M")+sx(d)+","+sy(Math.min(EM,s.f(d)));}S("path",{d:p,fill:"none",stroke:"var("+s.c+")","stroke-width":2,"stroke-linejoin":"round","stroke-linecap":"round"},svg);});
+    S("line",{x1:sx(d0),x2:sx(d0),y1:Y0,y2:Y1,stroke:"var(--text-secondary)","stroke-width":1},svg);
+    series.forEach(s=>{const e=s.f(d0);S("circle",{cx:sx(d0),cy:sy(Math.min(EM,e)),r:5,fill:"var("+s.c+")",stroke:"var(--surface-1)","stroke-width":2},svg);});
+    const lines=series.map(s=>Math.round(s.f(d0))+" µs　"+s.lab.split("：")[0]);
+    const bx=d0>1800?sx(d0)-250:sx(d0)+10;
+    S("rect",{x:bx,y:Y0+40,width:240,height:70,rx:8,fill:"var(--surface-1)",stroke:"var(--border)"},svg);
+    lines.forEach((l,i)=>T(svg,bx+10,Y0+60+i*18,l,i===0?"t-pri":"t-lab"));
+    const hit=S("rect",{x:X0,y:Y0,width:X1-X0,height:Y1-Y0,fill:"transparent"},svg);
+    hit.addEventListener("pointermove",ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const p=pt.matrixTransform(svg.getScreenCTM().inverse());const d=Math.round(Math.max(0,Math.min(DM,(p.x-X0)/(X1-X0)*DM))/50)*50;showTip(ev,["δ = "+d+" µs"].concat(series.map(s=>Math.round(s.f(d))+" µs　"+s.lab.split("：")[0])));});
+    hit.addEventListener("pointerleave",hideTip);
+  }
+  inp.addEventListener("input",draw);draw();
+  table("sk-table",["δ (µs)","原版实测 ms","我们固定序实测 ms","我们最后消费实测 ms"],[[0,4.45,"4.78–4.86","4.83–4.87"],[500,4.88,"4.84–4.85",4.81],[1000,5.38,"4.80–4.87","4.80–4.88"],[2000,6.37,"5.70–5.72",4.85]]);
+})();
+
+/* ---------- 5 call sites ---------- */
+(function(){
+  const svg=document.getElementById("sites");
+  const y=40,h=56;
+  const ops=[["QKV","AG → GEMM","④ col",true],["Attention","无 TP 通信","",false],["o_proj","GEMM → RS","② row",true],["fc1 (gate/up)","AG → GEMM","④ col",true],["fc2 (down)","GEMM → RS","② row",true]];
+  const w=160,gap=28;
+  ops.forEach((o,i)=>{const x=20+i*(w+gap);archBox(svg,x,y,w,h,o[0],o[1],o[3]);if(o[2])T(svg,x+w/2,y-10,o[2],"t-pri","middle");if(i<ops.length-1)arrow(svg,x+w,y+h/2,x+w+gap,y+h/2,"");});
+  T(svg,20,y+h+34,"前向（含 recompute）","t-axis");
+  const yb=y+h+60;
+  const bops=[["fc2 / o_proj 反向","AG(grad) → dgrad","③ bwd",true],["其余层反向","梯度 RS 等","① 纯 RS",true]];
+  bops.forEach((o,i)=>{const x=20+i*(2*w+gap);archBox(svg,x,yb,2*w,h,o[0],o[1],o[3]);T(svg,x+w,yb-10,o[2],"t-pri","middle");});
+  T(svg,20,yb+h+26,"反向","t-axis");
+})();
+
+/* ---------- 6 control plane ---------- */
+(function(){
+  const svg=document.getElementById("cp");
+  legend("cp-legend",[["--series-1","设备时间（GPU 上实际执行）"],["--series-2","host 入队时间"]]);
+  const rows=[["QKV 原版",3.74,0.345],["QKV 融合",3.445,4.85],["fc1 原版",7.01,0.355],["fc1 融合",6.01,3.4]];
+  const X0=120,X1=900,M=8,sx=v=>X0+(X1-X0)*v/M,bh=16;
+  for(let v=0;v<=8;v+=2){S("line",{x1:sx(v),x2:sx(v),y1:10,y2:250,class:"grid"},svg);T(svg,sx(v),266,v+" ms","t-axis","middle");}
+  rows.forEach((r,i)=>{
+    const y=20+i*58;
+    T(svg,X0-10,y+bh+5,r[0],"t-pri","end");
+    let b=rbar(svg,X0,y,sx(r[1])-X0,bh,"var(--series-1)");hover(b,[r[1]+" ms",r[0]+" · 设备时间"]);
+    T(svg,sx(r[1])+6,y+12,r[1]+"","t-axis");
+    b=rbar(svg,X0,y+bh+2,Math.max(3,sx(r[2])-X0),bh,"var(--series-2)");hover(b,[r[2]+" ms",r[0]+" · host 入队",r[2]>r[1]?"host 比 GPU 还慢 ⇒ GPU 空等":"host 远远跑在 GPU 前面"]);
+    T(svg,Math.max(sx(r[2]),X0+3)+6,y+bh+14,r[2]+(r[2]>r[1]?"　host > 设备":""),"t-axis");
+  });
+  S("line",{x1:X0,x2:X0,y1:10,y2:250,stroke:"var(--axis)","stroke-width":1},svg);
+  table("cp-table",["调用","设备 ms","host 入队 ms（中位）"],rows.map(r=>[r[0],r[1],r[2]]));
+})();
+
+/* ---------- 7 dispatcher ---------- */
+(function(){
+  const svg=document.getElementById("flow");
+  const st=[["预热 2 步","全部建好"],["探测：全关","3 步"],["+row","3 步"],["+bwd","3 步"],["+col","3 步"],["决定 + 释放","未选路径"]];
+  const w=136,gap=24;
+  st.forEach((s,i)=>{const x=10+i*(w+gap);archBox(svg,x,40,w,60,s[0],s[1],i===5);if(i<st.length-1)arrow(svg,x+w,70,x+w+gap,70,"");});
+  T(svg,480,140,"每个候选：比当前最好低 0.3% 以上才保留；各 rank 取 MAX 后统一决策","t-lab","middle");
+  T(svg,480,162,"之后整个训练都用选中的配置，不再探测（共 14 步）","t-axis","middle");
+})();
+(function(){
+  const svg=document.getElementById("at"),note=document.getElementById("at-note");
+  const D={
+    "27":{base:37253.5,p:[["全关",37253.5,"基准"],["+row",36274.5,"保留"],["+bwd",35860.1,"保留"],["+col",36084.4,"丢弃"]],
+          n:"27B（F28，10-30 20:49）：+col 让步时从 35860 回升到 36084 ms，被丢弃，选中 row+bwd。但 10-31 凌晨两次复跑都误开了 col（F31）：预热时建的 col 上下文一直常驻，拖慢了之后每个不开 col 的探针，col 因此显得白送。修复正在验证。"},
+    "70":{base:18884.0,p:[["全关",18884.0,"基准"],["+row",17931.5,"保留"],["+bwd",17641.4,"保留"],["+col",17337.8,"保留"]],
+          n:"70B（3 次一致）：三项全开。同批固定臂 fbag+col 比 fbag 快 0.58%（F27），说明选对了。"}};
+  function draw(k){
+    clear(svg);const d=D[k];note.textContent=d.n;
+    const X0=110,Xz=820,MIN=-9,sx=v=>Xz+(Xz-X0)*v/(-MIN),bh=22;
+    for(let v=0;v>=MIN;v-=3){S("line",{x1:sx(v),x2:sx(v),y1:10,y2:200,class:"grid"},svg);T(svg,sx(v),216,v+"%","t-axis","middle");}
+    S("line",{x1:Xz,x2:Xz,y1:10,y2:200,stroke:"var(--axis)","stroke-width":1},svg);
+    d.p.forEach((p,i)=>{
+      const y=20+i*44,pct=(p[1]/d.base-1)*100;
+      T(svg,X0-10,y+16,p[0],"t-pri","end");
+      if(pct<0){const b=lbar(svg,sx(pct),y,Xz-sx(pct),bh,p[2]==="丢弃"?"var(--idle)":"var(--series-1)");hover(b,[pct.toFixed(2)+"%",p[0]+"："+p[1].toFixed(1)+" ms/步",p[2]]);}
+      T(svg,(pct<0?sx(pct):Xz)-8,y+16,(pct<0?pct.toFixed(1)+"%　":"")+p[2],"t-lab","end");
+    });
+    T(svg,Xz+8,30,"← 越往左越快","t-axis");
+    table("at-table",["探测","步时 ms","相对全关","判定"],d.p.map(p=>[p[0],p[1],((p[1]/d.base-1)*100).toFixed(2)+"%",p[2]]));
+  }
+  draw("27");seg("at","at",draw);
+})();
+
+/* ---------- 8 results ---------- */
+(function(){
+  const svg=document.getElementById("res"),note=document.getElementById("res-note");
+  const R={
+    op:{rows:[["纯 RS 33.6 MB",0.58],["纯 RS 134 MB",1.27],["纯 RS 268 MB",1.45],["纯 RS 403 MB",1.53],["纯 RS 537 MB",1.57],["GEMM+RS 70B M8192",1.152],["GEMM+RS 70B M16384",1.196],["GEMM+RS 70B M32768",1.313]],
+        n:"孤立测试，±1 整数载荷位级 md==0，基线 vendor mm + RCCL（F4、F6）。33.6 MB 输在每个 op 约 0.9 ms 的 host 固定成本。",max:1.7},
+    e2e:{rows:[["27B fbag（M32768）",1.068],["70B fbag（M32768）",1.080],["70B fbag+col",1.086],["70B MBS2（M8192）",0.969],["70B MBS1（M4096）*",1.013]],
+        n:"真实 Megatron 训练整步，含 recompute，iter3+ 中位，每臂独立进程。* MBS1 时我们的路径一个 op 都没接管，却仍快 1.3%。空对照（同 fork、同堆、同包装，0 个 op 接管）在 MBS1 也比原版快 0.91%，所以对原版的整步差里确实含非重叠成分，来源正在二分。重叠本身的收益要按对空对照计算，MBS8 空对照在跑。MBS2 只接管了纯 RS，整步输 3.1%。",max:1.2}};
+  function draw(k){
+    clear(svg);const d=R[k];note.textContent=d.n;
+    const X0=200,X1=880,lo=k==="op"?0.4:0.9,hi=d.max,sx=v=>X0+(X1-X0)*(v-lo)/(hi-lo),bh=18,step=k==="op"?36:52;
+    const ticks=k==="op"?[0.4,0.6,0.8,1.0,1.2,1.4,1.6]:[0.9,0.95,1.0,1.05,1.1,1.15,1.2];
+    const H=20+d.rows.length*step;
+    svg.setAttribute("viewBox","0 0 960 "+(H+30));
+    ticks.forEach(v=>{S("line",{x1:sx(v),x2:sx(v),y1:10,y2:H,class:"grid"},svg);T(svg,sx(v),H+16,v.toFixed(2)+"×","t-axis","middle");});
+    S("line",{x1:sx(1),x2:sx(1),y1:6,y2:H,stroke:"var(--text-secondary)","stroke-width":1.5},svg);
+    T(svg,sx(1)+4,8,"1.0× = 原版","t-axis");
+    d.rows.forEach((r,i)=>{
+      const y=20+i*step,v=r[1];
+      T(svg,X0-10,y+13,r[0],"t-pri","end");
+      let b;
+      if(v>=1)b=rbar(svg,sx(1),y,sx(v)-sx(1),bh,"var(--series-1)");
+      else b=lbar(svg,sx(v),y,sx(1)-sx(v),bh,"var(--series-2)");
+      hover(b,[v.toFixed(3)+"×",r[0],v>=1?"比原版快":"比原版慢（输）"]);
+      if(v>=1)T(svg,sx(v)+6,y+13,v.toFixed(2)+"×","t-lab");
+      else T(svg,sx(v)-6,y+13,v.toFixed(2)+"×　输","t-lab","end");
+    });
+    table("res-table",["项","加速比"],d.rows.map(r=>[r[0],r[1]]));
+  }
+  draw("op");seg("res","res",draw);
+})();
+
+/* re-render pieces that read computed colors when theme flips */
+const mo=new MutationObserver(()=>{drawArch();if(window.__redrawPG)window.__redrawPG();});
+mo.observe(root,{attributes:true,attributeFilter:["data-theme"]});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{syncThemeBtn();drawArch();if(window.__redrawPG)window.__redrawPG();});
+})();
+</script>
+</body>
+</html>

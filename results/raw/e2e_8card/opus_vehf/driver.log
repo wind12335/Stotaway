@@ -1,0 +1,15 @@
+[vehf] fall1 kind=fall iters=12 start 21:25:32
+[vehf] fall1 kind=fall rc=1 iters=12 med(it3+)=37647.3 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022633E-01 | lm loss PPL: 1.224170E+00 |  21:34:43
+[vehf] fdk1 kind=fdk iters=12 start 21:34:43
+[vehf] fdk1 kind=fdk rc=1 iters=12 med(it3+)=36027.2 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022558E-01 | lm loss PPL: 1.224161E+00 |  21:43:58
+[vehf] base1 kind=base iters=12 start 21:43:58
+[vehf] base1 kind=base rc=0 iters=12 med(it3+)=36636.6 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.023066E-01 | lm loss PPL: 1.224223E+00 |  21:53:06
+[vehf] ffc2a kind=ffc2 iters=12 start 21:53:06
+[vehf] ffc2a kind=ffc2 rc=1 iters=12 med(it3+)=36884.8 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022966E-01 | lm loss PPL: 1.224211E+00 |  22:02:09
+[vehf] fall2 kind=fall iters=12 start 22:02:09
+[vehf] fall2 kind=fall rc=1 iters=12 med(it3+)=37772.0 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022780E-01 | lm loss PPL: 1.224188E+00 |  22:11:28
+[vehf] fdk2 kind=fdk iters=12 start 22:11:28
+[vehf] fdk2 kind=fdk rc=1 iters=12 med(it3+)=36177.8 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022959E-01 | lm loss PPL: 1.224210E+00 |  22:20:41
+[vehf] base2 kind=base iters=12 start 22:20:41
+[vehf] base2 kind=base rc=0 iters=12 med(it3+)=36661.1 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.023649E-01 | lm loss PPL: 1.224295E+00 |  22:29:44
+VEHF DONE

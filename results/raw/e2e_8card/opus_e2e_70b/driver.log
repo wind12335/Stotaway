@@ -1,0 +1,21 @@
+[e2e] b1 kind=base iters=16 start 16:34:36
+[e2e] b1 kind=base rc=0 iters=16 med(it3+)=18855.7 fallbacks_r0=0 val= validation loss at iteration 16 on test set | lm loss value: 1.099631E-01 | lm loss PPL: 1.116237E+00 |  16:41:06
+[e2e] f1 kind=fbag iters=16 start 16:41:06
+[e2e] f1 kind=fbag rc=1 iters=16 med(it3+)=17492.2 fallbacks_r0=0 val= validation loss at iteration 16 on test set | lm loss value: 1.099532E-01 | lm loss PPL: 1.116226E+00 |  16:47:04
+[e2e] b2 kind=base iters=16 start 16:47:04
+[e2e] b2 kind=base rc=0 iters=16 med(it3+)=18928.5 fallbacks_r0=0 val= validation loss at iteration 16 on test set | lm loss value: 1.099707E-01 | lm loss PPL: 1.116245E+00 |  16:53:31
+[e2e] f2 kind=fbag iters=16 start 16:53:31
+[e2e] f2 kind=fbag rc=1 iters=16 med(it3+)=17480.4 fallbacks_r0=0 val= validation loss at iteration 16 on test set | lm loss value: 1.099505E-01 | lm loss PPL: 1.116223E+00 |  16:59:27
+[e2e] a1 kind=fat iters=16 start 16:59:27
+[e2e] a1 kind=fat rc=1 iters=16 med(it3+)=17702.0 fallbacks_r0=0 val= validation loss at iteration 16 on test set | lm loss value: 1.099505E-01 | lm loss PPL: 1.116223E+00 |  17:05:30
+E2E DONE
+[e2e] a2 kind=fat iters=18 start 17:16:49
+[e2e] a2 kind=fat rc=1 iters=18 med(it3+)=17356.7 fallbacks_r0=0 val= validation loss at iteration 18 on test set | lm loss value: 8.531384E-02 | lm loss PPL: 1.089059E+00 |  17:23:23
+E2E DONE
+[e2e] a3 kind=fat iters=16 start 18:11:34
+[e2e] a3 kind=fat rc=1 iters=16 med(it3+)=17630.0 fallbacks_r0=0 val= validation loss at iteration 16 on test set | lm loss value: 1.099357E-01 | lm loss PPL: 1.116206E+00 |  18:17:38
+[e2e] c1 kind=fbc iters=16 start 18:17:38
+[e2e] c1 kind=fbc rc=1 iters=16 med(it3+)=17640.6 fallbacks_r0=0 val= validation loss at iteration 16 on test set | lm loss value: 1.099357E-01 | lm loss PPL: 1.116206E+00 |  18:23:41
+[e2e] f3 kind=fbag iters=16 start 18:23:41
+[e2e] f3 kind=fbag rc=1 iters=16 med(it3+)=17597.0 fallbacks_r0=0 val= validation loss at iteration 16 on test set | lm loss value: 1.099357E-01 | lm loss PPL: 1.116206E+00 |  18:29:44
+[e2e] c2 kind=fbc iters=16 start 18:29:44

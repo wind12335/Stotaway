@@ -1,0 +1,21 @@
+[veh] B1 kind=base iters=12 start 18:52:59
+[veh] B1 kind=base rc=? iters=12 med(it3+)=36531.5 fallbacks_r0=0 19:02:15 (driver resumed)
+[veh] K1 kind=k4 iters=12 start 19:02:15
+[veh] K1 kind=k4 rc=1 iters=12 med(it3+)=36188.5 fallbacks_r0=0 19:11:30
+[veh] D1 kind=dx iters=12 start 19:11:30
+[veh] D1 kind=dx rc=1 iters=12 med(it3+)=36452.6 fallbacks_r0=0 19:20:53
+[veh] B2 kind=base iters=12 start 19:20:53
+[veh] B2 kind=base rc=0 iters=12 med(it3+)=36664.4 fallbacks_r0=0 19:30:03
+[veh] D2 kind=dx iters=12 start 19:30:03
+[veh] D2 kind=dx rc=1 iters=12 med(it3+)=36189.2 fallbacks_r0=0 19:39:17
+[veh] K2 kind=k4 iters=12 start 19:39:17
+[veh] K2 kind=k4 rc=1 iters=12 med(it3+)=36258.4 fallbacks_r0=0 19:48:33
+VEH DONE
+[veh] DK1 kind=dxk iters=12 start 20:03:34
+[veh] DK1 kind=dxk rc=1 iters=12 med(it3+)=35845.6 fallbacks_r0=0 20:12:42
+[veh] DK2 kind=dxk iters=12 start 20:12:42
+[veh] DK2 kind=dxk rc=1 iters=12 med(it3+)=36148.0 fallbacks_r0=0 20:21:57
+VEH2 DONE
+[veh] DT1 kind=dxt iters=12 start 20:46:32
+[veh] DT1 kind=dxt rc=1 iters=12 med(it3+)=35828.3 fallbacks_r0=0 20:55:39
+VEH3 DONE

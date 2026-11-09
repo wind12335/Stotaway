@@ -1,0 +1,397 @@
+[vllm_sp] installed: mode=dx buckets=[16384] R=8
+[vsp] arm=dx TP=8 PP=1 M-bucket=16384 model=/root/private_data/stowaway/3rdparty/models/LLAMA3-70B
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+WARNING 11-02 16:37:48 [worker_base.py:40] VLLM_RANK6_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK6_NUMA = -1
+WARNING 11-02 16:37:48 [worker_base.py:40] VLLM_RANK5_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK5_NUMA = -1
+WARNING 11-02 16:37:48 [worker_base.py:40] VLLM_RANK7_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK7_NUMA = -1
+WARNING 11-02 16:37:48 [worker_base.py:40] VLLM_RANK3_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK3_NUMA = -1
+WARNING 11-02 16:37:48 [worker_base.py:40] VLLM_RANK0_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK0_NUMA = -1
+WARNING 11-02 16:37:48 [worker_base.py:40] VLLM_RANK2_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK2_NUMA = -1
+WARNING 11-02 16:37:48 [worker_base.py:40] VLLM_RANK1_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK1_NUMA = -1
+WARNING 11-02 16:37:49 [worker_base.py:40] VLLM_RANK4_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK4_NUMA = -1
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 6 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 4 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 1 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 5 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 7 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 2 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 3 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 5 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 1 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 3 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 2 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 6 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 4 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 7 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 1 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 3 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 7 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 2 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 4 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 5 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 6 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/root/private_data/stowaway/e2e/vllm/vllm_sp.py", line 67, in <module>
+[rank0]:     llm = LLM(model=MODEL, tensor_parallel_size=world, pipeline_parallel_size=NNODES,
+[rank0]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 302, in __init__
+[rank0]:     self.llm_engine = LLMEngine.from_engine_args(
+[rank0]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 178, in from_engine_args
+[rank0]:     return cls(vllm_config=vllm_config,
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 115, in __init__
+[rank0]:     self.engine_core = EngineCoreClient.make_client(
+[rank0]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 82, in make_client
+[rank0]:     return InprocClient(vllm_config, executor_class, log_stats)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 245, in __init__
+[rank0]:     self.engine_core = EngineCore(*args, **kwargs)
+[rank0]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 84, in __init__
+[rank0]:     self.model_executor = executor_class(vllm_config)
+[rank0]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/executor_base.py", line 54, in __init__
+[rank0]:     self._init_executor()
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 144, in _init_executor
+[rank0]:     super()._init_executor()
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 54, in _init_executor
+[rank0]:     self.collective_rpc("init_device")
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 83, in collective_rpc
+[rank0]:     return [run_method(self.driver_worker, method, args, kwargs)]
+[rank0]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/utils/__init__.py", line 3295, in run_method
+[rank0]:     return func(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/worker/worker_base.py", line 297, in init_device
+[rank0]:     self.worker.init_device()  # type: ignore
+[rank0]:     ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 187, in init_device
+[rank0]:     raise ValueError(
+[rank0]: ValueError: Free memory on device (56.77/63.98 GiB) on startup is less than desired GPU memory utilization (0.9, 57.59 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+[vllm_sp] sp_forwards=0 stock_forwards=0 sp_host_s=0.00 mode=dx
+[rank6]: Traceback (most recent call last):
+[rank6]:   File "/root/private_data/stowaway/e2e/vllm/vllm_sp.py", line 67, in <module>
+[rank6]:     llm = LLM(model=MODEL, tensor_parallel_size=world, pipeline_parallel_size=NNODES,
+[rank6]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 302, in __init__
+[rank6]:     self.llm_engine = LLMEngine.from_engine_args(
+[rank6]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 178, in from_engine_args
+[rank6]:     return cls(vllm_config=vllm_config,
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 115, in __init__
+[rank6]:     self.engine_core = EngineCoreClient.make_client(
+[rank6]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 82, in make_client
+[rank6]:     return InprocClient(vllm_config, executor_class, log_stats)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 245, in __init__
+[rank6]:     self.engine_core = EngineCore(*args, **kwargs)
+[rank6]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 84, in __init__
+[rank6]:     self.model_executor = executor_class(vllm_config)
+[rank6]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/executor_base.py", line 54, in __init__
+[rank6]:     self._init_executor()
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 144, in _init_executor
+[rank6]:     super()._init_executor()
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 54, in _init_executor
+[rank6]:     self.collective_rpc("init_device")
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 83, in collective_rpc
+[rank6]:     return [run_method(self.driver_worker, method, args, kwargs)]
+[rank6]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/utils/__init__.py", line 3295, in run_method
+[rank6]:     return func(*args, **kwargs)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/worker/worker_base.py", line 297, in init_device
+[rank6]:     self.worker.init_device()  # type: ignore
+[rank6]:     ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 187, in init_device
+[rank6]:     raise ValueError(
+[rank6]: ValueError: Free memory on device (56.64/63.98 GiB) on startup is less than desired GPU memory utilization (0.9, 57.59 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+[rank7]: Traceback (most recent call last):
+[rank7]:   File "/root/private_data/stowaway/e2e/vllm/vllm_sp.py", line 67, in <module>
+[rank7]:     llm = LLM(model=MODEL, tensor_parallel_size=world, pipeline_parallel_size=NNODES,
+[rank7]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 302, in __init__
+[rank7]:     self.llm_engine = LLMEngine.from_engine_args(
+[rank7]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 178, in from_engine_args
+[rank7]:     return cls(vllm_config=vllm_config,
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 115, in __init__
+[rank7]:     self.engine_core = EngineCoreClient.make_client(
+[rank7]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 82, in make_client
+[rank7]:     return InprocClient(vllm_config, executor_class, log_stats)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 245, in __init__
+[rank7]:     self.engine_core = EngineCore(*args, **kwargs)
+[rank7]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 84, in __init__
+[rank7]:     self.model_executor = executor_class(vllm_config)
+[rank7]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/executor_base.py", line 54, in __init__
+[rank7]:     self._init_executor()
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 144, in _init_executor
+[rank7]:     super()._init_executor()
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 54, in _init_executor
+[rank7]:     self.collective_rpc("init_device")
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 83, in collective_rpc
+[rank7]:     return [run_method(self.driver_worker, method, args, kwargs)]
+[rank7]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/utils/__init__.py", line 3295, in run_method
+[rank7]:     return func(*args, **kwargs)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/worker/worker_base.py", line 297, in init_device
+[rank7]:     self.worker.init_device()  # type: ignore
+[rank7]:     ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 187, in init_device
+[rank7]:     raise ValueError(
+[rank7]: ValueError: Free memory on device (56.83/63.98 GiB) on startup is less than desired GPU memory utilization (0.9, 57.59 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+[rank5]: Traceback (most recent call last):
+[rank5]:   File "/root/private_data/stowaway/e2e/vllm/vllm_sp.py", line 67, in <module>
+[rank5]:     llm = LLM(model=MODEL, tensor_parallel_size=world, pipeline_parallel_size=NNODES,
+[rank5]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 302, in __init__
+[rank5]:     self.llm_engine = LLMEngine.from_engine_args(
+[rank5]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 178, in from_engine_args
+[rank5]:     return cls(vllm_config=vllm_config,
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 115, in __init__
+[rank5]:     self.engine_core = EngineCoreClient.make_client(
+[rank5]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 82, in make_client
+[rank5]:     return InprocClient(vllm_config, executor_class, log_stats)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 245, in __init__
+[rank5]:     self.engine_core = EngineCore(*args, **kwargs)
+[rank5]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 84, in __init__
+[rank5]:     self.model_executor = executor_class(vllm_config)
+[rank5]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/executor_base.py", line 54, in __init__
+[rank5]:     self._init_executor()
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 144, in _init_executor
+[rank5]:     super()._init_executor()
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 54, in _init_executor
+[rank5]:     self.collective_rpc("init_device")
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 83, in collective_rpc
+[rank5]:     return [run_method(self.driver_worker, method, args, kwargs)]
+[rank5]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/utils/__init__.py", line 3295, in run_method
+[rank5]:     return func(*args, **kwargs)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/worker/worker_base.py", line 297, in init_device
+[rank5]:     self.worker.init_device()  # type: ignore
+[rank5]:     ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 187, in init_device
+[rank5]:     raise ValueError(
+[rank5]: ValueError: Free memory on device (56.64/63.98 GiB) on startup is less than desired GPU memory utilization (0.9, 57.59 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+[rank4]: Traceback (most recent call last):
+[rank4]:   File "/root/private_data/stowaway/e2e/vllm/vllm_sp.py", line 67, in <module>
+[rank4]:     llm = LLM(model=MODEL, tensor_parallel_size=world, pipeline_parallel_size=NNODES,
+[rank4]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 302, in __init__
+[rank4]:     self.llm_engine = LLMEngine.from_engine_args(
+[rank4]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 178, in from_engine_args
+[rank4]:     return cls(vllm_config=vllm_config,
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 115, in __init__
+[rank4]:     self.engine_core = EngineCoreClient.make_client(
+[rank4]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 82, in make_client
+[rank4]:     return InprocClient(vllm_config, executor_class, log_stats)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 245, in __init__
+[rank4]:     self.engine_core = EngineCore(*args, **kwargs)
+[rank4]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 84, in __init__
+[rank4]:     self.model_executor = executor_class(vllm_config)
+[rank4]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/executor_base.py", line 54, in __init__
+[rank4]:     self._init_executor()
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 144, in _init_executor
+[rank4]:     super()._init_executor()
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 54, in _init_executor
+[rank4]:     self.collective_rpc("init_device")
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 83, in collective_rpc
+[rank4]:     return [run_method(self.driver_worker, method, args, kwargs)]
+[rank4]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/utils/__init__.py", line 3295, in run_method
+[rank4]:     return func(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/worker/worker_base.py", line 297, in init_device
+[rank4]:     self.worker.init_device()  # type: ignore
+[rank4]:     ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 187, in init_device
+[rank4]:     raise ValueError(
+[rank4]: ValueError: Free memory on device (56.64/63.98 GiB) on startup is less than desired GPU memory utilization (0.9, 57.59 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/root/private_data/stowaway/e2e/vllm/vllm_sp.py", line 67, in <module>
+[rank2]:     llm = LLM(model=MODEL, tensor_parallel_size=world, pipeline_parallel_size=NNODES,
+[rank2]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 302, in __init__
+[rank2]:     self.llm_engine = LLMEngine.from_engine_args(
+[rank2]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 178, in from_engine_args
+[rank2]:     return cls(vllm_config=vllm_config,
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 115, in __init__
+[rank2]:     self.engine_core = EngineCoreClient.make_client(
+[rank2]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 82, in make_client
+[rank2]:     return InprocClient(vllm_config, executor_class, log_stats)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 245, in __init__
+[rank2]:     self.engine_core = EngineCore(*args, **kwargs)
+[rank2]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 84, in __init__
+[rank2]:     self.model_executor = executor_class(vllm_config)
+[rank2]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/executor_base.py", line 54, in __init__
+[rank2]:     self._init_executor()
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 144, in _init_executor
+[rank2]:     super()._init_executor()
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 54, in _init_executor
+[rank2]:     self.collective_rpc("init_device")
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 83, in collective_rpc
+[rank2]:     return [run_method(self.driver_worker, method, args, kwargs)]
+[rank2]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/utils/__init__.py", line 3295, in run_method
+[rank2]:     return func(*args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/worker/worker_base.py", line 297, in init_device
+[rank2]:     self.worker.init_device()  # type: ignore
+[rank2]:     ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 187, in init_device
+[rank2]:     raise ValueError(
+[rank2]: ValueError: Free memory on device (56.64/63.98 GiB) on startup is less than desired GPU memory utilization (0.9, 57.59 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/root/private_data/stowaway/e2e/vllm/vllm_sp.py", line 67, in <module>
+[rank3]:     llm = LLM(model=MODEL, tensor_parallel_size=world, pipeline_parallel_size=NNODES,
+[rank3]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 302, in __init__
+[rank3]:     self.llm_engine = LLMEngine.from_engine_args(
+[rank3]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 178, in from_engine_args
+[rank3]:     return cls(vllm_config=vllm_config,
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 115, in __init__
+[rank3]:     self.engine_core = EngineCoreClient.make_client(
+[rank3]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 82, in make_client
+[rank3]:     return InprocClient(vllm_config, executor_class, log_stats)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 245, in __init__
+[rank3]:     self.engine_core = EngineCore(*args, **kwargs)
+[rank3]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 84, in __init__
+[rank3]:     self.model_executor = executor_class(vllm_config)
+[rank3]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/executor_base.py", line 54, in __init__
+[rank3]:     self._init_executor()
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 144, in _init_executor
+[rank3]:     super()._init_executor()
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 54, in _init_executor
+[rank3]:     self.collective_rpc("init_device")
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 83, in collective_rpc
+[rank3]:     return [run_method(self.driver_worker, method, args, kwargs)]
+[rank3]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/utils/__init__.py", line 3295, in run_method
+[rank3]:     return func(*args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/worker/worker_base.py", line 297, in init_device
+[rank3]:     self.worker.init_device()  # type: ignore
+[rank3]:     ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 187, in init_device
+[rank3]:     raise ValueError(
+[rank3]: ValueError: Free memory on device (56.64/63.98 GiB) on startup is less than desired GPU memory utilization (0.9, 57.59 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/root/private_data/stowaway/e2e/vllm/vllm_sp.py", line 67, in <module>
+[rank1]:     llm = LLM(model=MODEL, tensor_parallel_size=world, pipeline_parallel_size=NNODES,
+[rank1]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 302, in __init__
+[rank1]:     self.llm_engine = LLMEngine.from_engine_args(
+[rank1]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 178, in from_engine_args
+[rank1]:     return cls(vllm_config=vllm_config,
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 115, in __init__
+[rank1]:     self.engine_core = EngineCoreClient.make_client(
+[rank1]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 82, in make_client
+[rank1]:     return InprocClient(vllm_config, executor_class, log_stats)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 245, in __init__
+[rank1]:     self.engine_core = EngineCore(*args, **kwargs)
+[rank1]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 84, in __init__
+[rank1]:     self.model_executor = executor_class(vllm_config)
+[rank1]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/executor_base.py", line 54, in __init__
+[rank1]:     self._init_executor()
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 144, in _init_executor
+[rank1]:     super()._init_executor()
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 54, in _init_executor
+[rank1]:     self.collective_rpc("init_device")
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/executor/uniproc_executor.py", line 83, in collective_rpc
+[rank1]:     return [run_method(self.driver_worker, method, args, kwargs)]
+[rank1]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/utils/__init__.py", line 3295, in run_method
+[rank1]:     return func(*args, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/worker/worker_base.py", line 297, in init_device
+[rank1]:     self.worker.init_device()  # type: ignore
+[rank1]:     ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/usr/local/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 187, in init_device
+[rank1]:     raise ValueError(
+[rank1]: ValueError: Free memory on device (56.64/63.98 GiB) on startup is less than desired GPU memory utilization (0.9, 57.59 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 16:37:53.955164 16679 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+/usr/local/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked shared_memory objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-crdnotebook-2110675621851545601-liqsh2-14754-16673@1,6] Exit code:    1
+--------------------------------------------------------------------------

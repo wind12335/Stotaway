@@ -1,0 +1,29 @@
+[v16][20:28:38] node=0 host=vcjob-2117231891400871938-liqsh2-14400-worker-0 out=/root/private_data/stowaway/results/raw/dual16_runs/vllm_rdma_liqsh2-14400 model=/root/private_data/stowaway/3rdparty/models/LLAMA3-70B
+[v16][20:28:38] master=172.31.40.13
+[v16][20:28:38] arm=stock (1) port=30507 start
+[v16][20:36:51] arm=stock (1) rc=0 [vsp] stock ttft r0 n1 isl16384: 2.330s 7032 tok/s
+[v16][20:36:51] RDMA verdict node=0: RDMA
+[v16][20:37:11] arm=rccl (2) port=30514 start
+[v16][20:42:24] arm=rccl (2) rc=0 [vsp] rccl ttft r0 n1 isl16384: 2.593s 6319 tok/s
+[v16][20:42:44] arm=dx (3) port=30521 start
+[v16][20:47:44] arm=dx (3) rc=0 [vsp] dx ttft r0 n1 isl16384: 1.923s 8520 tok/s
+[v16][20:48:04] arm=plan (4) port=30528 start
+[v16][20:53:03] arm=plan (4) rc=0 [vsp] plan ttft r0 n1 isl16384: 1.985s 8252 tok/s
+[v16][20:53:24] arm=stock (5) port=30535 start
+[v16][20:58:25] arm=stock (5) rc=0 [vsp] stock ttft r0 n1 isl16384: 2.329s 7036 tok/s
+[v16][20:58:45] arm=rccl (6) port=30542 start
+[v16][21:03:52] arm=rccl (6) rc=0 [vsp] rccl ttft r0 n1 isl16384: 2.293s 7146 tok/s
+[v16][21:04:12] arm=dx (7) port=30549 start
+[v16][21:09:13] arm=dx (7) rc=0 [vsp] dx ttft r0 n1 isl16384: 1.929s 8493 tok/s
+[v16][21:09:33] arm=plan (8) port=30556 start
+[v16][21:14:33] arm=plan (8) rc=0 [vsp] plan ttft r0 n1 isl16384: 1.987s 8247 tok/s
+[v16][21:14:53] gate arm=stock port=30563 start
+[v16][21:18:36] gate arm=stock rc=0
+[v16][21:18:56] gate arm=rccl port=30570 start
+[v16][21:22:50] gate arm=rccl rc=0
+[v16][21:23:10] gate arm=dx port=30577 start
+[v16][21:26:55] gate arm=dx rc=0
+[v16][21:27:15] gate arm=plan port=30584 start
+[v16][21:31:06] gate arm=plan rc=0
+[v16][21:31:26] report -> /root/private_data/stowaway/results/raw/dual16_runs/vllm_rdma_liqsh2-14400/report.md
+[v16][21:31:26] V16 DONE node=0 -> /root/private_data/stowaway/results/raw/dual16_runs/vllm_rdma_liqsh2-14400

@@ -1,0 +1,28 @@
+[v16][20:27:59] node=1 host=vcjob-2117231891400871938-liqsh2-14400-worker-1 out=/root/private_data/stowaway/results/raw/dual16_runs/vllm_rdma_liqsh2-14400 model=/root/private_data/stowaway/3rdparty/models/LLAMA3-70B
+[v16][20:28:00] master=vcjob-2117231891400871938-liqsh2-14400-worker-0
+[v16][20:29:38] arm=stock (1) port=30507 start
+[v16][20:36:55] arm=stock (1) rc=0 
+[v16][20:36:55] RDMA verdict node=1: RDMA
+[v16][20:37:41] arm=rccl (2) port=30514 start
+[v16][20:42:27] arm=rccl (2) rc=0 
+[v16][20:43:17] arm=dx (3) port=30521 start
+[v16][20:47:45] arm=dx (3) rc=0 
+[v16][20:48:36] arm=plan (4) port=30528 start
+[v16][20:53:04] arm=plan (4) rc=0 
+[v16][20:53:55] arm=stock (5) port=30535 start
+[v16][20:58:26] arm=stock (5) rc=0 
+[v16][20:59:17] arm=rccl (6) port=30542 start
+[v16][21:03:55] arm=rccl (6) rc=0 
+[v16][21:04:45] arm=dx (7) port=30549 start
+[v16][21:09:12] arm=dx (7) rc=0 
+[v16][21:10:03] arm=plan (8) port=30556 start
+[v16][21:14:30] arm=plan (8) rc=0 
+[v16][21:15:26] gate arm=stock port=30563 start
+[v16][21:18:37] gate arm=stock rc=0
+[v16][21:19:28] gate arm=rccl port=30570 start
+[v16][21:22:48] gate arm=rccl rc=0
+[v16][21:23:39] gate arm=dx port=30577 start
+[v16][21:26:58] gate arm=dx rc=0
+[v16][21:27:43] gate arm=plan port=30584 start
+[v16][21:31:05] gate arm=plan rc=0
+[v16][21:31:25] V16 DONE node=1 -> /root/private_data/stowaway/results/raw/dual16_runs/vllm_rdma_liqsh2-14400

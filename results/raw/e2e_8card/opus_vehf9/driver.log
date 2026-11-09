@@ -1,0 +1,5 @@
+[vehf9] cth1 kind=fcth iters=8 start 01:16:49
+[vehf9] cth1 kind=fcth rc=1 iters=8 med(it3+)=35260.4 fallbacks_r0=0 val= validation loss at iteration 8 on test set | lm loss value: 4.045790E-01 | lm loss PPL: 1.498671E+00 |  01:23:22
+[vehf9] chs1 kind=fchs iters=8 start 01:23:22
+[vehf9] chs1 kind=fchs rc=1 iters=8 med(it3+)=34352.2 fallbacks_r0=0 val= validation loss at iteration 8 on test set | lm loss value: 4.045790E-01 | lm loss PPL: 1.498671E+00 |  01:29:40
+VEHF9 DONE

@@ -1,0 +1,14 @@
+diff --git a/megatron/training/models/hybrid.py b/megatron/training/models/hybrid.py
+index b58a70d3c..002e121be 100644
+--- a/megatron/training/models/hybrid.py
++++ b/megatron/training/models/hybrid.py
+@@ -2,7 +2,8 @@
+ 
+ import logging
+ from dataclasses import dataclass
+-from typing import Any, Callable, ClassVar, Literal, override
++from typing import Any, Callable, ClassVar, Literal
++from typing_extensions import override  # py3.11 compat (upstream core_r0.18.0 needs 3.12)
+ 
+ from megatron.core.distributed.distributed_data_parallel_config import DistributedDataParallelConfig
+ from megatron.core.enums import ModelType

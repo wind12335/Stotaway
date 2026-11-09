@@ -1,0 +1,46 @@
+[t23][17:50:38] master=vcjob-2116830209266200577-liqsh2-81125-worker-0 run_tag=rdma_liqsh2-81125 out=/root/private_data/tri-dist-hygon/bench/results/opus_dual16/rdma_liqsh2-81125
+[t23][17:50:38] === mgd 阶段 shapes=70b,27b arms=BASE.1,NULL.1,ALT.1,PLAN.1,BASE.2,NULL.2,ALT.2,PLAN.2 iters=16 mbs=8 ===
+[t23][17:51:22] shape=70b arm=BASE.1 (1/16) nl=8 port=30207 node=1 17:51:22
+[t23][17:58:53] shape=70b arm=BASE.1 kind=BASE node=1 mpirun rc=0 iters=16 med(it3+)=17944.4（rc=1 teardown 竞态良性）17:58:53
+[t23][17:58:53] RDMA verdict node=1: RDMA |       1 vcjob-2116830209266200577-liqsh2-81125-worker-1:162:630 [7] NCCL INFO Using network IBext_v8;      1 vcjob-2116830209266200577-liqsh2-81125-worker-1:162:630 [7] NCCL INFO NET/Plugin: Plugin name set by env to librccl-net-shca.so;      1 vcjob-2116830209266200577-liqsh2-81125-worker-1:162:630 [7] NCCL INFO NET/IB : Using [0]shca_0:1/IB [1]shca_1:1/IB [2]shca_2:1/IB [3]shca_3:1/IB ; OOB eth0:172.31.133.167<0>;      1 vcjob-2116830209266200577-liqsh2-81125-worker-1:162:630 [7] NCCL INFO NET/IBext_v8 : GPU Direct RDMA Disabled for HCA 3 'shca_3';
+[t23][17:59:25] shape=70b arm=NULL.1 (2/16) nl=8 port=30214 node=1 17:59:25
+[t23][18:05:52] shape=70b arm=NULL.1 kind=NULL node=1 mpirun rc=1 iters=16 med(it3+)=18123.3（rc=1 teardown 竞态良性）18:05:52
+[t23][18:05:52] predictor node=1 shape=70b mbs=8 layers=8 base_step=17944.4 -> fbc (FBC); report /root/private_data/tri-dist-hygon/bench/results/opus_dual16/rdma_liqsh2-81125/70b/plan_node1.md
+[t23][18:05:52] shape=70b arm=ALT.1 -> FBAG (predictor chose FBC)
+[t23][18:06:21] shape=70b arm=ALT.1 (3/16) nl=8 port=30221 node=1 18:06:21
+[t23][18:12:43] shape=70b arm=ALT.1 kind=FBAG node=1 mpirun rc=1 iters=16 med(it3+)=17455.9（rc=1 teardown 竞态良性）18:12:43
+[t23][18:12:43] shape=70b arm=PLAN.1 -> FBC (predictor chose FBC)
+[t23][18:13:09] shape=70b arm=PLAN.1 (4/16) nl=8 port=30228 node=1 18:13:09
+[t23][18:19:10] shape=70b arm=PLAN.1 kind=FBC node=1 mpirun rc=1 iters=16 med(it3+)=16804.5（rc=1 teardown 竞态良性）18:19:10
+[t23][18:19:36] shape=70b arm=BASE.2 (5/16) nl=8 port=30235 node=1 18:19:36
+[t23][18:26:02] shape=70b arm=BASE.2 kind=BASE node=1 mpirun rc=0 iters=16 med(it3+)=17935.2（rc=1 teardown 竞态良性）18:26:02
+[t23][18:26:27] shape=70b arm=NULL.2 (6/16) nl=8 port=30242 node=1 18:26:27
+[t23][18:32:51] shape=70b arm=NULL.2 kind=NULL node=1 mpirun rc=1 iters=16 med(it3+)=18136.0（rc=1 teardown 竞态良性）18:32:51
+[t23][18:32:51] shape=70b arm=ALT.2 -> FBAG (predictor chose FBC)
+[t23][18:33:19] shape=70b arm=ALT.2 (7/16) nl=8 port=30249 node=1 18:33:19
+[t23][18:40:57] shape=70b arm=ALT.2 kind=FBAG node=1 mpirun rc=1 iters=16 med(it3+)=17360.1（rc=1 teardown 竞态良性）18:40:57
+[t23][18:40:57] shape=70b arm=PLAN.2 -> FBC (predictor chose FBC)
+[t23][18:41:30] shape=70b arm=PLAN.2 (8/16) nl=8 port=30256 node=1 18:41:30
+[t23][18:47:30] shape=70b arm=PLAN.2 kind=FBC node=1 mpirun rc=1 iters=16 med(it3+)=16801.9（rc=1 teardown 竞态良性）18:47:30
+[t23][18:47:56] shape=27b arm=BASE.1 (9/16) nl=32 port=30263 node=1 18:47:56
+[t23][19:00:09] shape=27b arm=BASE.1 kind=BASE node=1 mpirun rc=0 iters=16 med(it3+)=37539.8（rc=1 teardown 竞态良性）19:00:09
+[t23][19:00:37] shape=27b arm=NULL.1 (10/16) nl=32 port=30270 node=1 19:00:37
+[t23][19:12:37] shape=27b arm=NULL.1 kind=NULL node=1 mpirun rc=1 iters=16 med(it3+)=37437.8（rc=1 teardown 竞态良性）19:12:37
+[t23][19:12:38] predictor node=1 shape=27b mbs=8 layers=32 base_step=37539.8 -> fbag (FBAG); report /root/private_data/tri-dist-hygon/bench/results/opus_dual16/rdma_liqsh2-81125/27b/plan_node1.md
+[t23][19:12:38] shape=27b arm=ALT.1 -> FBC (predictor chose FBAG)
+[t23][19:13:06] shape=27b arm=ALT.1 (11/16) nl=32 port=30277 node=1 19:13:06
+[t23][19:24:48] shape=27b arm=ALT.1 kind=FBC node=1 mpirun rc=1 iters=16 med(it3+)=36720.1（rc=1 teardown 竞态良性）19:24:48
+[t23][19:24:48] shape=27b arm=PLAN.1 -> FBAG (predictor chose FBAG)
+[t23][19:25:19] shape=27b arm=PLAN.1 (12/16) nl=32 port=30284 node=1 19:25:19
+[t23][19:36:44] shape=27b arm=PLAN.1 kind=FBAG node=1 mpirun rc=1 iters=16 med(it3+)=35770.6（rc=1 teardown 竞态良性）19:36:44
+[t23][19:37:11] shape=27b arm=BASE.2 (13/16) nl=32 port=30291 node=1 19:37:11
+[t23][19:49:10] shape=27b arm=BASE.2 kind=BASE node=1 mpirun rc=0 iters=16 med(it3+)=37483.7（rc=1 teardown 竞态良性）19:49:10
+[t23][19:49:37] shape=27b arm=NULL.2 (14/16) nl=32 port=30298 node=1 19:49:37
+[t23][20:01:39] shape=27b arm=NULL.2 kind=NULL node=1 mpirun rc=1 iters=16 med(it3+)=37934.3（rc=1 teardown 竞态良性）20:01:39
+[t23][20:01:39] shape=27b arm=ALT.2 -> FBC (predictor chose FBAG)
+[t23][20:02:07] shape=27b arm=ALT.2 (15/16) nl=32 port=30305 node=1 20:02:07
+[t23][20:14:08] shape=27b arm=ALT.2 kind=FBC node=1 mpirun rc=1 iters=16 med(it3+)=36818.5（rc=1 teardown 竞态良性）20:14:08
+[t23][20:14:08] shape=27b arm=PLAN.2 -> FBAG (predictor chose FBAG)
+[t23][20:14:34] shape=27b arm=PLAN.2 (16/16) nl=32 port=30312 node=1 20:14:34
+[t23][20:26:27] shape=27b arm=PLAN.2 kind=FBAG node=1 mpirun rc=1 iters=16 med(it3+)=35751.7（rc=1 teardown 竞态良性）20:26:27
+[t23][20:26:27] T23 DONE node=1 run=rdma_liqsh2-81125 -> /root/private_data/tri-dist-hygon/bench/results/opus_dual16/rdma_liqsh2-81125

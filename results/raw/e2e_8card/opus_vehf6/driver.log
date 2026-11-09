@@ -1,0 +1,7 @@
+[vehf6] cp1 kind=fcpb iters=12 start 23:55:39
+[vehf6] cp1 kind=fcpb rc=1 iters=12 med(it3+)=35325.5 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022311E-01 | lm loss PPL: 1.224131E+00 |  00:04:24
+[vehf6] ref1 kind=fbag iters=12 start 00:04:24
+[vehf6] ref1 kind=fbag rc=1 iters=12 med(it3+)=34340.3 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022311E-01 | lm loss PPL: 1.224131E+00 |  00:12:53
+[vehf6] cp2 kind=fcpb iters=12 start 00:12:53
+[vehf6] cp2 kind=fcpb rc=1 iters=12 med(it3+)=35446.1 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022311E-01 | lm loss PPL: 1.224131E+00 |  00:21:46
+VEHF6 DONE

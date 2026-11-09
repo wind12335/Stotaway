@@ -1,0 +1,1992 @@
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/optimizer/__init__.py:25: UserWarning: Transformer Engine and Apex are not installed. Falling back to Torch optimizers.
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/distributed/fsdp/src/megatron_fsdp/mixed_precision.py:115: UserWarning: Transformer Engine and Apex are not installed. Falling back to local implementations of multi_tensor_applier and multi_tensor_scale
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/optimizer/optimizer.py:29: UserWarning: Transformer Engine and Apex are not installed. Falling back to local implementations of multi_tensor_applier and multi_tensor_scale
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/optimizer/clip_grads.py:32: UserWarning: Transformer Engine and Apex are not installed. Falling back to local implementations of multi_tensor_applier, multi_tensor_l2norm, and multi_tensor_scale
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/hyper_comm_grid.py:26: UserWarning: absl.logging is not installed. Using logging.getLogger(__name__) instead. Please install absl.logging with `pip install absl-py` to use absl.logging.
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/models/backends.py:34: UserWarning: Apex is not installed. Falling back to Torch Norm
+  warnings.warn("Apex is not installed. Falling back to Torch Norm")
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/models/gpt/gpt_layer_specs.py:74: UserWarning: Apex is not installed. Falling back to Torch Norm
+  warnings.warn("Apex is not installed. Falling back to Torch Norm")
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/models/gpt/heterogeneous/heterogeneous_layer_specs.py:68: UserWarning: Apex is not installed. Falling back to Torch Norm
+  warnings.warn("Apex is not installed. Falling back to Torch Norm")
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/training/utils/common_utils.py:27: UserWarning: Transformer Engine and Apex are not installed. Falling back to local implementations of multi_tensor_applier and multi_tensor_l2norm
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/extensions/transformer_engine_spec_provider.py:88: UserWarning: Only transformer-engine>=1.7.0 supports MoE experts, but your version is 0.0.0. Use local linear implementation instead.
+  warnings.warn(
+/root/private_data/lyc/Megatron-LM-das/hcu_megatron/core/tensor_parallel/layers.py:12: UserWarning: flux is NOT installed
+  warnings.warn("flux is NOT installed")
+using world size: 8, data-parallel size: 8, context-parallel size: 1, hierarchical context-parallel sizes: None, tensor-model-parallel size: 1, pipeline-model-parallel size: 1
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/training/utils/common_utils.py:414: UserWarning: Overriding default arguments for tokenizer_type:GPT2BPETokenizer with tokenizer_type:HuggingFaceTokenizer
+  warnings.warn(message)
+Number of virtual stages per pipeline stage: None
+accumulate and all-reduce gradients in fp32 for bfloat16 data type.
+using torch.bfloat16 for parameters ...
+------------------------ arguments ------------------------
+  _explicit_args .................................. {'num_attention_heads', 'apply_rope_fusion', 'ckpt_format', 'local_rank', 'moe_router_load_balancing_type', 'qk_layernorm', 'global_batch_size', 'dist_url', 'swiglu', 'group_query_attention', 'masked_softmax_fusion', 'overlap_grad_reduce', 'world_size', 'max_position_embeddings', 'normalization', 'moe_ffn_hidden_size', 'adam_beta1', 'num_experts', 'attention_dropout', 'vocab_size', 'expert_model_parallel_size', 'hidden_dropout', 'bias_dropout_fusion', 'kv_channels', 'moe_aux_loss_coeff', 'rank', 'recompute_granularity', 'log_throughput', 'tensor_model_parallel_size', 'bf16', 'transformer_impl', 'lr_warmup_iters', 'log_interval', 'context_parallel_size', 'ddp_average_in_collective', 'num_layers', 'moe_router_topk', 'num_query_groups', 'position_embedding_type', 'clip_grad', 'train_iters', 'deprecated_use_mcore_models', 'tokenizer_type', 'pipeline_model_parallel_size', 'no_persist_layer_norm', 'lr', 'bias_swiglu_fusion', 'add_bias_linear', 'hidden_size', 'tokenizer_model', 'eval_iters', 'init_method_std', 'min_lr', 'eval_interval', 'seq_length', 'adam_beta2', 'lr_decay_style', 'mock_data', 'save_interval', 'recompute_num_layers', 'untie_embeddings_and_output_weights', 'ffn_hidden_size', 'gradient_accumulation_fusion', 'use_distributed_optimizer', 'recompute_method', 'tensorboard_dir', 'micro_batch_size', 'weight_decay', 'moe_token_dispatcher_type'}
+  _is_global_batch_size_explicitly_specified ...... True
+  account_for_embedding_in_pipeline_split ......... False
+  account_for_loss_in_pipeline_split .............. False
+  accumulate_allreduce_grads_in_fp32 .............. True
+  activation_func_clamp_value ..................... None
+  adam_beta1 ...................................... 0.9
+  adam_beta2 ...................................... 0.95
+  adam_eps ........................................ 1e-08
+  add_bias_linear ................................. False
+  add_position_embedding .......................... True
+  add_qkv_bias .................................... False
+  adlr_autoresume ................................. False
+  adlr_autoresume_interval ........................ 1000
+  align_grad_reduce ............................... True
+  align_param_gather .............................. False
+  allow_ambiguous_pad_tokens ...................... False
+  app_tag_run_name ................................ None
+  app_tag_run_version ............................. 0.0.0
+  apply_query_key_layer_scaling ................... False
+  apply_residual_connection_post_layernorm ........ False
+  apply_rope_fusion ............................... False
+  apply_wd_to_qk_layernorm ........................ False
+  async_ckpt_cpu_priority ......................... 10
+  async_ckpt_io_priority .......................... 3
+  async_ckpt_use_cpu_shm .......................... False
+  async_save ...................................... False
+  async_strategy .................................. mcore
+  attention_backend ............................... AttnBackend.auto
+  attention_dropout ............................... 0.0
+  attention_output_gate ........................... False
+  attention_softmax_in_fp32 ....................... False
+  auto_detect_ckpt_format ......................... False
+  barrier_with_L1_time ............................ True
+  batch_invariant_mode ............................ False
+  bert_binary_head ................................ True
+  bert_embedder_type .............................. megatron
+  bert_load ....................................... None
+  bf16 ............................................ True
+  bias_dropout_fusion ............................. False
+  bias_gelu_fusion ................................ False
+  bias_swiglu_fusion .............................. False
+  biencoder_projection_dim ........................ 0
+  biencoder_shared_query_context_model ............ False
+  block_data_path ................................. None
+  bridge_hf_model ................................. None
+  bridge_language_model_only ...................... False
+  cache_mla_latents ............................... False
+  calc_ft_timeouts ................................ False
+  calculate_per_token_loss ........................ False
+  chat_template ................................... None
+  check_for_large_grads ........................... False
+  check_for_nan_in_loss_and_grad .................. True
+  check_for_spiky_loss ............................ False
+  check_weight_hash_across_dp_replicas_interval ... None
+  ckpt_assume_constant_structure .................. False
+  ckpt_convert_format ............................. None
+  ckpt_convert_save ............................... None
+  ckpt_convert_update_legacy_dist_opt_format ...... False
+  ckpt_format ..................................... torch
+  ckpt_fully_parallel_load ........................ False
+  ckpt_fully_parallel_load_exchange_algo .......... broadcast
+  ckpt_fully_parallel_load_process_group .......... dp
+  ckpt_fully_parallel_save ........................ True
+  ckpt_fully_parallel_save_deprecated ............. False
+  ckpt_fully_parallel_save_process_group .......... dp
+  ckpt_load_validate_sharding_integrity ........... True
+  ckpt_step ....................................... None
+  classes_fraction ................................ 1.0
+  clip_grad ....................................... 1.0
+  clone_scatter_output_in_embedding ............... True
+  collect_log_path ................................ ./logs
+  comm_time_log_iter .............................. None
+  config_logger_dir ............................... 
+  consumed_train_samples .......................... 0
+  consumed_valid_samples .......................... 0
+  context_parallel_size ........................... 1
+  cp_comm_type .................................... ['p2p']
+  cpu_offloading_num_layers ....................... 0
+  cpu_offloading_retain_pinned_cpu_buffers ........ False
+  create_all_gather_group ......................... False
+  create_attention_mask_in_dataloader ............. True
+  cross_entropy_fusion_impl ....................... native
+  cross_entropy_loss_fusion ....................... False
+  cuda_graph_impl ................................. none
+  cuda_graph_modules .............................. []
+  cuda_graph_warmup_steps ......................... 3
+  data_args_path .................................. None
+  data_cache_path ................................. None
+  data_parallel_random_init ....................... False
+  data_parallel_sharding_strategy ................. optim_grads_params
+  data_parallel_size .............................. 8
+  data_path ....................................... None
+  data_per_class_fraction ......................... 1.0
+  data_sharding ................................... True
+  dataloader_defer_npy_index_mmap ................. False
+  dataloader_fast_cache_load ...................... False
+  dataloader_type ................................. single
+  ddp_average_in_collective ....................... True
+  ddp_bucket_size ................................. None
+  ddp_num_buckets ................................. None
+  ddp_pad_buckets_for_high_nccl_busbw ............. False
+  ddp_param_name_patterns_for_fp32_local_accumulation  []
+  ddp_reduce_scatter_with_fp32_accumulation ....... False
+  decode_only_cuda_graphs ......................... False
+  decoder_first_pipeline_num_layers ............... None
+  decoder_last_pipeline_num_layers ................ None
+  decoder_num_layers .............................. None
+  decoder_seq_length .............................. None
+  decoupled_lr .................................... None
+  decoupled_min_lr ................................ None
+  decrease_batch_size_if_needed ................... False
+  defer_embedding_wgrad_compute ................... False
+  delay_1f1b_cooldown_wgrad_compute ............... False
+  delay_wgrad_compute ............................. False
+  deprecated_use_mcore_models ..................... True
+  deterministic_mode .............................. False
+  dino_bottleneck_size ............................ 256
+  dino_freeze_last_layer .......................... 1
+  dino_head_hidden_size ........................... 2048
+  dino_local_crops_number ......................... 10
+  dino_local_img_size ............................. 96
+  dino_norm_last_layer ............................ False
+  dino_teacher_temp ............................... 0.07
+  dino_warmup_teacher_temp ........................ 0.04
+  dino_warmup_teacher_temp_epochs ................. 30
+  disable_backward_fusion ......................... False
+  disable_bf16_reduced_precision_matmul ........... False
+  disable_jit_fuser ............................... False
+  disable_msc_deprecated .......................... False
+  disable_straggler_on_startup .................... False
+  disable_symmetric_registration .................. False
+  dist_ckpt_format_deprecated ..................... None
+  dist_ckpt_optim_fully_reshardable ............... False
+  dist_ckpt_save_pre_mcore_014 .................... False
+  dist_ckpt_strictness ............................ assume_ok_unexpected
+  dist_ckpt_workers ............................... 1
+  dist_url ........................................ tcp://localhost:33021
+  distrib_optim_fully_reshardable_mem_efficient ... False
+  distribute_saved_activations .................... False
+  distributed_backend ............................. nccl
+  distributed_timeout_minutes ..................... 10
+  distributed_timeout_seconds_after_init .......... None
+  dsa_indexer_head_dim ............................ None
+  dsa_indexer_loss_coeff .......................... None
+  dsa_indexer_n_heads ............................. None
+  dsa_indexer_topk ................................ None
+  dsa_indexer_use_sparse_loss ..................... False
+  dump_param_to_param_group_map ................... None
+  embedding_init_method_std ....................... None
+  embedding_path .................................. None
+  empty_unused_memory_level ....................... 0
+  enable_a2a_overlap_only_in_1f1b_phase ........... False
+  enable_bw_flux_gemmrs_op ........................ True
+  enable_chunked_prefill .......................... False
+  enable_cuda_graph ............................... False
+  enable_dynamic_grad_comp ........................ False
+  enable_experimental ............................. False
+  enable_ft_package ............................... False
+  enable_full_sharding_in_hsdp .................... False
+  enable_gpt_oss .................................. False
+  enable_hyper_connections ........................ False
+  enable_msc ...................................... False
+  enable_one_logger ............................... True
+  enable_pre_init_ep_overlap_streams .............. False
+  enable_vocab_parallel ........................... False
+  encoder_num_layers .............................. 12
+  encoder_seq_length .............................. 4096
+  end_weight_decay ................................ 0.1
+  eod_mask_loss ................................... False
+  ep_overlap_early_attn_memory_release ............ False
+  ep_overlap_early_recompute ...................... False
+  error_injection_rate ............................ 0
+  error_injection_type ............................ transient_error
+  eval_global_batch_size .......................... 8
+  eval_interval ................................... 1000
+  eval_iters ...................................... 2
+  eval_micro_batch_size ........................... 1
+  evidence_data_path .............................. None
+  exit_duration_in_mins ........................... None
+  exit_interval ................................... None
+  exit_on_missing_checkpoint ...................... False
+  exit_signal ..................................... 15
+  exit_signal_handler ............................. False
+  exit_signal_handler_for_dataloader .............. False
+  exit_signal_handler_for_training ................ False
+  exp_avg_dtype ................................... torch.float32
+  exp_avg_sq_dtype ................................ torch.float32
+  experimental_attention_variant .................. None
+  expert_model_parallel_size ...................... 8
+  expert_tensor_parallel_size ..................... 1
+  export_default_te_spec .......................... False
+  export_force_local_attention .................... False
+  export_kd_cfg ................................... None
+  export_kd_teacher_ckpt_format ................... None
+  export_kd_teacher_load .......................... None
+  export_kd_teacher_model_config .................. None
+  export_kv_cache_quant ........................... none
+  export_legacy_megatron .......................... False
+  export_model_type ............................... GPTModel
+  export_moe_apply_probs_on_input ................. False
+  export_offline_model ............................ False
+  export_qk_l2_norm ............................... False
+  export_quant_cfg ................................ None
+  export_real_quant_cfg ........................... None
+  export_te_mcore_model ........................... False
+  external_cuda_graph ............................. False
+  extra_vocab_size ................................ 0
+  fake_process_group .............................. False
+  fault_injector_delay_start_iteration ............ None
+  fault_injector_fault_delay ...................... None
+  fault_injector_fault_probabilities .............. None
+  fault_injector_fault_types ...................... None
+  fault_injector_mtti_seconds ..................... None
+  fault_injector_num_ranks ........................ None
+  fault_injector_offset_seconds ................... None
+  fault_injector_ranks ............................ None
+  fault_injector_seed ............................. None
+  ffn_hidden_size ................................. 6144
+  fim_data ........................................ False
+  fim_eod_token ................................... <|endoftext|>
+  fim_fragment_rate ............................... None
+  fim_middle_token ................................ <fim_middle>
+  fim_no_prefix ................................... None
+  fim_pad_token ................................... <fim_pad>
+  fim_prefix_token ................................ <fim_prefix>
+  fim_rate ........................................ 0.5
+  fim_split_sample ................................ None
+  fim_spm_rate .................................... 0.5
+  fim_suffix_token ................................ <fim_suffix>
+  fine_grained_activation_offloading .............. False
+  fine_grained_offloading_max_inflight_offloads ... None
+  finetune ........................................ False
+  finetune_data_split ............................. train
+  finetune_hf_dataset ............................. None
+  first_last_layers_bf16 .......................... False
+  flash_decode .................................... False
+  flight_recorder_dump_on_timeout ................. True
+  flight_recorder_dump_path ....................... None
+  flight_recorder_extra_dump_on_exec .............. True
+  flight_recorder_include_only_active ............. True
+  flight_recorder_include_stack_trace ............. False
+  flight_recorder_trace_buffer_size ............... 2000
+  flux_transpose_weight ........................... False
+  fp16 ............................................ False
+  fp16_lm_cross_entropy ........................... False
+  fp32_residual_connection ........................ False
+  fp4 ............................................. None
+  fp4_param_gather ................................ False
+  fp4_quantizer_factory ........................... None
+  fp4_recipe ...................................... nvfp4
+  fp8 ............................................. None
+  fp8_amax_compute_algo ........................... most_recent
+  fp8_amax_history_len ............................ 1
+  fp8_interval .................................... 1
+  fp8_margin ...................................... 0
+  fp8_output_proj ................................. False
+  fp8_param_gather ................................ False
+  fp8_quantizer_factory ........................... None
+  fp8_recipe ...................................... delayed
+  fp8_wgrad ....................................... True
+  fsdp_double_buffer .............................. False
+  fsdp_manual_registration ........................ False
+  ft_num_warmup_iters ............................. 5
+  full_validation ................................. False
+  fused_residual_rmsnorm .......................... False
+  global_batch_size ............................... 8
+  glu_linear_offset ............................... 0.0
+  gpu_sniff_test_interval ......................... None
+  grad_comp ....................................... False
+  grad_comp_warm_up ............................... 0.1
+  grad_reduce_in_bf16 ............................. False
+  gradient_accumulation_fusion .................... False
+  gradient_reduce_div_fusion ...................... True
+  gradient_sample_ratio ........................... 1.0
+  group_query_attention ........................... True
+  grpo_clamp_eps_lower ............................ 0.01
+  grpo_clamp_eps_upper ............................ 0.01
+  grpo_entropy_term_weight ........................ 0.0
+  grpo_filter_groups_with_same_reward ............. False
+  grpo_group_size ................................. 2
+  grpo_iterations ................................. 2
+  grpo_kl_beta .................................... 0.001
+  grpo_prompts_per_step ........................... 32
+  head_lr_mult .................................... 1.0
+  heterogeneous_layers_config_encoded_json ........ None
+  heterogeneous_layers_config_path ................ None
+  hidden_dropout .................................. 0.0
+  hidden_size ..................................... 2048
+  hierarchical_context_parallel_sizes ............. None
+  high_priority_a2a_comm_stream ................... False
+  high_priority_stream_groups ..................... []
+  hybrid_context_parallel ......................... False
+  hybrid_layer_pattern ............................ None
+  hybrid_override_pattern ......................... None
+  hysteresis ...................................... 2
+  ict_head_size ................................... None
+  ict_load ........................................ None
+  image_tokens_per_sample ......................... None
+  img_h ........................................... 224
+  img_w ........................................... 224
+  indexer_batch_size .............................. 128
+  indexer_log_interval ............................ 1000
+  inference_batch_times_seqlen_threshold .......... -1
+  inference_coordinator_port ...................... None
+  inference_cuda_graph_all_prefills ............... False
+  inference_cuda_graph_scope ...................... InferenceCudaGraphScope.none
+  inference_disable_ep_consensus .................. False
+  inference_disable_triton_nvls_kernels ........... False
+  inference_dynamic_batching ...................... False
+  inference_dynamic_batching_block_size ........... 256
+  inference_dynamic_batching_buffer_size_gb ....... 40.0
+  inference_dynamic_batching_cuda_graph_mixed_prefill_count  16
+  inference_dynamic_batching_enable_prefix_caching  False
+  inference_dynamic_batching_mamba_memory_ratio ... None
+  inference_dynamic_batching_max_requests ......... None
+  inference_dynamic_batching_max_tokens ........... None
+  inference_dynamic_batching_num_cuda_graphs ...... 16
+  inference_dynamic_batching_paused_buffer_size_gb  None
+  inference_dynamic_batching_prefix_caching_coordinator_policy  first_prefix_block
+  inference_dynamic_batching_prefix_caching_eviction_policy  ref_zero
+  inference_dynamic_batching_prefix_caching_mamba_gb  None
+  inference_dynamic_batching_prefix_caching_routing_alpha  0.5
+  inference_dynamic_batching_sampling_backend ..... torch
+  inference_dynamic_batching_track_generated_token_events  False
+  inference_dynamic_batching_track_paused_request_events  False
+  inference_dynamic_batching_unified_memory_level . 0
+  inference_fuse_tp_communication ................. False
+  inference_grouped_gemm_backend .................. vllm
+  inference_logging_step_interval ................. 0
+  inference_max_requests .......................... 8
+  inference_max_seq_length ........................ 2560
+  inference_moe_disable_fused_quant_kernels ....... False
+  inference_moe_token_dispatcher_type ............. nvls
+  inference_rng_tracker ........................... False
+  inference_text_gen_server_logging ............... False
+  inference_use_synchronous_zmq_collectives ....... False
+  inference_wandb_logging ......................... False
+  init_method_std ................................. 0.02
+  init_method_xavier_uniform ...................... False
+  init_model_with_meta_device ..................... False
+  initial_loss_scale .............................. 4294967296
+  inprocess_active_world_size ..................... 8
+  inprocess_barrier_timeout ....................... 120
+  inprocess_completion_timeout .................... 120
+  inprocess_empty_cuda_cache ...................... False
+  inprocess_granularity ........................... node
+  inprocess_hard_timeout .......................... 90
+  inprocess_heartbeat_interval .................... 30
+  inprocess_heartbeat_timeout ..................... 60
+  inprocess_last_call_wait ........................ 1
+  inprocess_max_iterations ........................ None
+  inprocess_monitor_process_interval .............. 1.0
+  inprocess_monitor_thread_interval ............... 1.0
+  inprocess_progress_watchdog_interval ............ 1.0
+  inprocess_restart ............................... False
+  inprocess_soft_timeout .......................... 60
+  inprocess_termination_grace_time ................ 1
+  integrate_recompute_to_ep_comm_overlap .......... False
+  is_hybrid_model ................................. False
+  iter_per_epoch .................................. 1250
+  iteration_sample_ratio .......................... 0.01
+  iterations_to_skip .............................. []
+  keep_fp8_transpose_cache ........................ False
+  kitchen_attention_backend ....................... sdpa
+  kv_channels ..................................... 128
+  kv_lora_rank .................................... 32
+  langrl_env_config ............................... None
+  layernorm_epsilon ............................... 1e-05
+  layernorm_zero_centered_gamma ................... False
+  lazy_mpu_init ................................... False
+  linear_attention_freq ........................... None
+  linear_conv_kernel_dim .......................... 4
+  linear_key_head_dim ............................. 128
+  linear_num_key_heads ............................ 16
+  linear_num_value_heads .......................... 32
+  linear_value_head_dim ........................... 128
+  lion_beta1 ...................................... 0.95
+  lion_beta2 ...................................... 0.98
+  load ............................................ None
+  load_main_params_from_ckpt ...................... False
+  load_weights .................................... False
+  local_rank ...................................... 0
+  log_device_memory_used .......................... False
+  log_energy ...................................... False
+  log_interval .................................... 1
+  log_loss_scale_to_tensorboard ................... True
+  log_max_attention_logit ......................... False
+  log_memory_interval ............................. None
+  log_memory_to_tensorboard ....................... False
+  log_num_zeros_in_grad ........................... False
+  log_params_norm ................................. False
+  log_progress .................................... False
+  log_straggler ................................... False
+  log_throughput .................................. True
+  log_timers_to_tensorboard ....................... False
+  log_validation_ppl_to_tensorboard ............... False
+  log_world_size_to_tensorboard ................... False
+  logging_level ................................... None
+  loss_scale ...................................... None
+  loss_scale_window ............................... 1000
+  lr .............................................. 3e-05
+  lr_decay_iters .................................. None
+  lr_decay_samples ................................ None
+  lr_decay_style .................................. cosine
+  lr_warmup_fraction .............................. None
+  lr_warmup_init .................................. 0.0
+  lr_warmup_iters ................................. 1
+  lr_warmup_samples ............................... 0
+  lr_wsd_decay_iters .............................. None
+  lr_wsd_decay_samples ............................ None
+  lr_wsd_decay_style .............................. exponential
+  main_grads_dtype ................................ torch.float32
+  main_params_dtype ............................... torch.float32
+  make_vocab_size_divisible_by .................... 128
+  mamba_head_dim .................................. 64
+  mamba_inference_conv_states_dtype ............... torch.bfloat16
+  mamba_inference_ssm_states_dtype ................ torch.bfloat16
+  mamba_num_groups ................................ 8
+  mamba_num_heads ................................. None
+  mamba_state_dim ................................. 128
+  manual_gc ....................................... False
+  manual_gc_eval .................................. True
+  manual_gc_interval .............................. 0
+  mask_factor ..................................... 1.0
+  mask_prob ....................................... 0.15
+  mask_type ....................................... random
+  masked_softmax_fusion ........................... False
+  max_position_embeddings ......................... 40960
+  max_seqlen_per_dp_cp_rank ....................... None
+  max_tokens_to_oom ............................... 12000
+  mega_moe ........................................ False
+  megatron_fsdp_enable_fine_grained_param_gather .. False
+  megatron_fsdp_grad_comm_dtype ................... None
+  megatron_fsdp_main_grads_dtype .................. None
+  megatron_fsdp_main_params_dtype ................. torch.float32
+  memory_snapshot_path ............................ snapshot.pickle
+  merge_file ...................................... None
+  metadata_path ................................... None
+  mhc_expand_emb .................................. False
+  mhc_fix_muons ................................... False
+  mhc_fuse_aggregate_compute ...................... False
+  mhc_fuse_h_post_compute ......................... False
+  mhc_hres_vwnstyle ............................... False
+  mhc_init_gating_factor .......................... 0.01
+  mhc_init_hpre_use_module_layer .................. False
+  mhc_lite ........................................ False
+  mhc_log_amax_per_step ........................... 1
+  mhc_recompute_layer_num ......................... 1
+  mhc_sinkhorn_iterations ......................... 1
+  mhc_tau ......................................... 0.05
+  mhc_use_tilekernels ............................. False
+  micro_batch_size ................................ 1
+  microbatch_group_size_per_vp_stage .............. None
+  mid_level_dataset_surplus ....................... 0.005
+  min_loss_scale .................................. 1.0
+  min_lr .......................................... 3e-06
+  min_offloaded_tensor_size ....................... 1048576
+  mla_down_proj_fusion ............................ False
+  mlp_chunks_for_prefill .......................... 1
+  mlp_chunks_for_training ......................... 1
+  mmap_bin_files .................................. True
+  mock_data ....................................... True
+  modelopt_enabled ................................ False
+  moe_apply_probs_on_input ........................ False
+  moe_aux_loss_coeff .............................. 0.001
+  moe_deepep_num_sms .............................. 20
+  moe_enable_deepep ............................... False
+  moe_enable_routing_replay ....................... False
+  moe_enable_ultraep .............................. False
+  moe_expert_capacity_factor ...................... None
+  moe_expert_rank_capacity_factor ................. None
+  moe_ffn_hidden_size ............................. 768
+  moe_flex_dispatcher_backend ..................... deepep
+  moe_grouped_gemm ................................ False
+  moe_hybridep_num_blocks_permute ................. None
+  moe_hybridep_num_blocks_unpermute ............... None
+  moe_hybridep_num_sms ............................ None
+  moe_hybridep_num_sms_preprocessing .............. 108
+  moe_input_jitter_eps ............................ None
+  moe_latent_size ................................. None
+  moe_layer_freq .................................. 1
+  moe_layer_recompute ............................. False
+  moe_mlp_glu_interleave_size ..................... None
+  moe_num_redundant_experts_per_rank .............. 0
+  moe_pad_expert_input_to_capacity ................ False
+  moe_pad_experts_for_cuda_graph_inference ........ False
+  moe_paged_stash ................................. False
+  moe_paged_stash_buffer_size_factor_cpu .......... 0.0
+  moe_paged_stash_buffer_size_factor_cuda ......... 1.1
+  moe_paged_stash_page_size ....................... 64
+  moe_per_layer_logging ........................... False
+  moe_permute_fusion .............................. False
+  moe_permute_fusion_into_hybridep ................ False
+  moe_router_bias_update_rate ..................... 0.001
+  moe_router_dtype ................................ None
+  moe_router_enable_expert_bias ................... False
+  moe_router_force_biased ......................... None
+  moe_router_force_load_balancing ................. False
+  moe_router_fusion ............................... False
+  moe_router_group_topk ........................... None
+  moe_router_load_balancing_type .................. aux_loss
+  moe_router_num_groups ........................... None
+  moe_router_padding_for_fp8 ...................... False
+  moe_router_padding_for_quantization ............. False
+  moe_router_pre_softmax .......................... False
+  moe_router_score_function ....................... softmax
+  moe_router_topk ................................. 8
+  moe_router_topk_scaling_factor .................. None
+  moe_shared_expert_gate .......................... False
+  moe_shared_expert_intermediate_size ............. None
+  moe_shared_expert_overlap ....................... False
+  moe_single_grouped_bias ......................... False
+  moe_single_grouped_weight ....................... False
+  moe_token_dispatcher_type ....................... alltoall
+  moe_token_drop_policy ........................... probs
+  moe_ultraep_autotune ............................ False
+  moe_ultraep_autotune_grad_reduce_max_sms ........ None
+  moe_ultraep_autotune_start_iteration ............ 3
+  moe_upcycling_granularity ....................... 1
+  moe_use_upcycling ............................... False
+  moe_z_loss_coeff ................................ None
+  mrope_section ................................... None
+  mscale .......................................... 1.0
+  mscale_all_dim .................................. 0.0
+  mtp_hybrid_override_pattern ..................... None
+  mtp_loss_scaling_factor ......................... 0.1
+  mtp_num_layers .................................. None
+  mtp_standalone .................................. False
+  mtp_use_repeated_layer .......................... False
+  multi_latent_attention .......................... False
+  multiple_validation_sets ........................ False
+  muon_coefficient_type ........................... quintic
+  muon_extra_scale_factor ......................... 1.0
+  muon_fp32_matmul_prec ........................... medium
+  muon_momentum ................................... 0.9
+  muon_nesterov ................................... False
+  muon_num_ns_steps ............................... 5
+  muon_scalar_optimizer ........................... adam
+  muon_scale_mode ................................. spectral
+  muon_split_qkv .................................. True
+  muon_tp_mode .................................... blockwise
+  mup_attn_scale_power ............................ 1.0
+  mup_base_head_dim ............................... None
+  mup_base_hidden_size ............................ None
+  mup_embedding_mult .............................. 1.0
+  mup_output_mult ................................. 1.0
+  mup_width_mult .................................. 1.0
+  nccl_all_reduce_for_prefill ..................... False
+  nccl_communicator_config_path ................... None
+  nccl_ub ......................................... False
+  no_load_optim ................................... None
+  no_load_rng ..................................... None
+  no_persist_layer_norm ........................... True
+  no_rope_freq .................................... None
+  no_save_optim ................................... None
+  no_save_rng ..................................... None
+  no_weight_decay_cond_type ....................... None
+  non_persistent_ckpt_type ........................ None
+  non_persistent_global_ckpt_dir .................. None
+  non_persistent_local_ckpt_algo .................. fully_parallel
+  non_persistent_local_ckpt_dir ................... None
+  non_persistent_save_interval .................... None
+  normalization ................................... RMSNorm
+  null_tokenizer_eod_id ........................... None
+  null_tokenizer_pad_id ........................... -1
+  num_attention_heads ............................. 32
+  num_channels .................................... 3
+  num_classes ..................................... 1000
+  num_dataset_builder_threads ..................... 1
+  num_distributed_optimizer_instances ............. 1
+  num_experts ..................................... 128
+  num_layers ...................................... 12
+  num_layers_at_end_in_bf16 ....................... 1
+  num_layers_at_start_in_bf16 ..................... 1
+  num_layers_per_virtual_pipeline_stage ........... None
+  num_layers_to_build ............................. None
+  num_query_groups ................................ 4
+  num_residual_streams ............................ 4
+  num_speculative_tokens .......................... 0
+  num_virtual_stages_per_pipeline_rank ............ None
+  num_workers ..................................... 2
+  nvtx_ranges ..................................... False
+  object_storage_cache_path ....................... None
+  offload_modules ................................. []
+  one_logger_async ................................ False
+  one_logger_project .............................. megatron-lm
+  one_logger_run_name ............................. None
+  onnx_safe ....................................... None
+  openai_gelu ..................................... False
+  optimizer ....................................... adam
+  optimizer_cpu_offload ........................... False
+  optimizer_cuda_graph ............................ False
+  optimizer_offload_fraction ...................... 1.0
+  outer_dp_sharding_strategy ...................... no_shard
+  output_bert_embeddings .......................... False
+  overlap_cpu_optimizer_d2h_h2d ................... False
+  overlap_dispatch_backward_with_experts_wgrad .... False
+  overlap_ep_comm_with_split_attn ................. False
+  overlap_grad_reduce ............................. True
+  overlap_moe_expert_parallel_comm ................ False
+  overlap_p2p_comm ................................ False
+  overlap_p2p_comm_warmup_flush ................... False
+  overlap_param_gather ............................ False
+  overlap_param_gather_with_optimizer_step ........ False
+  override_opt_param_scheduler .................... False
+  pad_vocab_size .................................. True
+  padded_vocab_size ............................... None
+  parallel_linear_impl ............................ None
+  params_dtype .................................... torch.bfloat16
+  patch_dim ....................................... 16
+  per_dataset_sequences_path ...................... None
+  per_split_data_args_path ........................ None
+  perform_initialization .......................... True
+  perform_rl_step ................................. False
+  phase_transition_iterations ..................... None
+  pin_cpu_grads ................................... True
+  pin_cpu_params .................................. True
+  pipe_sp_splits .................................. 1
+  pipe_sp_strategy ................................ average
+  pipeline_model_parallel_comm_backend ............ None
+  pipeline_model_parallel_layout .................. None
+  pipeline_model_parallel_size .................... 1
+  position_embedding_type ......................... rope
+  pretrained_checkpoint ........................... None
+  profile ......................................... False
+  profile_dir ..................................... ./
+  profile_ranks ................................... []
+  profile_step_end ................................ 12
+  profile_step_start .............................. 10
+  pytorch_profiler_collect_callstack .............. False
+  pytorch_profiler_collect_chakra ................. False
+  pytorch_profiler_collect_shapes ................. False
+  q_lora_rank ..................................... None
+  qk_clip ......................................... False
+  qk_clip_alpha ................................... 0.5
+  qk_clip_threshold ............................... 100
+  qk_head_dim ..................................... 128
+  qk_l2_norm ...................................... False
+  qk_layernorm .................................... True
+  qk_pos_emb_head_dim ............................. 64
+  quant_comm_bits ................................. 8
+  quant_group_size ................................ None
+  quant_scale_dtype ............................... bf16
+  query_in_block_prob ............................. 0.1
+  quick_geglu ..................................... False
+  rampup_batch_size ............................... None
+  rank ............................................ 0
+  rank_adjust_window_size ......................... 1000
+  recompute_activation_function ................... False
+  recompute_activation_function_num_layers ........ None
+  recompute_granularity ........................... full
+  recompute_in_advance ............................ False
+  recompute_in_bubble ............................. False
+  recompute_layer_ids ............................. None
+  recompute_method ................................ uniform
+  recompute_modules ............................... None
+  recompute_mtp_layer_ids ......................... None
+  recompute_num_layers ............................ 1
+  record_memory_history ........................... False
+  record_shapes ................................... False
+  reduce_recompute_for_last_chunk ................. False
+  refit_method .................................... gloo
+  relative_attention_max_distance ................. 128
+  relative_attention_num_buckets .................. 32
+  replication ..................................... False
+  replication_factor .............................. 2
+  replication_jump ................................ None
+  reproduce ....................................... False
+  rerun_mode ...................................... validate_results
+  reset_attention_mask ............................ False
+  reset_position_ids .............................. False
+  result_rejected_tracker_filename ................ None
+  retriever_report_topk_accuracies ................ []
+  retriever_score_scaling ......................... False
+  reuse_fp32_param ................................ False
+  reuse_grad_buf_for_mxfp8_param_ag ............... False
+  rl_default_temperature .......................... 1.0
+  rl_default_top_k ................................ -1
+  rl_default_top_p ................................ 0
+  rl_generation_batch_size ........................ None
+  rl_importance_sampling_truncation_coef .......... None
+  rl_inference_expert_model_parallel_size ......... None
+  rl_inference_expert_tensor_model_parallel_size .. None
+  rl_inference_logprobs_is_correction ............. False
+  rl_inference_model_unified_memory_level ......... 0
+  rl_inference_parsers ............................ []
+  rl_inference_pipeline_model_parallel_size ....... None
+  rl_inference_tensor_model_parallel_size ......... None
+  rl_kv_cache_management_mode ..................... persist
+  rl_num_parallel_generation_batches .............. None
+  rl_num_parallel_generations ..................... None
+  rl_offload_inference_model_weights_when_idle .... False
+  rl_offload_optimizer_during_inference ........... False
+  rl_parallel_generation_tasks .................... None
+  rl_partial_rollouts ............................. False
+  rl_persist_cuda_graphs .......................... False
+  rl_prompts_per_eval ............................. 32
+  rl_sequence_packing_algo ........................ fifo
+  rl_sequence_packing_max_sequences_per_bin ....... 50
+  rl_skip_bos_token ............................... False
+  rl_training_cuda_graphs ......................... False
+  rl_use_sequence_packing ......................... False
+  rl_verify_model_weights_swap .................... False
+  rope_scaling_factor ............................. 8.0
+  rope_type ....................................... None
+  rotary_base ..................................... 10000
+  rotary_interleaved .............................. False
+  rotary_percent .................................. 1.0
+  rotary_scaling_factor ........................... 1.0
+  rotary_seq_len_interpolation_factor ............. None
+  run_workload_inspector_server ................... False
+  sample_rate ..................................... 1.0
+  save ............................................ None
+  save_activations_interval ....................... None
+  save_dgrads_interval ............................ None
+  save_flux_gather_input .......................... False
+  save_hf_weights ................................. False
+  save_hf_weights_distributed ..................... False
+  save_interval ................................... 1000
+  save_params_interval ............................ None
+  save_retain_interval ............................ None
+  save_tokens_per_expert_interval ................. None
+  save_wgrads_interval ............................ None
+  schedule_method ................................. vanilla
+  schedule_timer_end .............................. 20
+  schedule_timer_start ............................ 10
+  seed ............................................ 1234
+  seq_length ...................................... 4096
+  sequence_parallel ............................... False
+  sft ............................................. False
+  sft_tokenizer_prompt_format ..................... nemotron-h-aligned
+  sgd_momentum .................................... 0.9
+  sharp_enabled_group ............................. None
+  short_seq_prob .................................. 0.1
+  skip_train ...................................... False
+  skipped_train_samples ........................... 0
+  softmax_type .................................... vanilla
+  spec ............................................ None
+  special_tokens .................................. None
+  specify_layers .................................. None
+  split ........................................... None
+  squared_relu .................................... False
+  start_eval_at_iter .............................. None
+  start_weight_decay .............................. 0.1
+  step_batch_size_schedule ........................ None
+  straggler_ctrlr_port ............................ 65535
+  straggler_minmax_count .......................... 1
+  strict_fsdp_dtensor_load ........................ True
+  suggested_communication_unit_size ............... None
+  swap_attention .................................. False
+  swap_modules .................................... self_attention
+  swiglu .......................................... True
+  swin_backbone_type .............................. tiny
+  symmetric_ar_type ............................... None
+  sync_free_moe ................................... False
+  sync_free_moe_backend ........................... primus
+  te_precision_config_file ........................ None
+  te_rng_tracker .................................. False
+  tensor_model_parallel_size ...................... 1
+  tensorboard_dir ................................. /root/private_data/tri-dist-hygon/bench/results/opus_moe_sfl_ab2/b4/tb
+  tensorboard_log_interval ........................ 1
+  tensorboard_queue_size .......................... 1000
+  test_data_path .................................. None
+  test_mode ....................................... False
+  tiktoken_num_special_tokens ..................... 1000
+  tiktoken_pattern ................................ None
+  timing_log_level ................................ 0
+  timing_log_option ............................... minmax
+  titles_data_path ................................ None
+  tokenizer_hf_no_include_special_tokens .......... False
+  tokenizer_hf_no_use_fast ........................ False
+  tokenizer_model ................................. /root/private_data/Qwen3-30B-A3B
+  tokenizer_sentencepiece_ignore_extra_whitespaces  True
+  tokenizer_sentencepiece_legacy .................. False
+  tokenizer_type .................................. HuggingFaceTokenizer
+  torch_fsdp2_reshard_after_forward ............... True
+  tp_comm_bootstrap_backend ....................... nccl
+  tp_comm_bulk_dgrad .............................. True
+  tp_comm_bulk_wgrad .............................. True
+  tp_comm_overlap ................................. False
+  tp_comm_overlap_ag .............................. True
+  tp_comm_overlap_cfg ............................. None
+  tp_comm_overlap_rs .............................. True
+  tp_comm_overlap_rs_dgrad ........................ False
+  tp_comm_split_ag ................................ True
+  tp_comm_split_rs ................................ True
+  train_data_path ................................. None
+  train_iters ..................................... 10
+  train_samples ................................... None
+  train_sync_interval ............................. None
+  transformer_impl ................................ local
+  transformer_pipeline_model_parallel_size ........ 1
+  trust_remote_code ............................... False
+  turbo_deepep_num_cu ............................. 32
+  turbo_deepep_use_comm_stream .................... False
+  turbo_mega_moe_precision ........................ bf16
+  turbo_sync_free_moe_stage ....................... None
+  untie_embeddings_and_output_weights ............. True
+  use_bridge ...................................... False
+  use_checkpoint_args ............................. False
+  use_checkpoint_opt_param_scheduler .............. False
+  use_ckpt_memory_cache ........................... False
+  use_cpu_initialization .......................... None
+  use_dist_ckpt ................................... False
+  use_dist_ckpt_deprecated ........................ False
+  use_distributed_optimizer ....................... True
+  use_flash_attn .................................. False
+  use_fused_weighted_squared_relu ................. False
+  use_gloo_process_groups ......................... True
+  use_grouped_gemm_for_dense_mlp .................. False
+  use_hip_profiler ................................ False
+  use_kitchen_attention ........................... False
+  use_layer_wise_distributed_optimizer ............ False
+  use_layer_wise_param_layout ..................... True
+  use_legacy_static_engine ........................ False
+  use_mamba_mem_eff_path .......................... True
+  use_megatron_fsdp ............................... False
+  use_mhc_svd ..................................... False
+  use_mp_args_from_checkpoint_args ................ False
+  use_mup ......................................... False
+  use_one_sent_docs ............................... False
+  use_optimizer_feature ........................... False
+  use_persistent_ckpt_worker ...................... False
+  use_precision_aware_optimizer ................... False
+  use_primus_deepep ............................... False
+  use_primus_fused_act_with_probs ................. False
+  use_primus_grouped_gemm ......................... False
+  use_primus_moe_permute_fusion ................... False
+  use_primus_topk_router .......................... False
+  use_pytorch_profiler ............................ False
+  use_quantize_comm ............................... False
+  use_ring_exchange_p2p ........................... False
+  use_rope_scaling ................................ False
+  use_rotary_position_embeddings .................. False
+  use_sharp ....................................... False
+  use_te_activation_func .......................... False
+  use_tokenizer_model_from_checkpoint_args ........ True
+  use_torch_fsdp2 ................................. False
+  use_torch_optimizer_for_cpu_offload ............. False
+  use_tp_pp_dp_mapping ............................ False
+  use_transformer_engine_op_fuser ................. False
+  use_vwn ......................................... False
+  v_head_dim ...................................... 128
+  valid_data_path ................................. None
+  validation_set_names ............................ None
+  variable_seq_lengths ............................ False
+  verify_integrity ................................ False
+  virtual_pipeline_model_parallel_size ............ None
+  vision_backbone_type ............................ vit
+  vision_pretraining .............................. False
+  vision_pretraining_type ......................... classify
+  vocab_extra_ids ................................. 0
+  vocab_file ...................................... None
+  vocab_size ...................................... 151936
+  wandb_entity .................................... None
+  wandb_exp_name .................................. None
+  wandb_project ................................... None
+  wandb_save_dir .................................. None
+  weight_decay .................................... 0.1
+  weight_decay_incr_style ......................... constant
+  wgrad_deferral_limit ............................ 0
+  window_attn_skip_freq ........................... None
+  window_size ..................................... None
+  world_size ...................................... 8
+  yaml_cfg ........................................ None
+-------------------- end of arguments ---------------------
+------------------------ env vars ------------------------
+  _ ............................................... /usr/local/bin/python
+  ACCESS_PATH_LIST ................................ 
+  AI_AGENT ........................................ claude-code_2-1-316_agent
+  ALLREDUCE_STREAM_WITH_COMPUTE ................... 1
+  AMDGPU_TARGETS .................................. gfx906;gfx926;gfx928;gfx936;gfx938
+  ANTHROPIC_AUTH_TOKEN ............................ sk-e7a00ce4a7ee4835a42052a24a53a820
+  ANTHROPIC_BASE_URL .............................. https://www.rightapi.ai
+  ANTHROPIC_MODEL ................................. claude-opus-5-5
+  C_INCLUDE_PATH .................................. /opt/dtk/dcc/gcvm/include:/opt/dtk/include:/opt/hyhal/include:/opt/dtk/llvm/include:/opt/dtk/opencl/include:/opt/dtk/.hyhal/rocm_smi/include:/opt/dtk-26.04/dcc/gcvm/include:/opt/dtk-26.04/include:/opt/hyhal/include:/opt/dtk-26.04/llvm/include:/opt/dtk-26.04/opencl/include:/opt/dtk-26.04/.hyhal/rocm_smi/include:/opt/dtk/dcc/gcvm/include:/opt/dtk/include:/opt/hyhal/include:/opt/dtk/llvm/include:/opt/dtk/opencl/include:
+  CHOWN_HOME ...................................... yes
+  CHOWN_HOME_OPTS ................................. -R
+  CLAUDE_CODE_CHILD_SESSION ....................... 1
+  CLAUDE_CODE_ENTRYPOINT .......................... cli
+  CLAUDE_CODE_EXECPATH ............................ /usr/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe
+  CLAUDE_CODE_MESSAGING_SOCKET .................... /tmp/cc-socks/874.sock
+  CLAUDE_CODE_MESSAGING_TOKEN ..................... 487193a0fbb8b1f34a69740871284dc2
+  CLAUDE_CODE_SESSION_ATTENDED .................... 1
+  CLAUDE_CODE_SESSION_ID .......................... 5a70b22d-899f-4255-84ca-d4b21f621b81
+  CLAUDE_EFFORT ................................... high
+  CLAUDE_PID ...................................... 874
+  CLAUDECODE ...................................... 1
+  CMAKE_PREFIX_PATH ............................... /opt/hyhal:/opt/dtk/.hyhal/rocm_smi/:/opt/hyhal:/opt/dtk-26.04/.hyhal/rocm_smi/:/opt/hyhal:
+  COLUMNS ......................................... 216
+  COREPACK_ENABLE_AUTO_PIN ........................ 0
+  CPLUS_INCLUDE_PATH .............................. /opt/dtk/dcc/gcvm/include:/opt/dtk/include:/opt/hyhal/include:/opt/dtk/llvm/include:/opt/dtk/dushmem/include:/opt/dtk/opencl/include:/opt/dtk/.hyhal/rocm_smi/include:/opt/dtk-26.04/dcc/gcvm/include:/opt/dtk-26.04/include:/opt/hyhal/include:/opt/dtk-26.04/llvm/include:/opt/dtk-26.04/dushmem/include:/opt/dtk-26.04/opencl/include:/opt/dtk-26.04/.hyhal/rocm_smi/include:/opt/dtk/dcc/gcvm/include:/opt/dtk/include:/opt/hyhal/include:/opt/dtk/llvm/include:/opt/dtk/dushmem/include:/opt/dtk/opencl/include:
+  CRD_NOTEBOOK_2110675621851545601_PORT ........... tcp://172.30.108.58:22
+  CRD_NOTEBOOK_2110675621851545601_PORT_22_TCP .... tcp://172.30.108.58:22
+  CRD_NOTEBOOK_2110675621851545601_PORT_22_TCP_ADDR  172.30.108.58
+  CRD_NOTEBOOK_2110675621851545601_PORT_22_TCP_PORT  22
+  CRD_NOTEBOOK_2110675621851545601_PORT_22_TCP_PROTO  tcp
+  CRD_NOTEBOOK_2110675621851545601_PORT_6666_TCP .. tcp://172.30.108.58:6666
+  CRD_NOTEBOOK_2110675621851545601_PORT_6666_TCP_ADDR  172.30.108.58
+  CRD_NOTEBOOK_2110675621851545601_PORT_6666_TCP_PORT  6666
+  CRD_NOTEBOOK_2110675621851545601_PORT_6666_TCP_PROTO  tcp
+  CRD_NOTEBOOK_2110675621851545601_PORT_7777_TCP .. tcp://172.30.108.58:7777
+  CRD_NOTEBOOK_2110675621851545601_PORT_7777_TCP_ADDR  172.30.108.58
+  CRD_NOTEBOOK_2110675621851545601_PORT_7777_TCP_PORT  7777
+  CRD_NOTEBOOK_2110675621851545601_PORT_7777_TCP_PROTO  tcp
+  CRD_NOTEBOOK_2110675621851545601_PORT_8888_TCP .. tcp://172.30.108.58:8888
+  CRD_NOTEBOOK_2110675621851545601_PORT_8888_TCP_ADDR  172.30.108.58
+  CRD_NOTEBOOK_2110675621851545601_PORT_8888_TCP_PORT  8888
+  CRD_NOTEBOOK_2110675621851545601_PORT_8888_TCP_PROTO  tcp
+  CRD_NOTEBOOK_2110675621851545601_SERVICE_HOST ... 172.30.108.58
+  CRD_NOTEBOOK_2110675621851545601_SERVICE_PORT ... 22
+  CRD_NOTEBOOK_2110675621851545601_SERVICE_PORT_CUSTOMSIZE  6666
+  CRD_NOTEBOOK_2110675621851545601_SERVICE_PORT_NOTEBOOK  8888
+  CRD_NOTEBOOK_2110675621851545601_SERVICE_PORT_SSH  22
+  CRD_NOTEBOOK_2110675621851545601_SERVICE_PORT_TENSORBOARD  7777
+  CUDA_DEVICE_MAX_CONNECTIONS ..................... 1
+  CUDA_HOME ....................................... /usr/local/cuda
+  DEBIAN_FRONTEND ................................. noninteractive
+  DEBUGINFOD_URLS ................................. 
+  DIST_PORT ....................................... 33021
+  DTKROOT ......................................... /opt/dtk
+  ftp_proxy ....................................... http://liqsh2:0d339dcf@10.16.1.51:3128
+  GIT_EDITOR ...................................... true
+  GPU_MAX_HW_QUEUES ............................... 4
+  HF_ENDPOINT ..................................... https://hf-mirror.com
+  HIP_KERNEL_EVENT_SYSTENFENCE .................... 1
+  HIP_PATH ........................................ /opt/dtk/hip
+  HIP_USE_GRAPH_QUEUE_POOL ........................ 1
+  HIP_VISIBLE_DEVICES ............................. 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+  HOME ............................................ /root
+  HOSTNAME ........................................ crdnotebook-2110675621851545601-liqsh2-16669
+  HSA_FORCE_FINE_GRAIN_PCIE ....................... 1
+  http_proxy ...................................... http://127.0.0.1:10808
+  https_proxy ..................................... http://127.0.0.1:10808
+  HYHAL_PATH ...................................... /opt/hyhal
+  JUPYTER ......................................... /usr/local/bin/jupyter
+  JUPYTER_CONFIG_PATH ............................. /etc
+  JUPYTER_ENABLE_LAB .............................. yes
+  JUPYTER_SERVER_ROOT ............................. /
+  JUPYTER_SERVER_URL .............................. http://crdnotebook-2110675621851545601-liqsh2-16669:8888/jupyter-forward/2110675621851545601/
+  JUPYTERLAB_WORKSPACES_DIR ....................... /tmp/
+  KMP_DUPLICATE_LIB_OK ............................ True
+  KMP_INIT_AT_FORK ................................ FALSE
+  KUBERNETES_PORT ................................. tcp://172.30.0.1:443
+  KUBERNETES_PORT_443_TCP ......................... tcp://172.30.0.1:443
+  KUBERNETES_PORT_443_TCP_ADDR .................... 172.30.0.1
+  KUBERNETES_PORT_443_TCP_PORT .................... 443
+  KUBERNETES_PORT_443_TCP_PROTO ................... tcp
+  KUBERNETES_SERVICE_HOST ......................... 172.30.0.1
+  KUBERNETES_SERVICE_PORT ......................... 443
+  KUBERNETES_SERVICE_PORT_HTTPS ................... 443
+  LANG ............................................ en_US.UTF-8
+  LANGUAGE ........................................ en_US.UTF-8
+  LC_ALL .......................................... en_US.UTF-8
+  LD_LIBRARY_PATH ................................. /usr/local/lib/:/usr/local/lib64/:/opt/mpi/lib:/opt/hwloc/lib:/usr/local/lib/:/usr/local/lib64/:/opt/mpi/lib:/opt/hwloc/lib:/opt/dtk/dcc/gcvm/lib:/opt/dtk/hip/lib:/opt/dtk/llvm/lib:/opt/dtk/lib:/opt/dtk/lib64:/opt/hyhal/lib:/opt/hyhal/lib64:/opt/dtk/dushmem/lib:/opt/dtk/opencl/lib:/opt/dtk/.hyhal/rocm_smi/lib:/opt/dtk-26.04/dcc/gcvm/lib:/opt/dtk-26.04/hip/lib:/opt/dtk-26.04/llvm/lib:/opt/dtk-26.04/lib:/opt/dtk-26.04/lib64:/opt/hyhal/lib:/opt/hyhal/lib64:/opt/dtk-26.04/dushmem/lib:/opt/dtk-26.04/opencl/lib:/opt/dtk-26.04/.hyhal/rocm_smi/lib:/opt/ucx/lib:/opt/dtk/dcc/gcvm/lib:/opt/dtk/hip/lib:/opt/dtk/llvm/lib:/opt/dtk/lib:/opt/dtk/lib64:/opt/hyhal/lib:/opt/hyhal/lib64:/opt/dtk/dushmem/lib:/opt/dtk/opencl/lib:/opt/mpi/lib:/opt/hwloc/lib:/usr/local/lib/:/usr/local/lib64/:
+  LIBRARY_PATH .................................... /opt/hyhal/lib:/opt/dtk/opencl/lib:/opt/dtk/dushmem/lib:/opt/dtk/.hyhal/rocm_smi/lib:/opt/hyhal/lib:/opt/dtk-26.04/opencl/lib:/opt/dtk-26.04/dushmem/lib:/opt/dtk-26.04/.hyhal/rocm_smi/lib:/opt/hyhal/lib:/opt/dtk/opencl/lib:/opt/dtk/dushmem/lib:
+  LINES ........................................... 48
+  LOCAL_RANK ...................................... 0
+  LOGDIR .......................................... /root/private_data/tri-dist-hygon/bench/results/opus_moe_sfl_ab2/b4
+  LS_COLORS ....................................... rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+  MANPATH ......................................... /opt/mpi/share/man:
+  MASTER_ADDR ..................................... 127.0.0.1
+  MASTER_PORT ..................................... 33021
+  MBS ............................................. 1
+  MGD_STATS_EARLY ................................. 1
+  MIOPEN_FIND_MODE ................................ 3
+  MOE_ROOT ........................................ opus_moe_sfl_ab2
+  MOFED_VERSION ................................... 23.10-4.0.9.1
+  NB_USER ......................................... liqsh2
+  NCCL_NCHANNELS_PER_PEER ......................... 2
+  NL .............................................. 12
+  no_proxy ........................................ localhost,127.0.0.1,0.0.0.0,localaddres
+  NoDefaultCurrentDirectoryInExePath .............. 1
+  NOTEBOOK_ACCELERATOR_MEMORY ..................... 64GB
+  NOTEBOOK_ACCELERATOR_MODE ....................... DCU ：异构加速卡BW 512GB，8
+  NOTEBOOK_CPU_NUM ................................ 120
+  NOTEBOOK_RAM_SIZE ............................... 472GB
+  OLDPWD .......................................... /root/private_data/tri-dist-hygon-opus/triton_dist/integrations
+  OPAL_USER_PARAMS_GIVEN .......................... 1
+  OS_VERSION ...................................... ubuntu22.04
+  PATH ............................................ /usr/local/bin:/opt/mpi/bin:/opt/hwloc/bin/:/usr/local/bin:/opt/ucx/bin:/opt/dtk/bin:/opt/dtk/llvm/bin:/opt/dtk/hip/bin:/opt/dtk/hip/bin/hipify:/opt/hyhal/bin:/opt/dtk/opencl/bin:/opt/mpi/bin:/opt/hwloc/bin/:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/conda/bin:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/usr/local/containerssh:/opt/conda/bin
+  PLATFORM ........................................ x86_64
+  PMIX_BFROP_BUFFER_TYPE .......................... PMIX_BFROP_BUFFER_NON_DESC
+  PMIX_GDS_MODULE ................................. shmem2,hash
+  PMIX_HOSTNAME ................................... crdnotebook-2110675621851545601-liqsh2-16669
+  PMIX_NAMESPACE .................................. prterun-crdnotebook-2110675621851545601-liqsh2-16669-20150@1
+  PMIX_PARAM_FILE_PASSED .......................... 1
+  PMIX_RANK ....................................... 0
+  PMIX_SECURITY_MODE .............................. native
+  PMIX_SERVER_TMPDIR .............................. /tmp/prterun.crdnotebook-2110675621851545601-liqsh2-16669.20150.0
+  PMIX_SERVER_URI2 ................................ prterun-crdnotebook-2110675621851545601-liqsh2-16669-20150@0.0;tcp4://172.31.91.12:51669
+  PMIX_SERVER_URI21 ............................... prterun-crdnotebook-2110675621851545601-liqsh2-16669-20150@0.0;tcp4://172.31.91.12:51669
+  PMIX_SERVER_URI3 ................................ prterun-crdnotebook-2110675621851545601-liqsh2-16669-20150@0.0;tcp4://172.31.91.12:51669
+  PMIX_SERVER_URI4 ................................ prterun-crdnotebook-2110675621851545601-liqsh2-16669-20150@0.0;tcp4://172.31.91.12:51669
+  PMIX_SERVER_URI41 ............................... prterun-crdnotebook-2110675621851545601-liqsh2-16669-20150@0.0;tcp4://172.31.91.12:51669
+  PMIX_SYSTEM_TMPDIR .............................. /tmp
+  PMIX_VERSION .................................... 5.0.2rc2
+  PRTE_LAUNCHED ................................... 1
+  PRTE_SHARED_FS .................................. FALSE
+  PWD ............................................. /root/private_data/tri-dist-hygon/bench/opus
+  PYTHONPATH ...................................... /root/private_data/lyc/Megatron-LM-das:/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM:/root/private_data/tri-dist-hygon
+  PYTORCH_CUDA_ALLOC_CONF ......................... expandable_segments:True
+  PYTORCH_MIOPEN_SUGGEST_NDHWC .................... 1
+  PYXTERM_DIMENSIONS .............................. 80x25
+  RANK ............................................ 0
+  ROCM_PATH ....................................... /opt/dtk
+  SCNET_SHARING_CENTER ............................ /public/SothisAI/sharingCenter
+  SCNET_TEAM_SHARE ................................ /public/share/acrfazcxdd
+  SCNET_USER_HOME ................................. /public/home/liqsh2
+  SHELL ........................................... /bin/bash
+  SHLVL ........................................... 4
+  TASK_PATH ....................................... /public/home/liqsh2/.SothisAI/k8s_instance/jupyter/crdNotebook-2110675621851545601/2117114428477952001/
+  TERM ............................................ xterm-256color
+  TOKENIZERS_PARALLELISM .......................... false
+  TORCHINDUCTOR_CACHE_DIR ......................... /tmp/torchinductor_root
+  TRAIN_ITERS ..................................... 10
+  TRITON_CACHE_DIR ................................ /tmp/tc_opusmoe_0
+  TZ .............................................. CST-8
+  UCX_HOME ........................................ /opt/ucx
+  VEH_ARMS ........................................ b3:base g3:gg b4:base g4:gg
+  VEH_ITERS ....................................... 10
+  WORLD_SIZE ...................................... 8
+-------------------- end of env vars ---------------------
+INFO:megatron.core.num_microbatches_calculator:setting number of microbatches to constant 1
+INFO:megatron.core.tokenizers.utils.build_tokenizer: > padded vocab (size: 151669) with 11 dummy tokens (new size: 151680)
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/training/argument_utils.py:441: UserWarning: 
+        It is recommended to use a ModelConfig (e.g. megatron.training.models.HybridModelConfig) instead
+        of a model builder/model provider function pointer.
+        
+  warnings.warn(msg)
+WARNING:megatron.core.rerun_state_machine:RerunStateMachine initialized in mode RerunMode.VALIDATE_RESULTS
+> initializing torch distributed ...
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I1102 12:50:44.527637 20199 ProcessGroupNCCL.cpp:1671] [PG ID 0 PG GUID 0 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.527660 20199 ProcessGroupNCCL.cpp:2000] [PG ID 0 PG GUID 0 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.527732 20199 ProcessGroupNCCL.cpp:980] [PG ID 0 PG GUID 0 Rank 0] ProcessGroupNCCL initialization options: size: 8, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 0
+I1102 12:50:44.527740 20199 ProcessGroupNCCL.cpp:990] [PG ID 0 PG GUID 0 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.528245 20199 ProcessGroupNCCL.cpp:1671] [PG ID 1 PG GUID 1 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.528262 20199 ProcessGroupNCCL.cpp:2000] [PG ID 1 PG GUID 1 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.528311 20199 ProcessGroupNCCL.cpp:980] [PG ID 1 PG GUID 1 Rank 0] ProcessGroupNCCL initialization options: size: 8, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 1
+I1102 12:50:44.528318 20199 ProcessGroupNCCL.cpp:990] [PG ID 1 PG GUID 1 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+I1102 12:50:44.536180 20199 ProcessGroupNCCL.cpp:1671] [PG ID 2 PG GUID 3 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.536202 20199 ProcessGroupNCCL.cpp:2000] [PG ID 2 PG GUID 3 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.536252 20199 ProcessGroupNCCL.cpp:980] [PG ID 2 PG GUID 3 Rank 0] ProcessGroupNCCL initialization options: size: 8, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 3
+I1102 12:50:44.536259 20199 ProcessGroupNCCL.cpp:990] [PG ID 2 PG GUID 3 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+I1102 12:50:44.541324 20199 ProcessGroupNCCL.cpp:1671] [PG ID 3 PG GUID 5 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.541347 20199 ProcessGroupNCCL.cpp:2000] [PG ID 3 PG GUID 5 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.541410 20199 ProcessGroupNCCL.cpp:980] [PG ID 3 PG GUID 5 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 5
+I1102 12:50:44.541419 20199 ProcessGroupNCCL.cpp:990] [PG ID 3 PG GUID 5 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.541872 20199 ProcessGroupNCCL.cpp:1671] [PG ID 4 PG GUID 13 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.541887 20199 ProcessGroupNCCL.cpp:2000] [PG ID 4 PG GUID 13 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.541934 20199 ProcessGroupNCCL.cpp:980] [PG ID 4 PG GUID 13 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 13
+I1102 12:50:44.541940 20199 ProcessGroupNCCL.cpp:990] [PG ID 4 PG GUID 13 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.542326 20199 ProcessGroupNCCL.cpp:1671] [PG ID 5 PG GUID 21 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.542343 20199 ProcessGroupNCCL.cpp:2000] [PG ID 5 PG GUID 21 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.542392 20199 ProcessGroupNCCL.cpp:980] [PG ID 5 PG GUID 21 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 21
+I1102 12:50:44.542400 20199 ProcessGroupNCCL.cpp:990] [PG ID 5 PG GUID 21 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.542778 20199 ProcessGroupNCCL.cpp:1671] [PG ID 6 PG GUID 29 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.542794 20199 ProcessGroupNCCL.cpp:2000] [PG ID 6 PG GUID 29 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.542840 20199 ProcessGroupNCCL.cpp:980] [PG ID 6 PG GUID 29 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 29
+I1102 12:50:44.542847 20199 ProcessGroupNCCL.cpp:990] [PG ID 6 PG GUID 29 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.542977 20199 ProcessGroupNCCL.cpp:1671] [PG ID 7 PG GUID 30 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.542989 20199 ProcessGroupNCCL.cpp:2000] [PG ID 7 PG GUID 30 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.543035 20199 ProcessGroupNCCL.cpp:980] [PG ID 7 PG GUID 30 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 30
+I1102 12:50:44.543041 20199 ProcessGroupNCCL.cpp:990] [PG ID 7 PG GUID 30 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.543165 20199 ProcessGroupNCCL.cpp:1671] [PG ID 8 PG GUID 31 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.543180 20199 ProcessGroupNCCL.cpp:2000] [PG ID 8 PG GUID 31 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.543442 20199 ProcessGroupNCCL.cpp:980] [PG ID 8 PG GUID 31 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 31
+I1102 12:50:44.543449 20199 ProcessGroupNCCL.cpp:990] [PG ID 8 PG GUID 31 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.544239 20199 ProcessGroupNCCL.cpp:1671] [PG ID 9 PG GUID 53 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.544257 20199 ProcessGroupNCCL.cpp:2000] [PG ID 9 PG GUID 53 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.544325 20199 ProcessGroupNCCL.cpp:980] [PG ID 9 PG GUID 53 Rank 0] ProcessGroupNCCL initialization options: size: 8, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 53
+I1102 12:50:44.544332 20199 ProcessGroupNCCL.cpp:990] [PG ID 9 PG GUID 53 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.544523 20199 ProcessGroupNCCL.cpp:1671] [PG ID 10 PG GUID 54 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.544538 20199 ProcessGroupNCCL.cpp:2000] [PG ID 10 PG GUID 54 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.544579 20199 ProcessGroupNCCL.cpp:980] [PG ID 10 PG GUID 54 Rank 0] ProcessGroupNCCL initialization options: size: 8, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 54
+I1102 12:50:44.544586 20199 ProcessGroupNCCL.cpp:990] [PG ID 10 PG GUID 54 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.544767 20199 ProcessGroupNCCL.cpp:1671] [PG ID 11 PG GUID 55 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.544780 20199 ProcessGroupNCCL.cpp:2000] [PG ID 11 PG GUID 55 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.544826 20199 ProcessGroupNCCL.cpp:980] [PG ID 11 PG GUID 55 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 55
+I1102 12:50:44.544834 20199 ProcessGroupNCCL.cpp:990] [PG ID 11 PG GUID 55 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.545178 20199 ProcessGroupNCCL.cpp:1671] [PG ID 12 PG GUID 63 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.545194 20199 ProcessGroupNCCL.cpp:2000] [PG ID 12 PG GUID 63 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.545239 20199 ProcessGroupNCCL.cpp:980] [PG ID 12 PG GUID 63 Rank 0] ProcessGroupNCCL initialization options: size: 8, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 63
+I1102 12:50:44.545248 20199 ProcessGroupNCCL.cpp:990] [PG ID 12 PG GUID 63 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.545432 20199 ProcessGroupNCCL.cpp:1671] [PG ID 13 PG GUID 64 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.545446 20199 ProcessGroupNCCL.cpp:2000] [PG ID 13 PG GUID 64 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.545493 20199 ProcessGroupNCCL.cpp:980] [PG ID 13 PG GUID 64 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 64
+I1102 12:50:44.545499 20199 ProcessGroupNCCL.cpp:990] [PG ID 13 PG GUID 64 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.545849 20199 ProcessGroupNCCL.cpp:1671] [PG ID 14 PG GUID 72 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.545864 20199 ProcessGroupNCCL.cpp:2000] [PG ID 14 PG GUID 72 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.545910 20199 ProcessGroupNCCL.cpp:980] [PG ID 14 PG GUID 72 Rank 0] ProcessGroupNCCL initialization options: size: 8, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 72
+I1102 12:50:44.545921 20199 ProcessGroupNCCL.cpp:990] [PG ID 14 PG GUID 72 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.546096 20199 ProcessGroupNCCL.cpp:1671] [PG ID 15 PG GUID 73 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.546109 20199 ProcessGroupNCCL.cpp:2000] [PG ID 15 PG GUID 73 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.546151 20199 ProcessGroupNCCL.cpp:980] [PG ID 15 PG GUID 73 Rank 0] ProcessGroupNCCL initialization options: size: 8, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 73
+I1102 12:50:44.546156 20199 ProcessGroupNCCL.cpp:990] [PG ID 15 PG GUID 73 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1102 12:50:44.546340 20199 ProcessGroupNCCL.cpp:1671] [PG ID 16 PG GUID 74 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.546355 20199 ProcessGroupNCCL.cpp:2000] [PG ID 16 PG GUID 74 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.546402 20199 ProcessGroupNCCL.cpp:980] [PG ID 16 PG GUID 74 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 74
+I1102 12:50:44.546409 20199 ProcessGroupNCCL.cpp:990] [PG ID 16 PG GUID 74 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+I1102 12:50:44.547876 20199 ProcessGroupNCCL.cpp:1671] [PG ID 17 PG GUID 90 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1102 12:50:44.547899 20199 ProcessGroupNCCL.cpp:2000] [PG ID 17 PG GUID 90 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1102 12:50:44.547957 20199 ProcessGroupNCCL.cpp:980] [PG ID 17 PG GUID 90 Rank 0] ProcessGroupNCCL initialization options: size: 8, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 90
+I1102 12:50:44.547966 20199 ProcessGroupNCCL.cpp:990] [PG ID 17 PG GUID 90 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+tp_group: [[0], [1], [2], [3], [4], [5], [6], [7]]
+pp_group: [[0], [1], [2], [3], [4], [5], [6], [7]]
+dp_group: [[0, 1, 2, 3, 4, 5, 6, 7]]
+ep_group: [[0, 1, 2, 3, 4, 5, 6, 7]]
+etp_group: [[0], [1], [2], [3], [4], [5], [6], [7]]
+edp_group: [[0], [1], [2], [3], [4], [5], [6], [7]]
+cp_group: [[0], [1], [2], [3], [4], [5], [6], [7]]
+tp-cp_group: [[0], [1], [2], [3], [4], [5], [6], [7]]
+embd-pp_group: [[0], [1], [2], [3], [4], [5], [6], [7]]
+pos_embd-pp_group: [[0], [1], [2], [3], [4], [5], [6], [7]]
+tp-ep_group: [[0, 1, 2, 3, 4, 5, 6, 7]]
+tp-dp-cp_group: [[0, 1, 2, 3, 4, 5, 6, 7]]
+tp-pp_group: [[0], [1], [2], [3], [4], [5], [6], [7]]
+dp-cp_group: [[0, 1, 2, 3, 4, 5, 6, 7]]
+> initialized tensor model parallel with size 1
+> initialized pipeline model parallel with size 1
+> setting random seeds to 1234 ...
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/training/initialize.py:112: UserWarning: expandable_segments not supported on this platform (Triggered internally at /home/pytorch/c10/hip/HIPAllocatorConfig.h:37.)
+  MoEAuxLossAutoScaler.set_loss_scale(torch.ones(1, device=torch.cuda.current_device()))
+> compiling dataset index builder ...
+make: Entering directory '/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/datasets'
+make: Nothing to be done for 'default'.
+make: Leaving directory '/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/datasets'
+>>> done with dataset index builder. Compilation time: 0.047 seconds
+/usr/local/lib/python3.11/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+W1102 12:50:44.707567 20199 ProcessGroupNCCL.cpp:5068] Guessing device ID based on global rank. This can cause a hang if rank to GPU mapping is heterogeneous. You can specify device_id in init_process_group()
+I1102 12:50:44.707726 20199 ProcessGroupNCCL.cpp:1058] [PG ID 0 PG GUID 0(default_pg) Rank 0] Using non-blocking mode: 0
+I1102 12:50:44.708602 20199 ProcessGroupNCCL.cpp:3083] [PG ID 0 PG GUID 0(default_pg) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.03486 ms
+I1102 12:50:44.708642 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:50:46.275202 20199 ProcessGroupNCCL.cpp:3117] [PG ID 0 PG GUID 0(default_pg) Rank 0] NCCL_DEBUG: N/A
+time to initialize megatron (seconds): 9.294
+/usr/local/lib/python3.11/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+[after in-process setup and before initialize_megatron] datetime: 2026-11-02 12:50:43.749217 
+[after in-job setup and before initialize_megatron] datetime: 2026-11-02 12:50:43.874083 
+[before library-setup] datetime: 2026-11-02 12:50:38.706896
+[after library-setup] datetime: 2026-11-02 12:50:42.836226
+[before megatron-init] datetime: 2026-11-02 12:50:43.749216
+[after megatron is initialized] datetime: 2026-11-02 12:50:48.291425 
+building GPT model ...
+/root/private_data/lyc/Megatron-LM-das/3rdparty/Megatron-LM/megatron/core/transformer/transformer_config.py:2504: UserWarning: Using a large number of experts (e.g. >=32) without fp32 routing. Consider enabling moe_router_dtype for better numerical stability.
+  warnings.warn(
+[rank 0] GPTModel(
+  (embedding): LanguageModelEmbedding(
+    (word_embeddings): VocabParallelEmbedding()
+    (embedding_dropout): Dropout(p=0.0, inplace=False)
+  )
+  (rotary_pos_emb): RotaryEmbedding()
+  (decoder): TransformerBlock(
+    (layers): ModuleList(
+      (0-11): 12 x TransformerLayer(
+        (input_layernorm): RMSNorm((2048,), eps=1e-05, elementwise_affine=True)
+        (self_attention): SelfAttention(
+          (core_attention): DotProductAttention(
+            (scale_mask_softmax): FusedScaleMaskSoftmax()
+            (attention_dropout): Dropout(p=0.0, inplace=False)
+          )
+          (linear_proj): RowParallelLinear(in_features=4096, out_features=2048, bias=False, TP=1)
+          (linear_qkv): ColumnParallelLinear(in_features=2048, out_features=5120, bias=False, TP=1)
+          (q_layernorm): RMSNorm((128,), eps=1e-05, elementwise_affine=True)
+          (k_layernorm): RMSNorm((128,), eps=1e-05, elementwise_affine=True)
+        )
+        (pre_cross_attn_layernorm): IdentityOp()
+        (cross_attention): IdentityOp()
+        (cross_attn_bda): IdentityFuncOp()
+        (pre_mlp_layernorm): RMSNorm((2048,), eps=1e-05, elementwise_affine=True)
+        (mlp): MoELayer(
+          (router): TopKRouter()
+          (experts): SequentialMLP(
+            (local_experts): ModuleList(
+              (0-15): 16 x MLP(
+                (linear_fc1): ColumnParallelLinear(in_features=2048, out_features=1536, bias=False, TP=1)
+                (linear_fc2): RowParallelLinear(in_features=768, out_features=2048, bias=False, TP=1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (final_layernorm): RMSNorm((2048,), eps=1e-05, elementwise_affine=True)
+  )
+  (output_layer): ColumnParallelLinear(in_features=2048, out_features=151680, bias=False, TP=1)
+)
+ > number of parameters on (tensor, pipeline) model parallel rank (0, 0): 1756943360
+INFO:megatron.core.distributed.distributed_data_parallel:Setting up DistributedDataParallel with config DistributedDataParallelConfig(grad_reduce_in_fp32=True, overlap_grad_reduce=True, overlap_param_gather=False, align_param_gather=False, use_distributed_optimizer=True, num_distributed_optimizer_instances=1, check_for_nan_in_grad=True, check_for_large_grads=False, bucket_size=40000000, num_buckets=None, pad_buckets_for_high_nccl_busbw=False, reduce_scatter_with_fp32_accumulation=False, param_name_patterns_for_fp32_local_accumulation=(), average_in_collective=True, fp8_param_gather=False, fp4_param_gather=False, reuse_grad_buf_for_mxfp8_param_ag=False, use_megatron_fsdp=False, use_custom_fsdp=False, data_parallel_sharding_strategy='optim_grads_params', gradient_reduce_div_fusion=True, suggested_communication_unit_size=None, keep_fp8_transpose_cache=False, nccl_ub=False, fsdp_double_buffer=False, fsdp_db_use_persist_buf_on_alloc_fail=False, fsdp_all_gather_in_start_param_sync=True, outer_dp_sharding_strategy='no_shard', disable_symmetric_registration=False, fsdp_manual_registration=False, delay_wgrad_compute=False, megatron_fsdp_main_params_dtype=torch.float32, megatron_fsdp_main_grads_dtype=None, megatron_fsdp_grad_comm_dtype=None, megatron_fsdp_use_decoupled_grad=False, megatron_fsdp_cuda_graph_mode=False, megatron_fsdp_enable_fine_grained_param_gather=False)
+INFO:megatron.core.distributed.param_and_grad_buffer:Number of buckets for gradient all-reduce / reduce-scatter: 6
+Params for bucket 1 (310640640 elements, 310640640 padded size, 0 param(s) with extra main_grads):
+	module.output_layer.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 2 (49033984 elements, 49033984 padded size, 0 param(s) with extra main_grads):
+	module.decoder.final_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 3 (46670336 elements, 46670336 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.9.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 4 (49033984 elements, 49033984 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.7.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 5 (46670336 elements, 46670336 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.4.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 6 (348924416 elements, 348924416 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.2.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.router.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.pre_mlp_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.self_attention.k_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.self_attention.q_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.self_attention.linear_qkv.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.self_attention.linear_proj.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.input_layernorm.weight (param.main_grad.dtype=torch.float32)
+	module.embedding.word_embeddings.weight (param.main_grad.dtype=torch.float32)
+INFO:megatron.core.distributed.param_and_grad_buffer:Number of buckets for gradient all-reduce / reduce-scatter: 22
+Params for bucket 1 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.11.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 2 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.11.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.11.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 3 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.10.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 4 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.10.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.10.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 5 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.9.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 6 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.9.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.9.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 7 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.8.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 8 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.8.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.8.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 9 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.7.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.7.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 10 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.6.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 11 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.6.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.6.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 12 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.5.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 13 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.5.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.5.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 14 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.4.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 15 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.4.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.4.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 16 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.3.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.3.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 17 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.2.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 18 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.2.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.2.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 19 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.1.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 20 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.1.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.1.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.15.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.15.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.14.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.14.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.13.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.13.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.12.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.12.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 21 (42467328 elements, 42467328 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.0.mlp.experts.local_experts.11.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.11.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.10.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.10.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.9.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.9.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.8.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.8.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.7.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.7.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.6.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.6.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.5.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.5.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.4.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.4.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.3.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.3.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+Params for bucket 22 (14155776 elements, 14155776 padded size, 0 param(s) with extra main_grads):
+	module.decoder.layers.0.mlp.experts.local_experts.2.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.2.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.1.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.1.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.0.linear_fc2.weight (param.main_grad.dtype=torch.float32)
+	module.decoder.layers.0.mlp.experts.local_experts.0.linear_fc1.weight (param.main_grad.dtype=torch.float32)
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.optimizer:Setting up optimizer with config OptimizerConfig(lr=3e-05, min_lr=3e-06, decoupled_lr=None, decoupled_min_lr=None, weight_decay=0.1, apply_wd_to_qk_layernorm=False, fp8_recipe='delayed', fp16=False, bf16=True, reuse_grad_buf_for_mxfp8_param_ag=False, params_dtype=torch.bfloat16, use_precision_aware_optimizer=False, store_param_remainders=True, main_grads_dtype=torch.float32, main_params_dtype=torch.float32, exp_avg_dtype=torch.float32, exp_avg_sq_dtype=torch.float32, optimizer='adam', loss_scale=None, initial_loss_scale=4294967296, min_loss_scale=1.0, loss_scale_window=1000, hysteresis=2, adam_beta1=0.9, adam_beta2=0.95, adam_eps=1e-08, decoupled_weight_decay=True, sgd_momentum=0.9, muon_momentum=0.9, muon_split_qkv=True, muon_nesterov=False, muon_scale_mode='spectral', muon_fp32_matmul_prec='medium', muon_coefficient_type='quintic', muon_num_ns_steps=5, muon_tp_mode='blockwise', muon_extra_scale_factor=1.0, muon_scalar_optimizer='adam', lion_beta1=0.95, lion_beta2=0.98, soap_shampoo_beta=0.95, soap_precondition_frequency=1, soap_use_kl_shampoo=True, adaptive_muon_moment2_method='adamuon', adaptive_muon_beta2=0.95, adaptive_muon_eps=1e-08, use_distributed_optimizer=True, use_layer_wise_distributed_optimizer=False, overlap_param_gather=False, overlap_param_gather_with_optimizer_step=False, optimizer_cpu_offload=False, optimizer_offload_fraction=1.0, use_torch_optimizer_for_cpu_offload=False, overlap_cpu_optimizer_d2h_h2d=False, pin_cpu_grads=True, pin_cpu_params=True, clip_grad=1.0, grad_norm_skip_threshold=inf, log_num_zeros_in_grad=False, barrier_with_L1_time=True, timers=<megatron.core.timers.Timers object at 0x7f62326ad950>, config_logger_dir='', optimizer_cuda_graph=False)
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.distributed.param_and_grad_buffer:Using reduce-scatter for gradient reductions because self.ddp_config.use_distributed_optimizer=True
+INFO:megatron.core.optimizer_param_scheduler:> learning rate decay style: cosine
+[after model, optimizer, and learning rate scheduler are built] datetime: 2026-11-02 12:50:48.759073 
+> building train, validation, and test datasets ...
+ > datasets target sizes (minimum size):
+    train:      80
+    validation: 16
+    test:       16
+INFO:megatron.core.datasets.blended_megatron_dataset_config:Let mock = True, as both blend and blend_per_split are None
+INFO:megatron.core.datasets.blended_megatron_dataset_config:Let split = 1,1,1, an arbitrarily even split, as mock is True
+INFO:megatron.core.datasets.blended_megatron_dataset_config:Let split_matrix = [(0, 0.3333333333333333), (0.3333333333333333, 0.6666666666666666), (0.6666666666666666, 1.0)]
+> building train, validation, and test datasets for GPT ...
+INFO:megatron.core.datasets.blended_megatron_dataset_builder:Building MockGPTDataset splits with sizes=(80, 16, 16) and config=GPTDatasetConfig(random_seed=1234, sequence_length=4096, blend=None, blend_per_split=None, multiple_validation_sets=False, full_validation=False, split='1,1,1', split_matrix=[(0, 0.3333333333333333), (0.3333333333333333, 0.6666666666666666), (0.6666666666666666, 1.0)], num_dataset_builder_threads=1, path_to_cache=None, mmap_bin_files=True, mock=True, tokenizer=<megatron.core.tokenizers.text.models.default_tokenizer.DefaultTokenizerText object at 0x7f61f81f6910>, mid_level_dataset_surplus=0.005, allow_ambiguous_pad_tokens=False, fast_cache_load=False, defer_npy_index_mmap=False, reset_position_ids=False, reset_attention_mask=False, eod_mask_loss=False, create_attention_mask=True, drop_last_partial_validation_sequence=True, add_extra_token_to_sequence=True, object_storage_cache_path=None, data_parallel_size=8, sequence_parallel_size=0, hybrid_context_parallel=False, sequences_per_dataset=None, token_dtype_code=4, context_parallel_size=1)
+INFO:megatron.core.datasets.gpt_dataset:Build and save the MockGPTDataset train indices
+WARNING:megatron.core.datasets.gpt_dataset:Unable to save MockGPTDataset indexes because path_to_cache is None
+INFO:megatron.core.datasets.gpt_dataset:> total number of samples: 16648
+INFO:megatron.core.datasets.gpt_dataset:> total number of epochs: 1
+INFO:megatron.core.datasets.gpt_dataset:Build and save the MockGPTDataset valid indices
+WARNING:megatron.core.datasets.gpt_dataset:Unable to save MockGPTDataset indexes because path_to_cache is None
+INFO:megatron.core.datasets.gpt_dataset:> total number of samples: 16640
+INFO:megatron.core.datasets.gpt_dataset:> total number of epochs: 1
+INFO:megatron.core.datasets.gpt_dataset:Build and save the MockGPTDataset test indices
+WARNING:megatron.core.datasets.gpt_dataset:Unable to save MockGPTDataset indexes because path_to_cache is None
+INFO:megatron.core.datasets.gpt_dataset:> total number of samples: 16671
+INFO:megatron.core.datasets.gpt_dataset:> total number of epochs: 1
+> finished creating GPT datasets ...
+/usr/local/lib/python3.11/site-packages/torch/utils/data/dataloader.py:627: UserWarning: This DataLoader will create 2 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+[after dataloaders are built] datetime: 2026-11-02 12:50:51.103183 
+done with setup ...
+training ...
+Overwriting rerun_state_machine.current_iteration from -1 to 0...
+[before the start of training step] datetime: 2026-11-02 12:50:51.174224 
+I1102 12:50:51.230769 20199 ProcessGroupNCCL.cpp:1058] [PG ID 5 PG GUID 21(TENSOR_MODEL_PARALLEL_GROUP) Rank 0] Using non-blocking mode: 0
+I1102 12:50:51.231261 20199 ProcessGroupNCCL.cpp:3083] [PG ID 5 PG GUID 21(TENSOR_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.08672 ms
+I1102 12:50:51.231293 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:50:51.602311 20199 ProcessGroupNCCL.cpp:3117] [PG ID 5 PG GUID 21(TENSOR_MODEL_PARALLEL_GROUP) Rank 0] NCCL_DEBUG: N/A
+I1102 12:51:00.834187 20199 ProcessGroupNCCL.cpp:1058] [PG ID 14 PG GUID 72(EXPERT_TENSOR_AND_MODEL_PARALLEL_GROUP) Rank 0] Using non-blocking mode: 0
+I1102 12:51:00.835474 20199 ProcessGroupNCCL.cpp:3083] [PG ID 14 PG GUID 72(EXPERT_TENSOR_AND_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.241902 ms
+I1102 12:51:00.835494 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:51:02.181260 20199 ProcessGroupNCCL.cpp:3117] [PG ID 14 PG GUID 72(EXPERT_TENSOR_AND_MODEL_PARALLEL_GROUP) Rank 0] NCCL_DEBUG: N/A
+I1102 12:51:02.258360 20199 ProcessGroupNCCL.cpp:1058] [PG ID 12 PG GUID 63(EXPERT_MODEL_PARALLEL_GROUP) Rank 0] Using non-blocking mode: 0
+I1102 12:51:02.258930 20199 ProcessGroupNCCL.cpp:3083] [PG ID 12 PG GUID 63(EXPERT_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.201932 ms
+I1102 12:51:02.258975 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:51:03.610749 20199 ProcessGroupNCCL.cpp:3117] [PG ID 12 PG GUID 63(EXPERT_MODEL_PARALLEL_GROUP) Rank 0] NCCL_DEBUG: N/A
+WARNING:megatron.core.rerun_state_machine:Result validation enabled
+I1102 12:51:05.705180 20199 ProcessGroupNCCL.cpp:1058] [PG ID 1 PG GUID 1(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] Using non-blocking mode: 0
+I1102 12:51:05.705809 20199 ProcessGroupNCCL.cpp:3083] [PG ID 1 PG GUID 1(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.228011 ms
+I1102 12:51:05.705829 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:51:07.113760 20199 ProcessGroupNCCL.cpp:3117] [PG ID 1 PG GUID 1(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] NCCL_DEBUG: N/A
+I1102 12:51:07.185491 20199 ProcessGroupNCCL.cpp:1058] [PG ID 17 PG GUID 90(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 0] Using non-blocking mode: 0
+I1102 12:51:07.186033 20199 ProcessGroupNCCL.cpp:3083] [PG ID 17 PG GUID 90(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.198811 ms
+I1102 12:51:07.186074 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:51:08.541951 20199 ProcessGroupNCCL.cpp:3117] [PG ID 17 PG GUID 90(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 0] NCCL_DEBUG: N/A
+I1102 12:51:08.598065 20199 ProcessGroupNCCL.cpp:1058] [PG ID 16 PG GUID 74(EXPERT_DATA_PARALLEL_GROUP) Rank 0] Using non-blocking mode: 0
+I1102 12:51:08.598304 20199 ProcessGroupNCCL.cpp:3083] [PG ID 16 PG GUID 74(EXPERT_DATA_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.054221 ms
+I1102 12:51:08.598323 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:51:08.675405 20199 ProcessGroupNCCL.cpp:3117] [PG ID 16 PG GUID 74(EXPERT_DATA_PARALLEL_GROUP) Rank 0] NCCL_DEBUG: N/A
+I1102 12:51:08.891094 20199 ProcessGroupNCCL.cpp:1058] [PG ID 4 PG GUID 13(MODEL_PARALLEL_GROUP) Rank 0] Using non-blocking mode: 0
+I1102 12:51:08.892153 20199 ProcessGroupNCCL.cpp:3083] [PG ID 4 PG GUID 13(MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.101651 ms
+I1102 12:51:08.892172 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:51:08.943166 20199 ProcessGroupNCCL.cpp:3117] [PG ID 4 PG GUID 13(MODEL_PARALLEL_GROUP) Rank 0] NCCL_DEBUG: N/A
+I1102 12:51:08.950476 20199 ProcessGroupNCCL.cpp:1058] [PG ID 6 PG GUID 29(PIPELINE_MODEL_PARALLEL_GROUP) Rank 0] Using non-blocking mode: 0
+I1102 12:51:08.951290 20199 ProcessGroupNCCL.cpp:3083] [PG ID 6 PG GUID 29(PIPELINE_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.0336 ms
+I1102 12:51:08.951308 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:51:08.998981 20199 ProcessGroupNCCL.cpp:3117] [PG ID 6 PG GUID 29(PIPELINE_MODEL_PARALLEL_GROUP) Rank 0] NCCL_DEBUG: N/A
+I1102 12:51:08.999898 20199 ProcessGroupNCCL.cpp:1058] [PG ID 11 PG GUID 55(TENSOR_AND_CONTEXT_PARALLEL_GROUP) Rank 0] Using non-blocking mode: 0
+I1102 12:51:09.000588 20199 ProcessGroupNCCL.cpp:3083] [PG ID 11 PG GUID 55(TENSOR_AND_CONTEXT_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.126401 ms
+I1102 12:51:09.000671 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:51:09.072717 20199 ProcessGroupNCCL.cpp:3117] [PG ID 11 PG GUID 55(TENSOR_AND_CONTEXT_PARALLEL_GROUP) Rank 0] NCCL_DEBUG: N/A
+I1102 12:51:09.073117 20199 ProcessGroupNCCL.cpp:1058] [PG ID 2 PG GUID 3(DATA_PARALLEL_GROUP) Rank 0] Using non-blocking mode: 0
+I1102 12:51:09.074002 20199 ProcessGroupNCCL.cpp:3083] [PG ID 2 PG GUID 3(DATA_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.0583 ms
+I1102 12:51:09.074039 20199 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1102 12:51:10.439004 20199 ProcessGroupNCCL.cpp:3117] [PG ID 2 PG GUID 3(DATA_PARALLEL_GROUP) Rank 0] NCCL_DEBUG: N/A
+Number of parameters in transformer block in billions:  7.48
+Number of active parameters in transformer block in billions:  0.68
+Number of parameters in embedding layers in billions: 0.62
+Total number of parameters in billions: 8.10
+Total number of active parameters in billions: 1.30
+Number of parameters in most loaded shard in billions: 1.7569
+compute_activation_memory_without_sp
+Activation memory footprint per transformer layer (precise, without SP): 272.0 MB
+Theoretical memory footprints: weight and optimizer=21638.62 MB, activation=4696.68 MB, total=26335.30 MB
+
+[Rank 0] (after 1 iterations) memory (MB) | allocated: 23150.65 | max allocated: 26606.65 | reserved: 27504.00 | max reserved: 27504.00
+Number of parameters in transformer block in billions:  7.48
+Number of active parameters in transformer block in billions:  0.68
+Number of parameters in embedding layers in billions: 0.62
+Total number of parameters in billions: 8.10
+Total number of active parameters in billions: 1.30
+Number of parameters in most loaded shard in billions: 1.7569
+compute_activation_memory_without_sp
+Activation memory footprint per transformer layer (precise, without SP): 272.0 MB
+Theoretical memory footprints: weight and optimizer=21638.62 MB, activation=4696.68 MB, total=26335.30 MB
+
+[Rank 0] (after 2 iterations) memory (MB) | allocated: 23150.65 | max allocated: 27451.23 | reserved: 33352.00 | max reserved: 33352.00
+[after training is done] datetime: 2026-11-02 12:51:24.170517 
+WARNING:megatron.core.rerun_state_machine:Setting RerunStateMachine mode RerunMode.DISABLED
+Evaluating on 16 samples
+Evaluating iter 1/2
+Evaluating iter 2/2
+WARNING:megatron.core.rerun_state_machine:Setting RerunStateMachine mode RerunMode.VALIDATE_RESULTS
+WARNING:megatron.core.rerun_state_machine:Setting RerunStateMachine mode RerunMode.DISABLED
+Evaluating on 16 samples
+Evaluating iter 1/2
+Evaluating iter 2/2
+WARNING:megatron.core.rerun_state_machine:Setting RerunStateMachine mode RerunMode.VALIDATE_RESULTS
+I1102 12:51:26.847776 20199 ProcessGroupNCCL.cpp:1515] [PG ID 0 PG GUID 0(default_pg) Rank 0] ProcessGroupNCCL destructor entered.
+W1102 12:51:26.847851 20199 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+I1102 12:51:26.848003 20199 ProcessGroupNCCL.cpp:1441] [PG ID 0 PG GUID 0(default_pg) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:26.848150 28384 NCCLUtils.cpp:315] Aborting ncclComm_ 0x560009bad100 with reason: No abort reason provided.
+I1102 12:51:26.862941 20199 ProcessGroupNCCL.cpp:1449] [PG ID 0 PG GUID 0(default_pg) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:26.863008 20199 ProcessGroupNCCL.cpp:2029] [PG ID 0 PG GUID 0(default_pg) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:26.863118 20199 ProcessGroupNCCL.cpp:1699] [PG ID 0 PG GUID 0(default_pg) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:27.452543 20199 ProcessGroupNCCL.cpp:1515] [PG ID 10 PG GUID 54 Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:27.452646 20199 ProcessGroupNCCL.cpp:1441] [PG ID 10 PG GUID 54 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:27.452749 20199 ProcessGroupNCCL.cpp:1449] [PG ID 10 PG GUID 54 Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:27.452777 20199 ProcessGroupNCCL.cpp:2029] [PG ID 10 PG GUID 54 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:27.452837 20199 ProcessGroupNCCL.cpp:1699] [PG ID 10 PG GUID 54 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:27.648046 20199 ProcessGroupNCCL.cpp:1515] [PG ID 4 PG GUID 13(MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:27.649632 20199 ProcessGroupNCCL.cpp:1441] [PG ID 4 PG GUID 13(MODEL_PARALLEL_GROUP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:27.649755 28396 NCCLUtils.cpp:315] Aborting ncclComm_ 0x560037a615d0 with reason: No abort reason provided.
+I1102 12:51:28.152707 20199 ProcessGroupNCCL.cpp:1449] [PG ID 4 PG GUID 13(MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.153766 20199 ProcessGroupNCCL.cpp:2029] [PG ID 4 PG GUID 13(MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.155118 20199 ProcessGroupNCCL.cpp:1699] [PG ID 4 PG GUID 13(MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.155707 20199 ProcessGroupNCCL.cpp:1515] [PG ID 17 PG GUID 90(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.155771 20199 ProcessGroupNCCL.cpp:1441] [PG ID 17 PG GUID 90(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.155876 28451 NCCLUtils.cpp:315] Aborting ncclComm_ 0x560036d99c00 with reason: No abort reason provided.
+I1102 12:51:28.164999 20199 ProcessGroupNCCL.cpp:1449] [PG ID 17 PG GUID 90(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.165038 20199 ProcessGroupNCCL.cpp:2029] [PG ID 17 PG GUID 90(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.165091 20199 ProcessGroupNCCL.cpp:1699] [PG ID 17 PG GUID 90(INTRA_DISTRIBUTED_OPTIMIZER_INSTANCE_GROUP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.165113 20199 ProcessGroupNCCL.cpp:1515] [PG ID 15 PG GUID 73 Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.165124 20199 ProcessGroupNCCL.cpp:1441] [PG ID 15 PG GUID 73 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.165207 20199 ProcessGroupNCCL.cpp:1449] [PG ID 15 PG GUID 73 Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.165231 20199 ProcessGroupNCCL.cpp:2029] [PG ID 15 PG GUID 73 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.165333 20199 ProcessGroupNCCL.cpp:1699] [PG ID 15 PG GUID 73 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.165349 20199 ProcessGroupNCCL.cpp:1515] [PG ID 14 PG GUID 72(EXPERT_TENSOR_AND_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.165360 20199 ProcessGroupNCCL.cpp:1441] [PG ID 14 PG GUID 72(EXPERT_TENSOR_AND_MODEL_PARALLEL_GROUP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.165449 28454 NCCLUtils.cpp:315] Aborting ncclComm_ 0x5600353c6510 with reason: No abort reason provided.
+I1102 12:51:28.174516 20199 ProcessGroupNCCL.cpp:1449] [PG ID 14 PG GUID 72(EXPERT_TENSOR_AND_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.174548 20199 ProcessGroupNCCL.cpp:2029] [PG ID 14 PG GUID 72(EXPERT_TENSOR_AND_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.174592 20199 ProcessGroupNCCL.cpp:1699] [PG ID 14 PG GUID 72(EXPERT_TENSOR_AND_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.174610 20199 ProcessGroupNCCL.cpp:1515] [PG ID 9 PG GUID 53 Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.174620 20199 ProcessGroupNCCL.cpp:1441] [PG ID 9 PG GUID 53 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.174706 20199 ProcessGroupNCCL.cpp:1449] [PG ID 9 PG GUID 53 Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.174727 20199 ProcessGroupNCCL.cpp:2029] [PG ID 9 PG GUID 53 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.174768 20199 ProcessGroupNCCL.cpp:1699] [PG ID 9 PG GUID 53 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.174783 20199 ProcessGroupNCCL.cpp:1515] [PG ID 8 PG GUID 31 Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.174791 20199 ProcessGroupNCCL.cpp:1441] [PG ID 8 PG GUID 31 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.174929 20199 ProcessGroupNCCL.cpp:1449] [PG ID 8 PG GUID 31 Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.174954 20199 ProcessGroupNCCL.cpp:2029] [PG ID 8 PG GUID 31 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.174996 20199 ProcessGroupNCCL.cpp:1699] [PG ID 8 PG GUID 31 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.175012 20199 ProcessGroupNCCL.cpp:1515] [PG ID 13 PG GUID 64 Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.175022 20199 ProcessGroupNCCL.cpp:1441] [PG ID 13 PG GUID 64 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.175093 20199 ProcessGroupNCCL.cpp:1449] [PG ID 13 PG GUID 64 Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.175117 20199 ProcessGroupNCCL.cpp:2029] [PG ID 13 PG GUID 64 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.175205 20199 ProcessGroupNCCL.cpp:1699] [PG ID 13 PG GUID 64 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.175225 20199 ProcessGroupNCCL.cpp:1515] [PG ID 7 PG GUID 30 Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.175235 20199 ProcessGroupNCCL.cpp:1441] [PG ID 7 PG GUID 30 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.175311 20199 ProcessGroupNCCL.cpp:1449] [PG ID 7 PG GUID 30 Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.175339 20199 ProcessGroupNCCL.cpp:2029] [PG ID 7 PG GUID 30 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.175376 20199 ProcessGroupNCCL.cpp:1699] [PG ID 7 PG GUID 30 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.175415 20199 ProcessGroupNCCL.cpp:1515] [PG ID 2 PG GUID 3(DATA_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.175424 20199 ProcessGroupNCCL.cpp:1441] [PG ID 2 PG GUID 3(DATA_PARALLEL_GROUP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.175508 28460 NCCLUtils.cpp:315] Aborting ncclComm_ 0x560037c93d70 with reason: No abort reason provided.
+I1102 12:51:28.184003 20199 ProcessGroupNCCL.cpp:1449] [PG ID 2 PG GUID 3(DATA_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.184064 20199 ProcessGroupNCCL.cpp:2029] [PG ID 2 PG GUID 3(DATA_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.184118 20199 ProcessGroupNCCL.cpp:1699] [PG ID 2 PG GUID 3(DATA_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.184144 20199 ProcessGroupNCCL.cpp:1515] [PG ID 6 PG GUID 29(PIPELINE_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.184160 20199 ProcessGroupNCCL.cpp:1441] [PG ID 6 PG GUID 29(PIPELINE_MODEL_PARALLEL_GROUP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.184257 28468 NCCLUtils.cpp:315] Aborting ncclComm_ 0x560037b1cdb0 with reason: No abort reason provided.
+I1102 12:51:28.685438 20199 ProcessGroupNCCL.cpp:1449] [PG ID 6 PG GUID 29(PIPELINE_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.685483 20199 ProcessGroupNCCL.cpp:2029] [PG ID 6 PG GUID 29(PIPELINE_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.685534 20199 ProcessGroupNCCL.cpp:1699] [PG ID 6 PG GUID 29(PIPELINE_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.685576 20199 ProcessGroupNCCL.cpp:1515] [PG ID 12 PG GUID 63(EXPERT_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.685586 20199 ProcessGroupNCCL.cpp:1441] [PG ID 12 PG GUID 63(EXPERT_MODEL_PARALLEL_GROUP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.685714 28526 NCCLUtils.cpp:315] Aborting ncclComm_ 0x560035fe71a0 with reason: No abort reason provided.
+I1102 12:51:28.697726 20199 ProcessGroupNCCL.cpp:1449] [PG ID 12 PG GUID 63(EXPERT_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:28.697765 20199 ProcessGroupNCCL.cpp:2029] [PG ID 12 PG GUID 63(EXPERT_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:28.697820 20199 ProcessGroupNCCL.cpp:1699] [PG ID 12 PG GUID 63(EXPERT_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:28.697934 20199 ProcessGroupNCCL.cpp:1515] [PG ID 5 PG GUID 21(TENSOR_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:28.697948 20199 ProcessGroupNCCL.cpp:1441] [PG ID 5 PG GUID 21(TENSOR_MODEL_PARALLEL_GROUP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:28.698050 28530 NCCLUtils.cpp:315] Aborting ncclComm_ 0x56000aff1a00 with reason: No abort reason provided.
+I1102 12:51:29.199257 20199 ProcessGroupNCCL.cpp:1449] [PG ID 5 PG GUID 21(TENSOR_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:29.199301 20199 ProcessGroupNCCL.cpp:2029] [PG ID 5 PG GUID 21(TENSOR_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:29.199353 20199 ProcessGroupNCCL.cpp:1699] [PG ID 5 PG GUID 21(TENSOR_MODEL_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:29.199604 20199 ProcessGroupNCCL.cpp:1515] [PG ID 1 PG GUID 1(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:29.199620 20199 ProcessGroupNCCL.cpp:1441] [PG ID 1 PG GUID 1(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:29.199733 28558 NCCLUtils.cpp:315] Aborting ncclComm_ 0x5600369e63d0 with reason: No abort reason provided.
+I1102 12:51:29.207679 20199 ProcessGroupNCCL.cpp:1449] [PG ID 1 PG GUID 1(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:29.207715 20199 ProcessGroupNCCL.cpp:2029] [PG ID 1 PG GUID 1(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:29.207768 20199 ProcessGroupNCCL.cpp:1699] [PG ID 1 PG GUID 1(DATA_PARALLEL_GROUP_WITH_CP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:29.208001 20199 ProcessGroupNCCL.cpp:1515] [PG ID 16 PG GUID 74(EXPERT_DATA_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:29.208016 20199 ProcessGroupNCCL.cpp:1441] [PG ID 16 PG GUID 74(EXPERT_DATA_PARALLEL_GROUP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:29.208118 28562 NCCLUtils.cpp:315] Aborting ncclComm_ 0x5600374ea710 with reason: No abort reason provided.
+I1102 12:51:29.709307 20199 ProcessGroupNCCL.cpp:1449] [PG ID 16 PG GUID 74(EXPERT_DATA_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:29.709352 20199 ProcessGroupNCCL.cpp:2029] [PG ID 16 PG GUID 74(EXPERT_DATA_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:29.709411 20199 ProcessGroupNCCL.cpp:1699] [PG ID 16 PG GUID 74(EXPERT_DATA_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:29.711762 20199 ProcessGroupNCCL.cpp:1515] [PG ID 3 PG GUID 5 Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:29.711787 20199 ProcessGroupNCCL.cpp:1441] [PG ID 3 PG GUID 5 Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:29.711908 20199 ProcessGroupNCCL.cpp:1449] [PG ID 3 PG GUID 5 Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:29.711937 20199 ProcessGroupNCCL.cpp:2029] [PG ID 3 PG GUID 5 Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:29.711985 20199 ProcessGroupNCCL.cpp:1699] [PG ID 3 PG GUID 5 Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+I1102 12:51:29.716550 20199 ProcessGroupNCCL.cpp:1515] [PG ID 11 PG GUID 55(TENSOR_AND_CONTEXT_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL destructor entered.
+I1102 12:51:29.716650 20199 ProcessGroupNCCL.cpp:1441] [PG ID 11 PG GUID 55(TENSOR_AND_CONTEXT_PARALLEL_GROUP) Rank 0] Launching ProcessGroupNCCL abort asynchronously.
+I1102 12:51:29.716740 28600 NCCLUtils.cpp:315] Aborting ncclComm_ 0x560037bd8590 with reason: No abort reason provided.
+I1102 12:51:30.217954 20199 ProcessGroupNCCL.cpp:1449] [PG ID 11 PG GUID 55(TENSOR_AND_CONTEXT_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL aborts successfully.
+I1102 12:51:30.217995 20199 ProcessGroupNCCL.cpp:2029] [PG ID 11 PG GUID 55(TENSOR_AND_CONTEXT_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL watchdog thread joined.
+I1102 12:51:30.218053 20199 ProcessGroupNCCL.cpp:1699] [PG ID 11 PG GUID 55(TENSOR_AND_CONTEXT_PARALLEL_GROUP) Rank 0] ProcessGroupNCCL heart beat monitor thread joined.
+W1102 12:51:32.350217 20199 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+EXIT 0

@@ -1,0 +1,5 @@
+[vehf4] ffwd1 kind=ffwd iters=12 start 23:11:05
+[vehf4] ffwd1 kind=ffwd rc=1 iters=12 med(it3+)=35127.4 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.022311E-01 | lm loss PPL: 1.224131E+00 |  23:19:43
+[vehf4] frec1 kind=frec iters=12 start 23:19:43
+[vehf4] frec1 kind=frec rc=1 iters=12 med(it3+)=36027.9 fallbacks_r0=0 val= validation loss at iteration 12 on test set | lm loss value: 2.023175E-01 | lm loss PPL: 1.224237E+00 |  23:28:35
+VEHF4 DONE

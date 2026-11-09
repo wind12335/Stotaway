@@ -1,0 +1,14 @@
+/usr/local/lib/python3.11/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+[moesf] slice0 skew=1.182 T=1024 | correctness 3/3 PASS overflow=0 | out ours 7.14e-03/rccl 2.81e-02 dx ours 6.50e-03/rccl 7.00e-03 dlogit ours 5.94e-03/rccl 7.34e-03 dW1 ours 1.07e-02/rccl 1.07e-02 dW2 ours 1.17e-02/rccl 1.17e-02
+[moesf] slice0 fwd: ours 2.810 rccl 4.237 -> x1.508 | fwd+bwd: ours 7.034 rccl 10.993 -> x1.563 ms
+[moesf] slice1 skew=1.325 T=1024 | correctness 3/3 PASS overflow=0 | out ours 7.08e-03/rccl 4.99e-02 dx ours 8.08e-03/rccl 3.12e-02 dlogit ours 4.63e-03/rccl 6.34e-02 dW1 ours 1.15e-02/rccl 1.17e-01 dW2 ours 1.62e-02/rccl 9.97e-02
+[moesf] slice1 fwd: ours 2.895 rccl 4.367 -> x1.509 | fwd+bwd: ours 7.227 rccl 11.369 -> x1.573 ms
+[moesf] slice2 skew=1.557 T=1024 | correctness 3/3 PASS overflow=0 | out ours 7.24e-03/rccl 7.73e-02 dx ours 7.15e-03/rccl 4.63e-02 dlogit ours 5.33e-03/rccl 3.88e-02 dW1 ours 1.11e-02/rccl 1.31e-01 dW2 ours 1.42e-02/rccl 1.06e-01
+[moesf] slice2 fwd: ours 3.017 rccl 4.701 -> x1.558 | fwd+bwd: ours 7.526 rccl 11.331 -> x1.506 ms
+[moesf] slice3 skew=1.823 T=1024 | correctness 3/3 PASS overflow=0 | out ours 6.26e-03/rccl 6.26e-03 dx ours 6.56e-03/rccl 7.65e-03 dlogit ours 5.45e-03/rccl 5.45e-03 dW1 ours 1.09e-02/rccl 1.09e-02 dW2 ours 1.34e-02/rccl 1.34e-02
+[moesf] slice3 fwd: ours 3.197 rccl 4.936 -> x1.544 | fwd+bwd: ours 7.897 rccl 11.654 -> x1.476 ms
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 11:22:02.357553  2848 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+rc=0
+ALL DONE

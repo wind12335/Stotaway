@@ -1,0 +1,14 @@
+[fg] triton_dist from /root/private_data/tri-dist-hygon-opus/triton_dist/__init__.py
+[fg] FAIL op K=6656 rel_vs_rccl=2.344e-02
+[fg] FAIL op K=6656 rel_vs_rccl=2.344e-02
+[fg] FAIL op K=6656 rel_vs_rccl=2.344e-02
+[fg] FAIL op K=6656 rel_vs_rccl=2.344e-02
+[fg] FAIL op K=6656 rel_vs_rccl=2.344e-02
+[fg] correctness ops=32 fails=32 rel(ours,rccl)=2.344e-02 rel(rccl,fp32)=2.737e-02 rel(ours,fp32)=1.010e-02 -> FAIL
+[fg2] K=6656 stock 17.223 (gemm 11.099 + rccl-rs 6.183) | dx-rs 4.279 | gemm+dx-rs 16.182 | dx-fused 12.354 -> fused/gemm+dx x1.310 | b2b/op gemm+dx 17.443 fused 12.234 x1.426
+[fg2-bwd] K=6656 ag 4.088 | dgrad 12.891 | wgrad NN(contig copy) 26.277 (copy alone 13.418) | wgrad TN(view, stock) 8.168 -> NN/TN x3.22
+/usr/local/lib/python3.11/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1031 22:40:22.627511 3184309 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+rc=0

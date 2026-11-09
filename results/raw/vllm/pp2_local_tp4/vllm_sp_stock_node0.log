@@ -1,0 +1,85 @@
+[vsp] arm=stock TP=4 PP=2 M-bucket=16384 model=/root/private_data/stowaway/3rdparty/models/LLAMA3-70B
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+WARNING 11-02 17:46:37 [worker_base.py:40] VLLM_RANK0_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK0_NUMA = -1
+WARNING 11-02 17:46:38 [worker_base.py:40] VLLM_RANK1_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK1_NUMA = -1
+WARNING 11-02 17:46:38 [worker_base.py:40] VLLM_RANK3_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK3_NUMA = -1
+WARNING 11-02 17:46:38 [worker_base.py:40] VLLM_RANK2_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK2_NUMA = -1
+[Gloo] Rank 2 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 1 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 3 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 0 is connected to 7 peer ranks. Expected number of connected peer ranks is : 7
+[Gloo] Rank 0 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 2 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 3 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 1 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 1 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 3 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 2 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+Loading safetensors checkpoint shards:   0% Completed | 0/30 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:   3% Completed | 1/30 [00:04<01:58,  4.08s/it]
+Loading safetensors checkpoint shards:   7% Completed | 2/30 [00:06<01:28,  3.15s/it]
+Loading safetensors checkpoint shards:  10% Completed | 3/30 [00:11<01:52,  4.15s/it]
+Loading safetensors checkpoint shards:  13% Completed | 4/30 [00:16<01:56,  4.47s/it]
+Loading safetensors checkpoint shards:  17% Completed | 5/30 [00:22<01:58,  4.76s/it]
+Loading safetensors checkpoint shards:  20% Completed | 6/30 [00:27<01:59,  4.96s/it]
+Loading safetensors checkpoint shards:  23% Completed | 7/30 [00:32<01:54,  4.98s/it]
+Loading safetensors checkpoint shards:  27% Completed | 8/30 [00:37<01:51,  5.05s/it]
+Loading safetensors checkpoint shards:  30% Completed | 9/30 [00:41<01:40,  4.81s/it]
+Loading safetensors checkpoint shards:  33% Completed | 10/30 [00:46<01:35,  4.78s/it]
+Loading safetensors checkpoint shards:  37% Completed | 11/30 [00:51<01:28,  4.65s/it]
+Loading safetensors checkpoint shards:  43% Completed | 13/30 [00:51<00:43,  2.54s/it]
+Loading safetensors checkpoint shards:  63% Completed | 19/30 [00:51<00:09,  1.15it/s]
+Loading safetensors checkpoint shards:  73% Completed | 22/30 [00:56<00:08,  1.12s/it]
+Loading safetensors checkpoint shards:  77% Completed | 23/30 [01:01<00:11,  1.63s/it]
+Loading safetensors checkpoint shards:  80% Completed | 24/30 [01:06<00:13,  2.23s/it]
+Loading safetensors checkpoint shards:  83% Completed | 25/30 [01:11<00:13,  2.70s/it]
+Loading safetensors checkpoint shards:  90% Completed | 27/30 [01:11<00:05,  1.79s/it]
+Loading safetensors checkpoint shards: 100% Completed | 30/30 [01:11<00:00,  2.39s/it]
+
+WARNING 11-02 17:48:25 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 17:48:25 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 17:48:25 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+WARNING 11-02 17:48:25 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+/usr/local/lib/python3.11/site-packages/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 17:48:25.425212 107343 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+/usr/local/lib/python3.11/site-packages/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 17:48:25.426002 107344 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+/usr/local/lib/python3.11/site-packages/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 17:48:25.427449 107345 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+/usr/local/lib/python3.11/site-packages/vllm/distributed/parallel_state.py:516: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /home/pytorch/torch/csrc/utils/tensor_new.cpp:1581.)
+  object_tensor = torch.frombuffer(pickle.dumps(obj), dtype=torch.uint8)
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1102 17:48:25.430766 107342 ProcessGroupNCCL.cpp:4004] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+[vsp] gate stock: first ids [481, 62, 15, 13, 15, 13, 15, 13]
+[vsp] stock ttft r0 n1 isl16384: 3.198s 5123 tok/s
+[vsp] stock ttft2 r0 n1 isl32768: 7.480s 4381 tok/s
+[vsp] stock thru r0 n16 isl16384: 51.339s 5106 tok/s
+[vsp] done -> results/raw/vllm/pp2_local_tp4/vsp.csv
+/usr/local/lib/python3.11/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+W1102 17:50:01.009521 107342 ProcessGroupNCCL.cpp:5068] Guessing device ID based on global rank. This can cause a hang if rank to GPU mapping is heterogeneous. You can specify device_id in init_process_group()
+W1102 17:50:03.226766 107342 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+/usr/local/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked shared_memory objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

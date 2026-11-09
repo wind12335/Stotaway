@@ -1,0 +1,5 @@
+[e2e] h1 kind=fcth iters=8 start 11:37:53
+[e2e] h1 kind=fcth rc=1 iters=8 med(it3+)=16153.5 fallbacks_r0=0 val= validation loss at iteration 8 on test set | lm loss value: 6.859586E-01 | lm loss PPL: 1.985674E+00 |  11:41:33
+[e2e] s1 kind=fchs iters=8 start 11:41:33
+[e2e] s1 kind=fchs rc=1 iters=8 med(it3+)=16656.7 fallbacks_r0=0 val= validation loss at iteration 8 on test set | lm loss value: 6.859586E-01 | lm loss PPL: 1.985674E+00 |  11:45:07
+E2E DONE

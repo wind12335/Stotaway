@@ -1,0 +1,8 @@
+Stowaway includes code derived from third-party projects:
+
+- triton-distributed (ByteDance Ltd. and/or its affiliates), MIT License, see LICENSE.triton-dist.
+  The Hygon DCU kernel layer under src/stowaway/kernels/ (common_ops and the ring / ticket kernels)
+  started from the triton-distributed DCU port; files keep their original copyright headers.
+- 3rdparty/dcu_shims/ are small compatibility stubs written for this project (no third-party code).
+- 3rdparty/patches/ are diffs against Megatron-LM-das (HYGON-AI) and Megatron-LM (NVIDIA), which are
+  not redistributed here; see 3rdparty/README.md for the exact upstream commits.

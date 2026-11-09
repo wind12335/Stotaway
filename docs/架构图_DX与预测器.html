@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Stowaway 架构图：DX 重叠方法 + 预测器（11-03 组会版）</title>
+<style>
+.viz-root {
+  color-scheme: light;
+  --surface-1: #fcfcfb;
+  --surface-2: #f3f2ef;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #7a7974;
+  --grid: #e2e1dc;
+  --s1: #2a78d6;   /* 计算（GEMM / 求和） */
+  --s2: #eb6834;   /* 通信（拷贝引擎推送 / RCCL） */
+  --s3: #1baf7a;   /* 同步与控制（票据、ack、host、预测器） */
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .viz-root {
+    color-scheme: dark;
+    --surface-1: #1a1a19; --surface-2: #242423;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+    --grid: #3a3a37;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  }
+}
+:root[data-theme="dark"] .viz-root {
+  color-scheme: dark;
+  --surface-1: #1a1a19; --surface-2: #242423;
+  --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+  --grid: #3a3a37;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+}
+html, body { margin: 0; }
+.viz-root {
+  background: var(--surface-1); color: var(--text-primary);
+  font-family: "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.7; font-size: 16px;
+  max-width: 1180px; margin: 0 auto; padding: 24px 28px 80px;
+}
+h1 { font-size: 26px; margin: 8px 0 4px; }
+h2 { font-size: 21px; margin: 44px 0 8px; padding-top: 12px; border-top: 1px solid var(--grid); }
+h3 { font-size: 17px; margin: 22px 0 6px; }
+p, li { color: var(--text-primary); }
+.sub { color: var(--text-secondary); margin: 0 0 12px; }
+.note { color: var(--text-secondary); font-size: 14px; }
+.key { background: var(--surface-2); border-left: 4px solid var(--s3); padding: 10px 14px; margin: 12px 0; border-radius: 4px; }
+.warn { background: var(--surface-2); border-left: 4px solid var(--s2); padding: 10px 14px; margin: 12px 0; border-radius: 4px; }
+code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.92em; background: var(--surface-2); padding: 1px 4px; border-radius: 3px; }
+table { border-collapse: collapse; margin: 10px 0 14px; font-size: 15px; }
+th, td { border: 1px solid var(--grid); padding: 5px 10px; text-align: left; vertical-align: top; }
+th { background: var(--surface-2); font-weight: 600; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.legend { display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--text-secondary); margin: 6px 0 4px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 14px; height: 14px; border-radius: 3px; display: inline-block; border: 2px solid; }
+.sw.c1 { border-color: var(--s1); background: color-mix(in srgb, var(--s1) 22%, transparent); }
+.sw.c2 { border-color: var(--s2); background: color-mix(in srgb, var(--s2) 22%, transparent); }
+.sw.c3 { border-color: var(--s3); background: color-mix(in srgb, var(--s3) 22%, transparent); }
+svg { display: block; width: 100%; height: auto; margin: 8px 0; }
+svg text { font-family: inherit; fill: var(--text-primary); }
+svg .t2 { fill: var(--text-secondary); }
+svg .tm { fill: var(--text-muted); }
+svg .b0 { fill: var(--surface-2); stroke: var(--text-muted); stroke-width: 1.5; }
+svg .b1 { fill: color-mix(in srgb, var(--s1) 18%, var(--surface-1)); stroke: var(--s1); stroke-width: 2; }
+svg .b2 { fill: color-mix(in srgb, var(--s2) 18%, var(--surface-1)); stroke: var(--s2); stroke-width: 2; }
+svg .b3 { fill: color-mix(in srgb, var(--s3) 16%, var(--surface-1)); stroke: var(--s3); stroke-width: 2; }
+svg .g1 { fill: color-mix(in srgb, var(--s3) 7%, var(--surface-1)); stroke: var(--s3); stroke-width: 1; stroke-dasharray: 5 4; }
+svg .g2 { fill: color-mix(in srgb, var(--s2) 6%, var(--surface-1)); stroke: var(--s2); stroke-width: 1; stroke-dasharray: 5 4; }
+svg .ln { stroke: var(--text-secondary); stroke-width: 1.5; fill: none; }
+svg .lnd { stroke: var(--text-muted); stroke-width: 1.2; fill: none; stroke-dasharray: 4 4; }
+svg .gridl { stroke: var(--grid); stroke-width: 1; }
+svg .axis { stroke: var(--text-muted); stroke-width: 1.2; }
+svg .bubble { fill: none; stroke: var(--s2); stroke-width: 2; stroke-dasharray: 5 3; }
+svg .tick3 { fill: var(--s3); }
+svg .model { stroke: var(--s2); stroke-width: 2; fill: none; }
+svg .dot { fill: var(--s1); stroke: var(--surface-1); stroke-width: 2; cursor: pointer; }
+svg .hit { fill: transparent; cursor: pointer; }
+svg .band { fill: var(--grid); opacity: 0.55; }
+.tip { position: fixed; pointer-events: none; background: var(--surface-1); color: var(--text-primary);
+  border: 1px solid var(--grid); border-radius: 6px; padding: 6px 10px; font-size: 13px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.12); opacity: 0; transition: opacity .08s; max-width: 260px; }
+.toc { columns: 2; font-size: 15px; }
+.toc li { margin: 2px 0; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+
+<h1>Stowaway：先预测，再重叠</h1>
+<p class="sub">DX 重叠方法（创新点 1）与预测器（创新点 2）的架构图与讲解。11-03 组会版。预测器在修复 vLLM 偏保守的问题后如果原理有变化，会另出一版。</p>
+
+<div class="legend">
+  <span><i class="sw c1"></i>计算：GEMM、求和（厂商 GEMM 原样调用）</span>
+  <span><i class="sw c2"></i>通信：拷贝引擎推送、RCCL 集合通信</span>
+  <span><i class="sw c3"></i>同步与控制：票据、ack、host、预测器</span>
+</div>
+<p class="note">全文三种颜色只表示这三类角色，每个方框都带文字标签。鼠标悬停在方框和数据点上可以看到说明。</p>
+
+<ol class="toc">
+  <li>一张图看全系统</li>
+  <li>DX 怎么做 GEMM+RS</li>
+  <li>为什么按"置换序"推</li>
+  <li>DX 怎么做 AG+GEMM</li>
+  <li>训练一层里的 4 个位置</li>
+  <li>为什么算子级赢、整步却可能输</li>
+  <li>预测器两级怎么算</li>
+  <li>MoE：整层去掉 host 同步</li>
+  <li>结果在哪份文档、局限</li>
+  <li>组会讲稿（约 5 分钟）</li>
+</ol>
+
+<!-- ============================================================ 1 -->
+<h2>1　一张图看全系统</h2>
+<p>系统分三块：先收集几样<b>输入</b>；<b>预测器</b>在训练开始前用纯 CPU 算出每个调用点用哪种做法；<b>运行时</b>只按这个方案接管对应的调用点。方案一旦选定，整个训练过程中不变。</p>
+
+<svg viewBox="0 0 1120 606" role="img" aria-label="系统总览：输入、预测器、运行时三列">
+  <!-- column backgrounds -->
+  <rect x="10" y="20" width="300" height="450" rx="10" fill="none" stroke="var(--grid)"/>
+  <rect x="345" y="20" width="370" height="450" rx="10" class="g1"/>
+  <rect x="750" y="20" width="360" height="450" rx="10" class="g2"/>
+  <text x="24" y="46" font-size="16" font-weight="600">① 输入（训练前）</text>
+  <text x="360" y="46" font-size="16" font-weight="600">② 预测器（planner/，纯 CPU）</text>
+  <text x="764" y="46" font-size="16" font-weight="600">③ 运行时（src/stowaway/）</text>
+
+  <!-- inputs -->
+  <g><title>来自模型配置和训练脚本：决定 4 个调用点的 GEMM 形状 M×K×N 和通信字节数</title>
+  <rect x="24" y="62" width="272" height="58" rx="6" class="b0"/>
+  <text x="38" y="86" font-size="15" font-weight="600">模型形状 + MBS</text>
+  <text x="38" y="108" font-size="13" class="t2">hidden、ffn、头数、层数；M = 序列×MBS</text></g>
+  <g><title>planner.py 自动在一张卡上测 4 个 GEMM，每个形状几秒；有探测文件时直接读</title>
+  <rect x="24" y="134" width="272" height="58" rx="6" class="b0"/>
+  <text x="38" y="158" font-size="15" font-weight="600">单卡测 4 个 GEMM 的时间 G</text>
+  <text x="38" y="180" font-size="13" class="t2">每个调用点几秒，不建通信上下文</text></g>
+  <g><title>原版配置跑 ≤3 次迭代，读出整步时间，换算成每层周期 GPU 时间 D</title>
+  <rect x="24" y="206" width="272" height="58" rx="6" class="b0"/>
+  <text x="38" y="230" font-size="15" font-weight="600">原版短跑 ≤3 次迭代</text>
+  <text x="38" y="252" font-size="13" class="t2">整步时间 → 每层周期 GPU 时间 D</text></g>
+
+  <g><title>这些规律是在本平台上一次性测出来的，预测器的系数由它们标定</title>
+  <rect x="24" y="290" width="272" height="166" rx="6" class="b0"/>
+  <text x="38" y="314" font-size="15" font-weight="600">平台定律（一次性标定）</text>
+  <text x="38" y="340" font-size="13" class="t2">· 置换序直推：任意对端 ~141 GB/s/卡</text>
+  <text x="38" y="364" font-size="13" class="t2">· 跨进程引擎拷贝会把 host 拉回到</text>
+  <text x="50" y="384" font-size="13" class="t2">GPU 进度附近（F50）</text>
+  <text x="38" y="408" font-size="13" class="t2">· 训练中现场试做法会改变后续速度（F44）</text>
+  <text x="38" y="432" font-size="13" class="t2">· 算子级 99 格实测 → 第一级系数</text></g>
+
+  <!-- planner -->
+  <g><title>每个调用点单独预测原版和重叠方法的时间；系数用 11 个模型的算子级实测拟合</title>
+  <rect x="360" y="62" width="340" height="132" rx="6" class="b3"/>
+  <text x="374" y="86" font-size="15" font-weight="600">第一级：算子级代价模型</text>
+  <text x="374" y="110" font-size="13" class="t2">每个调用点预测 原版 / 重叠 的时间</text>
+  <text x="374" y="132" font-size="13" class="t2">原版 = G + C(B) + h0</text>
+  <text x="374" y="154" font-size="13" class="t2">重叠 = a1·G + a2·Cx + a3·max(G, Cx) + h1</text>
+  <text x="374" y="178" font-size="13" class="t2">安全门：悲观估计也要快 2% 才选重叠</text></g>
+  <g><title>算子测试看不到的整步代价：融合 AG 让 GPU 空等；只在训练整步里出现</title>
+  <rect x="360" y="222" width="340" height="132" rx="6" class="b3"/>
+  <text x="374" y="246" font-size="15" font-weight="600">第二级：整步控制面项</text>
+  <text x="374" y="270" font-size="13" class="t2">融合 AG 每次调用让 GPU 空等 e</text>
+  <text x="374" y="292" font-size="13" class="t2">e = 0.0096 × D（D &lt; 205 ms），否则 0</text>
+  <text x="374" y="314" font-size="13" class="t2">AG 组合：Σ 算子收益 + 2 × e × 开的个数</text>
+  <text x="374" y="338" font-size="13" class="t2">RS 组：D &lt; 111 ms 时回退原版</text></g>
+  <g><title>输出就是一个配置名，例如 fbag / fbc / base</title>
+  <rect x="360" y="382" width="340" height="74" rx="6" class="b0"/>
+  <text x="374" y="406" font-size="15" font-weight="600">输出：每个调用点的方案</text>
+  <text x="374" y="428" font-size="13" class="t2">QKV · o_proj · fc1 · fc2 ∈ {重叠, 原版}</text>
+  <text x="374" y="448" font-size="13" class="t2">例：70B MBS8 四处全开；27B MBS8 只开 RS</text></g>
+
+  <!-- runtime -->
+  <g><title>e2e/megatron/prelude.py 与 vllm_sp_patch.py；不在方案里的调用点完全走原版</title>
+  <rect x="764" y="62" width="332" height="56" rx="6" class="b0"/>
+  <text x="778" y="86" font-size="15" font-weight="600">Megatron / vLLM 钩子</text>
+  <text x="778" y="107" font-size="13" class="t2">默认全关，只接管方案里开的调用点</text></g>
+  <g><title>dx_gemm_rs_op：前向的 o_proj 与 fc2</title>
+  <rect x="764" y="132" width="160" height="58" rx="6" class="b2"/>
+  <text x="778" y="156" font-size="15" font-weight="600">GEMM + RS</text>
+  <text x="778" y="177" font-size="13" class="t2">o_proj、fc2 前向</text></g>
+  <g><title>dx_ag_gemm_op：前向的 QKV 与 fc1</title>
+  <rect x="936" y="132" width="160" height="58" rx="6" class="b2"/>
+  <text x="950" y="156" font-size="15" font-weight="600">AG + GEMM</text>
+  <text x="950" y="177" font-size="13" class="t2">QKV、fc1 前向</text></g>
+  <g><title>dx_ag_bwd_op：反向时先收集梯度再算 dgrad，到达一块算一块</title>
+  <rect x="764" y="202" width="160" height="58" rx="6" class="b2"/>
+  <text x="778" y="226" font-size="15" font-weight="600">AG + dgrad</text>
+  <text x="778" y="247" font-size="13" class="t2">o_proj、fc2 反向</text></g>
+  <g><title>dxv_op：旁边没有 GEMM 可藏的独立 RS（梯度等）</title>
+  <rect x="936" y="202" width="160" height="58" rx="6" class="b2"/>
+  <text x="950" y="226" font-size="15" font-weight="600">纯 RS</text>
+  <text x="950" y="247" font-size="13" class="t2">梯度等独立 RS</text></g>
+  <g><title>moe_sf.py + moe_expert_mlp.py：派发、专家计算、合并全程不读计数到 host</title>
+  <rect x="764" y="274" width="332" height="58" rx="6" class="b2"/>
+  <text x="778" y="298" font-size="15" font-weight="600">MoE 层：免 host 同步</text>
+  <text x="778" y="319" font-size="13" class="t2">SM 直写派发 · 分组 GEMM · 按标签合并</text></g>
+  <g><title>四种 DX 算子和 MoE 路径共用的底座</title>
+  <rect x="764" y="346" width="332" height="110" rx="6" class="b0"/>
+  <text x="778" y="370" font-size="15" font-weight="600">共同底座</text>
+  <text x="778" y="393" font-size="13" class="t2">对称堆（dushmem：只分配、换算对端地址）</text>
+  <text x="778" y="414" font-size="13" class="t2">拷贝引擎直推 hipMemcpyAsync（不占计算单元）</text>
+  <text x="778" y="435" font-size="13" class="t2">4 B 票据 + hipStreamWaitValue32，无全员栅栏</text>
+  <text x="778" y="452" font-size="12" class="tm">厂商 GEMM（hipBLAS）一字不改</text></g>
+
+  <!-- arrows -->
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--text-secondary)"/></marker></defs>
+  <path class="ln" d="M296 91 H330 V120 H358" marker-end="url(#ar)"/>
+  <path class="ln" d="M296 163 H330 V140 H358" marker-end="url(#ar)"/>
+  <path class="ln" d="M296 235 H330 V288 H358" marker-end="url(#ar)"/>
+  <path class="lnd" d="M296 372 H338 V170 H358" marker-end="url(#ar)"/>
+  <path class="lnd" d="M338 300 H358" marker-end="url(#ar)"/>
+  <path class="ln" d="M530 194 V220" marker-end="url(#ar)"/>
+  <path class="ln" d="M530 354 V380" marker-end="url(#ar)"/>
+  <path class="ln" d="M700 419 H732 V90 H762" marker-end="url(#ar)"/>
+  <path class="ln" d="M930 118 V130" marker-end="url(#ar)"/>
+
+  <!-- result map -->
+  <rect x="10" y="490" width="1100" height="104" rx="10" fill="var(--surface-2)" stroke="var(--grid)"/>
+  <text x="24" y="516" font-size="15" font-weight="600">结果对应的文档（stowaway/results/）</text>
+  <text x="24" y="542" font-size="13" class="t2">算子级：算子级结果表.md（GEMM+RS 1.30×、AG+GEMM M32768 1.13×）· MoE结果表.md §1（整层 1.17–1.57×）</text>
+  <text x="24" y="564" font-size="13" class="t2">端到端：端到端与预测器结果表.md（Megatron 8 卡 1.06–1.08×、16 卡 1.05–1.08×；预测器 5/5、16 卡 2/2）</text>
+  <text x="24" y="584" font-size="13" class="t2">　　　　vLLM结果表.md（8 卡 1.14–1.17×、16 卡 1.19–1.22×）· MoE结果表.md §2（1.116×）</text>
+</svg>
+
+<div class="key"><b>一句话：</b>DX 把 TP 通信（AG、RS）切成和 GEMM 一样的 R 块，算完一块就由拷贝引擎按置换序直接推给它的归属卡，靠 4 字节票据对齐，不设全员栅栏；预测器在训练前判断每个调用点开不开它，因为在本平台上"算子级更快"不等于"整步更快"。</div>
+
+<!-- ============================================================ 2 -->
+<h2>2　DX 怎么做 GEMM + RS（o_proj、fc2 的前向）</h2>
+<p>行并行的线性层：每张卡用自己那份 K 算出完整的 M 行部分和，再做 ReduceScatter（RS），让第 d 块行最终落在卡 d 上、并对 R 张卡求和。原版是"整块 GEMM 算完 → 再调 RCCL RS"，两件事串行。DX 把 M 行切成 R 块，每块都有一张"归属卡"：</p>
+<svg viewBox="0 0 1120 330" role="img" aria-label="GEMM+RS 时间线：原版串行 vs DX 分块直推">
+  <text x="20" y="28" font-size="15" font-weight="600">原版：GEMM 算完全部 M 行，再调 RCCL ReduceScatter（串行）</text>
+  <text x="20" y="66" font-size="13" class="t2">计算流</text>
+  <g><title>厂商 GEMM，整块</title><rect x="170" y="46" width="560" height="30" rx="4" class="b1"/>
+  <text x="450" y="66" font-size="13" text-anchor="middle">GEMM（全部 M 行）</text></g>
+  <g><title>RCCL 集合通信，占用计算流</title><rect x="730" y="46" width="336" height="30" rx="4" class="b2"/>
+  <text x="898" y="66" font-size="13" text-anchor="middle">RCCL ReduceScatter</text></g>
+  <line x1="1066" y1="40" x2="1066" y2="84" class="axis"/>
+  <text x="1062" y="98" font-size="12" class="tm" text-anchor="end">结束</text>
+
+  <text x="20" y="130" font-size="15" font-weight="600">DX：分块算，算完一块立刻推给它的归属卡（卡 0 视角，R = 4，示意比例）</text>
+  <text x="20" y="168" font-size="13" class="t2">计算流</text>
+  <text x="20" y="214" font-size="13" class="t2">拷贝引擎</text>
+  <text x="20" y="260" font-size="13" class="t2">别人推来</text>
+  <g><title>先算要送给卡 1 的那块行</title><rect x="170" y="148" width="138" height="30" rx="4" class="b1"/><text x="239" y="168" font-size="13" text-anchor="middle">块 → 卡1</text></g>
+  <g><title>第 2 步送给卡 2</title><rect x="310" y="148" width="138" height="30" rx="4" class="b1"/><text x="379" y="168" font-size="13" text-anchor="middle">块 → 卡2</text></g>
+  <g><title>第 3 步送给卡 3</title><rect x="450" y="148" width="138" height="30" rx="4" class="b1"/><text x="519" y="168" font-size="13" text-anchor="middle">块 → 卡3</text></g>
+  <g><title>自己的块最后算：给别人的块越早推出越好</title><rect x="590" y="148" width="138" height="30" rx="4" class="b1"/><text x="659" y="168" font-size="13" text-anchor="middle">自己的块</text></g>
+  <g><title>等齐 3 张票据后，一次 fp32 求和得到自己那块行的结果</title><rect x="730" y="148" width="68" height="30" rx="4" class="b1"/><text x="764" y="168" font-size="13" text-anchor="middle">求和</text></g>
+  <g><title>ack：告诉发送方它的槽位可以复用了</title><rect x="800" y="152" width="8" height="22" class="tick3"/><text x="814" y="168" font-size="12" class="t2">ack</text></g>
+
+  <g><title>拷贝引擎（DMA）直接写对端对称堆，不占计算单元</title><rect x="310" y="194" width="84" height="30" rx="4" class="b2"/><text x="352" y="214" font-size="13" text-anchor="middle">推→1</text></g>
+  <rect x="396" y="198" width="7" height="22" class="tick3"><title>4 B 票据：紧跟数据写到对端，同一条流保证先数据后票据</title></rect>
+  <text x="400" y="238" font-size="12" text-anchor="middle" class="t2">票据</text>
+  <g><title>第 2 步</title><rect x="450" y="194" width="84" height="30" rx="4" class="b2"/><text x="492" y="214" font-size="13" text-anchor="middle">推→2</text></g>
+  <rect x="536" y="198" width="7" height="22" class="tick3"/>
+  <g><title>第 3 步</title><rect x="590" y="194" width="84" height="30" rx="4" class="b2"/><text x="632" y="214" font-size="13" text-anchor="middle">推→3</text></g>
+  <rect x="676" y="198" width="7" height="22" class="tick3"/>
+
+  <g><title>卡 3 在它的第 1 步把属于卡 0 的块推过来</title><rect x="394" y="244" width="10" height="26" class="tick3"/><text x="410" y="262" font-size="12" class="t2">卡3 的块到</text></g>
+  <g><title>卡 2 在它的第 2 步推过来</title><rect x="534" y="244" width="10" height="26" class="tick3"/><text x="550" y="262" font-size="12" class="t2">卡2 的块到</text></g>
+  <g><title>卡 1 在它的第 3 步推过来</title><rect x="674" y="244" width="10" height="26" class="tick3"/><text x="690" y="262" font-size="12" class="t2">卡1 的块到</text></g>
+  <path class="lnd" d="M730 186 V270"/>
+  <text x="736" y="290" font-size="12" class="t2">只在自己堆里的票据格上等，不等全员</text>
+  <line x1="808" y1="140" x2="808" y2="186" class="axis"/>
+  <text x="812" y="134" font-size="12" class="tm">结束</text>
+  <path class="ln" d="M812 310 H1062" marker-end="url(#ar)"/>
+  <path class="ln" d="M1062 310 H812" marker-end="url(#ar)"/>
+  <text x="937" y="304" font-size="13" text-anchor="middle" class="t2">藏起来的通信时间</text>
+</svg>
+<ul>
+  <li><b>分块计算</b>：要送给别人的块先算，自己的块最后算。这样第一块推出去时，后面的 GEMM 还在算，通信就藏在计算后面。</li>
+  <li><b>直推</b>：用拷贝引擎（DMA，专门搬数据的硬件，不占计算单元）把整块直接写进归属卡的对称堆。不经过 RCCL，也不经过任何中转卡；对称堆由 dushmem 分配，它只负责分配和换算对端地址。</li>
+  <li><b>票据</b>：每块数据后面紧跟一个 4 字节票据，写在同一条拷贝流上，所以票据到了就说明数据已经到了。归属卡用 <code>hipStreamWaitValue32</code> 只等自己堆里那几个格子，不设全员栅栏：慢的那张卡只拖慢它自己那一块。</li>
+  <li><b>求和与 ack</b>：R 份到齐后，一次 fp32 累加。求和结束后发 ack（一个原子交换小核写进发送方的格子），发送方下一次要复用这个槽位之前会先等它。</li>
+</ul>
+
+<!-- ============================================================ 3 -->
+<h2>3　为什么按"置换序"推</h2>
+<p>第 j 步，卡 r 推给卡 (r + j) mod R。下表的每一列里，每个目的地恰好出现一次。也就是说，同一时刻每张卡只收一份、只发一份，没有"多张卡同时往一张卡里挤"（incast）。</p>
+<table>
+  <tr><th>发送卡 \ 步</th><th class="num">第 1 步</th><th class="num">第 2 步</th><th class="num">第 3 步</th></tr>
+  <tr><td>卡 0</td><td class="num">→ 1</td><td class="num">→ 2</td><td class="num">→ 3</td></tr>
+  <tr><td>卡 1</td><td class="num">→ 2</td><td class="num">→ 3</td><td class="num">→ 0</td></tr>
+  <tr><td>卡 2</td><td class="num">→ 3</td><td class="num">→ 0</td><td class="num">→ 1</td></tr>
+  <tr><td>卡 3</td><td class="num">→ 0</td><td class="num">→ 1</td><td class="num">→ 2</td></tr>
+</table>
+<ul>
+  <li>实测（8 卡，F-perm）：8 张卡同时按置换序直推，每张卡约 <b>141 GB/s</b>，推给哪个对端都一样快。所以不需要环（ring）那种 7 跳"边加边转发"，一跳就到归属卡，求和只在终点做一次。</li>
+  <li>对比：FiCCO 是 1/8 粒度扇出（同时发给所有人），多条流并行。我们是一次只发给一个目的地，按步轮换。这是两者的主要取舍：我们换来了无 incast、单流、票据顺序天然有序，代价是每步只有一条流在用。</li>
+</ul>
+
+<!-- ============================================================ 4 -->
+<h2>4　DX 怎么做 AG + GEMM（QKV、fc1 的前向）</h2>
+<p>列并行的线性层，序列并行下：每张卡只持有 M/R 行输入，GEMM 之前要先 AllGather（AG）出全部 M 行。DX 反过来：先把自己那份按置换序推给所有人；自己的块先算；别人的块到一块算一块。</p>
+<svg viewBox="0 0 1120 290" role="img" aria-label="AG+GEMM 时间线：原版串行 vs DX 到达即算">
+  <text x="20" y="28" font-size="15" font-weight="600">原版：RCCL AllGather 收齐全部 M 行，再整块 GEMM</text>
+  <text x="20" y="66" font-size="13" class="t2">计算流</text>
+  <g><title>RCCL AllGather</title><rect x="170" y="46" width="336" height="30" rx="4" class="b2"/><text x="338" y="66" font-size="13" text-anchor="middle">RCCL AllGather</text></g>
+  <g><title>整块 GEMM</title><rect x="506" y="46" width="560" height="30" rx="4" class="b1"/><text x="786" y="66" font-size="13" text-anchor="middle">GEMM（全部 M 行）</text></g>
+  <line x1="1066" y1="40" x2="1066" y2="84" class="axis"/>
+
+  <text x="20" y="128" font-size="15" font-weight="600">DX：推出自己那份；自己的块先算；别人的块到一块算一块（卡 0 视角，R = 4，示意比例）</text>
+  <text x="20" y="168" font-size="13" class="t2">拷贝引擎</text>
+  <text x="20" y="214" font-size="13" class="t2">收到 + 搬出堆</text>
+  <text x="20" y="260" font-size="13" class="t2">计算流</text>
+  <g><title>把我的 M/R 行推给卡 1</title><rect x="170" y="148" width="82" height="30" rx="4" class="b2"/><text x="211" y="168" font-size="13" text-anchor="middle">推→1</text></g>
+  <g><title>推给卡 2</title><rect x="254" y="148" width="82" height="30" rx="4" class="b2"/><text x="295" y="168" font-size="13" text-anchor="middle">推→2</text></g>
+  <g><title>推给卡 3</title><rect x="338" y="148" width="82" height="30" rx="4" class="b2"/><text x="379" y="168" font-size="13" text-anchor="middle">推→3</text></g>
+  <g><title>卡 3 的块先到（第 1 步，卡 r−1 推给我）；GEMM 的操作数不能放在堆上，先搬到普通显存</title><rect x="254" y="194" width="30" height="30" rx="4" class="b2" opacity="0.75"/><text x="290" y="214" font-size="12" class="t2">卡3</text></g>
+  <g><title>卡 2 的块第 2 步到</title><rect x="338" y="194" width="30" height="30" rx="4" class="b2" opacity="0.75"/><text x="374" y="214" font-size="12" class="t2">卡2</text></g>
+  <g><title>卡 1 的块第 3 步到</title><rect x="422" y="194" width="30" height="30" rx="4" class="b2" opacity="0.75"/><text x="458" y="214" font-size="12" class="t2">卡1</text></g>
+  <g><title>自己的块不需要等，先算</title><rect x="170" y="240" width="138" height="30" rx="4" class="b1"/><text x="239" y="260" font-size="13" text-anchor="middle">自己的块</text></g>
+  <g><title>卡 3 的块已经到了，接着算</title><rect x="310" y="240" width="138" height="30" rx="4" class="b1"/><text x="379" y="260" font-size="13" text-anchor="middle">卡3 的块</text></g>
+  <g><title>卡 2 的块</title><rect x="450" y="240" width="138" height="30" rx="4" class="b1"/><text x="519" y="260" font-size="13" text-anchor="middle">卡2 的块</text></g>
+  <g><title>卡 1 的块</title><rect x="590" y="240" width="138" height="30" rx="4" class="b1"/><text x="659" y="260" font-size="13" text-anchor="middle">卡1 的块</text></g>
+  <line x1="728" y1="232" x2="728" y2="278" class="axis"/>
+  <text x="734" y="262" font-size="12" class="tm">结束（算子级）</text>
+</svg>
+<ul>
+  <li>收到的块先从对称堆搬到普通显存，再交给 GEMM，因为 GEMM 的操作数不能放在堆上。搬运放在旁路流上，搬完就发 ack。</li>
+  <li><b>反向的 AG + dgrad</b>（o_proj、fc2 的反向）是同一个机制：收集的是输出梯度，每到一块就算这块的 dgrad。wgrad 等全部到齐后算一次。</li>
+  <li>算子级上 AG+GEMM 在大 M 时赢（M32768 几何均值 1.13×），小 M 时多数输（M8192 0.88×）。进了训练整步还有一个算子测试看不到的代价，见 §6。</li>
+</ul>
+
+<!-- ============================================================ 5 -->
+<h2>5　训练一层里的 4 个位置</h2>
+<p>同一个 DX 机制，用在每层的 4 个调用点、前向和反向。下表也是配置名的来历：</p>
+<table>
+  <tr><th>调用点</th><th>前向（含重算）</th><th>反向</th><th>属于哪一组</th></tr>
+  <tr><td>QKV（注意力输入投影）</td><td>AG + GEMM</td><td>（RS，走纯 RS）</td><td>AG 组</td></tr>
+  <tr><td>o_proj（注意力输出投影）</td><td>GEMM + RS</td><td>AG + dgrad</td><td>RS 组</td></tr>
+  <tr><td>fc1 / gate_up（MLP 第一层）</td><td>AG + GEMM</td><td>（RS，走纯 RS）</td><td>AG 组</td></tr>
+  <tr><td>fc2 / down（MLP 第二层）</td><td>GEMM + RS</td><td>AG + dgrad</td><td>RS 组</td></tr>
+</table>
+<table>
+  <tr><th>配置名</th><th>含义</th></tr>
+  <tr><td>base</td><td>原版 Megatron，四处都不接管</td></tr>
+  <tr><td>fnull（空对照）</td><td>对称堆、钩子、环境都和我们一样，但一个算子都不接管。"对空对照"= 扣掉环境影响后的纯重叠收益</td></tr>
+  <tr><td>fbag</td><td>RS 组开（前向 GEMM+RS、反向 AG+dgrad、独立 RS），AG 组原版</td></tr>
+  <tr><td>fbc</td><td>四处全开</td></tr>
+  <tr><td>fcq / fcl</td><td>fbag + 只开 QKV / 只开 fc1</td></tr>
+</table>
+
+<!-- ============================================================ 6 -->
+<h2>6　为什么算子级赢、整步却可能输：控制面</h2>
+<p>同样是融合 AG，算子级更快，可在 27B 训练整步里四处全开（fbc）反而比只开 RS 组（fbag）慢 3.05%。原因不在数据传输上，而在 host（CPU 发命令的一侧）上：</p>
+<svg viewBox="0 0 1120 300" role="img" aria-label="控制面：host 提前量被拉回导致 GPU 空等">
+  <text x="20" y="28" font-size="15" font-weight="600">正常：host 提前很多发命令，GPU 一个接一个干活，没有空隙</text>
+  <text x="20" y="66" font-size="13" class="t2">host</text>
+  <text x="20" y="108" font-size="13" class="t2">GPU</text>
+  <g fill="var(--s3)"><rect x="170" y="52" width="6" height="20"/><rect x="200" y="52" width="6" height="20"/><rect x="230" y="52" width="6" height="20"/><rect x="260" y="52" width="6" height="20"/><rect x="290" y="52" width="6" height="20"/><rect x="320" y="52" width="6" height="20"/><rect x="350" y="52" width="6" height="20"/><rect x="380" y="52" width="6" height="20"/></g>
+  <text x="400" y="68" font-size="12" class="t2">host 早已发完后面的命令</text>
+  <rect x="170" y="90" width="900" height="28" rx="4" class="b1"><title>GPU 连续执行，没有等待</title></rect>
+  <text x="620" y="109" font-size="13" text-anchor="middle">GPU 连续执行</text>
+
+  <text x="20" y="160" font-size="15" font-weight="600">融合 AG：每次往"另一个进程的显存"做引擎拷贝，host 被拉回到 GPU 进度附近</text>
+  <text x="20" y="198" font-size="13" class="t2">host</text>
+  <text x="20" y="240" font-size="13" class="t2">GPU</text>
+  <g><title>F50：本平台上对另一进程显存的引擎拷贝，会让 host 等到离 GPU 很近才返回（约拉回 GPU 落后量的 25%）</title>
+  <rect x="170" y="184" width="300" height="20" rx="3" fill="none" stroke="var(--s3)" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="320" y="199" font-size="12" text-anchor="middle" class="t2">推送调用里 host 被拉住</text></g>
+  <g fill="var(--s3)"><rect x="476" y="184" width="6" height="20"/><rect x="500" y="184" width="6" height="20"/><rect x="524" y="184" width="6" height="20"/></g>
+  <text x="540" y="199" font-size="12" class="t2">才发出后面的命令</text>
+  <rect x="170" y="222" width="330" height="28" rx="4" class="b1"/>
+  <text x="335" y="241" font-size="13" text-anchor="middle">GPU 干完手上的活</text>
+  <rect x="502" y="222" width="70" height="28" rx="4" class="bubble"><title>GPU 等 host 的新命令：这就是 e</title></rect>
+  <text x="537" y="268" font-size="13" text-anchor="middle">空等 e</text>
+  <rect x="574" y="222" width="496" height="28" rx="4" class="b1"/>
+  <text x="822" y="241" font-size="13" text-anchor="middle">GPU 继续</text>
+</svg>
+<ul>
+  <li>F50（11-01 定位）：本平台上，拷贝引擎往<b>另一个进程</b>的显存（对称堆或 IPC）写数据时，host 会被拉回到 GPU 进度附近。这与拷贝次数、大小、分叉写法、用哪个 API 都无关。我们是每卡一个进程，推送全是这一类。</li>
+  <li><b>AG 吃亏、RS 不吃亏</b>：AG 是先推后算，推送一开始就把 host 的提前量清零，GPU 随后要等 host 重新发命令。RS 是先算后推，被它自己的 GEMM 盖住了一部分。</li>
+  <li>槽位多份、换等待流、改分叉写法三种改法都试过，位级正确但整步无效，所以这是平台代价，不是 bug。</li>
+  <li>一层的 GPU 时间 D 越长，host 越来得及重新领先，空等就被盖住。所以同一个 70B 模型：MBS8（D = 273 ms）开 AG 赚，MBS4、MBS2 开 AG 亏。<b>这就是需要预测器的原因：最优组合随形状变。</b></li>
+</ul>
+
+<!-- ============================================================ 7 -->
+<h2>7　预测器两级怎么算</h2>
+<h3>第一级：算子级代价模型（每个调用点单独估时间）</h3>
+<table>
+  <tr><th>做法</th><th>预测时间</th><th>各项含义</th></tr>
+  <tr><td>原版</td><td><code>T = G + C(B) + h0</code></td><td>G：单卡 GEMM 实测；C(B)：RCCL 传 B 字节的时间（直线拟合）；h0：固定开销</td></tr>
+  <tr><td>重叠（DX）</td><td><code>T = a1·G + a2·Cx + a3·max(G, Cx) + h1</code></td><td>max(G, Cx) 是理想重叠；a1·G、a2·Cx 补"藏不完"（GEMM 被抢带宽变慢、首块和末块藏不住）；h1：一次融合调用的固定开销</td></tr>
+</table>
+<p>系数按 RS、AG-up、AG-gate_up 三类分别拟合，用的是 11 个公开模型 × 3 种 M 的实测数据。<b>安全门</b>：先算"预测过于乐观的幅度"的 80% 分位 q，把预测时间乘以 e<sup>q</sup> 得到悲观估计，悲观估计仍比原版快 2% 才选重叠。留一模型检验（每次拿掉一个模型拟合，再预测这个模型）：97 个调用点里 0 个选得比原版慢，拿到事后最优收益的 83%。</p>
+
+<h3>第二级：整步控制面项（把 §6 的空等算进去）</h3>
+<ul>
+  <li>D = 每层周期 GPU 时间 = 原版整步时间 × 0.94 ÷（层数 × micro-batch 数）。层周期 = 一个 micro-batch 走完一层的前向 + 重算 + 反向。</li>
+  <li>每次融合 AG 调用的 GPU 空等：<b>e = 0.0096 × D（D &lt; 205 ms），否则 0</b>。</li>
+  <li>开 AG 的调用点集合 S（从 {不开, 只 QKV, 只 fc1, 都开} 里选）的整步变化 = Σ<sub>S</sub>（第一级预测的算子级收益 × 2）+ 2 × e × |S|。乘 2 是因为每个 AG 调用点在前向和重算里各被调用一次。选预测最快的那个，而且要预测快 ≥1% 才开。</li>
+  <li>RS 组作为一组开关：第一级选重叠，且 D ≥ 111 ms 才开。只有 70B MBS2 这一个输点，截止点只被夹在 80–143 ms 之间。</li>
+</ul>
+
+<div id="chart-e" style="position:relative">
+<svg viewBox="0 0 780 380" role="img" aria-label="每次融合 AG 调用的 GPU 空等 e 与每层周期 GPU 时间 D：5 个实测点与模型">
+  <text x="70" y="22" font-size="15" font-weight="600">第二级的定律：空等 e 随 D 增长，D 足够长后被盖住</text>
+  <!-- cutoff band 137..273 -->
+  <rect class="band" x="366.8" y="34" width="294.7" height="266"/>
+  <text x="514" y="52" font-size="12" text-anchor="middle" class="t2">截止点只确定在 137–273 ms 之间（取 205 ms）</text>
+  <!-- grid -->
+  <g>
+    <line class="gridl" x1="70" y1="232.5" x2="720" y2="232.5"/>
+    <line class="gridl" x1="70" y1="165" x2="720" y2="165"/>
+    <line class="gridl" x1="70" y1="97.5" x2="720" y2="97.5"/>
+    <line class="gridl" x1="70" y1="30" x2="720" y2="30"/>
+  </g>
+  <line class="axis" x1="70" y1="300" x2="720" y2="300"/>
+  <line class="axis" x1="70" y1="30" x2="70" y2="300"/>
+  <g font-size="12" class="tm">
+    <text x="62" y="304" text-anchor="end" class="tm">0</text>
+    <text x="62" y="236.5" text-anchor="end" class="tm">0.5</text>
+    <text x="62" y="169" text-anchor="end" class="tm">1.0</text>
+    <text x="62" y="101.5" text-anchor="end" class="tm">1.5</text>
+    <text x="62" y="34" text-anchor="end" class="tm">2.0</text>
+    <text x="70" y="318" text-anchor="middle" class="tm">0</text>
+    <text x="178.3" y="318" text-anchor="middle" class="tm">50</text>
+    <text x="286.7" y="318" text-anchor="middle" class="tm">100</text>
+    <text x="395" y="318" text-anchor="middle" class="tm">150</text>
+    <text x="503.3" y="318" text-anchor="middle" class="tm">200</text>
+    <text x="611.7" y="318" text-anchor="middle" class="tm">250</text>
+    <text x="720" y="318" text-anchor="middle" class="tm">300</text>
+  </g>
+  <text x="395" y="342" font-size="13" text-anchor="middle" class="t2">每层周期 GPU 时间 D（ms）</text>
+  <text x="18" y="165" font-size="13" text-anchor="middle" class="t2" transform="rotate(-90 18 165)">每次融合 AG 调用的 GPU 空等 e（ms）</text>
+  <!-- model -->
+  <polyline class="model" points="70,300 514.2,34.3 514.2,300 720,300"/>
+  <text x="430" y="92" font-size="12" class="t2">模型 e = 0.0096·D</text>
+  <!-- measured dots -->
+  <g id="dots">
+    <circle class="dot" cx="230.3" cy="212.3" r="6" data-t="27B MBS4｜D = 74 ms｜实测反推 e = 0.65 ms｜模型 0.71 ms"/>
+    <circle class="dot" cx="236.8" cy="201.5" r="6" data-t="70B MBS2｜D = 77 ms｜实测反推 e = 0.73 ms｜模型 0.74 ms"/>
+    <circle class="dot" cx="360.3" cy="170.4" r="6" data-t="70B MBS4｜D = 134 ms｜实测反推 e = 0.96 ms｜模型 1.29 ms"/>
+    <circle class="dot" cx="366.8" cy="71.9" r="6" data-t="27B MBS8｜D = 137 ms｜实测反推 e = 1.69 ms｜模型 1.32 ms"/>
+    <circle class="dot" cx="661.5" cy="300" r="6" data-t="70B MBS8｜D = 273 ms｜实测反推 e ≈ 0（开 AG 反而赚 1.68%）｜模型 0"/>
+  </g>
+  <g font-size="12" class="t2">
+    <text x="222" y="236" text-anchor="end" class="t2">27B MBS4</text>
+    <text x="246" y="194" class="t2">70B MBS2</text>
+    <text x="370" y="192" class="t2">70B MBS4</text>
+    <text x="378" y="70" class="t2">27B MBS8</text>
+    <text x="655" y="288" text-anchor="end" class="t2">70B MBS8</text>
+  </g>
+  <!-- legend -->
+  <g transform="translate(560,356)">
+    <circle cx="0" cy="-4" r="5" fill="var(--s1)"/><text x="10" y="0" font-size="12" class="t2">实测反推</text>
+    <line x1="80" y1="-4" x2="104" y2="-4" stroke="var(--s2)" stroke-width="2"/><text x="110" y="0" font-size="12" class="t2">模型</text>
+  </g>
+</svg>
+<div class="tip" id="tip"></div>
+</div>
+<table>
+  <tr><th>点</th><th class="num">D（ms）</th><th class="num">实测反推 e（ms）</th><th>预测器选择</th><th>实测最优</th></tr>
+  <tr><td>27B MBS8</td><td class="num">137</td><td class="num">1.69</td><td>fbag</td><td>fbag ✓</td></tr>
+  <tr><td>27B MBS4</td><td class="num">74</td><td class="num">0.65</td><td>base</td><td>fbag 优于 fbc ✓（原版未测）</td></tr>
+  <tr><td>70B MBS8</td><td class="num">273</td><td class="num">≈ 0</td><td>fbc</td><td>fbc ✓</td></tr>
+  <tr><td>70B MBS4</td><td class="num">134</td><td class="num">0.96</td><td>fbag</td><td>fbag ✓</td></tr>
+  <tr><td>70B MBS2</td><td class="num">77</td><td class="num">0.73</td><td>base</td><td>base ✓</td></tr>
+</table>
+<p class="note">8 卡样本内 5/5；第二级留一检验 4/5（80%，唯一选错的是唯一高于截止点的 70B MBS8）；双机 16 卡样本外 2/2（70B 选 fbc、27B 选 fbag，比没选的配置快 3.46% / 2.77%）。</p>
+
+<div class="warn"><b>已知局限：推理（vLLM）上第一级偏保守。</b>vLLM 只有前向，所以只用第一级。M16384 时，第一级只给 o_proj、fc2 开重叠，QKV、fc1 判成原版：算子级表里 70B 的 AG+GEMM 只有 1.01× / 0.98×，加上 2% 安全门后就被否决了。实测四处全开比它的选择再快：单机 8–10%，双机约 3%。安全门起了作用（从没比原版慢），但漏掉了一部分收益。下一步做归因：只开 QKV、只开 fc1 两臂，然后修正第一级。修正后如果原理有变化，本图会另出一版。</div>
+
+<!-- ============================================================ 8 -->
+<h2>8　MoE：整层去掉 host 同步</h2>
+<p>MoE 层的通信是 all-to-all（a2a）。Megatron 原版每层要把 token 计数读回 host 两次（<code>.tolist()</code>），每次都让 CPU 停下来等 GPU。我们把这两次读全部去掉：</p>
+<svg viewBox="0 0 1120 240" role="img" aria-label="MoE 层：原版两次 host 同步 vs 免同步路径">
+  <text x="20" y="26" font-size="15" font-weight="600">原版（Megatron alltoall 派发器）</text>
+  <g font-size="13">
+    <rect x="20" y="40" width="130" height="50" rx="6" class="b0"/><text x="85" y="70" text-anchor="middle">路由 top-k</text>
+    <g><title>交换各卡要发多少 token，再 .tolist() 读到 host：CPU 停下来等 GPU</title><rect x="164" y="40" width="160" height="50" rx="6" class="b2"/><text x="244" y="62" text-anchor="middle">计数 a2a</text><text x="244" y="81" text-anchor="middle" font-size="12" class="t2">+ .tolist()　host 同步</text></g>
+    <rect x="338" y="40" width="130" height="50" rx="6" class="b2"/><text x="403" y="70" text-anchor="middle">变长 a2a</text>
+    <g><title>按本地专家排序，再 .tolist() 读每个专家的行数：第二次 host 同步</title><rect x="482" y="40" width="160" height="50" rx="6" class="b2"/><text x="562" y="62" text-anchor="middle">按专家排序</text><text x="562" y="81" text-anchor="middle" font-size="12" class="t2">+ .tolist()　host 同步</text></g>
+    <rect x="656" y="40" width="150" height="50" rx="6" class="b1"/><text x="731" y="70" text-anchor="middle">逐专家 GEMM 循环</text>
+    <rect x="820" y="40" width="120" height="50" rx="6" class="b2"/><text x="880" y="70" text-anchor="middle">反向 a2a</text>
+    <rect x="954" y="40" width="146" height="50" rx="6" class="b1"/><text x="1027" y="70" text-anchor="middle">加权求和</text>
+  </g>
+  <text x="20" y="134" font-size="15" font-weight="600">我们（整层免 host 同步，sfl）</text>
+  <g font-size="13">
+    <rect x="20" y="148" width="130" height="50" rx="6" class="b0"/><text x="85" y="178" text-anchor="middle">路由 top-k</text>
+    <g><title>每个 token 用设备原子操作在专家卡的对称堆里领一个槽位，SM 直接写过去；写完发 4 B 旗标</title><rect x="164" y="148" width="190" height="50" rx="6" class="b2"/><text x="259" y="170" text-anchor="middle">SM 直写派发</text><text x="259" y="189" text-anchor="middle" font-size="12" class="t2">设备原子领槽位</text></g>
+    <rect x="368" y="148" width="160" height="50" rx="6" class="b1"/><text x="448" y="178" text-anchor="middle">设备侧按专家排序</text>
+    <g><title>hipBLASLt 分组 GEMM，参数由设备写；虚拟分组（每组 B 行）让网格固定，B 由 moe_plan.py 按形状选</title><rect x="542" y="148" width="200" height="50" rx="6" class="b1"/><text x="642" y="170" text-anchor="middle">分组 GEMM</text><text x="642" y="189" text-anchor="middle" font-size="12" class="t2">设备侧计数 · 虚拟分组</text></g>
+    <g><title>每行带 4 B 标签，直接写回源卡对应位置</title><rect x="756" y="148" width="184" height="50" rx="6" class="b2"/><text x="848" y="178" text-anchor="middle">按标签写回源卡</text></g>
+    <rect x="954" y="148" width="146" height="50" rx="6" class="b1"/><text x="1027" y="178" text-anchor="middle">加权求和</text>
+  </g>
+  <text x="20" y="226" font-size="13" class="t2">全程不读计数到 host、没有全员栅栏：4 B 旗标 + hipStreamWaitValue32 对齐，ACK 平面保护缓冲区复用；轮次计数单调递增。</text>
+</svg>
+<ul>
+  <li>结果：算子级整层（前向 + 反向）1.17–1.57×；8 卡 EP8 端到端 1.116×；单卡只换专家 GEMM 1.188×。</li>
+  <li>定位：免同步 a2a 已有先例（DeepEP 低延迟、MORI-EP、HybridEP），论文里写成框架下的一个实例，不单列贡献。贡献点在"控制面决定整步收益"这个论点：只换数据面，MoE 整步慢 13–18%；把控制面（host 同步）也去掉，整步快 11.5%。</li>
+</ul>
+
+<!-- ============================================================ 9 -->
+<h2>9　结果在哪份文档、局限</h2>
+<table>
+  <tr><th>文档（stowaway/results/）</th><th>讲什么</th><th>头条数字</th></tr>
+  <tr><td>算子级结果表.md</td><td>11 个模型 × M 8192/16384/32768，AG+GEMM 与 GEMM+RS</td><td>GEMM+RS 几何均值 1.30×（30/32 格赢）；AG+GEMM M32768 1.13×，M8192 0.88×</td></tr>
+  <tr><td>端到端与预测器结果表.md</td><td>Megatron 27B / 70B，8 卡与 16 卡；预测器的全部检验</td><td>8 卡对空对照 1.057× / 1.063–1.077×；16 卡 1.054× / 1.079×；预测器 5/5、留一 4/5、16 卡 2/2</td></tr>
+  <tr><td>vLLM结果表.md</td><td>LLaMA3-70B 完整 80 层 prefill，8 卡 TP8 与 16 卡 TP8 × PP2</td><td>四处全开 1.14–1.17×（8 卡）、1.19–1.22×（16 卡）；输出 192/192 一致</td></tr>
+  <tr><td>MoE结果表.md</td><td>Qwen3-30B-A3B 形状 EP8，算子级与端到端；MoE 侧预测器</td><td>整层 1.17–1.57×；端到端 1.116×</td></tr>
+  <tr><td>findings.md</td><td>开发期逐条实验记录 F01–F55（每个数字的出处）</td><td>—</td></tr>
+</table>
+<ul>
+  <li>Megatron 70B 截到 8 层、27B 截到 32 层，因为单机显存放不下完整模型的训练状态。每层形状与完整模型相同，整步加速比偏保守（固定开销占比被放大）。vLLM 用的是完整 80 层、真实权重。</li>
+  <li>预测器第二级只用 2 个模型、5 个点拟合，截止点只被夹住；RS 组截止点只有 1 个输点。</li>
+  <li>只在海光 DCU 一个平台上测过。F50 那条定律是本平台特有的，换平台后第二级要重新标定。</li>
+  <li>拆批只在第一级里，还没接进训练。</li>
+</ul>
+
+<!-- ============================================================ 10 -->
+<h2>10　组会讲稿（约 5 分钟）</h2>
+<ol>
+  <li><b>问题</b>（30 秒）：TP + 序列并行训练里，每层有 4 处通信（2 个 AG、2 个 RS）和 GEMM 串行。原版是厂商 GEMM + RCCL，一个算完另一个才开始。</li>
+  <li><b>DX</b>（1.5 分钟，看 §2–§4 两张时间线）：把 GEMM 切成 R 块，算完一块就用拷贝引擎直推给它的归属卡，不占计算单元；按置换序推，同一时刻每张卡只收一份，实测每卡 141 GB/s；4 字节票据跟着数据走，只等自己的格子，不设全员栅栏。同一机制用在 4 个调用点的前向和反向。算子级 GEMM+RS 1.30×。</li>
+  <li><b>为什么需要预测器</b>（1 分钟，看 §6）：融合 AG 算子级更快，但在本平台上，往别的进程显存推数据会把 host 拉回 GPU 附近，GPU 随后空等。所以同一个 70B，MBS8 开 AG 赚，MBS4、MBS2 开 AG 亏，最优配置随形状变。</li>
+  <li><b>预测器</b>（1 分钟，看 §7 的图）：第一级按形状和单卡 GEMM 时间预测每个调用点的算子时间，带安全门；第二级把空等 e 写成 D 的函数，D 越长空等越被盖住。训练前算一次，纯 CPU，几秒。8 卡 5/5，16 卡样本外 2/2。</li>
+  <li><b>结果</b>（1 分钟）：Megatron 整步 1.06–1.08×（8 卡、16 卡一致）；vLLM 完整 70B prefill 1.14–1.17×，16 卡 1.19–1.22×，输出逐 token 一致；MoE 去掉 host 同步后端到端 1.116×。</li>
+  <li><b>局限与下一步</b>（30 秒）：推理上第一级偏保守（漏掉 3–10%），下一步做归因并修正；第二级数据点少；只测了一个平台。</li>
+</ol>
+
+<p class="note">代码位置：DX 算子 <code>src/stowaway/kernels/gemm_rs_dx.py</code>；预测器 <code>planner/planner.py</code>、<code>costmodel.py</code>、<code>step_planner_v3.py</code>；MoE <code>src/stowaway/kernels/moe_sf.py</code>、<code>moe_expert_mlp.py</code>、<code>moe_ggemm.py</code>；原理细节 <code>docs/预测器原理.md</code>。</p>
+
+<script>
+(function () {
+  var tip = document.getElementById('tip');
+  document.querySelectorAll('#dots .dot').forEach(function (d) {
+    d.addEventListener('mousemove', function (e) {
+      tip.textContent = d.getAttribute('data-t');
+      tip.style.left = (e.clientX + 14) + 'px';
+      tip.style.top = (e.clientY + 14) + 'px';
+      tip.style.opacity = 1;
+    });
+    d.addEventListener('mouseleave', function () { tip.style.opacity = 0; });
+    var t = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    t.textContent = d.getAttribute('data-t');
+    d.appendChild(t);
+  });
+})();
+</script>
+</div>
+</body>
+</html>

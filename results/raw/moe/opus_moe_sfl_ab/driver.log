@@ -1,0 +1,13 @@
+[moeveh] b1 kind=base iters=10 MBS=1 NL=12 start 11:34:57
+[moeveh] b1 kind=base rc=0 iters=10 med(it3+)=1535.1 last_loss=1.151363E+01 11:36:23
+[moeveh] g1 kind=gg iters=10 MBS=1 NL=12 start 11:36:23
+[moeveh] g1 kind=gg rc=0 iters=10 med(it3+)=2129.8 last_loss=1.151393E+01 11:38:32
+[moeveh] s1 kind=sfl iters=10 MBS=1 NL=12 start 11:38:32
+[moeveh] s1 kind=sfl rc=1 iters=10 med(it3+)=1376.0 last_loss=1.151355E+01 11:40:07
+[moeveh] b2 kind=base iters=10 MBS=1 NL=12 start 11:40:08
+[moeveh] b2 kind=base rc=0 iters=10 med(it3+)=1541.3 last_loss=1.151347E+01 11:41:32
+[moeveh] g2 kind=gg iters=10 MBS=1 NL=12 start 11:41:32
+[moeveh] g2 kind=gg rc=0 iters=10 med(it3+)=2092.6 last_loss=1.151334E+01 11:43:32
+[moeveh] s2 kind=sfl iters=10 MBS=1 NL=12 start 11:43:32
+[moeveh] s2 kind=sfl rc=1 iters=10 med(it3+)=1381.8 last_loss=1.151356E+01 11:45:09
+MOEVEH DONE
