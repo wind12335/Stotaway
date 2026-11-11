@@ -1,0 +1,10 @@
+[e2e] ROOT=/root/private_data/stowaway/e2e/megatron/../../results/raw/e2e_8card/rs1109_70b_mbs2
+[e2e] b1 kind=base iters=14 model=70b MBS=2 NL=8 start 22:15:28
+[e2e] b1 kind=base rc=0 iters=14 med(it3+)=4772.6 fallbacks_r0=0 val=2.531129E-01 22:17:47
+[e2e] n1 kind=fnull iters=14 model=70b MBS=2 NL=8 start 22:17:47
+[e2e] n1 kind=fnull rc=1 iters=14 med(it3+)=4744.4 fallbacks_r0=0 val=2.531129E-01 22:19:57
+[e2e] d1 kind=fdk iters=14 model=70b MBS=2 NL=8 start 22:19:57
+[e2e] d1 kind=fdk rc=1 iters=14 med(it3+)=4915.4 fallbacks_r0=0 val=2.530507E-01 22:22:27
+[e2e] r1 kind=frow0 iters=14 model=70b MBS=2 NL=8 start 22:22:27
+[e2e] r1 kind=frow0 rc=1 iters=14 med(it3+)=4803.6 fallbacks_r0=0 val=2.530488E-01 22:24:40
+[e2e] k1 kind=frowk iters=14 model=70b MBS=2 NL=8 start 22:24:40

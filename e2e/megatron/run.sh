@@ -74,6 +74,8 @@ run_arm () {   # $1 NAME  $2 KIND  $3 ITERS
       fnull) export MGD_BRS=1 MGD_BRS_DEFER=1 MGD_BRS_SLOTS=4 MGD_BRS_MIN_MB=1000000 MGD_BRS_FORM=dx \
                     MGD_FUSED=1 MGD_RS_RELAY=dx MGD_MIN_MB=1000000 OPUS_DX_BWD=ag ;;
       fdk)   export $BRS ;;
+      frow0) export MGD_FUSED=1 MGD_RS_RELAY=dx MGD_MIN_MB=0 OPUS_DX_BWD=ag ;;   # fused GEMM+RS fwd + AG+dgrad bwd at o_proj+fc2, payload gate off, no standalone RS (11-09 decomposition)
+      frowk) export MGD_FUSED=1 MGD_RS_RELAY=dx MGD_MIN_MB=0 MGD_RS_MIN_K=2048 OPUS_DX_BWD=ag ;;   # same, fc2 only (K_r >= 2048 excludes o_proj)
       fallt) export $BRS $ROW OPUS_DX_BWD=t ;;
       fbag)  export $BRS $ROW OPUS_DX_BWD=ag ;;
       fbc)   export $BRS $ROW OPUS_DX_BWD=ag OPUS_CP=1 ;;

@@ -35,7 +35,9 @@ MICRO = 8                 # GBS = 8 x MBS, DP = 1 -> 8 micro-batches per step
 STEP_MARGIN = 1.0         # % ; AG sites: overlap only if the step is predicted this much faster
 K_E = 0.0096              # ms GPU idle per fused AG call per ms of layer-cycle GPU time (v3 fit, 5 points)
 D_CUT = 205.0             # ms ; bracket 137-273 (largest D with idle > 0, smallest with idle ~ 0)
-D_RS_CUT = 111.0          # ms ; bracket 80-143 (70B MBS2 loses, 27B MBS8 / 70B MBS4 win)
+D_RS_O_CUT = 95.0         # ms ; o_proj截止点（待拟合，暂用预估值）
+D_RS_FC2_CUT = 110.0      # ms ; fc2截止点（待拟合，暂用预估值）
+# 如果两截止点相差<10ms，合并回单一D_RS_CUT
 FBAG_OVER_BASE = 0.94     # step ratio fbag / original on points where both are measured (0.926-0.955)
 BUILTIN = {               # hidden, ffn, heads, kv groups, layers in the 8-card vehicle
     "27b": (5120, 17408, 40, 8, 32),
@@ -91,6 +93,8 @@ def plan(h, f, nh, kv, layers, mbs, step_ms=None, model=None, d_cycle=None, cm=N
     """stage2=False: operator-level choice only (inference forward: the stage-2 term is calibrated on
     training layer cycles = forward + recompute + backward and does not transfer). M overrides
     seq x MBS (vLLM prefill chunks)."""
+    # 11-09: dropping the guard for inference was tried and rejected -- leave-one-model-out then picks a
+    # slower-than-stock method on 7/97 cells (worst +13.6%). The guard stays on in both modes.
     cm = cm or CostModel(mode="b2b").fit(json.load(open(os.path.join(DATA, "cells.json"))))
     M = M or SEQ * mbs
     G, gsrc = gemm_times(model, h, f, nh, kv, M)
@@ -108,8 +112,13 @@ def plan(h, f, nh, kv, layers, mbs, step_ms=None, model=None, d_cycle=None, cm=N
         best, p = cm.choose(op, G[key], B)                       # operator level, all candidates
         dep, _ = cm.choose(op, G[key], B, allowed={"dx"})       # deployable today (split not in training)
         rows.append(dict(name=nm, key=key, op=op, M=m, K=k, N=n, G=G[key], B=B, stage1=best, stage1d=dep, pred=p))
-    # ---- stage 2, RS group
-    rs_on = (D >= D_RS_CUT or not stage2) and all(r["stage1d"] == "dx" for r in rows if r["op"] == "rs")
+    # ---- stage 2, RS sites: each site has its own cutoff
+    # (if the two cutoffs turn out <10ms apart after fitting, merge back to a single D_RS_CUT)
+    rs_decision = {}  # key -> "dx" or "stock"
+    for r in rows:
+        if r["op"] == "rs":
+            cut = D_RS_O_CUT if r["key"] == "o_proj" else D_RS_FC2_CUT
+            rs_decision[r["key"]] = "dx" if ((D >= cut or not stage2) and r["stage1d"] == "dx") else "stock"
     # ---- stage 2, AG sites: best subset by predicted step change (relative to "RS group as decided, AG original")
     # AG sites are decided at step level: a site is a candidate when the operator-level model predicts
     # the overlap method faster than the original at all (raw prediction, no per-op guard); the step-level
@@ -135,12 +144,19 @@ def plan(h, f, nh, kv, layers, mbs, step_ms=None, model=None, d_cycle=None, cm=N
             r["final"] = r["stage1d"]
             r["why"] = "第一级（算子级，推理不加第二级）"
         elif r["op"] == "rs":
-            r["final"] = "dx" if rs_on else "stock"
-            r["why"] = ("RS 组：第一级选重叠方法且每层周期 GPU 时间 ≥ %.0f ms" % D_RS_CUT if rs_on else
-                        ("每层周期 GPU 时间 %.0f ms < %.0f ms，RS 组整步实测会输（70B MBS2 +3.1%%）" % (D, D_RS_CUT)
-                         if D < D_RS_CUT else "第一级选了原版或拆批，RS 组按原版"))
+            r["final"] = rs_decision[r["key"]]
+            cut = D_RS_O_CUT if r["key"] == "o_proj" else D_RS_FC2_CUT
+            if r["final"] == "dx":
+                r["why"] = "第二级：第一级选重叠方法且每层周期 GPU 时间 %.0f ms ≥ %.0f ms" % (D, cut)
+            elif D < cut:
+                r["why"] = "第二级：每层周期 GPU 时间 %.0f ms < %.0f ms，整步实测会输" % (D, cut)
+            else:
+                r["why"] = "第一级选了原版或拆批"
         else:
-            if r["pred"]["dx"] >= r["pred"]["stock"]:
+            if not stage2:  # inference: each AG site on its own operator-level choice
+                r["final"] = r["stage1d"]
+                r["why"] = "第一级（算子级，推理不加第二级）"
+            elif r["pred"]["dx"] >= r["pred"]["stock"]:
                 r["final"] = "stock"
                 r["why"] = "第一级（算子级）预测重叠方法不比原版快"
             else:
@@ -156,16 +172,17 @@ def plan(h, f, nh, kv, layers, mbs, step_ms=None, model=None, d_cycle=None, cm=N
         r["deploy"] = r["final"]
     ag_on = {r["key"] for r in rows if r["op"] != "rs" and r["deploy"] == "dx"}
     rs_dep = {r["key"] for r in rows if r["op"] == "rs" and r["deploy"] == "dx"}
+    all_rs_on = len(rs_dep) == 2  # both RS sites are on
     if not stage2:
         cfg = "按调用点：" + "，".join(f"{r['name']}={NAME[r['deploy']]}" for r in rows)
-    elif not rs_on:
-        cfg = "base（四处原版）" if not ag_on else "（RS 原版 + AG 重叠：未定义的配置）"
+    elif not all_rs_on:
+        cfg = "base（四处原版）" if not ag_on and not rs_dep else "（部分重叠：未定义的配置）"
     else:
         cfg = {frozenset(): "fbag（RS 两处用重叠方法，AG 两处用原版）",
                frozenset({"qkv", "fc1_gate_up"}): "fbc（四处全用重叠方法）",
                frozenset({"qkv"}): "fcq（fbag + 只 QKV 用重叠方法）",
                frozenset({"fc1_gate_up"}): "fcl（fbag + 只 fc1 用重叠方法）"}[frozenset(ag_on)]
-    res = dict(M=M, D=D, dsrc=dsrc, gsrc=gsrc, e=e, rows=rows, rs_on=rs_on, ag_table=table,
+    res = dict(M=M, D=D, dsrc=dsrc, gsrc=gsrc, e=e, rows=rows, rs_on=all_rs_on, ag_table=table,
                ag_best_pct=best_pct, config=cfg)
     if not quiet:
         report(res, h, f, nh, kv, layers, mbs)
@@ -233,6 +250,7 @@ if __name__ == "__main__":
     ap.add_argument("--mbs", type=int, default=8)
     ap.add_argument("--step-ms", type=float, help="原版配置短跑（≤3 次迭代）读出的整步时间")
     ap.add_argument("--dcycle", type=float, help="直接给每层周期 GPU 时间（fbag 口径）")
+    ap.add_argument("--inference", action="store_true", help="推理模式：只用第一级（算子级代价模型），跳过第二级（GPU 空等项，只适用于训练）")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
     if a.selftest:
@@ -243,4 +261,4 @@ if __name__ == "__main__":
     else:
         h, f, nh, kv, L = a.hidden, a.ffn, a.heads, a.kv, a.layers
         assert None not in (h, f, nh, kv, L), "give --model or all of --hidden --ffn --heads --kv --layers"
-    plan(h, f, nh, kv, L, a.mbs, step_ms=a.step_ms, model=a.model, d_cycle=a.dcycle)
+    plan(h, f, nh, kv, L, a.mbs, step_ms=a.step_ms, model=a.model, d_cycle=a.dcycle, stage2=not a.inference)
