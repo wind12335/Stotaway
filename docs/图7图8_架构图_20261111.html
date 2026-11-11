@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>科技报告 图7／图8 架构图（2026-11-11）</title>
+<style>
+  :root { --ink:#1f2937; --line:#475569; --blue:#2563eb; --green:#059669; --amber:#d97706; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:24px 0 60px; background:#fff; color:var(--ink);
+         font-family:"Noto Sans CJK SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif; }
+  .note { max-width:1100px; margin:0 auto 28px; padding:10px 16px; background:#f8fafc;
+          border:1px solid #e2e8f0; border-radius:8px; font-size:13px; color:#475569; }
+  .fig { max-width:1100px; margin:0 auto 48px; padding:0 16px; }
+  .fig svg { width:100%; height:auto; display:block; background:#fff;
+             border:1px dashed #cbd5e1; border-radius:4px; }
+  .cap { text-align:center; font-weight:700; font-size:15px; margin-top:10px; color:#111827; }
+  text { font-family:"Noto Sans CJK SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="note">
+  用法：浏览器打开本页，缩放 100%，对虚线框内的图逐张截图（或 Ctrl+P 打印为 PDF 后裁切），
+  即可插入报告文档。左＝图7（2.5 开篇），右下方＝图8（2.5.2 节）。文字与 2.5–2.6 稿正文一一对应，
+  能力位取值与 <code>vendors/README.md</code> 能力矩阵一致。
+</div>
+
+<!-- ================= 图 7 ================= -->
+<div class="fig">
+<svg viewBox="0 0 1080 790" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a7" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#334155"/>
+    </marker>
+    <marker id="a7b" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+
+  <!-- ===== 顶层：声明式前端 ===== -->
+  <rect x="30" y="18" width="1020" height="118" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="52" y="44" font-size="15" font-weight="700" fill="#1e3a8a">声明式前端　@parallelize 装饰器（Config，少量标注声明训练意图）</text>
+  <!-- chips 两行四列 -->
+  <g font-size="12" fill="#1e3a8a">
+    <rect x="52"  y="56" width="232" height="30" rx="6" fill="#fff" stroke="#93c5fd"/>
+    <text x="168" y="75" text-anchor="middle">model_path／num_devices</text>
+    <rect x="300" y="56" width="232" height="30" rx="6" fill="#fff" stroke="#93c5fd"/>
+    <text x="416" y="75" text-anchor="middle">parallel_mode（AUTO 等）</text>
+    <rect x="548" y="56" width="232" height="30" rx="6" fill="#fff" stroke="#93c5fd"/>
+    <text x="664" y="75" text-anchor="middle">search_strategy／policy</text>
+    <rect x="796" y="56" width="228" height="30" rx="6" fill="#fff" stroke="#93c5fd"/>
+    <text x="910" y="75" text-anchor="middle">search_max_pp（流水线上限）</text>
+
+    <rect x="52"  y="94" width="232" height="30" rx="6" fill="#fff" stroke="#93c5fd"/>
+    <text x="168" y="113" text-anchor="middle">backend（PYTORCH／MEGATRON）</text>
+    <rect x="300" y="94" width="232" height="30" rx="6" fill="#fff" stroke="#93c5fd"/>
+    <text x="416" y="113" text-anchor="middle">run_mode（PLAN／LOWER／LAUNCH）</text>
+    <rect x="548" y="94" width="232" height="30" rx="6" fill="#fff" stroke="#93c5fd"/>
+    <text x="664" y="113" text-anchor="middle">训练配方（seq／iters／lr…）</text>
+    <rect x="796" y="94" width="228" height="30" rx="6" fill="#fff" stroke="#93c5fd"/>
+    <text x="910" y="113" text-anchor="middle">AUTOPLAN_VENDOR（厂商档覆盖）</text>
+  </g>
+
+  <line x1="540" y1="136" x2="540" y2="164" stroke="#334155" stroke-width="1.6" marker-end="url(#a7)"/>
+  <text x="554" y="155" font-size="11" fill="#64748b">被标注函数首次触发，自动进入下述流程</text>
+
+  <!-- ===== 中层：检测—搜索—渲染核心 ===== -->
+  <rect x="30" y="168" width="1020" height="320" rx="10" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/>
+  <text x="52" y="194" font-size="15" font-weight="700" fill="#334155">检测—搜索—渲染核心（公共代码，单副本；统一建模与多级子图体系为其输入）</text>
+
+  <g>
+    <!-- 环境检测 -->
+    <rect x="52" y="214" width="212" height="118" rx="8" fill="#fff" stroke="#64748b" stroke-width="1.3"/>
+    <text x="158" y="238" font-size="14" font-weight="700" text-anchor="middle" fill="#334155">环境检测</text>
+    <g font-size="11.5" fill="#475569" text-anchor="middle">
+      <text x="158" y="259">模型结构探测：层数、隐藏维、</text>
+      <text x="158" y="276">注意力分组、RoPE 比例、QKV 偏置</text>
+      <text x="158" y="293">厂商档自动识别（真机特征）</text>
+      <text x="158" y="310">（识别依据见图8）</text>
+    </g>
+    <!-- 策略搜索 -->
+    <rect x="292" y="214" width="212" height="118" rx="8" fill="#fff" stroke="#64748b" stroke-width="1.3"/>
+    <text x="398" y="238" font-size="14" font-weight="700" text-anchor="middle" fill="#334155">策略搜索</text>
+    <g font-size="11.5" fill="#475569" text-anchor="middle">
+      <text x="398" y="259">TP／DP／PP 及其组合多维枚举</text>
+      <text x="398" y="276">显存可行性＝硬约束</text>
+      <text x="398" y="293">通信墙钟估算＝优化目标</text>
+      <text x="398" y="310">不可行候选拒绝并留痕</text>
+    </g>
+    <!-- 脚本渲染 -->
+    <rect x="532" y="214" width="212" height="118" rx="8" fill="#fff" stroke="#64748b" stroke-width="1.3"/>
+    <text x="638" y="238" font-size="14" font-weight="700" text-anchor="middle" fill="#334155">脚本渲染</text>
+    <g font-size="11.5" fill="#475569" text-anchor="middle">
+      <text x="638" y="259">Megatron 命令行参数</text>
+      <text x="638" y="276">torchrun 脚本＋hostfile 模板</text>
+      <text x="638" y="293">权重转换／断点续训配置</text>
+      <text x="638" y="310">冒烟测试脚本（先验证再训练）</text>
+    </g>
+    <!-- 任务下放 -->
+    <rect x="772" y="214" width="212" height="118" rx="8" fill="#fff" stroke="#64748b" stroke-width="1.3"/>
+    <text x="878" y="238" font-size="14" font-weight="700" text-anchor="middle" fill="#334155">任务下放</text>
+    <g font-size="11.5" fill="#475569" text-anchor="middle">
+      <text x="878" y="259">PLAN 仅规划／LOWER 落盘／</text>
+      <text x="878" y="276">LAUNCH 直接启动（共用一链路）</text>
+      <text x="878" y="293">双后端：PyTorch 原生切分执行，</text>
+      <text x="878" y="310">或 Megatron-LM 启动脚本</text>
+    </g>
+    <line x1="264" y1="273" x2="290" y2="273" stroke="#334155" stroke-width="1.6" marker-end="url(#a7)"/>
+    <line x1="504" y1="273" x2="530" y2="273" stroke="#334155" stroke-width="1.6" marker-end="url(#a7)"/>
+    <line x1="744" y1="273" x2="770" y2="273" stroke="#334155" stroke-width="1.6" marker-end="url(#a7)"/>
+  </g>
+
+  <!-- 代价模型 -->
+  <rect x="52" y="354" width="620" height="112" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.3"/>
+  <text x="66" y="378" font-size="13.5" font-weight="700" fill="#92400e">代价模型（评估候选方案）</text>
+  <g font-size="11.5" fill="#78350f">
+    <text x="66" y="399">显存维度：权重＋梯度＋优化器状态＋激活（按重计算档折算），合计超容即判不可行</text>
+    <text x="66" y="417">时间维度：TP／DP／PP 每步通信量逐项解析，按卡间带宽／跨节点带宽／时延折算墙钟</text>
+    <text x="66" y="435">拓扑常数取自部署实测、可回填——迁移平台仅需替换常数，评估链路整体复用</text>
+    <text x="66" y="453">搜索空间已由单机多卡扩展至多维组合，并与通信代价模型耦合</text>
+  </g>
+  <line x1="398" y1="332" x2="398" y2="352" stroke="#d97706" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#a7)"/>
+
+  <!-- 闭环：规划—实测—回填—再规划 -->
+  <g font-size="11.5" fill="#2563eb" text-anchor="middle">
+    <text x="860" y="380" font-weight="700">闭环：规划—实测—回填—再规划</text>
+    <text x="860" y="398">集群部署实测 → 拓扑常数回填</text>
+    <text x="860" y="414">（卡间／跨节点带宽、通信时延、TFLOPS）</text>
+  </g>
+  <path d="M 990 536 L 1062 536 L 1062 428 L 676 428" fill="none" stroke="#2563eb"
+        stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a7b)"/>
+
+  <line x1="540" y1="488" x2="540" y2="532" stroke="#334155" stroke-width="1.6" marker-end="url(#a7)"/>
+  <text x="554" y="515" font-size="11" fill="#64748b">渲染产物按厂商档取值后下放四厂商集群</text>
+
+  <!-- ===== 底层：厂商适配档 + 四厂商集群 ===== -->
+  <rect x="30" y="536" width="1020" height="232" rx="10" fill="#f0fdf4" stroke="#059669" stroke-width="1.5"/>
+  <text x="52" y="562" font-size="15" font-weight="700" fill="#065f46">厂商适配档（VendorProfile，数据字段）＋四厂商集群</text>
+
+  <rect x="52" y="580" width="300" height="168" rx="8" fill="#fff" stroke="#10b981" stroke-width="1.3"/>
+  <text x="202" y="602" font-size="13.5" font-weight="700" text-anchor="middle" fill="#065f46">厂商适配档（厂商差异全部数据化）</text>
+  <g font-size="11.5" fill="#475569">
+    <text x="66" y="624">· 激活脚本／运行包装器路径</text>
+    <text x="66" y="643">· 能力位：序列并行／实现固定等</text>
+    <text x="66" y="662">· 设备名前缀／后端显式导入语句</text>
+    <text x="66" y="681">· TE 算子库替身目录（缺库自动转备用路径）</text>
+    <text x="66" y="700">· 替身卡规格（无硬件环境纯规划）</text>
+    <text x="66" y="719">→ 核心三环节查表：规划门控／渲染替换／下放切换</text>
+  </g>
+
+  <g>
+    <rect x="380" y="580" width="160" height="80" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="1.3"/>
+    <text x="460" y="606" font-size="13" font-weight="700" text-anchor="middle" fill="#065f46">海光 DCU（基线）</text>
+    <g font-size="11" fill="#475569" text-anchor="middle">
+      <text x="460" y="626">BW1000 64G</text>
+      <text x="460" y="643">补丁 wheel 版 Megatron</text>
+    </g>
+    <rect x="556" y="580" width="160" height="80" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="1.3"/>
+    <text x="636" y="606" font-size="13" font-weight="700" text-anchor="middle" fill="#065f46">沐曦 MACA</text>
+    <g font-size="11" fill="#475569" text-anchor="middle">
+      <text x="636" y="626">C500 64G</text>
+      <text x="636" y="643">官方 0.12 源码直挂</text>
+    </g>
+    <rect x="732" y="580" width="160" height="80" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="1.3"/>
+    <text x="812" y="606" font-size="13" font-weight="700" text-anchor="middle" fill="#065f46">摩尔线程 MUSA</text>
+    <g font-size="11" fill="#475569" text-anchor="middle">
+      <text x="812" y="626">S5000 80G</text>
+      <text x="812" y="643">上游源码＋7 处幂等补丁</text>
+    </g>
+    <rect x="908" y="580" width="160" height="80" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="1.3"/>
+    <text x="988" y="606" font-size="13" font-weight="700" text-anchor="middle" fill="#065f46">天数智芯 CoreX</text>
+    <g font-size="11" fill="#475569" text-anchor="middle">
+      <text x="988" y="626">天垓150 32G</text>
+      <text x="988" y="643">上游源码＋6 处幂等补丁</text>
+    </g>
+    <line x1="352" y1="620" x2="376" y2="620" stroke="#334155" stroke-width="1.6" marker-end="url(#a7)"/>
+    <text x="724" y="700" font-size="11.5" fill="#475569" text-anchor="middle">四集群共用同一套核心代码，厂商差异全部经适配档注入（档位详情见图8）</text>
+  </g>
+</svg>
+<div class="cap">图7　分布式自动并行框架整体架构（更新版）</div>
+</div>
+
+<!-- ================= 图 8 ================= -->
+<div class="fig">
+<svg viewBox="0 0 1080 960" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a8" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#334155"/>
+    </marker>
+    <marker id="a8b" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+
+  <!-- ===== 顶层：公共核心层 ===== -->
+  <rect x="30" y="18" width="1020" height="128" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="52" y="44" font-size="15" font-weight="700" fill="#1e3a8a">公共核心层（单副本·零厂商感知）</text>
+  <g>
+    <rect x="52" y="58" width="170" height="72" rx="8" fill="#fff" stroke="#93c5fd" stroke-width="1.3"/>
+    <text x="137" y="84" font-size="13.5" font-weight="700" text-anchor="middle" fill="#1e3a8a">environment（环境）</text>
+    <text x="137" y="106" font-size="10.5" text-anchor="middle" fill="#64748b">厂商差异＝档位字段取值</text>
+    <rect x="240" y="58" width="170" height="72" rx="8" fill="#fff" stroke="#93c5fd" stroke-width="1.3"/>
+    <text x="325" y="84" font-size="13.5" font-weight="700" text-anchor="middle" fill="#1e3a8a">search（搜索）</text>
+    <text x="325" y="106" font-size="10.5" text-anchor="middle" fill="#64748b">能力位门控候选并留痕</text>
+    <rect x="428" y="58" width="170" height="72" rx="8" fill="#fff" stroke="#93c5fd" stroke-width="1.3"/>
+    <text x="513" y="84" font-size="13.5" font-weight="700" text-anchor="middle" fill="#1e3a8a">render（渲染）</text>
+    <text x="513" y="106" font-size="10.5" text-anchor="middle" fill="#64748b">同一模板按档渲染脚本</text>
+    <rect x="616" y="58" width="170" height="72" rx="8" fill="#fff" stroke="#93c5fd" stroke-width="1.3"/>
+    <text x="701" y="84" font-size="13.5" font-weight="700" text-anchor="middle" fill="#1e3a8a">lowering（下放）</text>
+    <text x="701" y="106" font-size="10.5" text-anchor="middle" fill="#64748b">设备前缀／后端注册切换</text>
+    <rect x="804" y="58" width="226" height="72" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.3"/>
+    <g font-size="11" fill="#1e3a8a">
+      <text x="818" y="80" font-weight="700">四核心文件仅 29 处参数化取值</text>
+      <text x="818" y="98">其余模块一律单副本维护</text>
+      <text x="818" y="116">回归：海光产物逐键一致（零扰动）</text>
+    </g>
+  </g>
+
+  <line x1="540" y1="146" x2="540" y2="172" stroke="#334155" stroke-width="1.6" marker-end="url(#a8)"/>
+  <text x="554" y="163" font-size="11" fill="#64748b">三环节查表取值：规划门控／渲染替换／下放切换</text>
+
+  <!-- ===== 中层：厂商适配档表 ===== -->
+  <rect x="30" y="176" width="1020" height="352" rx="10" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/>
+  <text x="52" y="202" font-size="15" font-weight="700" fill="#334155">厂商适配档表（VendorProfile：四条档位，字段含能力位／激活脚本／包装器／设备前缀／后端导入／TE 替身／替身卡规格）</text>
+
+  <!-- 表格：x0=52 y0=222 宽 976 -->
+  <g font-size="11.5">
+    <!-- 表头 -->
+    <rect x="52" y="222" width="976" height="34" fill="#e2e8f0" stroke="#94a3b8"/>
+    <g fill="#334155" font-weight="700" text-anchor="middle">
+      <text x="111" y="243">厂商档</text>
+      <text x="224" y="243">目标卡（替身）</text>
+      <text x="382" y="243">Megatron 接入</text>
+      <text x="545" y="243">序列并行</text>
+      <text x="652" y="243">EP·MoE（千亿线）</text>
+      <text x="775" y="243">设备后端</text>
+      <text x="941" y="243">探测依据</text>
+    </g>
+
+    <!-- 行1 海光 -->
+    <rect x="52" y="256" width="976" height="64" fill="#fff" stroke="#cbd5e1"/>
+    <g text-anchor="middle" fill="#1f2937">
+      <text x="111" y="281" font-weight="700">海光 hygon</text><text x="111" y="298">（基线档）</text>
+      <text x="224" y="281">BW1000</text><text x="224" y="298">64G</text>
+      <text x="382" y="281">dcu_megatron 0.13</text><text x="382" y="298">补丁 wheel 安装</text>
+      <text x="545" y="290">允许</text>
+      <text x="652" y="290">✅ 唯一支持</text>
+      <text x="775" y="290">cuda（ROCm／HIP）</text>
+      <text x="941" y="290">torch.version.hip</text>
+    </g>
+    <!-- 行2 沐曦 -->
+    <rect x="52" y="320" width="976" height="64" fill="#f8fafc" stroke="#cbd5e1"/>
+    <g text-anchor="middle" fill="#1f2937">
+      <text x="111" y="345" font-weight="700">沐曦 maca</text><text x="111" y="362">MACA</text>
+      <text x="224" y="345">C500</text><text x="224" y="362">64G</text>
+      <text x="382" y="345">厂商官方 0.12 源码</text><text x="382" y="362">原样直挂（私有分发）</text>
+      <text x="545" y="345">允许</text><text x="545" y="362">（厂商 TE 2.3.0）</text>
+      <text x="652" y="354">❌ 拒绝留痕</text>
+      <text x="775" y="345">cuda</text><text x="775" y="362">（cu-bridge 兼容层）</text>
+      <text x="941" y="345">torch 版本串</text><text x="941" y="362">＋metax</text>
+    </g>
+    <!-- 行3 摩尔 -->
+    <rect x="52" y="384" width="976" height="64" fill="#fff" stroke="#cbd5e1"/>
+    <g text-anchor="middle" fill="#1f2937">
+      <text x="111" y="409" font-weight="700">摩尔线程 musa</text><text x="111" y="426">MUSA</text>
+      <text x="224" y="409">S5000</text><text x="224" y="426">80G</text>
+      <text x="382" y="409">上游 0.14.0rc2</text><text x="382" y="426">＋7 处幂等补丁</text>
+      <text x="545" y="409">强制关</text><text x="545" y="426">（LayerNorm 限制）</text>
+      <text x="652" y="418">❌</text>
+      <text x="775" y="409">musa</text><text x="775" y="426">（显式 import torch_musa）</text>
+      <text x="941" y="409">torch.musa</text><text x="941" y="426">.is_available()</text>
+    </g>
+    <!-- 行4 天数 -->
+    <rect x="52" y="448" width="976" height="64" fill="#f8fafc" stroke="#cbd5e1"/>
+    <g text-anchor="middle" fill="#1f2937">
+      <text x="111" y="473" font-weight="700">天数智芯 corex</text><text x="111" y="490">CoreX</text>
+      <text x="224" y="473">天垓150</text><text x="224" y="490">32G</text>
+      <text x="382" y="473">上游 0.14.0rc2</text><text x="382" y="490">＋6 处幂等补丁</text>
+      <text x="545" y="473">强制关</text>
+      <text x="652" y="482">❌</text>
+      <text x="775" y="473">cuda</text><text x="775" y="490">（CUDA 兼容层）</text>
+      <text x="941" y="473">设备名含 Iluvatar</text><text x="941" y="490">／版本串＋corex</text>
+    </g>
+    <!-- 列分隔线（置于行矩形之后，避免被覆盖） -->
+    <line x1="170" y1="222" x2="170" y2="512" stroke="#cbd5e1"/>
+    <line x1="278" y1="222" x2="278" y2="512" stroke="#cbd5e1"/>
+    <line x1="486" y1="222" x2="486" y2="512" stroke="#cbd5e1"/>
+    <line x1="604" y1="222" x2="604" y2="512" stroke="#cbd5e1"/>
+    <line x1="700" y1="222" x2="700" y2="512" stroke="#cbd5e1"/>
+    <line x1="850" y1="222" x2="850" y2="512" stroke="#cbd5e1"/>
+  </g>
+
+  <line x1="540" y1="528" x2="540" y2="554" stroke="#334155" stroke-width="1.6" marker-end="url(#a8)"/>
+  <text x="554" y="546" font-size="11" fill="#64748b">渲染／下放时按档位替换激活脚本、包装器路径、设备前缀与后端注册</text>
+
+  <!-- ===== 下层：厂商适配包 ===== -->
+  <rect x="30" y="558" width="1020" height="250" rx="10" fill="#f0fdf4" stroke="#059669" stroke-width="1.5"/>
+  <text x="52" y="584" font-size="15" font-weight="700" fill="#065f46">厂商适配包（vendors/ 自包含目录；海光基线在仓库根）</text>
+  <g>
+    <rect x="52" y="600" width="210" height="96" rx="8" fill="#fff" stroke="#10b981" stroke-width="1.3"/>
+    <text x="157" y="624" font-size="13.5" font-weight="700" text-anchor="middle" fill="#065f46">maca/</text>
+    <g font-size="11" fill="#475569" text-anchor="middle">
+      <text x="157" y="645">scripts：激活＋启动脚本</text>
+      <text x="157" y="662">tools：bootstrap＋包装器</text>
+      <text x="157" y="679">＋环境检查（四件套）</text>
+    </g>
+    <rect x="278" y="600" width="250" height="96" rx="8" fill="#fff" stroke="#10b981" stroke-width="1.3"/>
+    <text x="403" y="624" font-size="13.5" font-weight="700" text-anchor="middle" fill="#065f46">musa/</text>
+    <g font-size="11" fill="#475569" text-anchor="middle">
+      <text x="403" y="645">四件套＋调试脚本集</text>
+      <text x="403" y="662">musa_patch 运行期补丁包</text>
+      <text x="403" y="679">te_stub ／ docker</text>
+    </g>
+    <rect x="544" y="600" width="210" height="96" rx="8" fill="#fff" stroke="#10b981" stroke-width="1.3"/>
+    <text x="649" y="624" font-size="13.5" font-weight="700" text-anchor="middle" fill="#065f46">corex/</text>
+    <g font-size="11" fill="#475569" text-anchor="middle">
+      <text x="649" y="645">四件套（同上）</text>
+      <text x="649" y="662">te_stub 算子库替身目录</text>
+    </g>
+    <rect x="766" y="600" width="232" height="96" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="1.3"/>
+    <text x="882" y="624" font-size="13.5" font-weight="700" text-anchor="middle" fill="#065f46">海光（基线档）</text>
+    <g font-size="11" fill="#475569" text-anchor="middle">
+      <text x="882" y="645">仓库根 scripts/＋tools/</text>
+      <text x="882" y="662">内部 Megatron-LM-das 仓库</text>
+      <text x="882" y="679">activate 三级解析</text>
+    </g>
+  </g>
+  <g font-size="11.5" fill="#475569">
+    <text x="52" y="716">· 目录自包含：脚本按 BASH_SOURCE 相对根推导，整体迁移不改路径；新增一家厂商＝一条档位记录＋一个自包含适配包，框架核心代码零改动</text>
+    <text x="52" y="736">· Megatron 源码自动获取：musa／corex 目录不在位时自动拉取上游 core_v0.14.0rc2（幂等补丁、多 rank 文件锁串行化；内网不可达回落人工放置指引）</text>
+    <text x="52" y="756">· 沐曦为厂商私有分发源码、公网无有，仅人工放置；摩尔 7 处／天数 6 处幂等补丁，重复执行不叠加</text>
+  </g>
+
+  <!-- ===== 底部：档位选择规则 ===== -->
+  <rect x="30" y="828" width="1020" height="110" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text x="52" y="854" font-size="14" font-weight="700" fill="#92400e">档位选择规则（显式优先）与跨厂商纯规划入口</text>
+  <g font-size="12" fill="#78350f">
+    <text x="52" y="877">① AUTOPLAN_VENDOR＝&lt;hygon|maca|musa|corex&gt; 显式指定优先（非法值报错并列出可选档）　② 真机自动探测：构建版本串厂商标识／ROCm 标记／私有设备后端可用性／设备名称特征</text>
+    <text x="52" y="898">③ 无法识别一律回落海光基线档＝多厂商合并前的既有行为（存量环境产物零扰动）　·　AUTOPLAN_STANDIN_GPUS 指定替身卡数（优先于真卡）</text>
+    <text x="52" y="919">典型用途：新平台设备到货前的部署方案预评估；多厂商供货环境下同一训练任务的跨平台选型对比——两者均无需真实厂商硬件</text>
+  </g>
+  <path d="M 30 883 L 16 883 L 16 352 L 26 352" fill="none" stroke="#2563eb" stroke-width="2"
+        stroke-dasharray="6 4" marker-end="url(#a8b)"/>
+</svg>
+<div class="cap">图8　多厂商自动检测与适配总体架构</div>
+</div>
+
+</body>
+</html>
