@@ -1,0 +1,85 @@
+{
+  "model": "Qwen3.6-27B-text-megatron-local-vehicle",
+  "tp": 8,
+  "M": 8192,
+  "dtype": "bfloat16",
+  "layer_types": {
+    "linear_attention": 48,
+    "full_attention": 16
+  },
+  "sites": [
+    {
+      "site": "full_qkv",
+      "layer_type": "full_attention",
+      "adapter_name": "qkv",
+      "op": "ag_up",
+      "M": 8192,
+      "K": 5120,
+      "N": 1792,
+      "layers": 16,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending"
+    },
+    {
+      "site": "full_proj",
+      "layer_type": "full_attention",
+      "adapter_name": "proj",
+      "op": "rs",
+      "M": 8192,
+      "K": 768,
+      "N": 5120,
+      "layers": 16,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending"
+    },
+    {
+      "site": "gdn_in",
+      "layer_type": "linear_attention",
+      "adapter_name": "fc1",
+      "op": "ag_up",
+      "M": 8192,
+      "K": 5120,
+      "N": 2060,
+      "layers": 48,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending"
+    },
+    {
+      "site": "gdn_out",
+      "layer_type": "linear_attention",
+      "adapter_name": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "K": 768,
+      "N": 5120,
+      "layers": 48,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending"
+    },
+    {
+      "site": "mlp_fc1",
+      "layer_type": "all",
+      "adapter_name": "fc1",
+      "op": "ag_gu",
+      "M": 8192,
+      "K": 5120,
+      "N": 4352,
+      "layers": 64,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending"
+    },
+    {
+      "site": "mlp_fc2",
+      "layer_type": "all",
+      "adapter_name": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "K": 2176,
+      "N": 5120,
+      "layers": 64,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending"
+    }
+  ],
+  "classification": "static manifest; not runtime verified; not predictor calibration"
+}

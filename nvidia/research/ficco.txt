@@ -1,0 +1,1459 @@
+                                                 Design Space Exploration of DMA based
+                                               Finer-Grain Compute Communication Overlap
+                                                      Shagnik Pal1,2 , Shaizeen Aga1 , Suchita Pati1 , Mahzabeen Islam1 , Lizy K. John2
+                                                             1 Advanced Micro Devices Inc. , 2 The University of Texas at Austin
+
+                                              shagnik@utexas.edu, {shaizeen.aga, suchita.pati, mahzabeen.islam}@amd.com, ljohn@ece.utexas.edu
+
+
+                                           Abstract—Modern ML workloads demand distributing train-                   Serial   GPU     Collective (C)               GEMM (G)
+                                        ing and inference across multiple GPUs. However, these par-                 Execution
+                                        allelization techniques often suffer from exposed critical-path                                                    1 Inefficiencies
+                                        communication, leaving a potential 1.7× speedup on the ta-                                                                      a
+                                                                                                                                                                          b       2
+                                        ble through compute-communication overlap. Prior overlapping                 FiCCO    DMA    C0        C1        C2                 c
+arXiv:2512.10236v3 [cs.DC] 3 Jun 2026
+
+
+
+
+                                                                                                                                                                                FiCCO
+                                        methods harness the fact that ML model state and inputs are                 Execution GPU    G0        G1        G2       G3            search
+                                        already sharded into the number of GPUs, and overlap the                                                                                space
+                                        compute and communication at shard granularity. However, such
+                                        coarse-grained overlap suffers from limited network topology                                        FiCCO                          FiCCO
+                                                                                                                                          3 heuristics
+                                        support, and suboptimal dataflows. In this work, we instead                                                                       speedup
+                                        make a case for finer-grain compute-communication overlap
+                                                                                                                Fig. 1: Speedup via finer-grain decomposition of data-
+                                        which we term FiCCO. FiCCO operates one level deeper than
+                                        traditional sharding, and unlocks overlap for a wider set of            dependent communication-computation (FiCCO). FiCCO
+                                        network topologies and enables finer-grain dataflow.                    heuristics (③) picks the optimal schedule within the search
+                                           We show that FiCCO opens up a wider design space of exe-             space (②) to minimize overlap-induced inefficiencies (①).
+                                        cution schedules than possible at shard-level alone. To walk the
+                                        design space of schedules, we study and characterize the perfor-
+                                        mance inefficiencies on doing overlap and overlay the schedules
+                                        with the associated inefficiency signatures. Our characterization       overlapped with the computation of the current layer.
+                                        reveals decomposition and contention based slowdowns to be              In contrast, examples of data-dependent computation-
+                                        the major performance limiters, and we correlate the slowdown           communication include tensor-sequence parallelism [36]
+                                        factors with the static compute/communication operator sizes.           and context-parallelism [39], wherein communication on
+                                        This helps us design heuristics (that frameworks and runtimes
+                                        can harness) to select bespoke FiCCO schedules based on the             critical-path feeds into a data-dependent computation. In such
+                                        nature of underlying ML operations. Finally, to further minimize        cases, exposed communication provides up to 1.7× speedup
+                                        contention inefficiencies inherent with operation overlap, we of-       opportunity, that we target in this paper.
+                                        fload communication to GPU DMA engines. We evaluate several                Prior works [6], [28] address these challenges by over-
+                                        scenarios from realistic ML deployments and demonstrate that
+                                                                                                                lapping computation and communication at the shard granu-
+                                        our proposed heuristics driven bespoke schedules deliver up to
+                                        1.6× speedup. Further, our heuristics provide accurate guidance         larity, exploiting the inherent sharding in the parallelization
+                                        to pick the optimal schedule in 81% of unseen scenarios.                techniques (e.g., tensor parallelism shards a single layer’s
+                                           Index Terms—Finer-grain overlap, GPUs, ML, DMAs                      weights equally across GPUs). However, such coarse-grain
+                                                                                                                shard-based techniques manifest a severe limitation that they
+                                                              I. I NTRODUCTION                                  harness peer-to-peer communication operations (that is, a GPU
+                                           The rapid escalation of compute and memory demands in                communicating with only one other GPU at a time). While
+                                        machine learning (ML) workloads [45] has necessitated large-            suitable for switch-based GPU networks (flexible bandwidth
+                                        scale distributed execution. For example, training Llama-3              allocation), these techniques leave network links idle with
+                                        required nearly 16k GPUs [18]. These distributed setups em-             direct-connection based GPU networks, delivering consider-
+                                        ploy various parallelization strategies [30], [37], [39], [65] to       ably lower performance (up to 3.9× lower). Further, as they
+                                        shard model states and inputs across devices. Such partitioning         inherently operate at shard-granularity they limit granularity
+                                        necessitates frequent communication collectives, such as all-           of subsequent operations.
+                                        gather, to synchronize and communicate data (e.g., activations)            We propose FiCCO, a finer-grained compute-
+                                        at periodic intervals.                                                  communication overlap that decomposes communication
+                                           While independent computation-communication can                      one level deeper than traditional sharding (for example, in an
+                                        effectively hide communication latency, data-dependent                  8-GPU system, FiCCO utilizes transfer sizes one-eighth those
+                                        computation-communication often leaves communication                    of shard-based methods). This deeper decomposition enables
+                                        exposed on the critical path. An example of the former                  simultaneous all-to-all communication rather than serial peer-
+                                        is fully-sharded data parallelism (FSDP) [65] technique,                to-peer transfers, thereby reducing latency and maximizing
+                                        where weights are partitioned across GPUs and the                       link utilization across diverse topologies. Furthermore,
+                                        communication of weights of the next layer can be                       FiCCO unlocks finer execution granularity for all subsequent
+
+
+
+                                                                                                            1
+                                                                                                                                                    All-to-all
+                                                    Data-parallel – 0/FSDP0              Data-parallel – 1/FSDP1
+                       Inputs
+                                                              GPU0                                GPU1                                 Expert Parallel-0 Expert Parallel-1
+             Hardware is the new software
+batch-size
+
+
+                                                  Hardware is the new software             Some of it is about IO                           GPU0                 GPU2
+               Its all about the memory                                                                                   Pipeline
+                                                    Its all about the memory               Data-movement is key           Parallel-0                layer-0
+                 Some of it is about IO
+                Data-movement is key                                   All-gather, reduce scatter                       P2P
+                 Sequence-length                       Context-parallel - 0                  Context-parallel - 1                           GPU1                 GPU3
+                      Model                        GPU0               GPU1               GPU2               GPU3          Pipeline                  layer-1
+                                              Hardware is       the new software      Some of it          is about IO     Parallel-1
+                      layer-0
+                                              Its all about        the memory       Data-movement            is key                Tensor/Sequence        Tensor/Sequence
+                                                                                                                                      Parallel-0             Parallel-0
+       (a)            layer-1               (b)         All-gather, P2P                        All-gather, P2P          (c)               All-gather, reduce-scatter
+
+ Fig. 2: (a) Sample inputs and ML model. (b) Data-parallelism (Fully-Shared Data-Parallel (FSDP)) and context parallelism
+ shard the input. (c) Expert parallelism, context-parallelism, tensor-sequence parallelism shard model state amongst GPUs.
+
+
+ operations in the dataflow.                                                                      offload communication to GPU DMA engines to lower
+    As both shard-based and fine-grain techniques execute                                         contention-driven inefficiencies.
+ smaller compute/communication operators, they lead to var-                                     • We provide heuristics that guide frameworks and runtimes
+ ious forms of execution inefficiencies (Figure 1), which are                                     to pick bespoke FiCCO schedule for any given scenario,
+ highly dependent on the nature of operators being overlapped.                                    thereby maximizing performance.
+ That is, the aggregate execution time of decomposed oper-                                      • We evaluate several scenarios from realistic ML de-
+ ations can be higher than the execution time of the single                                       ployments and demonstrate that our proposed bespoke
+ larger operation. This happens for myriad reasons including                                      schedules deliver up to 1.6× speedup and our heuristics
+ poor utilization and/or contention for GPU resources [5].                                        picks the optimal schedule in 81% of studied scenarios.
+ Since execution inefficiencies can vary based on the operator                                                        II. BACKGROUND
+ dimensions, a single execution schedule for computation/com-
+                                                                                              A. ML - Increasingly Distributed
+ munication overlap can fail to realize optimal performance.
+    To tackle the above challenge, we provide a detailed                                         Large language models (LLMs) are becoming ubiquitous,
+ characterization of inefficiencies incurred as ML operators                                  from conversational agents to code generation [14], [34],
+ are decomposed and overlapped, and correlate these inef-                                     [58]. The LLM architecture consists of a stack of transformer
+ ficiency signatures with the associated operator sizes and                                   blocks, each transformer block made up of self-attention [21]
+ shapes. We next explore the FiCCO design space enabled by                                    and feedforward (MLP) layers. As LLM model sizes and
+ finer granularity, which encompasses varying communication                                   training dataset sizes scale [15], [26], the compute and memory
+ shapes, computation uniformity, and computation granularity.                                 throughput of a single GPU is insufficient to meet LLM needs
+ The expanded search space of FiCCO schedules necessitates                                    [45]. Consequently, parallelization techniques shard model
+ heuristics that can statically select the optimal schedule. We                               state and inputs across multiple GPUs.
+                                                                                                 Figure 2 depicts key ML parallelization techniques and
+ study how different schedules have tradeoffs in the inefficiency
+                                                                                              their associated communication collectives. Vanilla data-
+ signatures, and correlate them with static operator dimensions
+                                                                                              parallelism [38], [62] shards model inputs across GPUs.
+ to provide heuristics for frameworks and runtimes to pick
+                                                                                              Fully-sharded data-parallel (FSDP [65]) additionally shards
+ bespoke FiCCO schedules. Finally, we also harness com-
+                                                                                              model weights, requiring all-gather (AG) prior to executing
+ munication offloads to GPU DMA engines to further lower
+                                                                                              associated computation. In addition, reducing scatter (RS) of
+ contention based inefficiencies. Our evaluation across several
+                                                                                              model gradients, in which gradients across GPUs are summed
+ realistic ML deployments demonstrates that our heuristics
+                                                                                              element-wise, is also necessary (Figure 2(b)). Also depicted is
+ driven bespoke schedules deliver up to 1.6× speedup and
+                                                                                              context parallelism [63], which shards single input sequence
+ our heuristics provide accurate guidance to pick the optimal
+                                                                                              data across GPUs and can incur either ring-based peer-to-peer
+ schedule in 81% of unseen scenarios.
+                                                                                              (P2P) [40] or AG [18] communication.
+    In summary, we make the following contributions:                                             Alternative parallelization techniques shard model state
+             • We propose finer-grain compute-communication overlap                           across GPUs (Figure 2(c)). In order to scale model parameters
+               than shard-based, which we term FiCCO, in order to                             without commensurate scaling of compute, mixture-of-expert
+               overcome limitations of shard-based overlap.                                   (MoE) models have gained increasing traction [51], [53]. Such
+             • We provide detailed characterization of inefficiencies                         MoE models often deploy expert parallelism, wherein experts
+               incurred as ML operators are decomposed and executed                           in MLP layers are distributed over multiple GPUs incurring
+               in an overlapped fashion.                                                      all-to-all (AA) communication to disperse and collect input
+             • We provide a design space of FiCCO schedules which                             tokens across experts. Pipeline parallelism [30], spreads model
+               allows picking bespoke overlap schedules based on the                          layers across GPUs in stages, necessitating P2P communi-
+               nature of underlying ML operations. Further, we also                           cation of outputs/inputs between said stages. Finally, tensor
+
+
+
+                                                                                          2
+       Start State              Baseline GPU0 Execution                         Shard Compute/Comm. Overlap (GPU0)                                                       Overlap Interference
+
+                                                                                                                             S4: Compute                                  Compute              Comm.
+ GPU0         GPU1          S1: Gather      S2: Compute                   S1: Overlap    S2: Overlap          S3: Overlap
+                                                                                                                                                                 GPU                                GPU
+  I0           I1                GPU0         GPU0                          GPU0           GPU0                  GPU0             GPU0
+
+
+
+
+                                                          Comm. Compute
+        W0
+
+
+
+
+                     W1
+                                                                                                                                                                 Cores                            Cores
+                                   I0         I0                           I0             I1                    I2            I3
+
+
+
+
+                                                                                                    W0
+                                                                                    W0
+
+
+
+
+                                                                                                                                               W0
+                                                                                                                        W0
+ GPU2         GPU3                 I1         I1                                                                                                              Caches DMA                         Caches DMA
+
+
+
+
+                                                     W0
+  I2           I3                  I2         I2                          From           From                 From                                        On-chip network                     On-chip network
+        W2
+
+
+
+
+                     W3
+
+                                                                          GPU1           GPU2                 GPU3
+                                   I3         I3                                   I1              I2                 I3                                         HBM                                HBM
+                                                                                                                                                            Comm. done by                     Comm. done by
+(a)                       (b)                             (c)                                                                                            (d) GPU cores                         DMA engines
+
+
+Fig. 3: (a) Start state for weights (W) and inputs (I) on a four GPU system. (b) Steps(S) in baseline serial execution of
+communication and computation. (c) Shard-based overlap: P2P shard communication and shard-level computation overlap. (d)
+Contention of limited GPU resources with operation overlap, without and with DMA communication offloads.
+
+
+parallelism [42] shards linear layers in transformer block                                                    Start State                 Shard Overlap                               Finer Overlap
+across GPUs, which is often combined with sequence par-                                                                                              Step-2                               Step-2
+allelism [36] to shard sequence dependent operations as well.                                            GPU0         GPU1
+                                                                                                                                                     GPU0                              GPU0          Scatter
+
+
+
+
+                                                                                                                                                                          Compute
+                                                                                                                                     Compute
+This necessitates AG and RS collectives across participating                                             I0           I1
+
+
+
+
+                                                                                                                 W0
+
+
+
+                                                                                                                             W1
+                                                                                                                                                    I1
+                                                                                                                                                                                                    =
+
+
+
+
+                                                                                                                                                                                               W0
+                                                                                                                                                              W0
+GPUs.
+                                                                                                         GPU2         GPU3
+                                                                                                                                                From                                At GPU0             Gather
+
+
+
+
+                                                                                                                                                                          Comm.
+                                                                                                                                     Comm.
+B. Shard-based Overlap and Interference                                                                  I2           I3                        GPU2
+
+
+
+
+                                                                                                                 W2
+
+
+
+                                                                                                                             W3
+                                                                                                                                                            I2                       From
+   With wide-spread deployment of distributed ML, effectively                                                                                                                       GPU1-3
+                                                                                                                                               Peer-to-Peer (P2P)                       All-to-all (A2A)
+hiding resultant inter-GPU communication in the shadow of                                               (a)                        (b)          communication             (c)           communication
+computation gets increasingly important. This is straight-
+forward in presence of independent computation, such as                                                   Fig. 4: Shared-based overlap versus FiCCO in action.
+in FSDP, wherein all-gather of weights for next layer can
+be done in shadow of computation of the previous layer.
+However, for other forms of parallelization highlighted in                                         interference is eliminated as well. We also harness such DMA
+Figure 2, this is challenging. As an example, Figure 3(a)                                          offloads.
+depicts the start state for tensor-sequence parallel scenarios                                                                    III. F I CCO: M OTIVATION
+across four GPUs where each holds a row-sliced input shard
+(I) and column-sliced weight shard (W). In baseline execution                                      A. Case for Finer-grain Overlap
+(Figure 3b), the computation—a matrix-matrix multiplication                                           While shard-based overlap as employed by prior works
+(GEMM)—requires every input shard to interact with the                                             is indeed promising, we observe that it suffers from key
+weight shard on each GPU. Consequently, an All-Gather                                              limitations. To this end, we make a case in this work for
+collective must first synchronize all input shards across the                                      finer-grain compute-communication overlap which we term
+GPUs before the GEMM kernel is invoked. Section VI-B                                               FiCCO, wherein communication is decomposed at one-level
+shows that this serialized execution can leave up to 1.7× of                                       deeper granularity (that is, transfer sizes one-eighth that of
+the ideal operator-level performance unrealized.                                                   shard-based overlap in an eight GPU system) which allows
+   To overcome this, prior works [6], [28] harness the fact that                                   overcoming of limitations with shard-based overlap (discussed
+model’s inputs/states are already sharded allowing compute-                                        in more detail below). While shard-based techniques execute
+communication overlap as depicted in Figure 3(c). Instead of                                       compute and communicate at shard granularity, we propose
+gathering all input shards upfront, shards are sent peer-to-peer                                   to communicate at one-level deeper granularity (additional
+between GPU pairs one at a time, while overlapping com-                                            sharding by number of GPUs) while keeping the computation
+putation on the previously received shard, thereby attaining                                       granularity configurable and tunable (either match or increase
+compute-communication overlap.                                                                     granularity than shard-based techniques).
+   Such overlap of computation and communication is realized
+on modern GPUs via executing two concurrent GPU kernels,                                           B. FiCCO: Steady State
+one for computation and the other for communication. Such                                             Higher degree of decomposition with FiCCO unlocks all-
+concurrency, as expected, causes interference between the two                                      to-all communication pattern in steady state as opposed to
+as depicted in Figure 3(d) across different GPU resources (e.g.,                                   peer-to-peer communication pattern in shard-based overlap
+cores, caches, HBM, etc.). Prior works [5], [46], [66], [67],                                      as depicted at a high-level in Figure 4 ((b) versus (c)). As
+offload communication to existing DMA engines on GPU to                                            also depicted, since computation now happens over finer-grain
+lower a substantial portion of this interference. That is, by                                      communication received from multiple peer GPUs, depending
+not using GPU cores to orchestrate communication, compute                                          on the choice of computation granularity (as will be expanded
+interference is completely eliminated and a portion of cache                                       in Section V), this induces some additional actions in steady
+
+
+
+                                                                                               3
+                        Shard Overlap                     Finer-grain Overlap                                                  Time = c         Time = g
+                                                                                                              Serial
+                                                                                                                           Collective (C)       GEMM (G)
+                                                                                                            execution
+       1           G0        G1        G0       G1    G0           G1     G0        G1                                    c/3
+                      Switch                              Switch                                        Ideal FiCCO      I-C0 I-C1 I-C2        FiCCO roofline
+    Broader
+                   G2                                 G2                                                  execution                               speedup
+   Topology                  G3        G2       G3                 G3     G2        G3                                   I-G0 I-G1 I-G2 I-G3
+   Coverage      Lower link utilization with P2P     Superior link utilization with A2A                                   g/4
+                comm. in non-switch topologies           comm. in any topology                                                 dc> c/3       DIL
+                                                                                                    Decomposition        D-C0 D-C1 D-C2             Speedup
+      2
+                        I0              =   O               I0-0
+                                                                              =                     inefficiency loss
+                                                                                                                         D-G0     D-G1 D-G2 D-G3
+                                                                                                                                                    with DIL
+
+
+
+                                   W0
+
+
+
+
+                                                                         W0
+    Lower                                                                                                  (DIL)
+  Granularity                                                                                                                    dg > g/4
+   Dataflow     Granularity for next operation          Finer granularity for next                                        cc > dc                 CIL Speedup
+                    in dataflow pipeline              operation in dataflow pipeline                   Contention                                     with DIL
+                                                                                                                          C-C0     C-C1   C-C2
+                                                                                                     inefficiency loss                                  & CIL
+      3                           S1         S2                     S1        S2   S3                                      C-G0     C-G1  C-G2  C-G3
+                                                                                                            (CIL)
+    Hide         G0     G1     Comm.        Comp.    G0     G1                                                           cg > dg
+   Comm.
+  Asymmetry      G1     G2                           G1     G2                                Fig. 6: Inefficiencies with operator decomposition and overlap.
+                        Asymmetry exposed                  Potentially other ops
+                                                                                              d[c,g] and c[c,g] represent [Collective,GEMM] times with
+Fig. 5: Benefits of Finer-grain overlap. I0,W0: Input, Weight                                 decomposition and contention respectively.
+shard in GPU0 respectively; G: GPU; S: Step.
+
+                                                                                              large) operation. Careful understanding and characterization of
+state such as gathering of finer-grain communication buffers                                  these inefficiencies is necessary in order to effectively manage
+(Gather) and potentially scattering of finer-grain outputs in                                 them, and we provide the same in this section.
+final output space (Scatter). We further discuss in Section V
+how this unlocks a rich design space of FiCCO schedules.                                      A. Overview of Inefficiency Losses
+                                                                                                 We depict pictorially in Figure 6 the key inefficiency losses
+C. FiCCO: Benefits                                                                            that can incur due to operation decomposition and overlap.
+   We depict in Figure 5 the benefits of FiCCO in comparison                                  Note that the inefficiencies we discuss apply to both shard-
+to shard-based overlap. First, FiCCO broadens compute and                                     based overlap and our proposed FiCCO overlap. In the charac-
+communication overlap for data-dependent scenarios for wider                                  terization sections (Section IV-C, IV-D) we explicitly separate
+topologies. As discussed above, shard-based overlap deploys                                   out the empirical differences between the two.
+peer-to-peer communication which is suitable for switch-                                         Ideal Execution: To express the inefficiency losses, we
+based GPU topologies [54] which allow flexible bandwidth                                      first depict ideal execution in Figure 6. In such an execution,
+allocation between GPUs. That said, state-of-the-art GPUs                                     decomposing and overlapping of ML operations scales the
+such as AMD Instinct™ MI300X employ direct connection                                         execution time commensurate to the decomposition degree.
+based topologies. In such cases, peer-to-peer communication                                   This leads to what we refer in this work as ideal speedups for
+can leave network links unused causing performance degrada-                                   computation/communication overlap.
+tion – up to 3.9× slowdown compared to serial execution,                                         Decomposition Inefficiency caused Loss (DIL): In prac-
+as discussed further in Section VI-B. In contrast, FiCCO,                                     tice, decomposing operations into smaller sub-operations (as
+by decomposing communication one-level deeper (additional                                     done by both shard-based and FiCCO techniques) leads to
+sharding by number of GPUs) unlocks all-to-all communica-                                     slower execution than predicted by the ideal baseline (Fig-
+tion pattern which can keep direct connection based topologies                                ure 6). This is because smaller inputs/outputs are less capable
+well utilized. Second, finer-grain outputs as enabled by FiCCO                                of saturating GPU compute units and load-store pipelines,
+stand to enable lower granularity even in subsequent allowing                                 yield poorer cache reuse due to smaller GEMM tile sizes,
+superior utilization of dataflow-like pipeline. Finally, as also                              and suffer from other well-documented inefficiencies [43] [55].
+depicted in Figure 5, finer-granularity can also allow better                                 We term this as decomposition inefficiency caused loss (DIL
+hiding of communication asymmetry that can happen with                                        henceforth).
+MoE models wherein communication between pair of GPUs                                            Contention Inefficiency caused Loss (CIL): Additionally,
+can differ based on tokens to be communicated between them.                                   unlike baseline execution where computation and communi-
+                                                                                              cation run in isolation, both shard-based and FiCCO tech-
+   IV. DATA - DEPENDENT C OMPUTE /C OMMUNICATION                                              niques overlap these operations, introducing contention in
+   OVERLAP : C HARACTERIZATION OF I NEFFICIENCIES                                             GPU compute and memory subsystems. More specifically, as
+   As both shard-based or fine-grain techniques execute                                       depicted in Figure 3(d), overlapping computation and commu-
+smaller compute/communication operations as compared to                                       nication divides GPU compute cores between two concurrent
+baseline serial execution (Figure 3), they lead to various                                    kernels, causing each to receive fewer cores than it would
+forms of operation execution inefficiencies, which are highly                                 in isolation, an effect we term compute interference. The
+dependent on the nature of operators being overlapped. That                                   same phenomenon plays out over caches, network on-chip
+is, the aggregated execution time of decomposed operations                                    and HBM. While offloading communication to DMA engines
+can be higher than the execution time of the baseline (single                                 [5], [46] can eliminate compute interference and some portion
+
+
+
+                                                                                          4
+   TABLE I: GEMMs occurring in real world scenarios.                  intermediate buffer copies and enable direct peer-to-peer GPU
+                                                                      memory access. We report the average of five measured runs
+  Name    Parallelism   Model          GEMM (M,N,K)
+                                                                      following ten warm-up iterations.
+  g1      SP+TP         llama-3-405b   (16384,16384,131072)              2) Data-dependent Overlap Scenarios Under Considera-
+  g2      SP+TP         llama-3-405b   (131072,16384,16384)
+  g3      SP+TP         llama-3-405b   (53248,16384,131072)           tion: We study data-dependent compute-communication sce-
+  g4      SP+TP         llama-3-405b   (131072,53248,16384)           narios from real-world ML deployments in this work [18],
+  g5      SP+TP         llama-2-70b    (8192,8192,262144)             [23], [41], [56], [57], summarized in Table I. More specifically,
+  g6      SP+TP         llama-2-70b    (262144,8192,8192)             we study tensor-sequence parallel scenarios wherein, model
+  g7      SP+TP         llama-2-70b    (28672,8192,262144)            weights are sharded and activations are all-gathered [36]. We
+  g8      SP+TP         llama-2-70b    (262144,28672,8192)
+                                                                      also study scenarios for expert-parallelism [22], [33], wherein
+  g9      SP+TP         llama-3-405b   (196608,18432,16384)           input tokens are communicated in an all-to-all fashion before
+  g10     SP+TP         llama-3-405b   (196608,106496,16384)
+                                                                      executing the expert layers.
+  g11     SP+TP         llama-2-70b    (1048576,10240,8192)
+  g12     SP+TP         llama-2-70b    (1048576,57344,8192)              Finally, as we discussed in Section II-A, there exist
+                                                                      other data-dependent compute/communication overlap sce-
+  g13     EP            DeepSeek       (1607680,57344,8192)
+  g14     EP            Mixtral        (147456,28672,4096)
+                                                                      narios. We omit some of them that require communication
+  g15     EP            Mixtral        (327680,28672,4096)            with associated arithmetic operations as GPU DMA engines
+  g16     EP            Mixtral        (229376,28672,4096)            lack compute capabilities today (e.g., tensor parallelism with
+                                                                      reduce-scatter). With future such support, we believe our
+                                                                      conclusions/analysis will apply in those scenarios as well.
+of cache interference, memory interference still remains. We
+                                                                      C. DIL for Compute and Communication
+term this contention related operation execution slowdown as
+contention inefficiency caused loss (CIL henceforth).                    1) GEMM DIL: We characterize the decomposition over-
+   Other Inefficiency Losses: We observe in this work that            head as the GEMM is decomposed for shard-based and finer-
+DIL and CIL are the primary inefficiency losses and focus on          grain overlap. Thus, to evaluate GEMM DIL, we compare
+them. That said, other inefficiency losses exist and we briefly       the isolated execution of baseline GEMM to that of eight 8-
+mention them here and omit detailed characterization graphs           way sharded and sixty-four 64-way sharded smaller GEMMs.
+due to limited space. ML models repeatedly execute the same           As vanilla GEMM is comprised of M rows, K inner re-
+operation over multiple identical layers across multiple GPUs.        duction columns dimension and N output columns, sharding
+We observe variations in execution times of the same operation        of activations/gradients can be done in either the row (M)
+within the same GPU and across GPUs. However, we find that            or column (K) dimension. We exercise both. Additionally,
+this variation is within 6%, so we omit it. Finally, CPU launch       note that column-sharding necessitates accumulative GEMM
+of GPU kernels, which increase with both shard-based and our          kernels (that is, C += A * B). Finally, note that, 8-way sharding
+proposed FiCCO techniques can add launch overheads. These             is employed in both shard-overlap and FiCCO, while 64-
+overheads can matter when operation sizes are particularly            way sharding can be employed optionally in FiCCO. That
+small. However, graph-based launch techniques can mitigate            is, FiCCO shards communication one-level deeper than shard-
+these overheads [11].                                                 based techniques but only optionally shards computation (Sec-
+                                                                      tion V).
+B. Methodology                                                           Observations: Figure 7 depicts DIL for GEMMs. First, as
+   1) System and Execution Setup: Our setup comprises                 expected, 64-way sharding leads to higher DIL (slowdown)
+of AMD MI300X Infinity Platform comprised of 8x                       as compared to 8-way sharding for both row and column
+AMD Instinct™ MI300X GPUs [1] with a fully connected                  sharding. Second, DIL depends on relative magnitude of
+topology using AMD Infinity Fabric™ bi-directional links,             GEMM rows (M) and inner-dimension (K), i.e., row-sharding
+each link with a uni-directional bandwidth of 64GB/s. Our             incurs higher overhead when M < K, and column-sharding
+setup is based off PyTorch [44] as it is the most common              when M > K. That is, for g3, g1, g7, g5, DIL for row-
+framework for model training and inference. We focus on               sharding is higher than column-sharding (as depicted with
+overlap of key ML operations: GEMM and communication,                 data labels) and vice-versa for rest of GEMMs. Additionally,
+ML collectives kernels such as all-gather and all-to-all. For         DIL generally increases as static op-to-byte (OTB) for GEMM
+GEMMs, we harness AMD ROCm™ hipblaslt [2] library                     (arithmetic intensity, calculated using resultant GEMM dimen-
+of high-performance GEMM kernels. For communication,                  sions, derived from MNK for ops and bytes) decreases. That
+we either harness AMD ROCm communication collectives                  is, lower the OTB ratio, more the sensitivity to DIL. Finally,
+library (RCCL)      [8], a standard library of collective             as static GEMM parameters (OTB) dictate DIL, we note this
+communication routines for GPUs or launch memory copies               can aid in design of heuristics for picking optimal schedules
+(hipMemcpyDtoDAsync [7]) to offload communication to                  (Section V-C).
+GPU DMA engines. We use multiple GPU streams [9] that                    2) Communication DIL: For communication DIL, as indi-
+allow concurrent execution of GPU kernels. We harness                 vidual transfer size (between a pair of GPUs) in shard-overlap
+symmetric memory [61] for input/output buffers to eliminate           is same as baseline serial execution, shard-overlap does not
+
+
+
+                                                                  5
+                2.30                                                                                                                8.80
+Decomposition
+                             M>K            row-8way       row-64way                         M<K          2.2                               M>K            col-8way          col-64way                         M<K
+
+
+
+
+                                                                                                                    Decomposition
+                                                                                                                                    6.80
+  slowdown
+
+
+
+
+                                                                                                                      slowdown
+                1.80                                                                               1.6
+                                                                                             1.3                                    4.80
+                1.30                                                                                     1.1                        2.80
+                                                                                                                                                                                                               1.2 1.2 1.0 1.2
+                0.80                                                                                                                0.80
+
+
+
+
+                                                                                                                                           g10
+
+
+
+
+                                                                                                                                                                 g13
+                                                                                                                                                                       g12
+
+
+                                                                                                                                                                                  g11
+
+
+                                                                                                                                                                                             g15
+                                                                                                                                                                                                   g16
+                                                                                                                                                                                                         g14
+                                                                                                                                                 g4
+                                                                                                                                                      g9
+                                                                                                                                                            g2
+
+
+
+
+                                                                                                                                                                             g8
+
+
+                                                                                                                                                                                        g6
+
+
+
+
+                                                                                                                                                                                                               g3
+                                                                                                                                                                                                                    g1
+                                                                                                                                                                                                                         g7
+                                                                                                                                                                                                                              g5
+                         g10
+                                g13
+                                      g12
+
+
+
+
+                                                           g15
+                                                                 g16
+                                                                       g14
+
+
+                                                                                  g11
+                                            g4
+                                                 g8
+                                                      g9
+
+
+
+
+                                                                             g2
+
+
+                                                                                        g6
+                                                                                             g3
+                                                                                                   g1
+                                                                                                         g7
+                                                                                                               g5
+                               Sorted by op-to-byte (row-8way GEMM, descending)                                                                  Sorted by op-to-byte (col-8way GEMM, descending)
+
+
+Fig. 7: Decomposition Inefficiency caused Loss (DIL) for GEMM with 8-way and 64-way row (M) or column (K) sharding.
+
+
+                      1.30                                                                                                Observations: Figure 9 (right) depicts that communication
+      Decomposition
+
+
+
+
+                      1.20                                                                                              CIL similarly shows sensitivity to GEMM memory traffic and
+        slowdown
+
+
+
+
+                      1.10
+                      1.00
+                                                                                                                        we observe a geomean CIL of 1.12× slowdown. In contrast,
+                      0.90                                                                                              with larger and more efficient communication, shard-based
+                      0.80                                                                                              overlap experiences geomean CIL of 1.03× slowdown (not
+                               c13
+                               c11
+                               c12
+                                c7
+                                c3
+                                c9
+                               c10
+                                c1
+                                c2
+                                c4
+                                c5
+                                c6
+                                c8
+                               c15
+                               c16
+                               c14
+                                                                                                                        depicted for space reasons).
+                                 Sorted by communication size (descending)
+                                                                                                                        E. Case for Bespoke FiCCO Schedules
+                         Fig. 8: DIL for DMA based all-gather.                                                             Figure 10 illustrates how DIL and CIL proportionally affect
+                                                                                                                        the scenarios under consideration for GEMMs (8-way in (a),
+                                                                                                                        64-way sharding in (b)) and all-gather (c). For GEMMs, as the
+experience DIL. However, as FiCCO communicates at finer-                                                                combination of OTB and MT increases, GEMMs become more
+granularity, we scale down collective size 8-way for eight GPU                                                          susceptible to CIL (left to right in the figure). This is expected
+system and study resultant slowdown.                                                                                    based on trends we discussed above that DIL negatively
+   Observations: We depict DIL for communication all-gather                                                             correlates with OTB and CIL positively correlates with MT.
+in Figure 8. We observe that communication DIL for FiCCO                                                                This effect however, is less prominent for 64-way sharding as
+has a geomean of about 10% and positively correlates with                                                               the DIL is particularly more prominent there (Section IV-C1).
+communication size as expected. That is, as size increases,                                                             Communication DIL/CIL proportioning shows similar trend in
+there is increased resiliency to DIL as communication gets                                                              terms of GEMM MT. Overall, since different scenarios exhibit
+increasingly bandwidth-bound.                                                                                           different inefficiency signatures, using FiCCO schedules cog-
+                                                                                                                        nizant of these losses and guided by heuristics for selecting
+D. CIL for Compute and Communication
+                                                                                                                        the optimal schedule, stand to deliver better performance.
+   We compare overlapped and isolated execution of commu-
+nication/computation to quantify contention overheads.                                                                                     V. F I CCO: D ESIGN S PACE & H EURISTICS
+   1) GEMM CIL: To evaluate GEMM CIL, we execute                                                                          We discuss in this section both the design space unlocked
+8-way M-sharded GEMM concurrently with RCCL [8] or                                                                      via FiCCO and the schedules we study in this work.
+DMA-based all-gather and report the slowdown relative to
+isolated execution. In this case, as DIL is already baked into                                                          A. FiCCO Design Space Dimensions
+GEMM execution, slowdown observed is purely attributed to                                                                  Recall from Section III that FiCCO employs finer-grained
+contention between GEMM and communication.                                                                              compute-communication overlap, decomposing communica-
+   Observations: We depict CIL for GEMM in Figure 9 (left).                                                             tion one level deeper than shard-based techniques (for ex-
+We first observe that, DMA-based communication causes far                                                               ample, in an eight GPU system, one-eighth the transfer size
+lower CIL than traditional GPU core-driven communication                                                                of shard-based overlap). Specifically, while shard-based tech-
+(RCCL) in all cases. This is expected as DMAs eliminate                                                                 niques operate at shard granularity for both communication
+compute interference and reduce memory interference [5].                                                                and computation, FiCCO decouples the communication and
+While clean correlations as in DIL are not as evident for                                                               computation granularity. FiCCO communicates at the finer
+CIL, we observe that CIL generally increases as static memory                                                           granularity, while computation granularity is configurable–
+traffic (MT) for GEMM increases ( calculated as MK + NK                                                                 either matching or finer than shard-based techniques.
++ MN for a MNK GEMM). This is so as memory sub-system                                                                      Consequently, the design space dimensions possible with
+interference increases with larger GEMM memory traffic.                                                                 additional communication sharding in FiCCO are depicted in
+We also evaluate the CIL for shard-based overlap (omitted                                                               Figure 11a. Specifically, for communication, resultant buffers
+for space reasons) and observe a geomean CIL of 1.07×                                                                   can be 1-dimensional (1D) with sharding in row (M) di-
+slowdown as opposed to geomean CIL of 1.11× with FiCCO.                                                                 mension or 2-dimensional (2D) with sharding in column (K)
+   2) Communication CIL: Using the same setup as above we                                                               dimension allowing two choices in this dimension. Further,
+report slowdown in the communication kernel.                                                                            for computation, FiCCO unlocks four choices. First, in each
+
+
+
+                                                                                                                    6
+                           1.60                                                                                                                                    1.20
+                                  M>K                                                                                  M<K                                                 M>K                                                                 M<K
+
+
+
+
+                                                                                                                                             Contention slowdown
+     Contention slowdown                           w/ rccl         w/ dma                                                                                                                         w/ gemm
+                           1.50
+                                                                                                                                                                   1.15
+                           1.40
+                           1.30                                                                                                                                    1.10
+                           1.20
+                                                                                                                                                                   1.05
+                           1.10
+                           1.00                                                                                                                                    1.00
+
+
+
+
+                                                                                                                                                                          c14
+                                                                                                                                                                                c16
+                                                                                                                                                                                       c6
+                                                                                                                                                                                            c15
+                                                                                                                                                                                                  c2
+                                                                                                                                                                                                       c8
+                                                                                                                                                                                                            c4
+                                                                                                                                                                                                                 c9
+                                                                                                                                                                                                                      c10
+                                                                                                                                                                                                                            c11
+                                                                                                                                                                                                                                  c12
+                                                                                                                                                                                                                                         c13
+                                                                                                                                                                                                                                               c5
+                                                                                                                                                                                                                                                    c1
+                                                                                                                                                                                                                                                         c3
+                                                                                                                                                                                                                                                              c7
+                                  g14
+                                        g16
+
+
+                                                   g15
+
+
+
+
+                                                                              g10
+                                                                                    g11
+                                                                                                           g12
+                                                                                                                 g13
+                                              g6
+
+
+                                                         g2
+                                                              g8
+                                                                   g4
+                                                                         g9
+
+
+
+
+                                                                                                                       g5
+                                                                                                                            g1
+                                                                                                                                 g3
+                                                                                                                                       g7
+                                              Sorted by GEMM memory traffic (ascending)                                                                                               Sorted by GEMM memory traffic (ascending)
+
+Fig. 9: Contention Inefficiency caused Loss (CIL) for GEMM (left) and all-gather communication (right). We compare CIL
+for GEMM for both RCCL and DMA-based all-gather. CIL for all-gather is in comparison to 8-way M-sharded GEMM.
+
+                  1.2                                                                                     1.2
+ Proportion for GEMM
+
+
+
+
+                                                                                                                                                                                              1.2
+
+
+
+
+                                                                                                                   Proportion for Comm.
+                                              dil-8way        cil-8way                                                           dil-64way                     cil-64way
+
+                                                                                    Proportion for GEMM
+                  1.0                                                                                     1.0                                                                                                               dil         cil
+                                                                                                                                                                                                1
+                  0.8                                                                                     0.8                                                                                 0.8
+                  0.6                                                                                     0.6                                                                                 0.6
+                  0.4                                                                                     0.4                                                                                 0.4
+                  0.2                                                                                     0.2                                                                                 0.2
+                  0.0                                                                                     0.0                                                                                   0
+
+
+
+
+                                                                                                                                                                                                       c14
+                                                                                                                                                                                                       c16
+                                                                                                                                                                                                        c6
+                                                                                                                                                                                                       c15
+                                                                                                                                                                                                        c2
+                                                                                                                                                                                                        c8
+                                                                                                                                                                                                        c4
+                                                                                                                                                                                                        c9
+                                                                                                                                                                                                        c5
+                                                                                                                                                                                                        c1
+                                                                                                                                                                                                       c10
+                                                                                                                                                                                                        c3
+                                                                                                                                                                                                        c7
+                                                                                                                                                                                                       c11
+                                                                                                                                                                                                       c12
+                                                                                                                                                                                                       c13
+                              g14
+
+
+                              g16
+
+
+                              g15
+
+
+
+                              g11
+
+
+                              g10
+                              g12
+                              g13
+                               g6
+                               g5
+
+                               g2
+                               g1
+
+                               g9
+                               g8
+                               g7
+
+                               g3
+                               g4
+
+
+
+
+                                                                                                                 g14
+
+
+                                                                                                                 g16
+
+
+                                                                                                                 g15
+
+
+
+                                                                                                                 g11
+
+
+                                                                                                                 g10
+                                                                                                                 g12
+                                                                                                                 g13
+                                                                                                                  g6
+                                                                                                                  g5
+
+                                                                                                                  g2
+                                                                                                                  g1
+
+                                                                                                                  g9
+                                                                                                                  g8
+                                                                                                                  g7
+
+                                                                                                                  g3
+                                                                                                                  g4
+                                    GEMM OTB * MT (ascending)                                                           GEMM OTB * MT (ascending)                                                       GEMM memory traffic (ascending)
+           (a)                                                                              (b)                                                                                             (c)
+
+                                                          Fig. 10: Proportion of DIL versus CIL for GEMMs (g) and all-gather (c).
+
+
+overlap step, as GPUs receive buffers from all peer GPUs,                                                                              fused GEMM kernel or some invoke multiple GEMM kernels
+either a single/fused GEMM kernel using all the buffers can                                                                            (unfused). Finally, some schedules scatter output in final
+be executed (fused) or individual kernels allowing flexible                                                                            output space as they compute on non-contiguous rows in input
+scheduling (unfused) can be executed. Second, at the start                                                                             buffer. We assign DIL degree to schedules based largely on
+of the execution (first step), in order to hide exposed commu-                                                                         resultant GEMM size for it dictates the GEMM OTB and
+nication, each GPU can choose to start executing on its local                                                                          hence DIL (Section IV-E). Also, we assign CIL degree to a
+shard without waiting for any data from peer GPUs leading to                                                                           schedule based on the concurrency degree it manifests (e.g.,
+heterogeneous subsequent steps (hetero) or combine remote                                                                              uniform-fused-1D can execute communication, gather,
+and local buffers to ensure all steps execute the exact same                                                                           compute, and scatter at same time), stressing memory traffic
+GEMM (uniform). We next discuss concrete FiCCO schedules                                                                               which dictates CIL (Section IV-E).
+to study how each choice manifests tradeoffs in terms of                                                                                  While with our proposed design space (Section V-A) a total
+inefficiency loss signatures.                                                                                                          of eight schedules are possible, we study four of these. This
+                                                                                                                                       is because we observe that the inefficiency loss signatures of
+B. FiCCO Design Space Schedules                                                                                                        these missing schedules are strictly worse than the ones we
+   Figure 11b illustrates the four FiCCO schedules studied,                                                                            study. For the three other 2D schedules (M<K), row-sharding
+depicting their steady-state actions. We classify schedules by                                                                         is suboptimal. Thus, creating hetero or unfused schedules
+computation uniformity (uniform, hetero), granularity (fused,                                                                          that shard in row-dimension would further degrade perfor-
+unfused), and communication shape (1D, 2D). Also, recall                                                                               mance. Similarly, uniform-unfused-1D further shards
+from Section III-B that FiCCO may require gathering of                                                                                 hetero-unfused-1D, thereby increasing DIL while keep-
+finer-grained communication buffers (Gather) and potentially                                                                           ing CIL unchanged since the Scatter/Gather operations remain
+scattering outputs into the final output space (Scatter), depend-                                                                      unchanged.
+ing on the compute dimension and communication sharding
+choices. Finally, we assign each schedule an inefficiency loss                                                                         C. FiCCO Heuristics
+signature in terms of DIL and CIL, based on its resultant                                                                                Since FiCCO leads to distinct schedules, selecting the
+GEMM dimensions and concurrency degree.                                                                                                optimal one is essential for maximizing performance. While
+   Decoding the provided schedules in a comparative fash-                                                                              we can benchmark common GEMM dimensions in distributed
+ion, we observe that all schedules communicate the same                                                                                ML, the vast diversity of batch sizes, sequence lengths, and
+effective buffer size and that uniform-fused-2D com-                                                                                   model scales makes exhaustive offline profiling infeasible. We
+municates 2D buffers. Next, to ensure uniformity in GEMM                                                                               therefore utilize heuristics to enable optimal FiCCO execution
+sizes, all uniform schedules incur gather of local and remote                                                                          based on static parameters, that also works for future/unseen
+received buffers. Next, some schedules either invoke single                                                                            shapes and sizes. The heuristics can aide frameworks and
+
+
+
+                                                                                                                                   7
+                        FiCCO Comm. dimensions                         2x                                              Comm.                    Gather                Compute                  Scatter               DIL         CIL
+
+                            1D                      2D                                                               To GPU0 from Gather local and             Schedule fused or               Scatter              GEMM     Concurrency
+                                                                                                                    every other GPU remote chunks               unfused GEMM                output chunks         size/shape contention
+                                  K                 K/4
+                                                                                      uniform                                                       K                      K         N
+                         M/4                   M                                                                              K
+                                                                                       fused                          M/4                                                                            4x             Low          High
+
+
+
+
+                                                                                                                                                                                     W1
+              Chunk shards for finer-grain communication                                                                                   M                      M
+                                                                                         1D                                                                                                                       G = MNK        4-way
+                                                                                                                                                                                     N
+                    FiCCO Compute dimensions                           4x             hetero                                   K
+                                                                                      fused                                                                                                          3x            Medium       Medium
+
+
+
+
+                                                                                                                                                                                     W1
+                                                                                                                       M/4                                    3M/4
+                   uniform                          heterogenous                        1D                                                                                                                    G = 3MNK/4         3-way
+              S0               S1                   S0             S1                  hetero                                                                              K         N
+ fused
+
+
+
+
+           I0-0            I0-1                                 I1-1                                                          K                                M/4
+                                               I0                                     unfused                                                                                                                       High         Low
+
+
+
+
+                                                                        W0
+                                    W0
+
+
+
+
+                           I1-1                          W0
+                   W0
+
+
+
+
+                                                                I2-1
+
+
+
+
+                                                                                                                                                                                     W1
+           I1-0                                                                                                       M/4
+           I2-0            I2-1                                 I3-1                     1D
+           I3-0            I3-1                                                                                                                                        3x                                         G = MNK/4      2-way
+ unfused
+
+
+
+
+           I0-0           I0-1
+                                               I0               I1-1                                                                                                             N
+                                                                                      uniform                                K/4
+                  W0
+
+
+
+
+                                   W0
+
+
+
+
+                                                     W0
+
+
+
+
+                                                                       W0
+                                                                                                                                                                                     K/4
+           4x             4x                                    3x                     fused                            M                  4M                 4M                                                    Low         Medium
+                                                                                         2D                                                                                                                       G = MNK        3-way
+           Schedule shard-level or finer-grain computations
+
+                                         (a)                                                                                                                          (b)
+  Fig. 11: (a) FiCCO design space resulting in eight possible schedules. (S: Step) (b) FiCCO schedules under consideration.
+
+       1                 ID ( M > K)                                   2D (M < K)                                     ID ( M > K)                                                                                             2D (M < K)
+   DIL            Low            Medium                  High                                                                   uniform-fused-1D             hetero-fused-1D               hetero-unfused-1D          uniform-fused-2D
+                                                                                        Speedup over serial
+
+
+
+
+                                                                                                              1.7
+                                                                                                                             (OTB*MT) < TS                         Rest                   (OTB*MT) > 5*TS
+   CIL            High           Medium                  Low                                                  1.5
+              uniform             hetero             hetero                 uniform                           1.3
+       2       fused              fused             unfused                  fused                            1.1
+                 1D                 1D                1D                       2D                             0.9
+   OTB            Low            Medium                  High                                                 0.7
+                                                                                                              0.5
+                                                                                                                      g15
+
+                                                                                                                              g16
+
+                                                                                                                                     g14
+
+
+
+
+                                                                                                                                                                                      g10
+
+                                                                                                                                                                                              g13
+
+                                                                                                                                                                                                    g12
+
+                                                                                                                                                                                                            g11
+                                                                                                                                               g2
+
+                                                                                                                                                        g6
+
+                                                                                                                                                             g4
+
+                                                                                                                                                                      g8
+
+                                                                                                                                                                                g9
+
+
+
+
+                                                                                                                                                                                                                    g3
+
+                                                                                                                                                                                                                           g1
+
+                                                                                                                                                                                                                                 g7
+
+                                                                                                                                                                                                                                         g5
+   MT             Low            Medium                  High
+                     Machine               5x TS                                                                                                             Sorted by winning schedule
+                   TS = OTB*MT
+                                           (a)                                                                                                                                 (b)
+   Fig. 12: (a) FiCCO heuristics – GEMM op-to-byte/OTB, GEMM memory traffic/MT). (b) FiCCO schedules performance.
+
+
+runtimes to pick bespoke schedules. We present our design for                                                                       byte × memory bandwidth = FLOPs). We then assign uniform-
+this heuristic in Figure 12a. Specifically, we first observe that                                                                   fused-1D to scenarios where the combined OTB and MT is
+relative magnitude of GEMM row (M) and column dimension                                                                             below this machine-level threshold, while hetero-unfused-1D
+(K) can provide a clear guidance on choice of communication                                                                         is assigned when the combined metric exceeds the threshold
+shape to pick: 1D if M>K or 2D otherwise in order to                                                                                by 5×. We evaluate this heuristic both for scenarios under
+minimize resultant DIL (Section IV-C1). For latter, there is                                                                        consideration and for synthetic scenarios and report efficacy
+a single FiCCO schedule available (uniform-fused-2D). For                                                                           in Section VI-D.
+the former, first recall that each FiCCO schedule has a unique
+                                                                                                                                                                  VI. F I CCO E VALUATION
+and inherent inefficiency loss signature (DIL-CIL degree) as
+depicted in Figure 12a. As such, we match each schedule with                                                                        A. FiCCO Realization
+operations least sensitive to their inherent inefficiencies. As                                                                        Our system setup is described in Section IV-B1. FiCCO
+an example, since uniform-fused-1D inherently manifests low                                                                         schedules are implemented in PyTorch by invoking standard
+DIL and high CIL, it is selected for scenarios with low GEMM                                                                        GEMM libraries and DMA transfers, without modifying the
+op-to-byte (OTB) and low memory traffic (MT), since DIL                                                                             underlying optimized kernels. We use hipStreamWrite and hip-
+negatively correlates with OTB and CIL positively correlates                                                                        StreamWait [3] for lightweight synchronization. To incorporate
+with MT (Section IV-E). We similarly match hetero-unfused-                                                                          FiCCO, the user provides only the GEMM inputs; based on the
+1D with high combination of OTB and MT and assign hetero-                                                                           GEMM dimensions our heuristic will select and execute the
+fused-1D schedule otherwise.                                                                                                        optimum overlap schedule, replacing the serial communication
+                                                                                                                                    and computation.
+   To demarcate the resulting OTB and MT tranches, we
+leverage machine-level hardware characteristics. We define a                                                                        B. Shard-based Overlap: Limitations
+combined machine threshold using combined OTB and MT for                                                                              We start with motivating FiCCO by demonstrating speedup
+underlying GPU in terms of its peak compute FLOPs (op-to-                                                                           potential with ideal computation-communication overlap, and
+
+
+
+                                                                                                                               8
+                                                                                                                                                    2.0
+
+
+
+
+                                                                                                                               speedup vs. serial
+  Speedup vs. serial   2.00                                                                                                                                                                    1.50
+                                                                              ideal        shard-overlap                                            1.5                   1.24   1.27   1.35
+                       1.50
+
+
+
+
+                                                                                                                                  Geomean
+                                                                                                                                                                   0.98
+                                                                                                                                                    1.0
+                       1.00                                                                                                                               0.44
+                                                                                                                                                    0.5
+                       0.50                                                                                                                         0.0
+                       0.00
+                                         g11
+
+
+
+
+                                                                        g16
+                                                                              g15
+
+
+                                                                                         g14
+
+
+                                                                                                    g12
+                                                                                                          g13
+                                                                                                                g10
+                               g6
+                                    g5
+
+
+                                               g7
+                                                    g2
+                                                         g3
+                                                              g1
+                                                                   g9
+
+
+
+                                                                                    g8
+
+
+                                                                                               g4
+                               Sorted by GEMM/communication-time ratio (ascending)
+                                                                                                                                    Fig. 14: Comparing FiCCO to other techniques.
+                              Fig. 13: Deficiencies of shard-based overlap.
+
+                                                                                                                                                            VII. R ELATED W ORKS
+limitations of current shard-overlap based techniques in Fig-                                                                Table II compares prior compute-communication overlap
+ure 13. Ideal performance assumes operator decomposition                                                                  works. There has been significant research to overlap in-
+scales linearly with no slowdowns from decomposition or                                                                   dependent computation and communication [19], [20], [24],
+contention. We implement shard-overlap following PyTorch                                                                  [31], [48], [49], but these solutions do not work in de-
+Async Tensor Parallelism [28] technique.                                                                                  pendent computation-communication. CoCoNet [32], Google-
+   Ideal performance follows a bell curve relative to the                                                                 Decomposition [60], Centauri [13], Flux [12], Comet [64],
+GEMM/communication time ratio (along x-axis), that is,                                                                    Domino [59], Concerto [16], FlashOverlap [27] decompose the
+the more balanced the operators the greater the benefit of                                                                operators, and schedule the overlap such that the dependency
+perfect overlap. However, shard-based overlap, with peer-                                                                 is satisfied. However, these solutions do not use DMAs, and
+to-peer communication, under-utilizes the available network                                                               therefore incur contention between communication [29] and
+links in AMD Instinct™ MI300X (we observe 7× communi-                                                                     computation kernels for the compute resources. We use DMAs
+cation slowdown). We observe a negative correlation between                                                               for communication, thereby reducing contention. In addition,
+speedup and the GEMM/communication time ratio; as GEMM                                                                    several of the solutions require writing a customized GEMM
+execution time increases (moving rightward on the x-axis),                                                                kernel to suit their implementation, and do not use the existing
+they better mask communication inefficiencies. Regardless,                                                                highly optimized GEMM kernels [2], [10]. We make no
+shard-overlap does not attain speedups.                                                                                   changes to the existing GEMM kernels to take advantage of
+C. FiCCO Schedules Comparison                                                                                             their optimizations.
+                                                                                                                             TileLink [67] and Fused-Operators [50] employ fused ker-
+  Figure 12b depicts the speedups attained by the FiCCO
+                                                                                                                          nels of compute and communication operators. However, fused
+schedules we discussed, with our heuristic selections overlaid.
+                                                                                                                          kernels often require user intervention to implement communi-
+Since 2D DMA memory copies are currently unsupported,
+                                                                                                                          cation primitives and tiling optimizations. Furthermore, Fused-
+we emulate them using equal-sized 1D copies. Unlike shard-
+                                                                                                                          Operators does not use DMA, thereby increasing compute
+based methods, FiCCO leverages all-to-all communication to
+                                                                                                                          contention. DMA based compute communication solutions
+improve network utilization, attaining speedups of up to 1.6×
+                                                                                                                          include ConCCL [5], PyTorch AsyncTP [28] and Distributed-
+with 1D schedules and 1.7× with emulated 2D schedules.
+                                                                                                                          GEMM [6]. ConCCL works only if compute and commu-
+D. FiCCO Heuristic Evaluation                                                                                             nication operators are independent. PyTorch AsyncTP, and
+   Our proposed heuristic in Figure 12a predicts the right                                                                Distributed-GEMM employ shard-overlap, they are optimized
+schedule for all scenarios we study in this work. To further                                                              for switch based P2P topologies but do not work well on
+evaluate the efficacy of this heuristic, we generate sixteen                                                              full-mesh topologies. We employ finer-grain overlap that max-
+additional synthetic scenarios with diverse OTB and MT                                                                    imally saturate the bandwidth on full-mesh topologies and
+combinations. Across these scenarios, our proposed heuristic                                                              achieve good performance. ACE [52] and T3 [46] propose
+predicts the right schedule for 81% of scenarios, further un-                                                             new hardware modules to handle communication to reduce
+derscoring its efficacy. For the scenarios where we mispredict,                                                           compute contention. They require hardware changes, while
+the schedule proposed by our heuristic loses approximately                                                                ours is a software solution.
+14% of the optimal speedup.                                                                                                  Finally, based on a thorough characterization of overlap
+                                                                                                                          inefficiencies, we provide a design space for finer grain overlap
+E. FiCCO Comparison To Other Overlap Techniques                                                                           and provide heuristics to pick the optimal one. To the best of
+  Figure 14 depicts geomean speedups across all scenarios for                                                             our knowledge, this design space exploration has not been
+shard-overlap, and FiCCO 1D and emulated 2D schedules.                                                                    done before.
+We also implement FiCCO with GPU core-based RCCL
+                                                                                                                                                                 VIII. D ISCUSSION
+communication denoted as FiCCO-rccl. Finally, we attempted
+comparing against Triton Distributed [66] but out-of-memory                                                               A. FiCCO Benefits For Switch-based Topologies
+(OOM) errors in Triton Distributed for our GEMMs precluded                                                                  While we study FiCCO for direct/fully-connected topolo-
+successful execution.                                                                                                     gies, its benefits carry over to other topologies as well
+
+
+
+                                                                                                                      9
+                      TABLE II: Comparison of FiCCO with prior compute-communication overlap works.
+ Name                                  Dependent         DMA-       Use Optimized                Full-Mesh          Require no          Design Space
+                                      Comp/Comm          based     GEMM Libraries                 Support          HW Changes           Exploration
+ CoCoNet [32], Concerto [16],             ✓                ✗             ✗                            ✗                 ✓                    ✗
+ Google-Decomp [60]
+ Centauri [13],Domino [59],                 ✓              ✗                     ✓                     ✗                  ✓                    ✗
+ Comet [64], FlashOverlap [27]
+ Flux [12], Fused-Ops. [50]                 ✓              ✗                     ✗                    ✓                   ✓                    ✗
+ TileLink [67]                              ✓              ✓                     ✗                    ✓                   ✓                    ✗
+ ConCCL [5]                                 ✗              ✓                     ✓                    ✓                   ✓                    ✗
+ AsyncTP [28], Dist-Gemm [6]                ✓              ✓                     ✓                    ✗                   ✓                    ✗
+ ACE [52]                                   ✓              ✗                     ✓                    ✓                   ✗                    ✗
+ T3 [46]                                    ✓              ✓                     ✓                    ✓                   ✗                    ✗
+ FiCCO                                      ✓              ✓                     ✓                    ✓                   ✓                    ✓
+
+
+(e.g., switch-connected topologies). As an example, on de-                                              IX. C ONCLUSION
+composing a GEMM, the tradeoff (Section IV) between
+                                                                                 We make a case in this work for finer-grain compute-
+increased decomposition loss and reduced contention (due to
+                                                                              communication overlap which we term FiCCO, where we
+decreased memory-traffic) would persist even in a switch-
+                                                                              argue for finer-granularity, one-level deeper sharding than the
+topology. Specifically, Figure 12b/hetero-infused-1D shows
+                                                                              commonly deployed shard-level overlap, to unlock compute/-
+computation sharding incurs lower contention without high
+                                                                              communication overlap for wider set of network topologies,
+decomposition loss and this is agnostic of underlying network
+                                                                              finer-grain dataflow and more. We show that FiCCO opens up
+topology. As such, FiCCO-like sharding can enable superior
+                                                                              a wider design space of execution schedules than possible at
+dataflow (Figure 5) for all topologies1 .
+                                                                              shard-level alone and couple this with detailed inefficiency
+                                                                              loss characterization to provide heuristics to pick bespoke
+B. FiCCO Power Behavior
+                                                                              schedules. Across scenarios from real-world ML deployments,
+   Concurrent kernel execution can utilize GPU power budget                   we demonstrate FiCCO delivers up to 1.6× speedup.
+more efficiently via utilization of heterogeneous resources
+(compute, network, etc.). Prior work [4] analyzes concurrency                                              R EFERENCES
+power and shows that power gets re-allocated between com-
+                                                                               [1] (2023) Amd instinct™ mi300x accelerators. AMD. [On-
+pute and memory based on what is stressed. It also shows that                      line]. Available: https://www.amd.com/en/products/accelerators/instinct/
+concurrent power can be higher than the isolated execution                         mi300/mi300x.html
+of compute or communication. However, FiCCO harnesses                          [2] (2025) hipblaslt. AMD. [Online]. Available: https://github.com/ROCm/
+                                                                                   rocm-libraries
+DMA communication which is more energy-efficient [47], and                     [3] “HIP runtime API reference: Stream memory operations,”
+thus FiCCO power drawn will be lower. Finally, overlapping                         https://rocm.docs.amd.com/projects/HIP/en/latest/doxygen/html/group
+computation and communication stands to mitigate problem-                             stream m.html, Advanced Micro Devices, Inc., 2025, hIP 7.2.53211
+                                                                                   Documentation. Accessed: May 1, 2026.
+atic power swings [17], [35], which is observed in the serial                  [4] S. Aga and M. A. Ibrahim, “Comppow: A case for component-
+execution of computation and communication.                                        level gpu power management,” 2026. [Online]. Available: https:
+                                                                                   //arxiv.org/abs/2605.21847
+                                                                               [5] A. Agrawal, S. Aga, S. Pati, and M. Islam, “Conccl: Optimizing
+C. FiCCO with Device-initiated Communication                                       ML concurrent computation and communication with GPU DMA
+                                                                                   engines,” in IEEE International Symposium on Performance Analysis
+   Recent works such as GPU-initiated networking (GIN) [25]                        of Systems and Software, ISPASS 2025, Ghent, Belgium, May
+enable GPUs to directly initiate communication, eliminating                        11-13, 2025. IEEE, 2025, pp. 1–11. [Online]. Available: https:
+CPU coordination overhead and allowing efficient fusion.                           //doi.org/10.1109/ISPASS64960.2025.00018
+                                                                               [6] Ali Hassani, Michael Isaev, Nic McDonald, Jie Ren, Vijay
+While beneficial, they also steal GPU core cycles to initiate                      Thakkar, Haicheng Wu, and Humphrey Shi, “[Distributed
+and manage communication and as such, both GIN and host-                           GEMM: A novel CUTLASS-based implementation of Tensor
+initiated communication are judiciously employed. That said,                       Parallelism for NVLink-enabled systems,” https://blog.shi-labs.
+                                                                                   com/distributed-gemm-88be6a481e2b, December 2024.
+FiCCO is fully compatible with both device-initiated and                       [7] “HIP: C++ Heterogeneous-Compute Interface for Portability,” https://
+host-initiated communication and can be coupled with either.                       github.com/ROCm/HIP, AMD, 2024.
+FiCCO schedules and associated heuristics are mainly gov-                      [8] “ROCm Communication Collectives Library (RCCL),” https://github.
+                                                                                   com/ROCm/rccl, AMD, 2024.
+erned by static GEMM dimensions (op-to-byte and memory                         [9] “ROCm: HIPStream,” https://rocm.docs.amd.com/projects/HIP/en/latest/
+traffic) and as such these heuristics should also carry over                       reference/hip runtime api/modules/stream management.html, AMD,
+(with one-time tuning cost for thresholds) to device-initiated                     2024.
+                                                                              [10] “ROCm/rocBLAS: Next generation BLAS implementation for ROCm
+communication.                                                                     platform,” https://github.com/ROCm/rocBLAS, AMD, 2024.
+                                                                              [11] AMD.          (2025)       Hip      graphs.       [Online].      Avail-
+  1 We avoid explicit competitive analysis in compliance with our host             able: https://rocm.docs.amd.com/projects/HIP/en/docs-develop/how-to/
+industry institution’s publication policy.                                         hip runtime api/hipgraph.html
+
+
+
+
+                                                                         10
+[12] L. Chang, W. Bao, Q. Hou, C. Jiang, N. Zheng, Y. Zhong,                                Neural Information Processing Systems 2022, NeurIPS 2022, New
+     X. Zhang, Z. Song, Z. Jiang, H. Lin, X. Jin, and X. Liu,                               Orleans, LA, USA, November 28 - December 9, 2022, S. Koyejo,
+     “FLUX: fast software-based communication overlap on gpus through                       S. Mohamed, A. Agarwal, D. Belgrave, K. Cho, and A. Oh, Eds.,
+     kernel fusion,” CoRR, vol. abs/2406.06858, 2024. [Online]. Available:                  2022. [Online]. Available: http://papers.nips.cc/paper files/paper/2022/
+     https://doi.org/10.48550/arXiv.2406.06858                                              hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract-Conference.html
+[13] C. Chen, X. Li, Q. Zhu, J. Duan, P. Sun, X. Zhang, and                            [22] DeepSeek-AI, A. Liu, B. Feng, B. Xue, B. Wang, B. Wu, C. Lu,
+     C. Yang, “Centauri: Enabling efficient scheduling for communication-                   C. Zhao, C. Deng, C. Zhang, C. Ruan, D. Dai, D. Guo, D. Yang,
+     computation overlap in large model training via communication                          D. Chen, D. Ji, E. Li, F. Lin, F. Dai, F. Luo, G. Hao, G. Chen, G. Li,
+     partitioning,” ser. ASPLOS ’24. New York, NY, USA: Association                         H. Zhang, H. Bao, H. Xu, H. Wang, H. Zhang, H. Ding, H. Xin,
+     for Computing Machinery, 2024, p. 178–191. [Online]. Available:                        H. Gao, H. Li, H. Qu, J. L. Cai, J. Liang, J. Guo, J. Ni, J. Li, J. Wang,
+     https://doi.org/10.1145/3620666.3651379                                                J. Chen, J. Chen, J. Yuan, J. Qiu, J. Li, J. Song, K. Dong, K. Hu,
+[14] M. Chen, J. Tworek, H. Jun, Q. Yuan, H. P. de Oliveira Pinto,                          K. Gao, K. Guan, K. Huang, K. Yu, L. Wang, L. Zhang, L. Xu, L. Xia,
+     J. Kaplan, H. Edwards, Y. Burda, N. Joseph, G. Brockman, A. Ray,                       L. Zhao, L. Wang, L. Zhang, M. Li, M. Wang, M. Zhang, M. Zhang,
+     R. Puri, G. Krueger, M. Petrov, H. Khlaaf, G. Sastry, P. Mishkin,                      M. Tang, M. Li, N. Tian, P. Huang, P. Wang, P. Zhang, Q. Wang,
+     B. Chan, S. Gray, N. Ryder, M. Pavlov, A. Power, L. Kaiser,                            Q. Zhu, Q. Chen, Q. Du, R. J. Chen, R. L. Jin, R. Ge, R. Zhang,
+     M. Bavarian, C. Winter, P. Tillet, F. P. Such, D. Cummings,                            R. Pan, R. Wang, R. Xu, R. Zhang, R. Chen, S. S. Li, S. Lu, S. Zhou,
+     M. Plappert, F. Chantzis, E. Barnes, A. Herbert-Voss, W. H. Guss,                      S. Chen, S. Wu, S. Ye, S. Ye, S. Ma, S. Wang, S. Zhou, S. Yu, S. Zhou,
+     A. Nichol, A. Paino, N. Tezak, J. Tang, I. Babuschkin, S. Balaji, S. Jain,             S. Pan, T. Wang, T. Yun, T. Pei, T. Sun, W. L. Xiao, W. Zeng, W. Zhao,
+     W. Saunders, C. Hesse, A. N. Carr, J. Leike, J. Achiam, V. Misra,                      W. An, W. Liu, W. Liang, W. Gao, W. Yu, W. Zhang, X. Q. Li, X. Jin,
+     E. Morikawa, A. Radford, M. Knight, M. Brundage, M. Murati,                            X. Wang, X. Bi, X. Liu, X. Wang, X. Shen, X. Chen, X. Zhang,
+     K. Mayer, P. Welinder, B. McGrew, D. Amodei, S. McCandlish,                            X. Chen, X. Nie, X. Sun, X. Wang, X. Cheng, X. Liu, X. Xie, X. Liu,
+     I. Sutskever, and W. Zaremba, “Evaluating large language models                        X. Yu, X. Song, X. Shan, X. Zhou, X. Yang, X. Li, X. Su, X. Lin,
+     trained on code,” CoRR, vol. abs/2107.03374, 2021. [Online]. Available:                Y. K. Li, Y. Q. Wang, Y. X. Wei, Y. X. Zhu, Y. Zhang, Y. Xu, Y. Xu,
+     https://arxiv.org/abs/2107.03374                                                       Y. Huang, Y. Li, Y. Zhao, Y. Sun, Y. Li, Y. Wang, Y. Yu, Y. Zheng,
+[15] Z. Chen, S. Wang, T. Xiao, Y. Wang, S. Chen, X. Cai,                                   Y. Zhang, Y. Shi, Y. Xiong, Y. He, Y. Tang, Y. Piao, Y. Wang, Y. Tan,
+     J. He, and J. Wang, “Revisiting scaling laws for language                              Y. Ma, Y. Liu, Y. Guo, Y. Wu, Y. Ou, Y. Zhu, Y. Wang, Y. Gong,
+     models: The role of data quality and training strategies,” in                          Y. Zou, Y. He, Y. Zha, Y. Xiong, Y. Ma, Y. Yan, Y. Luo, Y. You,
+     Proceedings of the 63rd Annual Meeting of the Association for                          Y. Liu, Y. Zhou, Z. F. Wu, Z. Z. Ren, Z. Ren, Z. Sha, Z. Fu, Z. Xu,
+     Computational Linguistics (Volume 1: Long Papers), W. Che,                             Z. Huang, Z. Zhang, Z. Xie, Z. Zhang, Z. Hao, Z. Gou, Z. Ma, Z. Yan,
+     J. Nabende, E. Shutova, and M. T. Pilehvar, Eds. Vienna, Austria:                      Z. Shao, Z. Xu, Z. Wu, Z. Zhang, Z. Li, Z. Gu, Z. Zhu, Z. Liu, Z. Li,
+     Association for Computational Linguistics, Jul. 2025, pp. 23 881–23 899.               Z. Xie, Z. Song, Z. Gao, and Z. Pan, “Deepseek-v3 technical report,”
+     [Online]. Available: https://aclanthology.org/2025.acl-long.1163/                      2025. [Online]. Available: https://arxiv.org/abs/2412.19437
+[16] S. Cheng, S. Lin, L. Diao, H. Wu, S. Wang, C. Si, Z. Liu, X. Zhao, J. Du,         [23] A. Grattafiori, A. Dubey, A. Jauhri, A. Pandey, A. Kadian, A. Al-
+     W. Lin, and Y. You, “Concerto: Automatic communication optimization                    Dahle, A. Letman, A. Mathur, A. Schelten, A. Vaughan, A. Yang,
+     and scheduling for large-scale deep learning,” in Proceedings of the                   A. Fan, A. Goyal, A. Hartshorn, A. Yang, A. Mitra, A. Sravankumar,
+     30th ACM International Conference on Architectural Support for                         A. Korenev, A. Hinsvark, A. Rao, A. Zhang, A. Rodriguez,
+     Programming Languages and Operating Systems, Volume 1, ASPLOS                          A. Gregerson, A. Spataru, B. Roziere, B. Biron, B. Tang, B. Chern,
+     2025, Rotterdam, The Netherlands, 30 March 2025 - 3 April 2025,                        C. Caucheteux, C. Nayak, C. Bi, C. Marra, C. McConnell, C. Keller,
+     L. Eeckhout, G. Smaragdakis, K. Liang, A. Sampson, M. A. Kim, and                      C. Touret, C. Wu, C. Wong, C. C. Ferrer, C. Nikolaidis, D. Allonsius,
+     C. J. Rossbach, Eds. ACM, 2025, pp. 198–213. [Online]. Available:                      D. Song, D. Pintz, D. Livshits, D. Wyatt, D. Esiobu, D. Choudhary,
+     https://doi.org/10.1145/3669940.3707223                                                D. Mahajan, D. Garcia-Olano, D. Perino, D. Hupkes, E. Lakomkin,
+[17] E. Choukse, B. Warrier, S. Heath, L. Belmont, A. Zhao, H. A. Khan,                     E. AlBadawy, E. Lobanova, E. Dinan, E. M. Smith, F. Radenovic,
+     B. Harry, M. Kappel, R. J. Hewett, K. Datta, Y. Pei, C. Lichtenberger,                 F. Guzmán, F. Zhang, G. Synnaeve, G. Lee, G. L. Anderson, G. Thattai,
+     J. Siegler, D. Lukofsky, Z. Kahn, G. Sahota, A. Sullivan, C. Frederick,                G. Nail, G. Mialon, G. Pang, G. Cucurell, H. Nguyen, H. Korevaar,
+     H. Thai, R. Naughton, D. Jurnove, J. Harp, R. Carper, N. Mahalingam,                   H. Xu, H. Touvron, I. Zarov, I. A. Ibarra, I. Kloumann, I. Misra,
+     S. Varkala, A. G. Kumbhare, S. Desai, V. Ramamurthy, P. Gottumukkala,                  I. Evtimov, J. Zhang, J. Copet, J. Lee, J. Geffert, J. Vranes, J. Park,
+     G. Bhatia, K. Wildstone, L. Olariu, I. Incorvaia, A. Wetmore, P. Ram,                  J. Mahadeokar, J. Shah, J. van der Linde, J. Billock, J. Hong,
+     M. Raghuraman, M. Ayna, M. Kendrick, R. Bianchini, A. Hurst,                           J. Lee, J. Fu, J. Chi, J. Huang, J. Liu, J. Wang, J. Yu, J. Bitton,
+     R. Zamani, X. Li, M. Petrov, G. Oden, R. Carmichael, T. Li,                            J. Spisak, J. Park, J. Rocca, J. Johnstun, J. Saxe, J. Jia, K. V.
+     A. Gupta, P. Patel, N. Dattani, L. Marwong, R. Nertney, H. Kobayashi,                  Alwala, K. Prasad, K. Upasani, K. Plawiak, K. Li, K. Heafield,
+     J. Liott, M. Enev, D. Ramakrishnan, I. Buck, and J. Alben, “Power                      K. Stone, K. El-Arini, K. Iyer, K. Malik, K. Chiu, K. Bhalla,
+     stabilization for ai training datacenters,” 2025. [Online]. Available:                 K. Lakhotia, L. Rantala-Yeary, L. van der Maaten, L. Chen, L. Tan,
+     https://arxiv.org/abs/2508.14318                                                       L. Jenkins, L. Martin, L. Madaan, L. Malo, L. Blecher, L. Landzaat,
+[18] W. Chu, X. Xie, J. Yu, J. Wang, A. Phanishayee, C. Tang, Y. Hao,                       L. de Oliveira, M. Muzzi, M. Pasupuleti, M. Singh, M. Paluri,
+     J. Huang, M. Ozdal, J. Wang, V. Goswami, N. Goyal, A. Kadian,                          M. Kardas, M. Tsimpoukelli, M. Oldham, M. Rita, M. Pavlova,
+     A. Gu, C. Cai, F. Tian, X. Wang, M. Si, P. Balaji, C.-H. Chu,                          M. Kambadur, M. Lewis, M. Si, M. K. Singh, M. Hassan, N. Goyal,
+     and J. Park, “Scaling llama 3 training with efficient parallelism                      N. Torabi, N. Bashlykov, N. Bogoychev, N. Chatterji, N. Zhang,
+     strategies,” in Proceedings of the 52nd Annual International Symposium                 O. Duchenne, O. Çelebi, P. Alrassy, P. Zhang, P. Li, P. Vasic,
+     on Computer Architecture, ser. ISCA ’25. New York, NY, USA:                            P. Weng, P. Bhargava, P. Dubal, P. Krishnan, P. S. Koura, P. Xu,
+     Association for Computing Machinery, 2025, p. 1703–1716. [Online].                     Q. He, Q. Dong, R. Srinivasan, R. Ganapathy, R. Calderer, R. S.
+     Available: https://doi.org/10.1145/3695053.3731410                                     Cabral, R. Stojnic, R. Raileanu, R. Maheswari, R. Girdhar, R. Patel,
+[19] A. Danalis, K.-Y. Kim, L. Pollock, and M. Swany, “Transformations                      R. Sauvestre, R. Polidoro, R. Sumbaly, R. Taylor, R. Silva, R. Hou,
+     to parallel codes for communication-computation overlap,” in SC ’05:                   R. Wang, S. Hosseini, S. Chennabasappa, S. Singh, S. Bell, S. S. Kim,
+     Proceedings of the 2005 ACM/IEEE Conference on Supercomputing,                         S. Edunov, S. Nie, S. Narang, S. Raparthy, S. Shen, S. Wan, S. Bhosale,
+     2005, pp. 58–58.                                                                       S. Zhang, S. Vandenhende, S. Batra, S. Whitman, S. Sootla, S. Collot,
+[20] A. Danalis, L. Pollock, M. Swany, and J. Cavazos, “Mpi-aware                           S. Gururangan, S. Borodinsky, T. Herman, T. Fowler, T. Sheasha,
+     compiler optimizations for improving communication-computation                         T. Georgiou, T. Scialom, T. Speckbacher, T. Mihaylov, T. Xiao, U. Karn,
+     overlap,” in Proceedings of the 23rd International Conference on                       V. Goswami, V. Gupta, V. Ramanathan, V. Kerkez, V. Gonguet, V. Do,
+     Supercomputing, ser. ICS ’09. New York, NY, USA: Association                           V. Vogeti, V. Albiero, V. Petrovic, W. Chu, W. Xiong, W. Fu, W. Meers,
+     for Computing Machinery, 2009, p. 316–325. [Online]. Available:                        X. Martinet, X. Wang, X. Wang, X. E. Tan, X. Xia, X. Xie, X. Jia,
+     https://doi.org/10.1145/1542275.1542321                                                X. Wang, Y. Goldschlag, Y. Gaur, Y. Babaei, Y. Wen, Y. Song,
+[21] T. Dao, D. Y. Fu, S. Ermon, A. Rudra, and C. Ré, “Flashattention: Fast                Y. Zhang, Y. Li, Y. Mao, Z. D. Coudert, Z. Yan, Z. Chen, Z. Papakipos,
+     and memory-efficient exact attention with io-awareness,” in Advances                   A. Singh, A. Srivastava, A. Jain, A. Kelsey, A. Shajnfeld, A. Gangidi,
+     in Neural Information Processing Systems 35: Annual Conference on                      A. Victoria, A. Goldstand, A. Menon, A. Sharma, A. Boesenberg,
+
+
+
+
+                                                                                  11
+     A. Baevski, A. Feinstein, A. Kallet, A. Sangani, A. Teo, A. Yunus,                        distributed-w-torchtitan-introducing-async-tensor-parallelism-in-pytorch/
+     A. Lupu, A. Alvarado, A. Caples, A. Gu, A. Ho, A. Poulton,                                209487, September 2024.
+     A. Ryan, A. Ramchandani, A. Dong, A. Franco, A. Goyal, A. Saraf,                     [29] Z. Hu, S. Shen, T. Bonato, S. Jeaugey, C. Alexander, E. Spada,
+     A. Chowdhury, A. Gabriel, A. Bharambe, A. Eisenman, A. Yazdan,                            J. Dinan, J. Hammond, and T. Hoefler, “Demystifying nccl: An
+     B. James, B. Maurer, B. Leonhardi, B. Huang, B. Loyd, B. D.                               in-depth analysis of gpu communication protocols and algorithms,”
+     Paola, B. Paranjape, B. Liu, B. Wu, B. Ni, B. Hancock, B. Wasti,                          2025. [Online]. Available: https://arxiv.org/abs/2507.04786
+     B. Spence, B. Stojkovic, B. Gamido, B. Montalvo, C. Parker, C. Burton,               [30] Y. Huang, Y. Cheng, A. Bapna, O. Firat, D. Chen, M. X. Chen, H. Lee,
+     C. Mejia, C. Liu, C. Wang, C. Kim, C. Zhou, C. Hu, C.-H. Chu,                             J. Ngiam, Q. V. Le, Y. Wu, and Z. Chen, “Gpipe: Efficient training
+     C. Cai, C. Tindal, C. Feichtenhofer, C. Gao, D. Civin, D. Beaty,                          of giant neural networks using pipeline parallelism,” in Advances in
+     D. Kreymer, D. Li, D. Adkins, D. Xu, D. Testuggine, D. David,                             Neural Information Processing Systems 32: Annual Conference on
+     D. Parikh, D. Liskovich, D. Foss, D. Wang, D. Le, D. Holland,                             Neural Information Processing Systems 2019, NeurIPS 2019, December
+     E. Dowling, E. Jamil, E. Montgomery, E. Presani, E. Hahn, E. Wood,                        8-14, 2019, Vancouver, BC, Canada, H. M. Wallach, H. Larochelle,
+     E.-T. Le, E. Brinkman, E. Arcaute, E. Dunbar, E. Smothers, F. Sun,                        A. Beygelzimer, F. d’Alché-Buc, E. B. Fox, and R. Garnett, Eds.,
+     F. Kreuk, F. Tian, F. Kokkinos, F. Ozgenel, F. Caggioni, F. Kanayet,                      2019, pp. 103–112. [Online]. Available: https://proceedings.neurips.cc/
+     F. Seide, G. M. Florez, G. Schwarz, G. Badeer, G. Swee, G. Halpern,                       paper/2019/hash/093f65e080a295f8076b1c5722a46aa2-Abstract.html
+     G. Herman, G. Sizov, Guangyi, Zhang, G. Lakshminarayanan, H. Inan,                   [31] K. Ishizaki, H. Komatsu, and T. Nakatani, “A loop transformation
+     H. Shojanazeri, H. Zou, H. Wang, H. Zha, H. Habeeb, H. Rudolph,                           algorithm for communication overlapping,” Int. J. Parallel Program.,
+     H. Suk, H. Aspegren, H. Goldman, H. Zhan, I. Damlaj, I. Molybog,                          vol. 28, no. 2, p. 135–154, Apr. 2000. [Online]. Available:
+     I. Tufanov, I. Leontiadis, I.-E. Veliche, I. Gat, J. Weissman, J. Geboski,                https://doi.org/10.1023/A:1007554715418
+     J. Kohli, J. Lam, J. Asher, J.-B. Gaya, J. Marcus, J. Tang, J. Chan,                 [32] A. Jangda, J. Huang, G. Liu, A. H. N. Sabet, S. Maleki, Y. Miao,
+     J. Zhen, J. Reizenstein, J. Teboul, J. Zhong, J. Jin, J. Yang,                            M. Musuvathi, T. Mytkowicz, and O. Saarikivi, “Breaking the
+     J. Cummings, J. Carvill, J. Shepard, J. McPhie, J. Torres, J. Ginsburg,                   computation and communication abstraction barrier in distributed
+     J. Wang, K. Wu, K. H. U, K. Saxena, K. Khandelwal, K. Zand,                               machine learning workloads,” in Proceedings of the 27th ACM
+     K. Matosich, K. Veeraraghavan, K. Michelena, K. Li, K. Jagadeesh,                         International Conference on Architectural Support for Programming
+     K. Huang, K. Chawla, K. Huang, L. Chen, L. Garg, L. A, L. Silva,                          Languages and Operating Systems, ser. ASPLOS ’22. New York,
+     L. Bell, L. Zhang, L. Guo, L. Yu, L. Moshkovich, L. Wehrstedt,                            NY, USA: Association for Computing Machinery, 2022, p. 402–416.
+     M. Khabsa, M. Avalani, M. Bhatt, M. Mankus, M. Hasson, M. Lennie,                         [Online]. Available: https://doi.org/10.1145/3503222.3507778
+     M. Reso, M. Groshev, M. Naumov, M. Lathi, M. Keneally, M. Liu,
+                                                                                          [33] A. Q. Jiang, A. Sablayrolles, A. Roux, A. Mensch, B. Savary,
+     M. L. Seltzer, M. Valko, M. Restrepo, M. Patel, M. Vyatskov,
+                                                                                               C. Bamford, D. S. Chaplot, D. de Las Casas, E. B. Hanna, F. Bressand,
+     M. Samvelyan, M. Clark, M. Macey, M. Wang, M. J. Hermoso,
+                                                                                               G. Lengyel, G. Bour, G. Lample, L. R. Lavaud, L. Saulnier,
+     M. Metanat, M. Rastegari, M. Bansal, N. Santhanam, N. Parks,
+                                                                                               M. Lachaux, P. Stock, S. Subramanian, S. Yang, S. Antoniak, T. L.
+     N. White, N. Bawa, N. Singhal, N. Egebo, N. Usunier, N. Mehta,
+                                                                                               Scao, T. Gervet, T. Lavril, T. Wang, T. Lacroix, and W. E. Sayed,
+     N. P. Laptev, N. Dong, N. Cheng, O. Chernoguz, O. Hart, O. Salpekar,
+                                                                                               “Mixtral of experts,” CoRR, vol. abs/2401.04088, 2024. [Online].
+     O. Kalinli, P. Kent, P. Parekh, P. Saab, P. Balaji, P. Rittner, P. Bontrager,
+                                                                                               Available: https://doi.org/10.48550/arXiv.2401.04088
+     P. Roux, P. Dollar, P. Zvyagina, P. Ratanchandani, P. Yuvraj, Q. Liang,
+     R. Alao, R. Rodriguez, R. Ayub, R. Murthy, R. Nayani, R. Mitra,                      [34] J. Jiang, F. Wang, J. Shen, S. Kim, and S. Kim, “A survey on large
+     R. Parthasarathy, R. Li, R. Hogan, R. Battey, R. Wang, R. Howes,                          language models for code generation,” CoRR, vol. abs/2406.00515,
+     R. Rinott, S. Mehta, S. Siby, S. J. Bondu, S. Datta, S. Chugh, S. Hunt,                   2024. [Online]. Available: https://doi.org/10.48550/arXiv.2406.00515
+     S. Dhillon, S. Sidorov, S. Pan, S. Mahajan, S. Verma, S. Yamamoto,                   [35] Z. Jiang, J. Garrigus, A. Seigler, E. Syed, Y.-L. Huang, M. Sadi,
+     S. Ramaswamy, S. Lindsay, S. Lindsay, S. Feng, S. Lin, S. C. Zha,                         T. Rahal-Arabi, and L. K. John, “Exploration of llm workload reliability
+     S. Patil, S. Shankar, S. Zhang, S. Zhang, S. Wang, S. Agarwal,                            based on di/dt effects and voltage droops,” in 2026 IEEE International
+     S. Sajuyigbe, S. Chintala, S. Max, S. Chen, S. Kehoe, S. Satterfield,                     Symposium on High Performance Computer Architecture (HPCA), 2026,
+     S. Govindaprasad, S. Gupta, S. Deng, S. Cho, S. Virk, S. Subramanian,                     pp. 1–15.
+     S. Choudhury, S. Goldman, T. Remez, T. Glaser, T. Best, T. Koehler,                  [36] V. A. Korthikanti, J. Casper, S. Lym, L. McAfee, M. Andersch,
+     T. Robinson, T. Li, T. Zhang, T. Matthews, T. Chou, T. Shaked,                            M. Shoeybi, and B. Catanzaro, “Reducing activation recomputation in
+     V. Vontimitta, V. Ajayi, V. Montanez, V. Mohan, V. S. Kumar,                              large transformer models,” in Proceedings of the Sixth Conference on
+     V. Mangla, V. Ionescu, V. Poenaru, V. T. Mihailescu, V. Ivanov, W. Li,                    Machine Learning and Systems, MLSys 2023, Miami, FL, USA, June 4-8,
+     W. Wang, W. Jiang, W. Bouaziz, W. Constable, X. Tang, X. Wu,                              2023, D. Song, M. Carbin, and T. Chen, Eds. mlsys.org, 2023. [On-
+     X. Wang, X. Wu, X. Gao, Y. Kleinman, Y. Chen, Y. Hu, Y. Jia, Y. Qi,                       line]. Available: https://proceedings.mlsys.org/paper files/paper/2023/
+     Y. Li, Y. Zhang, Y. Zhang, Y. Adi, Y. Nam, Yu, Wang, Y. Zhao,                             hash/80083951326cf5b35e5100260d64ed81-Abstract-mlsys2023.html
+     Y. Hao, Y. Qian, Y. Li, Y. He, Z. Rait, Z. DeVito, Z. Rosnbrick,                     [37] D. Lepikhin, H. Lee, Y. Xu, D. Chen, O. Firat, Y. Huang, M. Krikun,
+     Z. Wen, Z. Yang, Z. Zhao, and Z. Ma, “The llama 3 herd of models,”                        N. Shazeer, and Z. Chen, “Gshard: Scaling giant models with
+     2024. [Online]. Available: https://arxiv.org/abs/2407.21783                               conditional computation and automatic sharding,” in 9th International
+[24] J. Guo, Q. Yi, J. Meng, J. Zhang, and P. Balaji, “Compiler-assisted                       Conference on Learning Representations, ICLR 2021, Virtual Event,
+     overlapping of communication and computation in mpi applications,” in                     Austria, May 3-7, 2021. OpenReview.net, 2021. [Online]. Available:
+     2016 IEEE International Conference on Cluster Computing (CLUSTER),                        https://openreview.net/forum?id=qrwe7XHTmYb
+     2016, pp. 60–69.                                                                     [38] S. Li, Y. Zhao, R. Varma, O. Salpekar, P. Noordhuis, T. Li,
+[25] K. Hamidouche, J. Bachan, P. Markthub, P.-J. Gootzen, E. Agostini,                        A. Paszke, J. Smith, B. Vaughan, P. Damania, and S. Chintala, “Pytorch
+     S. Jeaugey, A. Shafi, G. Theodorakis, and M. G. Venkata,                                  distributed: Experiences on accelerating data parallel training,” Proc.
+     “Gpu-initiated networking for nccl,” 2025. [Online]. Available:                           VLDB Endow., vol. 13, no. 12, pp. 3005–3018, 2020. [Online].
+     https://arxiv.org/abs/2511.15076                                                          Available: http://www.vldb.org/pvldb/vol13/p3005-li.pdf
+[26] B. Hanindhito, B. Patel, and L. K. John, “Bandwidth characterization                 [39] H. Liu, M. Zaharia, and P. Abbeel, “Ring attention with blockwise
+     of deepspeed on distributed large language model training,” in                            transformers for near-infinite context,” CoRR, vol. abs/2310.01889,
+     IEEE International Symposium on Performance Analysis of Systems                           2023. [Online]. Available: https://doi.org/10.48550/arXiv.2310.01889
+     and Software, ISPASS 2024, Indianapolis, IN, USA, May 5-                             [40] ——, “Ring attention with blockwise transformers for near-infinite
+     7, 2024. IEEE, 2024, pp. 241–256. [Online]. Available: https:                             context,” 2023. [Online]. Available: https://arxiv.org/abs/2310.01889
+     //doi.org/10.1109/ISPASS61541.2024.00031                                             [41] MLCommons, “MLPerf Inference Results v5.0,” https://github.com/
+[27] K. Hong, X. Li, M. Liu, Q. Mao, T. Wu, Z. Huang, L. Chen, Z. Wang,                        mlcommons/inference results v5.0, 2025, accessed: 2025-11-16.
+     Y. Zhang, Z. Zhu, G. Dai, and Y. Wang, “Efficient and adaptable                      [42] D. Narayanan, M. Shoeybi, J. Casper, P. LeGresley, M. Patwary,
+     overlapping for computation and communication via signaling and                           V. Korthikanti, D. Vainbrand, P. Kashinkunti, J. Bernauer, B. Catanzaro,
+     reordering,” 2025.                                                                        A. Phanishayee, and M. Zaharia, “Efficient large-scale language
+[28] Horace He, Less Wright, Luca Wehrstedt, Tianyu Liu,                                       model training on gpu clusters using megatron-lm,” in Proceedings
+     Wanchao Liang, “[Distributed w/ TorchTitan] Introducing Async                             of the International Conference for High Performance Computing,
+     Tensor Parallelism in PyTorch,” https://discuss.pytorch.org/t/                            Networking, Storage and Analysis, ser. SC ’21. New York, NY,
+
+
+
+
+                                                                                     12
+     USA: Association for Computing Machinery, 2021. [Online]. Available:       [55] P. Tillet, H. Kung, and D. D. Cox, “Triton: an intermediate
+     https://doi.org/10.1145/3458817.3476209                                         language and compiler for tiled neural network computations,” in
+[43] M. Osama, D. Merrill, C. Cecka, M. Garland, and J. D. Owens,                    Proceedings of the 3rd ACM SIGPLAN International Workshop on
+     “Stream-k: Work-centric parallel decomposition for dense matrix-                Machine Learning and Programming Languages, MAPL@PLDI 2019,
+     matrix multiplication on the GPU,” in Proceedings of the 28th                   Phoenix, AZ, USA, June 22, 2019, T. Mattson, A. Muzahid, and
+     ACM SIGPLAN Annual Symposium on Principles and Practice of                      A. Solar-Lezama, Eds. ACM, 2019, pp. 10–19. [Online]. Available:
+     Parallel Programming, PPoPP 2023, Montreal, QC, Canada, 25                      https://doi.org/10.1145/3315508.3329973
+     February 2023 - 1 March 2023, M. M. Dehnavi, M. Kulkarni,                  [56] H. Touvron, T. Lavril, G. Izacard, X. Martinet, M.-A. Lachaux,
+     and S. Krishnamoorthy, Eds. ACM, 2023, pp. 429–431. [Online].                   T. Lacroix, B. Rozière, N. Goyal, E. Hambro, F. Azhar, A. Rodriguez,
+     Available: https://doi.org/10.1145/3572848.3577479                              A. Joulin, E. Grave, and G. Lample, “Llama: Open and efficient
+[44] A. Paszke, S. Gross, F. Massa, A. Lerer, J. Bradbury, G. Chanan,                foundation language models,” 2023. [Online]. Available: https:
+     T. Killeen, Z. Lin, N. Gimelshein, L. Antiga, A. Desmaison, A. Köpf,           //arxiv.org/abs/2302.13971
+     E. Yang, Z. DeVito, M. Raison, A. Tejani, S. Chilamkurthy, B. Steiner,     [57] H. Touvron, L. Martin, K. Stone, P. Albert, A. Almahairi, Y. Babaei,
+     L. Fang, J. Bai, and S. Chintala, “Pytorch: An imperative style,                N. Bashlykov, S. Batra, P. Bhargava, S. Bhosale, D. Bikel, L. Blecher,
+     high-performance deep learning library,” 2019. [Online]. Available:             C. C. Ferrer, M. Chen, G. Cucurull, D. Esiobu, J. Fernandes, J. Fu,
+     https://arxiv.org/abs/1912.01703                                                W. Fu, B. Fuller, C. Gao, V. Goswami, N. Goyal, A. Hartshorn,
+[45] S. Pati, S. Aga, M. Islam, N. Jayasena, and M. D. Sinclair,                     S. Hosseini, R. Hou, H. Inan, M. Kardas, V. Kerkez, M. Khabsa,
+     “Tale of two cs: Computation vs. communication scaling for                      I. Kloumann, A. Korenev, P. S. Koura, M.-A. Lachaux, T. Lavril,
+     future transformers on future hardware,” in IEEE International                  J. Lee, D. Liskovich, Y. Lu, Y. Mao, X. Martinet, T. Mihaylov,
+     Symposium on Workload Characterization, IISWC 2023, Ghent,                      P. Mishra, I. Molybog, Y. Nie, A. Poulton, J. Reizenstein, R. Rungta,
+     Belgium, October 1-3, 2023. IEEE, 2023, pp. 140–153. [Online].                  K. Saladi, A. Schelten, R. Silva, E. M. Smith, R. Subramanian,
+     Available: https://doi.org/10.1109/IISWC59245.2023.00026                        X. E. Tan, B. Tang, R. Taylor, A. Williams, J. X. Kuan, P. Xu,
+[46] ——, “T3: Transparent tracking & triggering for fine-grained overlap of          Z. Yan, I. Zarov, Y. Zhang, A. Fan, M. Kambadur, S. Narang,
+     compute & collectives,” in Proceedings of the 29th ACM International            A. Rodriguez, R. Stojnic, S. Edunov, and T. Scialom, “Llama 2: Open
+     Conference on Architectural Support for Programming Languages and               foundation and fine-tuned chat models,” 2023. [Online]. Available:
+     Operating Systems, Volume 2, ser. ASPLOS ’24. New York, NY, USA:                https://arxiv.org/abs/2307.09288
+     Association for Computing Machinery, 2024, p. 1146–1164. [Online].         [58] P. Vaithilingam, T. Zhang, and E. L. Glassman, “Expectation vs.
+     Available: https://doi.org/10.1145/3620665.3640410                              experience: Evaluating the usability of code generation tools powered
+[47] S. Pati, S. Aga, M. Islam, R. Quach, S. Kudchadker, and                         by large language models,” in CHI ’22: CHI Conference on Human
+     M. A. Ibrahim, “Dma-latte: Expanding the reach of dma offloads                  Factors in Computing Systems, New Orleans, LA, USA, 29 April 2022
+     to latency-bound ml communication,” 2026. [Online]. Available:                  - 5 May 2022, Extended Abstracts, S. D. J. Barbosa, C. Lampe,
+     https://arxiv.org/abs/2511.06605                                                C. Appert, and D. A. Shamma, Eds. ACM, 2022, pp. 332:1–332:7.
+[48] S. Pellegrini, T. Hoefler, and T. Fahringer, “Exact dependence analysis         [Online]. Available: https://doi.org/10.1145/3491101.3519665
+     for increased communication overlap,” in Recent Advances in the            [59] G. Wang, C. Zhang, Z. Shen, A. Li, and O. Ruwase, “Domino:
+     Message Passing Interface, J. L. Träff, S. Benkner, and J. J. Dongarra,        Eliminating communication in LLM training via generic tensor
+     Eds. Berlin, Heidelberg: Springer Berlin Heidelberg, 2012, pp. 89–99.           slicing and overlapping,” CoRR, vol. abs/2409.15241, 2024. [Online].
+[49] J. A. Pienaar, S. Chakradhar, and A. Raghunathan, “Automatic gen-               Available: https://doi.org/10.48550/arXiv.2409.15241
+     eration of software pipelines for heterogeneous parallel systems,” in      [60] S. Wang, J. Wei, A. Sabne, A. Davis, B. Ilbeyi, B. Hechtman,
+     Proceedings of the International Conference on High Performance                 D. Chen, K. S. Murthy, M. Maggioni, Q. Zhang, S. Kumar,
+     Computing, Networking, Storage and Analysis, ser. SC ’12. Washington,           T. Guo, Y. Xu, and Z. Zhou, “Overlap communication with
+     DC, USA: IEEE Computer Society Press, 2012.                                     dependent computation via decomposition in large deep learning
+[50] K. Punniyamurthy, K. Hamidouche, and B. M. Beckmann, “Optimizing                models,” in Proceedings of the 28th ACM International Conference
+     distributed ML communication with fused computation-collective                  on Architectural Support for Programming Languages and Operating
+     operations,” in Proceedings of the International Conference for High            Systems, Volume 1, ser. ASPLOS 2023. New York, NY, USA:
+     Performance Computing, Networking, Storage, and Analysis, SC 2024,              Association for Computing Machinery, 2022, p. 93–106. [Online].
+     Atlanta, GA, USA, November 17-22, 2024. IEEE, 2024, p. 88. [Online].            Available: https://doi.org/10.1145/3567955.3567959
+     Available: https://dl.acm.org/doi/10.1109/SC41406.2024.00094               [61] Y. Wang, H. He, and L. Wehrstedt, “Pytorch symmetricmemory:
+[51] S. Rajbhandari, C. Li, Z. Yao, M. Zhang, R. Y. Aminabadi, A. A.                 Harnessing nvlink programmability with ease,” Feb 2025, pyTorch
+     Awan, J. Rasley, and Y. He, “Deepspeed-moe: Advancing mixture-of-               Developer Forum. [Online]. Available: https://dev-discuss.pytorch.org/t/
+     experts inference and training to power next-generation AI scale,” in           pytorch-symmetricmemory-harnessing-nvlink-programmability-with-ease/
+     International Conference on Machine Learning, ICML 2022, 17-23 July             2798
+     2022, Baltimore, Maryland, USA, ser. Proceedings of Machine Learning       [62] E. P. Xing, Q. Ho, W. Dai, J. K. Kim, J. Wei, S. Lee,
+     Research, K. Chaudhuri, S. Jegelka, L. Song, C. Szepesvári, G. Niu, and        X. Zheng, P. Xie, A. Kumar, and Y. Yu, “Petuum: A new
+     S. Sabato, Eds., vol. 162. PMLR, 2022, pp. 18 332–18 346. [Online].             platform for distributed machine learning on big data,” IEEE Trans.
+     Available: https://proceedings.mlr.press/v162/rajbhandari22a.html               Big Data, vol. 1, no. 2, pp. 49–67, 2015. [Online]. Available:
+[52] S. Rashidi, M. Denton, S. Sridharan, S. Srinivasan, A. Suresh,                  https://doi.org/10.1109/TBDATA.2015.2472014
+     J. Nie, and T. Krishna, “Enabling compute-communication overlap in         [63] A. Yang, J. Yang, A. Ibrahim, X. Xie, B. Tang, G. Sizov, J. Reizenstein,
+     distributed deep learning training platforms,” in 48th ACM/IEEE Annual          J. Park, and J. Huang, “Context parallelism for scalable million-token
+     International Symposium on Computer Architecture, ISCA 2021, Virtual            inference,” CoRR, vol. abs/2411.01783, 2024. [Online]. Available:
+     Event / Valencia, Spain, June 14-18, 2021. IEEE, 2021, pp. 540–553.             https://doi.org/10.48550/arXiv.2411.01783
+     [Online]. Available: https://doi.org/10.1109/ISCA52012.2021.00049          [64] S. Zhang, N. Zheng, H. Lin, Z. Jiang, W. Bao, C. Jiang, Q. Hou,
+[53] S. Singh, O. Ruwase, A. A. Awan, S. Rajbhandari, Y. He, and                     W. Cui, S. Zheng, L. Chang, Q. Chen, and X. Liu, “Comet:
+     A. Bhatele, “A hybrid tensor-expert-data parallelism approach to                Fine-grained computation-communication overlapping for mixture-
+     optimize mixture-of-experts training,” in Proceedings of the 37th               of-experts,” CoRR, vol. abs/2502.19811, 2025. [Online]. Available:
+     International Conference on Supercomputing, ICS 2023, Orlando,                  https://doi.org/10.48550/arXiv.2502.19811
+     FL, USA, June 21-23, 2023, K. A. Gallivan, E. Gallopoulos, D. S.           [65] Y. Zhao, A. Gu, R. Varma, L. Luo, C. Huang, M. Xu, L. Wright,
+     Nikolopoulos, and R. Beivide, Eds. ACM, 2023, pp. 203–214.                      H. Shojanazeri, M. Ott, S. Shleifer, A. Desmaison, C. Balioglu,
+     [Online]. Available: https://doi.org/10.1145/3577193.3593704                    P. Damania, B. Nguyen, G. Chauhan, Y. Hao, A. Mathews, and S. Li,
+[54] B. Slechta, N. Comly, A. Eassa, J. DeLaere, and                                 “Pytorch FSDP: experiences on scaling fully sharded data parallel,”
+     S. Raj. (2024, Aug) Nvidia nvlink and nvidia nvswitch                           Proc. VLDB Endow., vol. 16, no. 12, pp. 3848–3860, 2023. [Online].
+     supercharge large language model inference. NVIDIA Technical                    Available: https://www.vldb.org/pvldb/vol16/p3848-huang.pdf
+     Blog.      [Online].     Available:     https://developer.nvidia.com/blog/ [66] S. Zheng, W. Bao, Q. Hou, X. Zheng, J. Fang, C. Huang, T. Li,
+     nvidia-nvlink-and-nvidia-nvswitch-supercharge-large-language-model-inference/ H. Duanmu, R. Chen, R. Xu, Y. Guo, N. Zheng, Z. Jiang, X. Di,
+     #nvswitch is critical for fast multi-gpu llm inference                          D. Wang, J. Ye, H. Lin, L.-W. Chang, L. Lu, Y. Liang, J. Zhai,
+
+
+
+
+                                                                           13
+     and X. Liu, “Triton-distributed: Programming overlapping kernels
+     on distributed ai systems with the triton compiler,” 2025. [Online].
+     Available: https://arxiv.org/abs/2504.19442
+[67] S. Zheng, J. Fang, X. Zheng, Q. Hou, W. Bao, N. Zheng, Z. Jiang,
+     D. Wang, J. Ye, H. Lin, L.-W. Chang, and X. Liu, “Tilelink: Generating
+     efficient compute-communication overlapping kernels using tile-centric
+     primitives,” in Eighth Conference on Machine Learning and Systems,
+     2025. [Online]. Available: https://openreview.net/forum?id=ccjvBkTRRe
+
+
+
+
+                                                                              14
+

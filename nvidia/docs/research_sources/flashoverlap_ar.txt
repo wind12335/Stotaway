@@ -1,0 +1,263 @@
+flashoverlap_ar
+8192 29568 8192
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/tune# CUDA_VISIBLE_DEVICES=0,1,2,3
+python search.py --m 8192 --n 29568 --k 8192 --comm_op all_reduce --predictive_search True
+Bandwidth curve captured.
+[ERROR] NCCL error /root/FlashOverlap/src/overlap_impl.cu:256 'ncclAllReduce((void )(c_ptr +
+acc_addr), (void )(c_ptr + acc_addr), commSize, ncclFloat16, ncclSum, this->comm, this-
+>comm_stream)' : unhandled cuda error (run with NCCL_DEBUG=INFO for details)
+[ERROR] NCCL error /root/FlashOverlap/src/overlap_impl.cu:256 'ncclAllReduce((void )(c_ptr +
+acc_addr), (void )(c_ptr + acc_addr), commSize, ncclFloat16, ncclSum, this->comm, this-
+>comm_stream)' : unhandled cuda error (run with NCCL_DEBUG=INFO for details)
+[ERROR] NCCL error /root/FlashOverlap/src/overlap_impl.cu:256 'ncclAllReduce((void )(c_ptr +
+acc_addr), (void )(c_ptr + acc_addr), commSize, ncclFloat16, ncclSum, this->comm, this-
+>comm_stream)' : unhandled cuda error (run with NCCL_DEBUG=INFO for details)
+[ERROR] NCCL error /root/FlashOverlap/src/overlap_impl.cu:256 'ncclAllReduce((void )(c_ptr +
+acc_addr), (void )(c_ptr + acc_addr), commSize, ncclFloat16, ncclSum, this->comm, this-
+>comm_stream)' : unhandled cuda error (run with NCCL_DEBUG=INFO for details)
+W0606 17:00:01.469000 49120 site-packages/torch/multiprocessing/spawn.py:169] Terminating
+process 49229 via signal SIGTERM
+Traceback (most recent call last):
+File "/root/FlashOverlap/tune/search.py", line 528, in
+main()
+File "/root/FlashOverlap/tune/search.py", line 522, in main
+fast_search(args.m, args.n, args.k, comm_array, args.comm_op)
+File "/root/FlashOverlap/tune/search.py", line 464, in fast_search
+result = compute_hint(M, N, K, BM, BN, Algo, min_group_size * (sm_count - 2), comm_op)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/root/FlashOverlap/tune/search.py", line 172, in compute_hint
+mp.spawn(
+File "/root/miniconda3/lib/python3.12/site-packages/torch/multiprocessing/spawn.py", line 340, in
+spawn
+return start_processes(fn, args, nprocs, join, daemon, start_method="spawn")
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/root/miniconda3/lib/python3.12/site-packages/torch/multiprocessing/spawn.py", line 296, in
+start_processes
+while not context.join():
+^^^^^^^^^^^^^^
+File "/root/miniconda3/lib/python3.12/site-packages/torch/multiprocessing/spawn.py", line 204, in
+join
+raise ProcessExitedException(
+torch.multiprocessing.spawn.ProcessExitedException: process 2 terminated with exit code 255
+
+8192 49152 12288
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/test# CUDA_VISIBLE_DEVICES=0,1,2,3
+python test.py --m 8192 --n 49152 --k 12288 --comm_op all_reduce
+
+
+       Item                    Value
+       -----                   -----
+       m                        8192
+       n                       49152
+       k                       12288
+       tile_num                12288
+       gemm_dur (ms)            39.5049
+       comm_dur (ms)             5.5336
+       baseline_dur (ms)            44.0314
+       overlap_dur (ms)            43.9483
+       speedup                1.0019
+
+
+
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/test# CUDA_VISIBLE_DEVICES=0,1,2,3
+python test.py --m 8192 --n 49152 --k 12288 --comm_op all_reduce
+
+
+       Item                    Value
+       -----                   -----
+       m                        8192
+       n                       49152
+       k                       12288
+       tile_num                12288
+       gemm_dur (ms)            39.5049
+       comm_dur (ms)             5.5315
+       baseline_dur (ms)            44.1360
+       overlap_dur (ms)            44.0575
+       speedup                1.0018
+
+
+
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/test# CUDA_VISIBLE_DEVICES=0,1,2,3
+python test.py --m 8192 --n 49152 --k 12288 --comm_op all_reduce
+      Item                 Value
+      -----                -----
+      m                     8192
+      n                    49152
+      k                    12288
+      tile_num             12288
+      gemm_dur (ms)         39.5049
+      comm_dur (ms)          5.5676
+      baseline_dur (ms)         44.0456
+      overlap_dur (ms)         44.0663
+      speedup             0.9995
+
+
+
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/test# CUDA_VISIBLE_DEVICES=0,1,2,3
+python test.py --m 8192 --n 49152 --k 12288 --comm_op all_reduce
+
+
+      Item                 Value
+      -----                -----
+      m                     8192
+      n                    49152
+      k                    12288
+      tile_num             12288
+      gemm_dur (ms)         39.5049
+      comm_dur (ms)          5.5312
+      baseline_dur (ms)         44.1154
+      overlap_dur (ms)         44.1999
+      speedup             0.9981
+
+
+
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/test# CUDA_VISIBLE_DEVICES=0,1,2,3
+python test.py --m 8192 --n 49152 --k 12288 --comm_op all_reduce
+
+
+      Item                 Value
+      -----                -----
+      m                     8192
+      n                    49152
+      k                    12288
+      tile_num             12288
+      gemm_dur (ms)         39.5049
+      comm_dur (ms)          5.5135
+      baseline_dur (ms)         44.0291
+      overlap_dur (ms)         44.1410
+      speedup             0.9975
+8192 53248 16384
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/test# CUDA_VISIBLE_DEVICES=0,1,2,3
+python test.py --m 8192 --n 53248 --k 16384 --comm_op all_reduce
+
+
+      Item                   Value
+      -----                  -----
+      m                       8192
+      n                      53248
+      k                      16384
+      tile_num               13312
+      gemm_dur (ms)           56.9574
+      comm_dur (ms)            6.0069
+      baseline_dur (ms)           62.6187
+      overlap_dur (ms)           63.6375
+      speedup               0.9840
+
+
+
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/test# CUDA_VISIBLE_DEVICES=0,1,2,3
+python test.py --m 8192 --n 53248 --k 16384 --comm_op all_reduce
+
+
+      Item                   Value
+      -----                  -----
+      m                       8192
+      n                      53248
+      k                      16384
+      tile_num               13312
+      gemm_dur (ms)           56.9574
+      comm_dur (ms)            5.9634
+      baseline_dur (ms)           62.7300
+      overlap_dur (ms)           63.5638
+      speedup               0.9869
+
+
+
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/test# CUDA_VISIBLE_DEVICES=0,1,2,3
+python test.py --m 8192 --n 53248 --k 16384 --comm_op all_reduce
+
+
+      Item                   Value
+      -----                  -----
+      m                       8192
+      n                      53248
+      k                      16384
+      tile_num               13312
+      gemm_dur (ms)           56.9574
+      comm_dur (ms)             5.9752
+      baseline_dur (ms)            62.8217
+      overlap_dur (ms)            63.6782
+      speedup                0.9865
+
+
+
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/test# CUDA_VISIBLE_DEVICES=0,1,2,3
+python test.py --m 8192 --n 53248 --k 16384 --comm_op all_reduce
+
+
+      Item                    Value
+      -----                   -----
+      m                        8192
+      n                       53248
+      k                       16384
+      tile_num                13312
+      gemm_dur (ms)            56.9574
+      comm_dur (ms)             5.9940
+      baseline_dur (ms)            62.3646
+      overlap_dur (ms)            63.3941
+      speedup                0.9838
+
+
+
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/test# CUDA_VISIBLE_DEVICES=0,1,2,3
+python test.py --m 8192 --n 53248 --k 16384 --comm_op all_reduce
+
+
+      Item                    Value
+      -----                   -----
+      m                        8192
+      n                       53248
+      k                       16384
+      tile_num                13312
+      gemm_dur (ms)            56.9574
+      comm_dur (ms)             6.0353
+      baseline_dur (ms)            62.3008
+      overlap_dur (ms)            63.5103
+      speedup                0.9810
+
+
+16384 29568 8192
+(base) root@cs-d085f-deb6f-server:~/FlashOverlap/tune# CUDA_VISIBLE_DEVICES=0,1,2,3
+python search.py --m 16384 --n 29568 --k 8192 --comm_op all_reduce --predictive_search True
+Bandwidth curve captured.
+[ERROR] NCCL error /root/FlashOverlap/src/overlap_impl.cu:256 'ncclAllReduce((void )(c_ptr +
+acc_addr), (void )(c_ptr + acc_addr), commSize, ncclFloat16, ncclSum, this->comm, this-
+>comm_stream)' : unhandled cuda error (run with NCCL_DEBUG=INFO for details)
+[ERROR] NCCL error /root/FlashOverlap/src/overlap_impl.cu:256 'ncclAllReduce((void )(c_ptr +
+acc_addr), (void )(c_ptr + acc_addr), commSize, ncclFloat16, ncclSum, this->comm, this-
+>comm_stream)' : unhandled cuda error (run with NCCL_DEBUG=INFO for details)
+[ERROR] NCCL error /root/FlashOverlap/src/overlap_impl.cu:256 'ncclAllReduce((void )(c_ptr +
+acc_addr), (void )(c_ptr + acc_addr), commSize, ncclFloat16, ncclSum, this->comm, this-
+>comm_stream)' : unhandled cuda error (run with NCCL_DEBUG=INFO for details)
+[ERROR] NCCL error /root/FlashOverlap/src/overlap_impl.cu:256 'ncclAllReduce((void )(c_ptr +
+acc_addr), (void )(c_ptr + acc_addr), commSize, ncclFloat16, ncclSum, this->comm, this-
+>comm_stream)' : unhandled cuda error (run with NCCL_DEBUG=INFO for details)
+W0606 17:02:40.744000 52531 site-packages/torch/multiprocessing/spawn.py:169] Terminating
+process 52640 via signal SIGTERM
+W0606 17:02:40.749000 52531 site-packages/torch/multiprocessing/spawn.py:169] Terminating
+process 52641 via signal SIGTERM
+W0606 17:02:40.749000 52531 site-packages/torch/multiprocessing/spawn.py:169] Terminating
+process 52642 via signal SIGTERM
+Traceback (most recent call last):
+File "/root/FlashOverlap/tune/search.py", line 528, in
+main()
+File "/root/FlashOverlap/tune/search.py", line 522, in main
+fast_search(args.m, args.n, args.k, comm_array, args.comm_op)
+File "/root/FlashOverlap/tune/search.py", line 464, in fast_search
+result = compute_hint(M, N, K, BM, BN, Algo, min_group_size * (sm_count - 2), comm_op)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/root/FlashOverlap/tune/search.py", line 172, in compute_hint
+mp.spawn(
+File "/root/miniconda3/lib/python3.12/site-packages/torch/multiprocessing/spawn.py", line 340, in
+spawn
+return start_processes(fn, args, nprocs, join, daemon, start_method="spawn")
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/root/miniconda3/lib/python3.12/site-packages/torch/multiprocessing/spawn.py", line 296, in
+start_processes
+while not context.join():
+^^^^^^^^^^^^^^
+File "/root/miniconda3/lib/python3.12/site-packages/torch/multiprocessing/spawn.py", line 204, in
+join
+raise ProcessExitedException(
+torch.multiprocessing.spawn.ProcessExitedException: process 3 terminated with exit code 255
+

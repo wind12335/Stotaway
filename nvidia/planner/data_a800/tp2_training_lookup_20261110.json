@@ -1,0 +1,126 @@
+{
+  "schema": "stowaway-tp2-training-lookup-v1",
+  "classification": "diagnostic-forward-backward",
+  "runtime": {
+    "tp": 2,
+    "dtype": "bfloat16",
+    "gpu": "NVIDIA A800-SXM4-80GB",
+    "torch": "2.7.0+cu126",
+    "triton": "3.3.0",
+    "cuda_build": "12.6",
+    "cuda_device_max_connections": "1"
+  },
+  "guard": {
+    "margin": 0.03,
+    "stock_quantile": 0.2,
+    "dx_quantile": 0.8
+  },
+  "sources": [
+    {
+      "path": "/root/data/stowaway-nvidia/results/raw/tp2_train_cells_m4096_20261110.json",
+      "sha256": "81d9637065a709e4a092f20d7a9ebd4934ae251d55cf63e187c990d2c5ab4dd2"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/raw/tp2_train_cells_m8192_20261110.json",
+      "sha256": "adb39fd56113d61b99bec32ff43aa2cc0c3f549435aaeb2a257635a5bd9c2c63"
+    }
+  ],
+  "entries": {
+    "qkv:4096:5120:3584": {
+      "choice": "stock",
+      "stock_lower_ms": 2.1905601024627686,
+      "dx_upper_ms": 2.3183600902557373,
+      "samples": 6
+    },
+    "proj:4096:2560:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 1.6706160306930542,
+      "dx_upper_ms": 1.5007200241088867,
+      "samples": 6
+    },
+    "fc1:4096:5120:17408": {
+      "choice": "stock",
+      "stock_lower_ms": 8.979528427124023,
+      "dx_upper_ms": 9.08525562286377,
+      "samples": 6
+    },
+    "fc2:4096:8704:5120": {
+      "choice": "stock",
+      "stock_lower_ms": 4.730319976806641,
+      "dx_upper_ms": 4.653560161590576,
+      "samples": 6
+    },
+    "qkv:4096:8192:5120": {
+      "choice": "stock",
+      "stock_lower_ms": 4.532832145690918,
+      "dx_upper_ms": 4.515744209289551,
+      "samples": 6
+    },
+    "proj:4096:4096:8192": {
+      "choice": "dx",
+      "stock_lower_ms": 3.839247941970825,
+      "dx_upper_ms": 3.5770959854125977,
+      "samples": 6
+    },
+    "fc1:4096:8192:28672": {
+      "choice": "stock",
+      "stock_lower_ms": 23.203399658203125,
+      "dx_upper_ms": 23.21503257751465,
+      "samples": 6
+    },
+    "fc2:4096:14336:8192": {
+      "choice": "stock",
+      "stock_lower_ms": 11.89913558959961,
+      "dx_upper_ms": 11.82746410369873,
+      "samples": 6
+    },
+    "qkv:8192:5120:3584": {
+      "choice": "stock",
+      "stock_lower_ms": 4.257559776306152,
+      "dx_upper_ms": 4.288760185241699,
+      "samples": 6
+    },
+    "proj:8192:2560:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 3.252552032470703,
+      "dx_upper_ms": 2.7824320793151855,
+      "samples": 6
+    },
+    "fc1:8192:5120:17408": {
+      "choice": "stock",
+      "stock_lower_ms": 17.809864044189453,
+      "dx_upper_ms": 17.858295440673828,
+      "samples": 6
+    },
+    "fc2:8192:8704:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 9.329848289489746,
+      "dx_upper_ms": 8.90833568572998,
+      "samples": 6
+    },
+    "qkv:8192:8192:5120": {
+      "choice": "stock",
+      "stock_lower_ms": 9.027239799499512,
+      "dx_upper_ms": 8.879287719726562,
+      "samples": 6
+    },
+    "proj:8192:4096:8192": {
+      "choice": "dx",
+      "stock_lower_ms": 7.651040077209473,
+      "dx_upper_ms": 6.957511901855469,
+      "samples": 6
+    },
+    "fc1:8192:8192:28672": {
+      "choice": "stock",
+      "stock_lower_ms": 45.93483352661133,
+      "dx_upper_ms": 45.89895248413086,
+      "samples": 6
+    },
+    "fc2:8192:14336:8192": {
+      "choice": "stock",
+      "stock_lower_ms": 23.367128372192383,
+      "dx_upper_ms": 23.064632415771484,
+      "samples": 6
+    }
+  }
+}

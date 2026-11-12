@@ -1,0 +1,230 @@
+{
+  "schema": "stowaway-tp2-forward-lookup-v1",
+  "classification": "diagnostic-forward-only",
+  "runtime": {
+    "tp": 2,
+    "dtype": "bfloat16",
+    "gpu": "NVIDIA A800-SXM4-80GB",
+    "torch": "2.7.0+cu126",
+    "triton": "3.3.0",
+    "cuda_build": "12.6",
+    "cuda_device_max_connections": "1"
+  },
+  "guard": {
+    "margin": 0.03,
+    "stock_quantile": 0.2,
+    "dx_quantile": 0.8
+  },
+  "sources": [
+    {
+      "path": "/root/data/stowaway-nvidia/results/raw/tp2_accept_m4096_conn1_20261110.json",
+      "sha256": "f3a8d22cc14c9382eddc81176f28076656dddc78e2be2b7105fc9b624735677f"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/raw/tp2_accept_m8192_conn1_20261110.json",
+      "sha256": "b343b9ef974c6d56c489c807a7b4202d423d123a310a991913262908f06894c1"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/raw/tp2_accept_m16384_conn1_20261110.json",
+      "sha256": "f30376677d094244d8ef67b86de695eeb9bbfd9220d62f287df209fa02755a8b"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/raw/tp2_accept_m32768_conn1_20261110.json",
+      "sha256": "d592e0def2ce9689b0f40a8151e5480f1a2bd250808c8cd4082f06e21f638502"
+    }
+  ],
+  "entries": {
+    "qkv:4096:5120:3584": {
+      "choice": "stock",
+      "stock_lower_ms": 0.8849615931510926,
+      "dx_upper_ms": 0.9424992084503174,
+      "samples": 8
+    },
+    "proj:4096:2560:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 0.6172063827514649,
+      "dx_upper_ms": 0.4826524019241333,
+      "samples": 8
+    },
+    "fc1:4096:5120:17408": {
+      "choice": "stock",
+      "stock_lower_ms": 3.128750038146973,
+      "dx_upper_ms": 3.1943051338195803,
+      "samples": 8
+    },
+    "fc2:4096:8704:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 1.560311222076416,
+      "dx_upper_ms": 1.4778468370437623,
+      "samples": 8
+    },
+    "qkv:4096:8192:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 1.6113800048828124,
+      "dx_upper_ms": 1.544490385055542,
+      "samples": 8
+    },
+    "proj:4096:4096:8192": {
+      "choice": "dx",
+      "stock_lower_ms": 1.368083620071411,
+      "dx_upper_ms": 1.2090935468673707,
+      "samples": 8
+    },
+    "fc1:4096:8192:28672": {
+      "choice": "stock",
+      "stock_lower_ms": 7.834601974487304,
+      "dx_upper_ms": 7.81231050491333,
+      "samples": 8
+    },
+    "fc2:4096:14336:8192": {
+      "choice": "stock",
+      "stock_lower_ms": 4.090974044799805,
+      "dx_upper_ms": 3.9805383682250977,
+      "samples": 8
+    },
+    "qkv:8192:5120:3584": {
+      "choice": "stock",
+      "stock_lower_ms": 1.6243791580200195,
+      "dx_upper_ms": 1.618227243423462,
+      "samples": 8
+    },
+    "proj:8192:2560:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 1.2068175792694091,
+      "dx_upper_ms": 0.9721743941307068,
+      "samples": 8
+    },
+    "fc1:8192:5120:17408": {
+      "choice": "stock",
+      "stock_lower_ms": 6.1205343246459964,
+      "dx_upper_ms": 6.240115356445313,
+      "samples": 8
+    },
+    "fc2:8192:8704:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 3.178150463104248,
+      "dx_upper_ms": 2.9663007736206053,
+      "samples": 8
+    },
+    "qkv:8192:8192:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 3.2398040771484373,
+      "dx_upper_ms": 3.088651657104492,
+      "samples": 8
+    },
+    "proj:8192:4096:8192": {
+      "choice": "dx",
+      "stock_lower_ms": 2.6795632362365724,
+      "dx_upper_ms": 2.4217709064483643,
+      "samples": 8
+    },
+    "fc1:8192:8192:28672": {
+      "choice": "stock",
+      "stock_lower_ms": 15.609953498840332,
+      "dx_upper_ms": 15.666195297241211,
+      "samples": 8
+    },
+    "fc2:8192:14336:8192": {
+      "choice": "stock",
+      "stock_lower_ms": 7.899565601348877,
+      "dx_upper_ms": 7.920905590057373,
+      "samples": 8
+    },
+    "qkv:16384:5120:3584": {
+      "choice": "dx",
+      "stock_lower_ms": 3.117798900604248,
+      "dx_upper_ms": 3.012756824493408,
+      "samples": 8
+    },
+    "proj:16384:2560:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 2.3878400325775146,
+      "dx_upper_ms": 1.935483193397522,
+      "samples": 8
+    },
+    "fc1:16384:5120:17408": {
+      "choice": "stock",
+      "stock_lower_ms": 12.214483642578125,
+      "dx_upper_ms": 12.220232391357422,
+      "samples": 8
+    },
+    "fc2:16384:8704:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 6.329312515258789,
+      "dx_upper_ms": 5.993258380889893,
+      "samples": 8
+    },
+    "qkv:16384:8192:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 6.496581935882569,
+      "dx_upper_ms": 6.195241069793701,
+      "samples": 8
+    },
+    "proj:16384:4096:8192": {
+      "choice": "dx",
+      "stock_lower_ms": 5.359342288970947,
+      "dx_upper_ms": 4.713129901885987,
+      "samples": 8
+    },
+    "fc1:16384:8192:28672": {
+      "choice": "stock",
+      "stock_lower_ms": 31.282112503051756,
+      "dx_upper_ms": 31.07363815307617,
+      "samples": 8
+    },
+    "fc2:16384:14336:8192": {
+      "choice": "dx",
+      "stock_lower_ms": 16.03186798095703,
+      "dx_upper_ms": 15.47757511138916,
+      "samples": 8
+    },
+    "qkv:32768:5120:3584": {
+      "choice": "dx",
+      "stock_lower_ms": 6.230232238769531,
+      "dx_upper_ms": 5.810252094268799,
+      "samples": 8
+    },
+    "proj:32768:2560:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 4.791919231414795,
+      "dx_upper_ms": 3.9674176216125487,
+      "samples": 8
+    },
+    "fc1:32768:5120:17408": {
+      "choice": "stock",
+      "stock_lower_ms": 24.748787689208985,
+      "dx_upper_ms": 24.198771286010743,
+      "samples": 8
+    },
+    "fc2:32768:8704:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 12.817800521850586,
+      "dx_upper_ms": 12.08054428100586,
+      "samples": 8
+    },
+    "qkv:32768:8192:5120": {
+      "choice": "dx",
+      "stock_lower_ms": 13.085057258605957,
+      "dx_upper_ms": 12.48254451751709,
+      "samples": 8
+    },
+    "proj:32768:4096:8192": {
+      "choice": "dx",
+      "stock_lower_ms": 10.777436447143554,
+      "dx_upper_ms": 9.504472732543945,
+      "samples": 8
+    },
+    "fc1:32768:8192:28672": {
+      "choice": "stock",
+      "stock_lower_ms": 63.38292541503906,
+      "dx_upper_ms": 62.38171310424805,
+      "samples": 8
+    },
+    "fc2:32768:14336:8192": {
+      "choice": "dx",
+      "stock_lower_ms": 32.172752380371094,
+      "dx_upper_ms": 30.77249221801758,
+      "samples": 8
+    }
+  }
+}

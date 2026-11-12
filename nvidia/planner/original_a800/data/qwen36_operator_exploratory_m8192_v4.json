@@ -1,0 +1,184 @@
+{
+  "classification": "exploratory operator-only; not an E2E training plan",
+  "model": "Qwen3.6-27B-text-megatron-local-vehicle",
+  "tp": 8,
+  "M": 8192,
+  "warnings": [
+    "GDN uses the same adapter names as MLP; per-shape choices not yet deployable",
+    "no backward/step calibration; do not interpret as training speedup",
+    "G probe is single GPU; existing G is single call over TP8 ranks; windows differ",
+    "cautious_choice is diagnostic agreement and range filtering, not a safety guarantee"
+  ],
+  "results": [
+    {
+      "site": "full_qkv",
+      "layer_type": "full_attention",
+      "adapter_name": "qkv",
+      "op": "ag_up",
+      "M": 8192,
+      "K": 5120,
+      "N": 1792,
+      "layers": 16,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_single_ms": 0.790336012840271,
+      "G_b2b_ms": 0.7777760028839111,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 1.0403356167293882,
+        "dx": 1.5012615736337522
+      },
+      "relative_choice": "stock",
+      "relative_prediction": {
+        "log_speedup": -0.2186056961474409,
+        "guard": 0.0637649265271951,
+        "lower_log_speedup": -0.28237062267463603
+      },
+      "outside_calibration_ranges": [],
+      "cautious_choice": "stock"
+    },
+    {
+      "site": "full_proj",
+      "layer_type": "full_attention",
+      "adapter_name": "proj",
+      "op": "rs",
+      "M": 8192,
+      "K": 768,
+      "N": 5120,
+      "layers": 16,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_single_ms": 0.3415520042181015,
+      "G_b2b_ms": 0.3294129967689514,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 0.6413928926587734,
+        "dx": 0.7517132959346774
+      },
+      "relative_choice": "dx",
+      "relative_prediction": {
+        "log_speedup": 0.1756730174366707,
+        "guard": 0.05810692175084447,
+        "lower_log_speedup": 0.11756609568582621
+      },
+      "outside_calibration_ranges": [
+        "K",
+        "G"
+      ],
+      "cautious_choice": "stock"
+    },
+    {
+      "site": "gdn_in",
+      "layer_type": "linear_attention",
+      "adapter_name": "fc1",
+      "op": "ag_up",
+      "M": 8192,
+      "K": 5120,
+      "N": 2060,
+      "layers": 48,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_single_ms": 1.4419999718666077,
+      "G_b2b_ms": 1.429377019405365,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 1.691999575755725,
+        "dx": 2.1451256795499747
+      },
+      "relative_choice": "stock",
+      "relative_prediction": {
+        "log_speedup": -0.20033478374189032,
+        "guard": 0.0637649265271951,
+        "lower_log_speedup": -0.2640997102690854
+      },
+      "outside_calibration_ranges": [],
+      "cautious_choice": "stock"
+    },
+    {
+      "site": "gdn_out",
+      "layer_type": "linear_attention",
+      "adapter_name": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "K": 768,
+      "N": 5120,
+      "layers": 48,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_single_ms": 0.3415520042181015,
+      "G_b2b_ms": 0.3294129967689514,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 0.6413928926587734,
+        "dx": 0.7517132959346774
+      },
+      "relative_choice": "dx",
+      "relative_prediction": {
+        "log_speedup": 0.1756730174366707,
+        "guard": 0.05810692175084447,
+        "lower_log_speedup": 0.11756609568582621
+      },
+      "outside_calibration_ranges": [
+        "K",
+        "G"
+      ],
+      "cautious_choice": "stock"
+    },
+    {
+      "site": "mlp_fc1",
+      "layer_type": "all",
+      "adapter_name": "fc1",
+      "op": "ag_gu",
+      "M": 8192,
+      "K": 5120,
+      "N": 4352,
+      "layers": 64,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_single_ms": 1.4128000140190125,
+      "G_b2b_ms": 1.4996060132980347,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 1.485311755333913,
+        "dx": 2.1396505370196772
+      },
+      "relative_choice": "stock",
+      "relative_prediction": {
+        "log_speedup": -0.18031508139353508,
+        "guard": 0.03672766035658671,
+        "lower_log_speedup": -0.21704274175012178
+      },
+      "outside_calibration_ranges": [],
+      "cautious_choice": "stock"
+    },
+    {
+      "site": "mlp_fc2",
+      "layer_type": "all",
+      "adapter_name": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "K": 2176,
+      "N": 5120,
+      "layers": 64,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_single_ms": 0.751615971326828,
+      "G_b2b_ms": 0.7428709864616394,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 1.0514568597675,
+        "dx": 1.047852543395811
+      },
+      "relative_choice": "dx",
+      "relative_prediction": {
+        "log_speedup": 0.1131964118904635,
+        "guard": 0.05810692175084447,
+        "lower_log_speedup": 0.055089490139619036
+      },
+      "outside_calibration_ranges": [],
+      "cautious_choice": "stock"
+    }
+  ],
+  "calibration_sha256": "5e1d1bfdfb810fb5a50ae0569db18d8b857b073ff8dfaa9ccb7007b635bc4b15",
+  "gemm_probe_sha256": "860a5fa82940d0eb0f601bd77399111e1ffa3603fdceee0587414ae26f094f9c"
+}

@@ -1,0 +1,1240 @@
+                                               Syncopate: Efficient Multi-GPU AI Kernels via Automatic Chunk-Centric
+                                                                                    Compute-Communication Overlap
+
+                                                 Xinwei Qiang1,∗ , Yue Guan1,∗ , Zhengding Hu1 , Keren Zhou3,4 , Yufei Ding1,2 , Adnan Aziz2
+                                                     1 University of California, San Diego, 2 Meta, 3 George Mason University, 4 OpenAI
+                                                                      1 {x1qiang, yueguan, zhh068, yufeiding}@ucsd.edu
+                                                                                   2 {adnanaziz}@meta.com
+                                                                                      3 {kzhou6}@gmu.edu
+arXiv:2601.20595v3 [cs.DC] 3 Apr 2026
+
+
+
+
+                                                                     Abstract                                 multiple kernels can run concurrently. This kernel-level over-
+                                                                                                              lap [4, 10, 29, 34, 37, 47] has become the default mechanism
+                                        Communication has become a first-order bottleneck in large-           for improving utilization in distributed settings.
+                                        scale GPU workloads, and existing distributed compilers ad-
+                                                                                                                 However, kernel-level overlap is fundamentally insufficient
+                                        dress it mainly by overlapping whole compute and commu-
+                                                                                                              for fully hiding communication latency. As illustrated in
+                                        nication kernels at the stream level. This coarse granularity
+                                                                                                              Fig. 1, this kernel-level scheduling forces a device-wide syn-
+                                        incurs extra kernel launches, forces device-wide synchroniza-
+                                                                                                              chronization at every kernel boundary and incurs extra launch
+                                        tions at kernel boundaries, and leaves substantial slack when
+                                                                                                              and sync overhead for each communication phase ( 1 ). More-
+                                        the slowest tile or kernel stretches the communication tail.
+                                                                                                              over, by splitting computation into multiple shorter kernels,
+                                        We present Syncopate, a compiler and runtime that enable
+                                                                                                              the work within each launch is further partitioned into waves
+                                        automatic fine-grained overlap inside a single fused kernel.
+                                                                                                              of compute tiles on each SM, increasing the fraction of time
+                                        Syncopate introduces a communication chunk abstraction
+                                                                                                              SMs sit idle; even when part of the data needed by later ker-
+                                        that decouples communication granularity from kernel struc-
+                                                                                                              nels is already available, tiles in the current wave must wait for
+                                        ture and backend mechanisms, allowing chunk-level plans to
+                                                                                                              the slowest tile to finish ( 2 ). Finally, the coarse granularity of
+                                        be ported from existing distributed compilers, written directly
+                                                                                                              kernel-level overlap leaves a long segment of communication
+                                        by users, or instantiated from reusable templates. Given a lo-
+                                                                                                              at the end of the timeline that receives little or no overlap ( 3 ).
+                                        cal Triton kernel and a chunk schedule, Syncopate performs
+                                        transformations to align computation with chunk availability.            This motivates us to overlap computation and communi-
+                                        Implemented as a source-to-source compiler on Triton, Syn-            cation at a finer intra-kernel granularity. Such fine-grained
+                                        copate delivers an average end-to-end speedup of 1.3× and
+                                                                                                              overlap opens up new design space for improving end-to-end
+                                        up to 4.7× on multi-GPU workloads.                                    efficiency. As shown by the yellow region in Fig. 1, Synco-
+                                                                                                              pate launches communication directly from within the fused
+                                                                                                              kernel, rather than delegating to external communication li-
+                                                                                                              braries, giving the compiler explicit control over which hard-
+                                        1    Introduction                                                     ware backend to use for each transfer (copy engine, tensor
+                                                                                                              memory accelerator, or load/store on CUDA cores) as shown
+                                        Communication has become a first-order bottleneck for train-          with 1 . This also allows us to explore much smaller com-
+                                        ing and serving large neural networks on multi-GPU systems.           munication granularities without incurring additional kernel-
+                                        Even with high-bandwidth interconnects such as NVLink [21]            launch overhead, and to tune the chunk size that best balances
+                                        and NVSwitch, collective operations like AllGather, Re-               link throughput against synchronization cost ( 2 ). Finally,
+                                        duceScatter, and All-to-All frequently dominate end-to-end            because tiles and communication are orchestrated inside a
+                                        latency for tensor-parallel feed-forward layers and attention         single kernel, we can reshape the intra-kernel tile schedule to
+                                        layers. To hide this cost, recent systems and distributed com-        track communication progress while still preserving locality
+                                        pilers aggressively search for schedules that overlap compu-          in the register, shared-memory, and cache hierarchy ( 3 ).
+                                        tation and communication at the kernel level. Given a com-               We present Syncopate, a compiler that turns the vision of
+                                        putation graph and a device mesh, these compilers select              fine-grained overlap for distributed kernel generation into a
+                                        parallelization strategies, insert communication kernels, and         practical and general system. At the heart of Syncopate is the
+                                        assign compute and communication kernels to streams so that           notion of a communication chunk, which represents a logical
+                                                                                                              block of data associated with a particular communication op-
+                                            ∗ Xinwei and Yue contributed equally.                             eration and the tiles that produce or consume it. This abstrac-
+
+
+                                                                                                          1
+ Prior Arts: Kernel-Level Overlap                                                                                                                       ❶ Adaptive Communication Backend
+                                              GEMM 0                                              GEMM 1
+   SM 0                Tile 0               Tile 15                            Tile 16          Tile 31                                                     a.
+
+
+
+
+                                                             Device Sync
+
+
+
+
+                                                                                                               Device Sync
+                                                                                                                                                                       CUDA
+                                                                                                                                                            b.   SMs          TMA
+   SM 1                Tile 1       …        Idle                              Tile 17   …       Idle                                                    HBM                                  GPU
+   SM 2                Tile 2                Idle                              Tile 18           Idle                                                        c.       Copy Engine
+   SMs                                                                       ReduceScatter 0                                   ReduceScatter 1          ❷ Adaptive Tile Schedule
+                                               ❶ Reduce                                                                        ❸ Reduce                 a.             b.            c.
+  Direct Optimizations
+                                                                                              ❷ Reduce                                                       Tile 0         Tile 0        T0 T1
+                                           Kernel Launch                                      Idle SMs                        Tail Latency
+                                                                                                                                                             Tile 4         Tile 1        T2 T3
+ Syncopate: Fine-Grained Overlap                                           Signal-GEMM
+                                                                                                                                  Compute Tile
+                                                                                                                                                             Tile 8         Tile 2        T4 T5
+   SM 0                Tile 0         Tile 24          Tile 27
+                              Chunk 0           Chunk 4                                                                                                 ❸ Adaptive Chunk Size
+   SM 1                Tile 4   …     Tile 28   …      Tile 31                                                                    Commnication
+   SM 2                Tile 8          Tile 1 Chunk 1 Idle                                                                            Chunk                  Fused-GEMM
+
+  CE/SMs                                                         Reduce              …     Reduce                                  Dependency              a. RS 0      RS 1         RS 2     RS 3
+                                                                 Scatter 0                 Scatter 3
+  ❶ Adaptive                        ❷ Adaptive Intra-Chunk                               ❸ Adaptive
+                                                                                                                               New Design Spaces             b.        RS 0                 RS 1
+  Communication Backend             Tile Schedule                                        Chunk Size
+
+                     (a) Comparison of compute-communication overlap at different levels                                                         (b) New design space for fine-grained overlap
+
+Figure 1: Motivating example of Syncopate. Red numbers shows the direct improvements gained by fine-grained overlap over
+kernel-level overlap, while orange numbers show the additional improvements from the new design space enabled by Syncopate.
+
+
+tion is motivated by a key observation: fine-grained overlap                                                                 inside distributed kernels.
+requires a communication granularity that flexibly matches
+                                                                                                                   • We design and implement a compiler pipeline and run-
+how tiles generate data and how communication backends
+                                                                                                                     time that takes annotated local kernels and chunk-level
+consume it, rather than assuming that tile-level or full-kernel
+                                                                                                                     communication plans, then generates efficient fused dis-
+granularity is always appropriate. By making chunks explicit,
+                                                                                                                     tributed kernels with inter- and intra-chunk autotuning.
+Syncopate can represent a wide range of overlap patterns
+and enable the compiler to reason about when each chunk                                                            • We evaluate Syncopate on a diverse set of distributed
+becomes available, which tiles produce or use it, and how                                                            workloads and observe an average speedup of 1.3× on
+these dependencies interact with fused multi-stage tensor pro-                                                       common operators, with improvements reaching up to
+grams and potentially irregular collectives. This abstraction                                                        4.7× in the best cases.
+exposes a small set of principled knobs, including chunk size,
+backend choice, and tile order, that define the design space
+later explored by our autotuner.                                                                           2                 Background and Related Works
+   Building on this abstraction, Syncopate implements a
+source-to-source compiler and runtime that transform stan-
+                                                                                                           2.1                Distributed Compilers
+dard Triton [32] kernels and a high-level chunk-based com-                                                 As model sizes grew, tensor compilers [5, 6, 9, 27, 39, 42, 43]
+munication plan into fused distributed kernels capable of                                                  incorporated basic multi-GPU support [1, 16, 25, 28, 35, 40],
+fine-grained compute–communication overlap. The compiler                                                   typically by composing single-GPU kernels with predefined
+restructures the kernel’s tile execution to follow communi-                                                collective primitives. Systems like Alpa [44], Mercury [13],
+cation progress and selects appropriate backends to realize                                                and other recent distributed compilers extend this idea by
+each chunk transfer, while a lightweight runtime executes                                                  searching over communication patterns and schedules at the
+these transfers and integrates seamlessly with PyTorch dis-                                                level of whole kernels: given a parallelization strategy, they
+tributed [2] so that Syncopate kernels can replace standard                                                first construct a communication plan containing AllGather,
+operators with only minimal changes to user code. Syncopate                                                ReduceScatter, or All-to-All operators, and then explore dif-
+further performs inter- and intra-chunk autotuning, adjusting                                              ferent mappings of compute and communication kernels to
+chunk sizes, backend choices, SM allocations, and tile sched-                                              streams in order to maximize kernel-level overlap (Table 1).
+ules, to consistently achieve high performance across diverse                                              This design has made distributed training far more accessible,
+operators. This implementation strategy makes the abstract                                                 but it also bakes in a rigid abstraction boundary: commu-
+chunk-based model concrete, enabling rapid prototyping of                                                  nication is planned as a sequence of full-kernel collectives
+new overlap policies while remaining compatible with real                                                  whose launch and completion times are the basic units of
+distributed workloads and production communication stacks.                                                 scheduling. As a result, all these distributed compilers focus
+   In summary, this work makes the following contributions:                                                their search on the communication plan at the kernel level and
+                                                                                                           are fundamentally blind to finer-grained opportunities inside
+   • We introduce a chunk-based abstraction that decouples                                                 kernels, such as overlapping per-shard or per-tile communi-
+     high-level overlap intent from low-level implementation,                                              cation with computation, reusing remote data across tiles, or
+     enabling fine-grained compute-communication overlap                                                   exploiting topology-aware pipelining within a fused kernel.
+
+
+                                                                                                       2
+Table 1: Comparison of various projects on distributed opera-                                      Table 2: Comparison of various GPU communication mecha-
+tions.                                                                                             nisms.
+ Projects                     Granularity   Compute   Communication   Schedule   Performance                          Hardware     Programming          Collective   Bandwidth
+                                       Automatic Approaches
+ Alpa [44]                      Kernel      Auto           Auto       Template      ✔                  Copy Engine   Copy Engine   Host Launch             ✗          ✔✔✔
+ Mercury [13]                   Kernel      Auto           Auto         Auto        ✔✔                 TMA              SM         Async. Instruction      ✗          ✔✔
+                                      Manual Implementations                                           Load/Store       SM         Sync. Instruction       ✔           ✔
+ Flux [3]                        Tile      Manual         Manual      Manual       ✔✔
+ AsyncTP [36]                    Tile      Manual         Manual      Manual       ✔✔
+ FlashOverlap [14]              Chunk      Manual         Manual      Manual       ✔✔✔
+                                    Domain Specific Languages                                      and programmability trade-offs (Tbl. 2). Copy Engines satu-
+ ThunderKittens [30, 31]         Tile     Manual         Manual       Manual       ✔✔✔
+ TritonDistributed [45, 46]     Chunk     Manual         Manual       Manual       ✔✔✔             rate NVLink [21] at 400 GB/s per direction on H100 and run
+ Syncopate                      Chunk        Auto         Auto        Template     ✔✔✔             independently of the SMs. Therefore, they do not consume
+                                                                                                   compute resources and are ideal when communication can
+                                                                                                   be decoupled from computation. However, they are typically
+Once a kernel is chosen and its associated collective is placed,                                   driven by host APIs and can only transfer contiguous data, so
+the compiler can only treat it as an atomic black box, leaving                                     high-dimensional strided tensors must be decomposed into
+significant intra-kernel overlap potential untapped even under                                     many smaller transfers, each requiring a separate launch cost-
+an “optimal” kernel-level schedule.                                                                ing around 2-3µs, which can significantly reduce the effective
+                                                                                                   bandwidth as each transfer time is also very short.
+                                                                                                      Tensor Memory Accelerator (TMA) [19] paths achieve
+2.2         Mannual Kernel Designs
+                                                                                                   high bandwidth using dedicated asynchronous tensor-copy
+A complementary line of work pushes beyond kernel-level                                            hardware, and can achieve a throughput of 300+ GB/s with
+overlap and instead hand-crafts fine-grained pipelines that                                        only about 16 SMs issuing TMA instructions. This makes
+interleave communication and computation at the level of                                           TMA attractive for overlapping structured tensor movement
+tiles, tokens, or shards. Flux [3] fuses GEMM with collectives                                     with computation within a node. At the same time, TMA must
+at tile granularity and over-decomposes work to maximize                                           be launched by SM threads and does not currently support
+overlap for both training and inference, while Comet [41] tar-                                     inter-node communication or in-network (switch-based) col-
+gets MoE with a shared-tensor abstraction and NVSHMEM-                                             lective reduction, which limits its applicability to intra-node,
+backed buffers to overlap token-wise communication with                                            point-to-point patterns.
+tile-wise compute at production scale. FlashOverlap [14]                                              Finally, plain load/store-based communication, often com-
+uses lightweight readiness signaling and layout reordering                                         bined with registers and shared memory, attains slightly lower
+to trigger overlap with standard NCCL collectives without                                          peak bandwidth than copy engines or TMA [31] but is signifi-
+modifying existing compute kernels, and systems like Triton-                                       cantly more flexible. These mechanisms integrate naturally
+Distributed [45, 46] introduce tile-centric or OpenSHMEM-                                          with switch-based collective reduction (NVSHARP [20]), en-
+style primitives to Triton [32] that make it easier to author                                      abling fine-grained per-shard communication and in-network
+overlapped kernels (e.g., fused AllGather/GEMM or GEM-                                             reductions. The downside is that they consume SM resources
+M/ReduceScatter) in a domain-specific language.                                                    and are synchronous from the issuing warp’s perspective, so
+   Despite these advances, all of these systems fundamentally                                      they are harder to pipeline and require careful scheduling to
+rely on manual, operator-specific engineering: experts must                                        hide communication latency.
+design fused kernels, choose tiling and buffering schemes, and
+reason about synchronization and communication protocols                                           3      Motivation
+for each new model architecture or hardware platform. The
+resulting implementations are highly optimized but difficult to                                    To fully exploit modern GPUs, distributed training systems
+generalize or retarget, and they do not provide a general com-                                     must overlap computation and communication. Prior work
+piler abstraction for expressing and reusing fine-grained over-                                    mainly relies on coarse, kernel-level partitioning of compu-
+lap patterns across operators. Emerging fine-grained DSLs                                          tation kernels, which leaves substantial performance on the
+and primitives greatly lower the barrier to writing overlapped                                     table. In this section, we revisit the motivating example in Fig-
+kernels, but they still place the burden of discovering effec-                                     ure 1 using detailed microbenchmarks (Figure 2), and show
+tive overlap strategies, encoding dependency structure, and                                        three key insights:
+validating correctness squarely on the programmer.
+                                                                                                       ★Insight 1: Limitations of Kernel-Level Overlap.
+2.3         Communication Backends                                                                     Kernel-level overlap is fundamentally limited by SM
+                                                                                                       under-utilization and kernel-launch overheads.
+Modern GPU systems [19] expose several mechanisms for
+moving tensors across devices, each with distinct performance                                           Figure 2(a) reports SM utilization for different GEMM
+
+
+                                                                                               3
+                                    (a) SM Utilization                                         (b) Compute Kernel Performance                                    (c) P2P Communication           (d) P2P Reduce     CUDA,SM=8
+                      100                                                                                                                                 400                                                       TMA, SM=8
+
+
+
+
+                                                                 Performance (TFLOPS)
+                                                                                        700                                                                                              300
+ SM Utilization (%)
+
+
+
+
+                                                                                                                                       Bandwidth (GB/s)
+                       80                                                                                                                                                                                           CUDA,SM=16
+                                                                                                                                                          300                                                       TMA, SM=16
+                       60                                                               600
+                                                                                                                                                                                         200                        CUDA,SM=32
+                                                                                                                                                          200
+                       40                                                               500                                                                                                                         TMA, SM=32
+                                               tile 64×128×64                                                                                                                            100
+                                                                                                                Streamed Kernel                           100                                                       CUDA,SM=64
+                       20                      tile 128×128×64
+                                                                                        400                                                                                                                         TMA, SM=64
+                                               tile 256×128×64                                                  Kernel Partition
+                                                                                                                                                            0                              0                        CUDA,SM=128
+                        0
+                            0   2000 4000 6000 8000 10000                                     2000        4000       6000                                         512B 128KB 32MB              512B 128KB 32MB      TMA, SM=128
+                                  N (GEMM size: N×N×N)                                               N (GEMM size: N×N×N)                                         Communication Size           Communication Size   Copy Engine
+
+
+
+
+Figure 2: Motivation experiment results. (a) SM utilization under different GEMM sizes and tile sizes. (b) Performance
+comparison between a streamed GEMM kernel and a kernel-partitioned baseline. (c,d) Bandwidth of different communication
+backends under varying message sizes.
+
+
+sizes under several commonly used tile-size configurations.                                                                            compute tile size, which determines the cadence at which
+Large GEMMs provide enough tile waves to saturate the                                                                                  results become available, (ii) the communication transfer size,
+SMs across all configurations. As the GEMM size decreases,                                                                             which trades off latency and bandwidth, and (iii) the choice of
+fewer tile waves are generated, and the partially filled last                                                                          communication backend. Coarse-grained kernel-level overlap
+wave dominates a larger portion of execution, causing SM                                                                               cannot flexibly coordinate these parameters, since compute
+utilization to drop due to wave quantization. Partitioning a                                                                           and communication are implemented as separate kernels with
+GEMM into many sub-kernels forces each launch to oper-                                                                                 rigid interfaces. Intra-kernel overlap, by coordinating com-
+ate on a smaller shape, pushing execution into exactly this                                                                            putation and communication at the same time, can align tile
+low-utilization regime. This effect directly limits the benefit                                                                        production with backend-specific sweet spots and select trans-
+of kernel-level partition-based overlap (corresponding to 2                                                                            fer granularities that sustain high utilization across SMs and
+in Figure 1), since overlapping many small kernels simply                                                                              copy engines.
+wastes SM capacity.
+   Figure 2(b) compares the end-to-end performance of (i) a                                                                                               ★Insight 3: A Unified Unit for Intra-Kernel Overlap.
+baseline that partitions GEMM into multiple small kernels                                                                                                 Effective intra-kernel overlap therefore requires a com-
+for overlap and (ii) a streamed GEMM kernel that internally                                                                                               munication unit with tunable granularity and a stable
+pipelines tiles. Although both variants execute the same arith-                                                                                           interface across communication backends.
+metic operations, the kernel-partitioned baseline incurs sub-
+stantial performance loss due to extra kernel launches ( 1 ) and
+                                                                                                                                           The combined granularity and backend effects indicate that
+the SM under-utilization observed in Figure 2(a). In contrast,
+                                                                                                                                        effective overlap requires a communication unit whose size
+the streamed kernel maintains high utilization by exposing
+                                                                                                                                        can match both the rate at which tiles produce data and the
+fine-grained compute tiles within a single launch, enabling
+                                                                                                                                        efficiency points of different communication backends. At
+overlap without fragmenting the workload. These results show
+                                                                                                                                        the same time, this unit must provide a stable boundary be-
+that simply launching more kernels is not an effective path
+                                                                                                                                        tween the high-level communication schedule and its backend-
+toward overlap; we need mechanisms that expose intra-kernel
+                                                                                                                                        specific realization, so that schedules need not be rewritten
+concurrency while preserving efficient GPU execution.
+                                                                                                                                        for each backend. We therefore introduce a chunk abstraction
+                                                                                                                                        that offers both tunable intra-kernel granularity and a unified
+                  ★Insight 2: Granularity and Backend Effects. Commu-                                                                   interface for mapping communication onto diverse backends.
+                  nication efficiency varies sharply with transfer granular-
+                  ity and backend selection.
+                                                                                                                                        4                       Overview
+   Communication efficiency varies sharply with transfer gran-
+ularity and backend behavior. Figures 2(c) and 2(d) show the                                                                            Syncopate is a compiler and runtime framework that turns
+achieved bandwidth of different communication backends as                                                                               locally written Triton kernels into distributed, fine-grained
+we vary the transfer size and the number of SMs. Each back-                                                                             overlapped kernels. Rather than asking programmers to man-
+end shows distinct scaling behavior: some reach peak band-                                                                              ually fuse communication and computation, Syncopate takes
+width at moderate transfer sizes, while others require larger                                                                           an existing local kernel and a high-level distribution specifi-
+transfers or more SMs to reach their full potential. Moreover,                                                                          cation as input, and automatically synthesizes an intra-kernel
+different backends support different communication patterns,                                                                            schedule that interleaves tile-wise communication with com-
+such as point-to-point transfers versus reductions.                                                                                     putation according to the available communication backends.
+   Taken together, these granularity and backend effects im-                                                                            Input and User Interface. On the compute side, Syncopate
+ply that the optimal configuration depends jointly on (i) the                                                                           consumes unmodified local Triton kernels annotated with
+
+
+                                                                                                                                   4
+                                               Distribution Setting                  Listing 1: Annotated Local Triton Kernel API.
+            Local Kernel
+                                          Multi-GPU Compiler                1   @triton.jit
+             Annotations                      User Schedule                 2   def kernel_gemm(a_ptr, b_ptr, ...):
+                                                                            3       start_pid = tl.program_id(axis=0)
+                                              Built-in Template             4       # @sy.axis_count M block=BLOCK_SIZE_M
+                                                                            5       num_pid_m = tl.cdiv(M, BLOCK_SIZE_M)
+          Annotated Kernel                                                  6       # @sy.tile_id persistent
+                                           Comm. Schedule                   7       tile_id = start_pid - NUM_SMS
+                                                                            8       ...
+                           Parser Interface                                 9       a_desc = tl.make_tensor_descriptor(a_ptr, ...)
+                                                                           10       ...
+                                                                           11       for _ in range(0, k_tiles * tiles_per_SM):
+              Chunk Tuner                 Comm. Dispatcher                 12           tile_id += NUM_SMS
+                                    AutoTuning                             13           # @sy.dispatch begin
+                                                                           14           # @sy.pid_map M=pid_m N=pid_n
+          Code Generator                      Tile Scheduler               15           pid_m, pid_n = get_pid_mn(tile_id,
+    Syncopate                                                              16                                     num_pid_m, ...)
+                                                                           17           # @sy.dispatch end
+                                                                           18           offs_am = pid_m * BLOCK_SIZE_M
+       Fused                 Load/Store            Copy Engine             19           offs_bn = pid_n * BLOCK_SIZE_N
+       Local Kernel             TMA                  Host Code             20           offs_k = ki * BLOCK_SIZE_K
+                                                Distributed Operator       21           a = a_desc.load([offs_am, offs_k])
+                                                                           22           b = b_desc.load([offs_bn, offs_k])
+                                                                           23           accumulator = tl.dot(a, b.T, accumulator)
+          Figure 3: System overview of Syncopate.
+
+                                                                                     Listing 2: Communication Schedule Example.
+lightweight scheduling metadata (Listing 1). Programmers                    1   def all_gather_1d_swizzle(shape,dtype,axis,rank,...):
+write kernels as if they were running on a single device, using             2       plan = DevicePlan(dev=rank)
+                                                                            3       plan.tensors_involved[buf] = (torch.Size(shape))
+standard Triton primitives for indexing, tiling, and tensor de-             4       local = shard(rank)
+scriptors. Optional Syncopate annotations (e.g., axis counts,               5       plan.local_regions.setdefault(buf,[]).append(local)
+                                                                            6       for i in range(mesh):
+tile identifiers, and dispatch regions) identify the logical tiles          7           peer = (i + rank) % mesh # 1D swizzle
+and iteration structure but do not change the kernel’s seman-               8           if peer == rank: continue
+tics. On the distribution side, Syncopate uses a communi-                   9           r = shard(peer)
+                                                                           10           plan.add_op(Transfer(
+cation plan that encodes the desired global data movement                  11                           op=TransferOp.PULL,
+pattern and device topology (Listing 2). This plan is expressed            12                           dst_buf=buf, dst_region=r,
+                                                                           13                           src_buf=buf, src_region=r,
+using a small API defined by the users or imported directly                14                           peer=peer, shard_idx=peer,
+from higher-level compilers searching parallel schedule.                   15                       ...))
+                                                                           16       return plan
+   To end users, Syncopate exposes a small set of APIs for
+(1) registering local kernels with their annotations, (2) con-
+structing or selecting predefined communication plans (such
+as 1D/2D AllGather or ReduceScatter swizzles), and (3) com-                 asynchronous communication and computation in a tightly
+piling these into executable distributed kernels. High-level                pipelined manner inside a single fused kernel. From the user’s
+frameworks can wrap these APIs so that model authors only                   perspective, this kernel can be invoked with the same signature
+specify tensor partitioning and desired collectives, while Syn-             as the original local kernel, plus standard distributed-runtime
+copate automatically generates the corresponding overlapped                 arguments (e.g., rank, world size, mesh), and integrated into
+kernels. This separation of concerns allows experts to encode               existing training or inference code without further changes.
+distribution and communication strategies once, while ordi-
+nary users invoke the resulting distributed operators through
+familiar, library-style calls.
+                                                                            5     Syncopate: Fine-Grained Overlap Compiler
+
+Syncopate Architecture and Output. Given a local ker-                       Syncopate automatically transforms locally written kernels
+nel and its communication plan, Syncopate lowers them into                  into fine-grained overlapped distributed kernels by aligning
+a unified dependence representation over tiles, shards, and                 the execution of local computation tiles with a global com-
+communication operations. The compiler then searches for a                  munication schedule. At a high level, we introduce a chunk-
+fine-grained schedule that maps tiles to devices, assigns com-              centric compilation pipeline that treats communication and
+munication operations to appropriate backends (e.g., copy                   computation symmetrically: communication is described as
+engine, TMA, or load/store), and inserts the necessary syn-                 transfers of logical chunks, while computation is expressed
+chronization to respect both compute and communication                      as tiles that consume and produce these chunks. The com-
+dependencies. The output is a distributed Triton kernel that                piler then derives dependencies between chunks and tiles,
+preserves the original numerical semantics but now issues                   rewrites the tile scheduler to follow the communication order,
+
+
+                                                                       5
+     (a) P2P Push                                                                                             (d) Partitioned AllReduce
+  Chunk 0                                 Chunk 0                Chunk 0                                      Chunk 0                  Chunk 0           Chunk 0                    Chunk 0    Rank 0: AllReduce(0, 0, None)
+                                                                               Rank 0: P2P(1, 0, 0, None)
+  Chunk 1SendRcev(Chunk 0)                Chunk 1                                      P2P(1, 1, 1, 0)
+                                                                                                              Chunk 1                  Chunk 1           Chunk 1                    Chunk 1            AllReduce(1, 1, None)
+                                                  SendRcev(Chunk 1)                                                                                                                                    …
+                                                                                       …                      Chunk 2                  Chunk 2           Chunk 2                    Chunk 2
+                                                                                                              Chunk 3 AllReduce(Chunk0)Chunk 3           Chunk 3                    Chunk 3    Rank 1: AllReduce(0, 0, None)
+Rank 0           Step 1         Rank 1 Rank 0        Step 2           Rank 1                                Rank 0                         Rank 1      Rank 0                           Rank 1         AllReduce(1, 1, None)
+                                                                                                                          Chunk 0 NVSwitch                            Chunk 1 NVSwitch                 …
+     (b) P2P Pull                                                                                                                                                                              Rank 2: AllReduce(0, 0, None)
+  Chunk 0                                Chunk 0                 Chunk 0                                      Chunk 0                     Chunk 0        Chunk 0                    Chunk 0            AllReduce(1, 1, None)
+  Chunk 1SendRcev(Chunk 0)               Chunk 1
+                                                                               Rank 1: P2P(1, 0, 0, None)     Chunk 1                     Chunk 1        Chunk 1                    Chunk 1
+                                                                                                                                                                     AllReduce(Chunk1)                 …
+                                                 SendRcev(Chunk 1)                     P2P(1, 1, 1, 0)        Chunk 2                     Chunk 2        Chunk 2                    Chunk 2    Rank 3: AllReduce(0, 0, None)
+                                                                                       …
+                                                                                                              Chunk 3                     Chunk 3        Chunk 3                    Chunk 3            …
+                                                                                                            Rank 3             Step 1         Rank 2   Rank 3             Step 2        Rank 2
+Rank 0           Step 1         Rank 1 Rank 0        Step 2           Rank 1
+
+    (c) Ring AllGather                                                                                               (e) Heterogeneous
+  Chunk 0                                                                     Rank 0: P2P(3, 0, 0, None)      Chunk 0 SendRcev(Chunk 0)                                             Chunk 0         Rank 0: P2P(1, 0, 0, None)
+           SendRcev(Chunk 1)                    SendRcev(Chunk 1)                     P2P(3, 1, 1, 0)                                                                                                       P2P(3, 1, 1, 0)
+                           Chunk 1        Chunk 1                                                                        SendRcev(Chunk 1) Chunk 1       Chunk 1
+                                                                                      …                                                                                SendRcev(Chunk 0)                    …
+                                                               Chunk 2
+                                                                              Rank 1: P2P(0, 1, 1, None)                                                    SendRcev(Chunk 1)                       Rank 1: P2P(0, 1, 1, None)
+Rank 0        SendRcev(Chunk 2) Rank 1 Rank 0        SendRcev(Chunk 2) Rank 1         P2P(0, 2, 2, 0)       Rank 0                            Rank 1   Rank 0                              Rank 1           P2P(2, 0, 0, 0)
+       SendRcev(Chunk 0)                   SendRcev(Chunk 0)                          …
+                                                                                                                                                                                                            …
+                                                                              Rank 2: P2P(1, 2, 2, None)
+                                         Chunk 0                                                                                                                SendRcev(Chunk 2)
+          SendRcev(Chunk 3)
+                                                                                      P2P(1, 3, 3, 0)                                                                                               Rank 2: P2P(3, 2, 2, None)
+                                                 SendRcev(Chunk 3)
+                                                                                      …                                                                                     SendRcev(Chunk 3)               P2P(1, 3, 3, 0)
+                          Chunk 2                                             Rank 3: P2P(2, 3, 3, None)                 SendRcev(Chunk 2)
+                                                                                                                                           Chunk 2       Chunk 2                                            …
+  Chunk 3                                                       Chunk 3               …                       Chunk 3 SendRcev(Chunk 3)                                             Chunk 3         Rank 3: …
+Rank 3                          Rank 2 Rank 3                         Rank 2                                Rank 3                            Rank 2   Rank 3                              Rank 2
+                 Step 1                              Step 2                                                                   Step 1                                      Step 2
+
+
+
+Figure 4: Communication schedule abstraction. (a) and (b) illustrate the same point-to-point exchange expressed as push and pull
+variants, respectively. (c) shows a ring-based AllGather pattern. (d) represents a partition-based AllReduce schedule. (e) depicts a
+heterogeneous swizzled AllGather pattern that pipelines communication across multiple hierarchy levels.
+
+
+inserts the necessary synchronization, and finally explores                                                           defined on the source side, it represents a push operation;
+several implementation choices to generate high-performance                                                           otherwise, it represents a pull operation. This will lead to
+overlapped code.                                                                                                      different implementation choices during lowering.
+                                                                                                                      • Collective communication is represented as
+                                                                                                                      Collective(collective_type, src_chunk,
+5.1         Communication Schedule Abstraction                                                                        dst_chunk, ranks, dependency). This operator ap-
+We first define a communication-side abstraction that cap-                                                            plies a collective operation (e.g., AllGather, ReduceScatter)
+tures how data moves across devices independently of any                                                              over a set of ranks on a given chunk with explicit de-
+particular local kernel implementation. This abstraction is                                                           pendency control. When explicitly defined as collective
+built around the notion of a chunk, an intermediate layout be-                                                        operations, the compiler can leverage the optimized collective
+tween the global logical tensor and the local computation tiles.                                                      implementations provided by the communication backends.
+By operating at this intermediate granularity, the abstraction                                                           For both operator types, the dependency field encodes any
+is expressive enough to describe a wide range of distributed                                                          ordering constraints that must be respected between commu-
+schedules while remaining compatible with both partition-                                                             nication operations. In specific, it is represented as a (rank,
+based and loop-based IRs in existing distributed compilers.                                                           index) tuple, indicating that the current operation cannot
+Definition. A chunk is a logical block of data that is com-                                                           start until the specified operation on the given rank has com-
+municated as a unit. Each chunk contains one or more tiles,                                                           pleted. This allows us to express complex communication
+where a tile is the basic unit of computation in the local kernel.                                                    patterns, such as ring exchanges or multi-stage collectives, by
+Importantly, the chunk size in the communication schedule                                                             chaining dependencies between chunks.
+specifies logical transfers; the same logical chunk may later be                                                         Upon this abstraction, a communication schedule is defined
+implemented using different physical communication patterns                                                           as a sequence of chunk-level communication operations with
+or backends during lowering.                                                                                          their associated dependencies on each rank as schedule :=
+   Conceptually, a chunk can be represented as: chunk                                                                 [rank:Int, operations:List[CommOp]]:List. Since
+= Chunk(sizes=[...] , layout=..., tensor=...).                                                                        there is no restriction on the operation for each rank,
+Based on this abstraction, we define communication operators                                                          the communication schedule can express heterogeneous
+over chunks. We consider two primary classes of operators:                                                            communication patterns where different ranks perform
+point-to-point (P2P) transfers and collective communications.                                                         different operations on different chunks at different times.
+• P2P transfer is represented as P2P(src_rank,                                                                        Expressiveness. Despite its simplicity, the chunk abstraction
+dst_rank, src_chunk, dst_chunk, dependency).                                                                          is sufficiently expressive to capture a wide range of commu-
+This operator moves a chunk from a source rank to a                                                                   nication schedules covering all the overlap patterns used in
+destination rank, optionally guarded by a dependency on                                                               practice (Fig. 4). To elaborate, (a) and (b) show the same P2P
+other chunks or operations. Note that for a pair of P2P                                                               communication between two ranks expressed as push and
+operations on the source and destination ranks, we only                                                               pull operations, respectively, demonstrating the flexibility of
+include the operation on one side. If the P2P operation is                                                            pull/push semantics. (c) illustrates a ring-based AllGather pat-
+
+
+                                                                                                              6
+tern, which is a common pattern for asynchronous distributed                       Listing 3: Lowering from Higher-Level IR.
+operators [18], where each rank sends and receives chunks in             1   def emit_steps(steps, mesh, path="template"):
+a pipelined manner, with dependencies ensuring the correct               2       comm = CommPlan()
+                                                                         3       for step in steps:
+order of operations. (d) depicts a partition-based collective            4           if step.is_p2p(): # push/pull/local_copy
+AllReduce pattern, where each rank contributes a chunk to                5               for rank in mesh:
+the collective operation and performs the accumulation on the            6                   emit_p2p(comm.plans[rank], step, rank)
+                                                                         7           else: # collective
+fibre. This pattern is often used in partition-based distributed         8               for rank in mesh:
+compilers for kernel-level overlap. Finally, (e) shows a com-            9               # Path in ["direct", "synth", "template"]
+                                                                        10                   emit_collective(path, comm.plans[rank],
+plex heterogeneous swizzled AllGather pattern advancing (c).                       step, rank)
+By utilizing the port abstraction, each rank processes com-             11       return comm
+munication at different mesh hierarchy levels, enabling fine-           12
+                                                                        13   def lower_partition_ir(part_ir, axis_info, mesh, path="
+grained pipelining and overlap across multiple dimensions.                        template"):
+With this abstraction, different collective patterns, pipelined         14       steps = []
+                                                                        15       for tensor in part_ir.tensors:
+P2P exchanges, and hybrid schemes that combine intra-node               16           layout = part_ir.placement[tensor]
+and inter-node communication can all be written as sequences            17           meta = axis_info[tensor]
+of chunk-level P2P and collective operators with explicit de-           18           steps.extend(parse_partition_to_steps(tensor,
+                                                                                  layout, meta))
+pendencies. Because chunks are defined in terms of logical              19       return emit_steps(steps, mesh, path)
+tensor regions rather than concrete buffers, the same schedule          20
+                                                                        21   def lower_loop_ir(loop_ir, mesh, path="template"):
+can be reused across different kernels and tensor shapes, and           22       steps = []
+later specialized by the compiler.                                      23       for node in walk(loop_ir):
+                                                                        24           steps.extend(parse_comm_intents(node))
+Lowering from Higher-Level Compiler IRs. Communica-                     25       return emit_steps(steps, mesh, path)
+tion schedules in this abstraction can either be defined manu-
+ally or automatically derived from existing distributed com-
+piler IRs. In the manual case, users construct chunk objects
+and communication operators directly using our API as shown              those tiles whose data has already been communicated, and to
+in Listing 2. Syncopate also provides pre-defined templates              defer tiles whose input chunks are still in flight. This compute
+such as 1D/2D AllGather or ReduceScatter swizzles for the                chunk scheduling bridges the gap between the communication
+common communication patterns. User can instantiate these                abstraction and the tile-level structure of the original local
+templates with different chunk sizes, mesh topologies, com-              kernel.
+munication axes, and pipeline stages to generate reusable                Compute Kernel Annotations. To make tile-level scheduling
+communication schedules.                                                 explicit, users provide lightweight annotations on the local
+   When integrating with a higher-level distributed compiler,            computation kernel using Syncopate’s API. These annota-
+Syncopate provides frontends for both partition-based and                tions do not change the numerical semantics of the kernel; in-
+loop-based IRs. For partition-based IRs, we analyze the global           stead, they expose its tiling structure and iteration order to the
+data partitioning and the implied communication pattern be-              compiler. Although expressed as Python comments, they fol-
+tween partitions to infer chunk sizes, participating ranks, and          low a structured directive format analogous to OpenMP [23]
+the corresponding P2P or collective operators. For loop-based            pragmas, allowing the compiler to reliably parse and verify
+IRs, we traverse loop nests, identify communication points,              them. Concretely, we require three pieces of information:
+and group the communicated regions into chunks according                 • Tile size: the logical shape of each tile along the relevant
+to the chosen granularity. In both cases, the result is a uniform        dimensions (e.g., GEMM blocks), which allows us to map
+chunk-level schedule that decouples the high-level communi-              tiles to chunks.
+cation intent from any particular implementation (Listing 3).
+                                                                         • Tile index identifier: a program variable (or tuple of vari-
+Specifically, the collective operators can be directly inserted
+                                                                         ables) that uniquely identifies the tile being processed in a
+("direct") into our communication plan, or they can be further
+                                                                         given iteration.
+lowered to P2P communication operators using our templates
+("template") or using some collective synthesis algorithms               • Tile scheduler: the loop or control structure that advances
+("synth") such as TACOS [38].                                            the tile index and determines the order in which tiles are
+                                                                         visited.
+                                                                            These annotations can often be derived from existing index-
+5.2    Chunk-based Code Generation                                       ing expressions and loop bounds with minor code changes, as
+Given a chunk-level communication schedule, the next step                illustrated in the overview section.
+is to reorganize local computation so that tiles are executed            Dependency Parsing. With both the communication sched-
+in an order that aligns with the arrival and consumption of              ule and the annotated compute kernel in hand, Syncopate
+chunks. Intuitively, we want the kernel to compute exactly               constructs a dependence graph over chunks and tiles. For
+
+
+                                                                    7
+       Compute Annotation                     Chunk Dependency         Tile Scheduler                      Computation Kernel                           Communication Kernel
+                                                                                                   @triton.jit
+                                                                    Split, Order, Swizzle                                                         def _tma_kernel(src_desc, dst_desc, ):
+  Tile Size: [128, 128]                                                                            def kernel_gemm_consumer(a_ptr, b_ptr, ...):
+                                                                                                                                                      pid = tl.program_id(0)
+                                              Produer/Consumer                                         pid = tl.program_id(axis=0)
+  Tile ID: pid                                                                                         num_pid_m = tl.cdiv(M, BLOCK_SIZE_M)           while tile_id < total_tiles:
+                                              Dependency                                               tile_id = start_pid - NUM_SMS                      dst_desc.store(idx, tile)
+  Tile Scheduler: None                                               Comm. Backend                                                                        tile_id += NUM_SMS
+                                                                                                       ...
+                                                                                                       a_descs = tl.make_tensor_descriptor(...)
+                                                                                                       ...
+                                                                    Copy Engine/TMA/CUDA               for _ in range(0, k_tiles*tiles_per_SM):
+       Communication Plan                     Chunk Size Space                                             tile_id += NUM_SMS                                 Host Schedule
+                                                                                                           pid_m, pid_n = get_pid_mn(…)
+                                                                                                           offs_am = pid_m * BLOCK_SIZE_M         def fused_all_gather_gemm(b, c):
+ P2P(0, (0, 128), (0, 128), None)                                     Tile Size Space                      # Signal barrier                           comm_runtime.reset_signals()
+                                                                                                           wait(signal, …)                            # Launch communications and signals
+ P2P(0, (128, 256), (256, 512), None)         [512, 1024, 2048]                                            a = a_desc.load([offs_am, …])              comm_runtime.execute()
+ AllReduce(0, (128, 256), (256, 512), None)                         [64, 128, 256,512]                     accumulator = tl.dot(…)                    generated_gemm_consumer(comm_buf, b, c,)
+                                                                                                                                                      comm_runtime.end_before(stream())
+
+
+                                               Inter-Chunk Tuning    Intra-Chunk Tuning                                           Distributed GPU Program
+
+Figure 5: Compilation pipeline. In this example, we show communication using specialized SM as an independent kernel
+synchronized with signals. It can also be a fused kernel depending on the communication backend.
+
+each chunk, we track its producer(s) and consumer(s), as well                               backend for each operator and hardware configuration.
+as any explicit ordering constraints encoded in the commu-                                  Tile-Scheduler Swizzling. As visualized in Fig. 6, the com-
+nication schedule (e.g., pipeline stages). For each tile, we                                munication plan and the original computation kernel typically
+determine which chunks it reads and writes based on its tile                                induce different layouts over the global tensor: communi-
+index and the tensor layout.                                                                cation groups tiles into chunks based on where data needs
+   From this graph, the compiler identifies the minimal set of                              to move, while the kernel groups tiles into waves based on
+synchronization points needed to respect all data dependen-                                 its own traversal order. Prior work reconciles this mismatch
+cies. Concretely, we insert wait operations in the kernel so                                by explicitly reordering data between communication and
+that a tile that consumes a given chunk cannot start until the                              computation, paying extra global-memory traffic and syn-
+corresponding communication operator has completed. This                                    chronization. In contrast, Syncopate keeps the communicated
+synchronization can be implemented using different mecha-                                   chunks in-place and instead swizzles the tile scheduler at the
+nisms depending on the chosen backend, but is always derived                                intra-kernel level. We reorder the sequence of waves so that
+from the same chunk-level dependency structure.                                             each chunk is consumed as soon as it arrives, and apply an
+Communication Code Generation. Once the communica-                                          intra-chunk swizzle that visits tiles in an order that preserves
+tion schedule and tile scheduler have been aligned, Syncopate                               locality within the chunk. This chunk-based tile schedule
+lowers the abstract chunk-level plan into concrete communi-                                 aligns compute with communication progress without addi-
+cation code. As illustrated in Fig. 7, the same logical schedule                            tional reordering kernels, enabling fine-grained overlap purely
+can be realized by several backends that differ in how they                                 through scheduling.
+move chunks and how they allocate SM resources. Concretely,
+we support five realizations: (1) using the dedicated copy en-
+                                                                                            5.3    Communication-Centric Auto-Tuning
+gine, (2) using TMA on a specialized SM, (3) using TMA on
+a co-located SM, (4) using operator-instruction load/store on                               The chunk abstraction also provides a natural space for
+a specialized SM, and (5) using operator-instruction load/s-                                communication-centric auto-tuning. Because chunks sit ex-
+tore on a co-located SM. In all cases, tiles are produced on                                actly at the boundary between the global communication
+one side and consumed by operations on the other side, but                                  schedule and the local tile scheduler, changing chunk-level
+the mechanism for signaling readiness and the division of                                   parameters simultaneously reshapes how data moves across
+compute versus communication work across SMs differ.                                        ranks and how computation is ordered within each kernel.
+   For each operator, Syncopate first builds a dependency                                   Rather than only tuning conventional kernel parameters (e.g.,
+graph over tiles and communication steps from the chunk                                     block sizes), Syncopate exposes a higher-level search space
+schedule, then lowers this graph into backend-specific code                                 whose knobs directly control overlap and resource sharing.
+that enforces all dependencies by construction. When target-                                   At the inter-chunk level, we tune the chunk size, shape,
+ing the copy engine or a specialized SM, the compiler emits                                 and split factor for each logical transfer. Larger chunks tend
+global-memory signals and kernel launches so that communi-                                  to achieve higher effective bandwidth on copy engines and
+cation progresses asynchronously relative to the main com-                                  TMA but reduce the granularity of overlap, while smaller
+pute tiles. When targeting co-located SM backends, it instead                               chunks enable more fine-grained pipelining at the cost of
+generates shared-memory barriers and index bookkeeping to                                   higher per-chunk overhead and more synchronization. Differ-
+coordinate communication and computation within the same                                    ent operators and model sizes favor different trade-off points:
+SM. Because all five realizations share the same logical sched-                             communication-heavy A2A-GEMM and GEMM-AR, for ex-
+ule but expose different latency/bandwidth and resource trade-                              ample, benefit from intermediate split factors that balance
+offs, they form a search space for the autotuner: Syncopate                                 bandwidth and overlap, as confirmed by our sensitivity study
+automatically generates all valid implementations, measures                                 in §6. The tuner searches this space under hardware-specific
+their end-to-end performance, and selects the best-performing                               constraints (e.g., minimum efficient transfer size for copy en-
+
+
+                                                                                      8
+Communication Plan                 Computation Kernel            GPU 0                                               GPU 1
+                                                                                         Reordered Chunk
+     Communication 0                                                                                                             Communication Chunk
+                                 Wave Wave Wave Wave               Wave                  in Global Memory
+                          Layout
+                                  0    2    4    6                  0                                                            Chunk-basd tile schedule
+     Communication 1     Mismatch                                         Reorder
+                                                                                                                                        Wave 0
+                                                                                         Communication 0
+                                                                                                                                        Wave 1
+     Communication 2
+                                   Wave Wave Wave Wave             Wave                                      Reorder             Intra-chunk swizzle
+                                    1    3    5    7                1
+     Communication 3                                                                      Received Chunk                         Wave 0        Wave 1
+
+    (a) Input computation kernel and communication plan                           (b) Prior works: tile reordering           (c) Syncopate: tile scheduling
+
+Figure 6: Tile scheduler transformation. (a) Computation and communication naturally follow different tile/chunk layouts,
+creating misalignment. (b) Prior approaches resolve this by inserting explicit data reordering between the two paths. (c) Syncopate
+instead rewrites the tile schedule to follow chunk order and applies intra-chunk swizzles for locality, aligning compute with
+communication progress without extra data movement.
+
+
+       SM 0              Tile 0             Tile 0                                  allocation, or tile order never requires re-deriving the global
+       SM 1              Tile 1             Tile 1                                  communication plan; instead, Syncopate reuses the existing
+        …                  …                …
+                        Global Memory                                               schedule and regenerates backend-specific code that enforces
+    Copy Engine                 Signal RS Kernel 0      RS Kernel 1
+                     (a) Communication with copy engine                             the same dependencies. This separation of logical schedule
+                                                                                    from physical realization is what makes the search space both
+       SM 0               Tile 0            Tile 0
+       SM 1               Tile 1            Tile 1                                  rich and manageable: as our ablation results show, reason-
+        …                  …                  …
+       SM n
+                       Global Memory                                                able but suboptimal settings can easily leave more than a
+    (TMA/CUDA)                 Signal    RS Chunk 0     RS Chunk 1
+                                                                                    factor of two in performance, while the tuned configuration
+                     (b) Communication with specialized SM
+                                                                                    found by our communication-centric autotuner consistently
+       SM 0               Tile 0           Tile 0       Shared Memory
+                                                        Barrier
+                                                                                    coincides with the most balanced point between computation,
+    (TMA/CUDA)                            RS Tile 0       RS Tile 0                 communication, and hardware utilization.
+       SM 1               Tile 1           Tile 1
+    (TMA/CUDA)                            RS Tile 1       RS Tile 1
+        …                  …                  …              …
+                     (c) Communication with co-located SM                           6     Evaluation
+Figure 7: Communication backend selection. (a) Communica-                           6.1      Experimental Setup
+tion issued by the copy engine with global-memory signaling.
+(b) Dedicated SMs drive transfer. (c) Communication is co-                          Testbed. We evaluate Syncopate on a server with 8 NVIDIA
+located with compute on the same SM.                                                H100 GPUs connected via NVLink with an aggregate band-
+                                                                                    width of 900 GB/s, which is a quite common setting used in
+                                                                                    previous works [3, 13, 31, 46]. Unless otherwise stated, all
+gines and TMA alignment rules) and prunes configurations                            measurements are taken on a single node using all 8 GPUs;
+that would violate these hardware limits.                                           in later experiments, we vary the number of active devices to
+   At the intra-chunk level, we tune both the computation tile                      study scalability and portability. Syncopate is implemented
+configuration and how each chunk is realized by a communi-                          with CUDA v12.9, NVSHMEM v3.3.9, and PyTorch v2.7,
+cation backend. Given a fixed logical schedule, the compiler                        and we run all baselines on the same software stack to ensure
+can instantiate each transfer using any of the backends in                          a fair comparison.
+Fig. 7 (copy engine, intra- or inter-SM TMA, or CUDA load-                          Workloads. We use Syncopate to optimize represen-
+/store on specialized or co-located SMs) and can vary the                           tative multi-GPU operators that dominate the cost of
+number of SMs assigned to communication when applicable.                            modern LLM workloads: general matrix multiplication
+Some schedules benefit from using TMA for intra-node ten-                           (GEMM) and attention [7, 8, 26, 33]. For GEMM, we
+sor movement and load/store-based communication for small,                          benchmark three distributed variants: AllGather–GEMM
+reduction-heavy shards, while others favor copy engines for                         (AG-GEMM) and GEMM–ReduceScatter (GEMM-RS), and
+large bulk transfers with minimal SM involvement. In parallel,                      GEMM–AllReduce (GEMM-AR), which appear in tensor-
+the autotuner explores different tile sizes and intra-tile orders                   parallel [29] or sequence parallel [17] feed-forward network
+that better align compute waves with the chosen chunk layout,                       (FFN) layers. For attention, we evaluate both head-parallel
+improving locality and avoiding long communication tails.                           (HP) [15] and sequence-parallel (SP) schedules, including the
+   Crucially, all of these decisions operate on top of the same                     overlapped RingAttention (Ring-Attn) [18] variant.
+chunk-level dependence graph. Changing the backend, SM                                 Operator shapes are derived from the FFN layers and atten-
+
+
+                                                                              9
+                                                                                                                                     Syncopate             ThunderKittens                                              TritonDistributed                                       AsyncTP                 Flux                   PyTorch
+
+                                                                                AG-GEMM                                                                                                                                         GEMM-RS                                                                                                                                           GEMM-AR
+
+                                                                                                                                                                                                                                                                                                         600
+         600                                                                                                                                              600
+TFLOPS
+
+
+
+
+         400                                                                                                                                              400                                                                                                                                            400
+                      Not Supported
+
+
+
+
+                                                  Not Supported
+
+
+
+
+                                                                                 Not Supported
+
+
+
+
+                                                                                                                 Not Supported
+
+
+
+
+                                                                                                                                          Not Supported
+
+
+
+
+                                                                                                                                                                        Not Supported
+
+
+
+
+                                                                                                                                                                                                   Not Supported
+
+
+
+
+                                                                                                                                                                                                                                Not Supported
+
+
+
+
+                                                                                                                                                                                                                                                               Not Supported
+
+
+
+
+                                                                                                                                                                                                                                                                                       Not Supported
+
+
+
+
+                                                                                                                                                                                                                                                                                                                           Not Supported
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                          Not Supported
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                     Not Supported
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                 Not Supported
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                              Not Supported
+         200                                                                                                                                              200                                                                                                                                            200
+
+
+           0                                                                                                                                                0                                                                                                                                                 0
+                       7B                            -8B                         70
+                                                                                                 B               5B                              2B                        7B                         -8B                       70
+                                                                                                                                                                                                                                                B                     5B                      2B                            7B                         1-8
+                                                                                                                                                                                                                                                                                                                                                                B                  0B                         05
+                                                                                                                                                                                                                                                                                                                                                                                                                       B                      2B
+                    A-                            1                           1-                              -40                        -7                             A-                       1                            1-                             40                       2-7                                A-                                                    1-7                                                      2-7
+                 aM                           -3.                         -3.                              3.1                       en2                             aM                      -3.                          -3.                            .1-                        en                              aM                            A-
+                                                                                                                                                                                                                                                                                                                                                     3.                      3.                          3.1-4                     en
+               LL                       a   MA                          MA                               A-                      Qw                             LL                        aMA                           MA                           A-
+                                                                                                                                                                                                                                                        3
+                                                                                                                                                                                                                                                                               Qw                                 LL                         aM                           A-                          A-                         Qw
+                                      LL                            a                               M                                                                                   LL                           a                      aM                                                                                             LL                        aM                  aM
+                                                                  LL                       L     La                                                                                                                LL                     LL                                                                                                                       LL                  LL
+
+                                                                                                                                                                                                                         4 * H100
+
+                                                                                AG-GEMM                                                                                                                                         GEMM-RS                                                                                                                                           GEMM-AR
+
+
+                                                                                                                                                                                                                                                                                                         600
+         600                                                                                                                                              600
+TFLOPS
+
+
+
+
+         400                                                                                                                                              400                                                                                                                                            400
+
+
+         200                                                                                                                                              200                                                                                                                                            200
+
+
+           0                                                                                                                                                0                                                                                                                                                 0
+                       7B                        1-8
+                                                                  B                     0B                      5B                               2B                        7B                   1-8
+                                                                                                                                                                                                                   B                   0B                             5B                      2B                            7B                         1-8
+                                                                                                                                                                                                                                                                                                                                                                B                  0B                         05
+                                                                                                                                                                                                                                                                                                                                                                                                                       B                      2B
+                    A-                                                          1-7                           40                         2-7                            A-                                                   1-7                            40                        -7                                 A-                                                    1-7                                                      2-7
+                 aM                       A-
+                                             3.                           -3.                               1-                       n                           La
+                                                                                                                                                                    M                        -3.                          -3.                             1-                       n2                               aM                            A-
+                                                                                                                                                                                                                                                                                                                                                     3.                    3.                              1-4                     en
+               LL                       aM                              MA                              -3.                       we                            L                          MA                           MA                            -3.                       we                                LL                         aM                         A-                             -3.                       Qw
+                                      LL                            a                                 MA                         Q
+                                                                                                                                                                                        LL
+                                                                                                                                                                                          a                          a                              MA                         Q
+                                                                                                                                                                                                                                                                                                                                           LL                        aM                              MA
+                                                                  LL                       LL
+                                                                                                     a                                                                                                             LL                     LL
+                                                                                                                                                                                                                                            a                                                                                                                      LL                  LL
+                                                                                                                                                                                                                                                                                                                                                                                         a
+
+                                                                                                                                                                                                                         8 * H100
+Figure 8: Performance comparison of GEMM operators optimized by Syncopate with SOTA baselines. ThunderKittens supports
+only 8 GPUs; 4-GPU is unsupported. When both settings are unsupported, the bar is omitted.
+
+
+tion layers of open-source Llama-3 [11] and Qwen [24] mod-                                                                                                                                                                                          showing even larger gains over fully automatic distributed
+els, covering a range of hidden dimensions, head counts, and                                                                                                                                                                                        compilers. As summarized in Fig. 8 and Fig. 9, Syncopate
+parallelism configurations that are typical of large-scale LLM                                                                                                                                                                                      sustains high TFLOPS on both GEMM and attention oper-
+deployments. For attention, we sweep over multiple sequence                                                                                                                                                                                         ators under multiple communication patterns (AG-GEMM,
+lengths to reflect common short- and long-context use cases                                                                                                                                                                                         GEMM-RS, GEMM-AR, HP/SP attention, and Ring-Attn)
+under different distribution strategies. Overall, this workload                                                                                                                                                                                     and model configurations derived from Llama-3 and Qwen.
+suite exercises Syncopate across both regular GEMM-heavy                                                                                                                                                                                               In Fig. 8, Syncopate is at or near the best-performing curve
+and more irregular attention patterns.                                                                                                                                                                                                              in almost every GEMM configuration. On common, heavily
+Baselines. To assess the effectiveness of operators generated                                                                                                                                                                                       optimized AG-GEMM and GEMM-RS cases where manual
+and tuned by Syncopate, we compare against both state-of-the-                                                                                                                                                                                       kernels such as ThunderKittens, TritonDistributed, AsyncTP,
+art manually engineered kernels and fully automatic compiler-                                                                                                                                                                                       and Flux already sit close to the hardware limits, Syncopate
+based approaches. As manual baselines, we include built-in                                                                                                                                                                                          essentially matches their peak throughput on both 4- and 8-
+operators from fine-grained overlap DSLs such as ThunderKit-                                                                                                                                                                                        GPU settings, achieving on average 99.8% of the best baseline
+tens [30, 31] and Triton-Distributed [45, 46], as well as highly                                                                                                                                                                                    on 4 GPUs and 104% on 8 GPUs. For GEMM-AR, Syncopate
+optimized implementations including AsyncTP [36], Flux [3],                                                                                                                                                                                         is marginally below TritonDistributed on 7B/8B shapes, yet
+and Triton kernels paired with NCCL [22] collectives.                                                                                                                                                                                               it scales more effectively and becomes the top-performing
+   To isolate the benefit of Syncopate’s automatic fine-grained                                                                                                                                                                                     kernel on larger model configurations. These results indicate
+overlap, we further compare against automatic operators pro-                                                                                                                                                                                        that our generic compilation pipeline can recover the same
+duced by existing distributed compiler frameworks, includ-                                                                                                                                                                                          highly tuned overlap patterns that experts design by hand.
+ing Domino [34], Alpa [44], and Mercury [13]. For these                                                                                                                                                                                                In Fig. 9, we observe a similar trend for attention opera-
+comparisons, we transform the communication schedules                                                                                                                                                                                               tors. Under standard HP attention with moderate sequence
+found by each compiler into our chunk-level representation                                                                                                                                                                                          lengths, Syncopate closely tracks the best manual implemen-
+and reuse the same high-level plans in Syncopate, so that                                                                                                                                                                                           tations, confirming that the chunk-based abstraction does not
+any performance difference reflects our intra-kernel overlap                                                                                                                                                                                        sacrifice performance even for workloads that already benefit
+and backend-selection mechanisms rather than differences in                                                                                                                                                                                         from hand-optimized kernels. As the problem becomes harder,
+global parallelization strategy.                                                                                                                                                                                                                    moving to Ring-Attn, longer sequences, and 8-GPU runs, the
+                                                                                                                                                                                                                                                    gap widens in favor of Syncopate. Our compiler maintains
+6.2               Performance Benchmark                                                                                                                                                                                                             high TFLOPS while baseline kernels degrade more rapidly,
+                                                                                                                                                                                                                                                    since it can reshape chunks, rebalance compute and com-
+Operator Results. Across all evaluated settings, Syncopate                                                                                                                                                                                          munication, and choose different backends as the sequence
+generates automatically optimized operators whose perfor-                                                                                                                                                                                           length and parallelism strategy change. Notably, on the most
+mance exceeds, carefully hand-engineered baselines, while                                                                                                                                                                                           communication-intensive Ring-Attn settings, Syncopate de-
+
+
+                                                                                                                                                                                                                            10
+                                              Syncopate         ThunderKittens    TritonDistributed                    PyTorch         Triton + NCCL
+
+                              HP-Attn                                                  Attn-A2A                                                                                         Ring-Attn
+         600                                              600                                                                         600
+
+
+         400
+TFLOPS
+
+
+
+
+                                                          400                                                                         400
+
+
+
+
+                                                                                                                                                 Not Supported
+
+
+
+
+                                                                                                                                                                      Not Supported
+
+
+
+
+                                                                                                                                                                                                    Not Supported
+
+
+
+
+                                                                                                                                                                                                                      Not Supported
+         200                                              200                                                                         200
+
+
+           0                                                0                                                                           0
+                 8k     12K             16K    20K                     8K        12K                        16K            20k                       16K                  32K                           64K           128K
+
+                                                                                 4 * H100
+
+                              HP-Attn                                                  Attn-A2A                                                                                         Ring-Attn
+                                                                                                                                      600
+                                                          600
+
+         400
+                                                                                                                                      400
+TFLOPS
+
+
+
+
+                                                          400
+
+         200                                                                                                                          200
+                                                          200
+
+
+           0                                                0                                                                           0
+                 8k     12k             16k    20k                     8k        12k                        16k            20k                       16K                  32K                           64K           128K
+
+                                                                                 8 * H100
+
+                      Figure 9: Performance comparison of operators optimized by Syncopate with SOTA baselines.
+
+livers the best performance despite not being tailored specifi-                                                    Domino        Domino+Syncopate                                           Mercury
+                                                                                                                   Alpa          Alpa+Syncopate                                             Mercury+Syncopate
+cally for this operator.                                                                                                                                         20
+                                                                                                            3
+                                                                                                                                                                                         4*H100                     8*H100
+
+
+
+                                                                                             Latency (ms)
+Integration Results. We further evaluate how Syncopate                                                      2
+composes with existing automatic distributed compilers that                                                                                                      10
+                                                                                                            1
+search for the communication schedule among devices, using                                                           4*H100             8*H100
+                                                                                                            0                                                     0
+their communication plans as our inputs. As summarized in                                                         Domino     Alpa   Domino    Alpa                                    Mercury Mercury Mercury Mercury
+                                                                                                                  GEMM      GEMM    GEMM     GEMM                                      Ring DoubleRing Ring DoubleRing
+Fig. 10, for each of Domino, Alpa, and Mercury, we keep the                                                            (a) Partition-based IR                                                (b) Loop-based IR
+original parallelization strategy and the searched communica-
+tion schedule fixed, convert that schedule into our chunk-level
+representation, and let Syncopate generate the fine-grained                                 Figure 10: Evaluation lowering partitioned-based IR and loop-
+overlapped kernels. Across both GEMM and attention work-                                    based IR searched by higher-level distributed compilers inte-
+loads on 4- and 8-H100 configurations, integrating Syncopate                                grated with Syncopate.
+consistently reduces end-to-end operator latency compared
+to the native implementations shipped with these systems,
+showing that chunk-based intra-kernel overlap exposes an                                    Fig. 11. Each subplot corresponds to one of the key design
+additional optimization dimension on top of their global par-                               choices introduced in §5: communication backend selection
+allelization decisions.                                                                     and SM allocation, chunk size (split factor), and intra-tile
+   This experiment also illustrates that Syncopate can be                                   scheduling.
+cleanly integrated with both partition-based and loop-based                                Communication Backend and SM Tuning. Fig. 11(a) and
+compiler stacks. Domino and Alpa operate on partitioned IRs                                (c) study how different realizations of the same logical com-
+and expose their communication plans as sequences of collec-                               munication schedule perform under the backends described
+tives between logical tensor partitions, while Mercury is built                            in § 4.2, and how tuning the number of active SMs further
+around a loop-centric IR for ring [18] and double-ring atten-                              refines this choice. In (a), for GEMM-RS and AG-GEMM,
+tion [12]. Because our interface only requires a well-defined,                             copy-engine and intra-SM TMA backends achieve the highest
+implementation-agnostic communication schedule and light-                                  TFLOPS, while purely CUDA load/store realizations saturate
+weight annotations on the local kernels, these systems can                                 at much lower throughput. The gap between the best and worst
+plug into Syncopate with minimal source modifications. This                                backend for the same logical schedule is comparable to the
+compatibility allows practitioners to reuse mature distributed                             gap between our final implementation and several baselines in
+compilers for global partitioning, while relying on Synco-                                 Fig. 8, indicating that backend selection alone can determine
+pate to automatically realize high-performance, fine-grained                               whether overlap is effective. This confirms that the ability to
+overlap within each generated operator.                                                    instantiate the same chunk schedule with different backends is
+                                                                                           crucial: no single mechanism dominates across operators, and
+6.3            Ablation and Sensitivity Studies                                            picking a suboptimal backend can leave more than half of the
+                                                                                           available performance on the table. In (c), for a fixed backend,
+We next evaluate the effect of Syncopate’s chunk-based code                                varying the number of SMs devoted to communication reveals
+generation and communication-centric auto-tuning compo-                                    a clear sweet spot where computation and communication are
+nents through a series of ablation and sensitivity analyses in                             balanced. For both 405B and 70B GEMMs, allocating too
+
+
+                                                                                   11
+                                                              Copy Engine                                                                            Split=1
+                                                                                              400
+ TFLOPS
+
+
+
+
+                                                                                     TFLOPS
+           500                                                Intra-SM (TMA)                                                                         Split=2
+                                                              Intra-SM (CUDA)                                                                        Split=3
+                                                              Inter-SM (TMA)                  200                                                    Split=4
+                                                              Inter-SM (CUDA)                                                                        Split=5
+             0                                                                                  0
+                     GEMM-RS           AG-GEMM                                                       A2A-GEMM               GEMM-AR
+                 (a) Communication Backend Selection                                                      (b) Chunk Split Tuning
+
+
+           800                                                                                800
+                                                                                                    M 128, N 256, K 64, Step 2
+                                                                                              600
+  TFLOPS
+
+
+
+
+                                                                                     TFLOPS
+           600
+                                                                                              400
+           400                                         405B            70B                    200
+
+                 4      6     8     10    12     14      16      18      20                         20   30    40     50    60     70      80   90      100
+                                  (c) SM Number Tuning                                                         (d) Intra-Tile Scheduling
+                            Figure 11: Ablation and sensitivity studies of Syncopate’s auto-tuning design space.
+
+few SMs underutilizes the link bandwidth, whereas allocating                          communication chunk order introduced in our chunk-based
+too many starves the main kernel. The optimal SM count                                code generation, whereas poorly performing ones repeatedly
+also shifts with model size, which matches the design of our                          revisit tiles in a way that destroys locality or creates long tails
+backend code generation: the autotuner treats SM allocation                           of unfinished work. By generating and evaluating these sched-
+as a first-class knob and automatically selects a near-optimal                        ules automatically, Syncopate converges on tile orders that
+point for each operator/hardware pair instead of relying on a                         co-optimize cache reuse and SM utilization, without requiring
+single hard-coded ratio.                                                              users to reason manually about low-level tiling and swizzling
+Chunk Size Tuning. Fig. 11(b) varies the number of chunks                             policies.
+(split factor) used to realize the same high-level schedule for                          Taken together, these studies demonstrate that Syncopate’s
+A2A-GEMM and GEMM-AR. Smaller split factors corre-                                    chunk abstraction is not only expressive but also forms a prac-
+spond to larger chunks with higher single-transfer efficiency                         tical search space: the same logical schedule can be realized
+but fewer overlap opportunities, while larger split factors in-                       via multiple backends, chunk sizes, SM allocations, and tile or-
+crease overlap at the cost of per-chunk overhead. The curves                          ders, and the differences between reasonable but non-optimal
+exhibit a clear non-monotonic trend, with performance peak-                           choices and the tuned configuration are often comparable to,
+ing at an intermediate split (e.g., 2–3 splits, about 128MB for                       or larger than, the gaps between systems in our main bench-
+GEMM-AR) and degrading when chunks become either too                                  marks. The auto-tuning framework in § 4.3 systematically
+coarse or too fine. Notably, naive choices that are convenient                        explores this space using the code generation mechanisms of
+to implement by hand (such as a single large chunk or split-                          § 4.2, turning what would otherwise be a brittle, hand-tuned
+ting once per rank) sit far from the optimum. This behavior                           process into a robust, compiler-driven optimization.
+directly reflects the trade-off discussed in our chunk-based
+code generation: practitioners cannot reliably pick a single
+“good” chunk size by hand, whereas Syncopate searches this
+space automatically and selects the configuration that best                           7         Conclusion
+matches the operator’s compute/communication balance.
+Intra-Tile Scheduling. Finally, Fig. 11(d) explores different                         Syncopate bridges the abstraction gap between communica-
+intra-tile scheduling strategies for a representative GEMM                            tion planning and fine-grained overlapping by introducing
+configuration, varying the order in which tiles within each                           a chunk-based interface that unifies communication plans
+chunk are visited. Each point corresponds to a valid sched-                           with tiled GPU computation. By automatically aligning tile
+ule with tile size on M, N, K dimensions and the pipeline                             schedules with communication progress and selecting among
+stages that preserve program semantics but change locality                            heterogeneous backends, Syncopate turns intra-kernel over-
+and load balance. To represent different search candidates,                           lap into a general compiler capability rather than a hand-
+we calculate the consumed shared memory size and plot the                             engineered optimization. The framework integrates cleanly
+performance of these valid schedules. The wide spread in                              with existing distributed compilers, complementing their
+TFLOPS shows that tile order alone can introduce more than                            global parallelization strategies with backend-aware, fine-
+a 2 × performance difference, reinforcing the importance of                           grained scheduling. This decoupled design provides a founda-
+the tile-scheduler transformation in § 4.2. High-performing                           tion for systems that co-schedule computation and communi-
+schedules cluster around orders that align tile waves with the                        cation and accommodate diverse communication backends.
+
+
+                                                                                12
+References                                                          [6] Tianqi Chen, Lianmin Zheng, Eddie Yan, Ziheng Jiang,
+                                                                        Thierry Moreau, Luis Ceze, Carlos Guestrin, and Arvind
+[1] Sami Alabed, Daniel Belov, Bart Chrzaszcz, Juliana                  Krishnamurthy. Learning to optimize tensor programs.
+    Franco, Dominik Grewe, Dougal Maclaurin, James Mol-                 In Proceedings of the 32nd International Conference
+    loy, Tom Natan, Tamara Norman, Xiaoyue Pan, et al.                  on Neural Information Processing Systems, NIPS’18,
+    Partir: Composing spmd partitioning strategies for ma-              page 3393–3404, Red Hook, NY, USA, 2018. Curran
+    chine learning. In Proceedings of the 30th ACM Inter-               Associates Inc.
+    national Conference on Architectural Support for Pro-
+    gramming Languages and Operating Systems, Volume                [7] Tri Dao. Flashattention-2: Faster attention with bet-
+    1, pages 794–810, 2025.                                             ter parallelism and work partitioning. arXiv preprint
+                                                                        arXiv:2307.08691, 2023.
+[2] Jason Ansel, Edward Yang, Horace He, Natalia
+    Gimelshein, Animesh Jain, Michael Voznesensky, Bin              [8] Tri Dao, Dan Fu, Stefano Ermon, Atri Rudra, and
+    Bao, Peter Bell, David Berard, Evgeni Burovski, Geeta               Christopher Ré. Flashattention: Fast and memory-
+    Chauhan, Anjali Chourdia, Will Constable, Alban Des-                efficient exact attention with io-awareness. Advances
+    maison, Zachary DeVito, Elias Ellison, Will Feng, Jiong             in neural information processing systems, 35:16344–
+    Gong, Michael Gschwind, Brian Hirsh, Sherlock Huang,                16359, 2022.
+    Kshiteej Kalambarkar, Laurent Kirsch, Michael Lazos,
+    Mario Lezcano, Yanbo Liang, Jason Liang, Yinghai Lu,            [9] Siyuan Feng, Bohan Hou, Hongyi Jin, Wuwei Lin, Junru
+    C. K. Luk, Bert Maher, Yunjie Pan, Christian Puhrsch,               Shao, Ruihang Lai, Zihao Ye, Lianmin Zheng, Cody Hao
+    Matthias Reso, Mark Saroufim, Marcos Yukio Siraichi,                Yu, Yong Yu, et al. Tensorir: An abstraction for auto-
+    Helen Suk, Shunting Zhang, Michael Suo, Phil Tillet,                matic tensorized program optimization. In Proceedings
+    Xu Zhao, Eikan Wang, Keren Zhou, Richard Zou, Xi-                   of the 28th ACM International Conference on Architec-
+    aodong Wang, Ajit Mathews, William Wen, Gregory                     tural Support for Programming Languages and Operat-
+    Chanan, Peng Wu, and Soumith Chintala. Pytorch 2:                   ing Systems, Volume 2, pages 804–817, 2023.
+    Faster machine learning through dynamic python byte-
+    code transformation and graph compilation. In Proceed-         [10] Raja Gond, Nipun Kwatra, and Ramachandran Ramjee.
+    ings of the 29th ACM International Conference on Archi-             Tokenweave: Efficient compute-communication overlap
+    tectural Support for Programming Languages and Op-                  for distributed llm inference, 2025.
+    erating Systems, Volume 2, ASPLOS ’24, page 929–947,
+                                                                   [11] Aaron Grattafiori, Abhimanyu Dubey, Abhinav Jauhri,
+    New York, NY, USA, 2024. Association for Computing
+                                                                        Abhinav Pandey, Abhishek Kadian, Ahmad Al-Dahle,
+    Machinery.
+                                                                        Aiesha Letman, Akhil Mathur, Alan Schelten, Alex
+[3] Li-Wen Chang, Wenlei Bao, Qi Hou, Chengquan                         Vaughan, et al. The llama 3 herd of models. arXiv
+    Jiang, Ningxin Zheng, Yinmin Zhong, Xuanrun Zhang,                  preprint arXiv:2407.21783, 2024.
+    Zuquan Song, Chengji Yao, Ziheng Jiang, et al. Flux:
+    fast software-based communication overlap on gpus              [12] Diandian Gu, Peng Sun, Qinghao Hu, Ting Huang, Xun
+    through kernel fusion. arXiv preprint arXiv:2406.06858,             Chen, Yingtong Xiong, Guoteng Wang, Qiaoling Chen,
+    2024.                                                               Shangchun Zhao, Jiarui Fang, et al. Loongtrain: Effi-
+                                                                        cient training of long-sequence llms with head-context
+[4] Chang Chen, Xiuhong Li, Qianchao Zhu, Jiangfei Duan,                parallelism. arXiv preprint arXiv:2406.18485, 2024.
+    Peng Sun, Xingcheng Zhang, and Chao Yang. Cen-
+    tauri: Enabling efficient scheduling for communication-        [13] Yue Guan, Xinwei Qiang, Zaifeng Pan, Daniels John-
+    computation overlap in large model training via commu-              son, Yuanwei Fang, Keren Zhou, Yuke Wang, Wanlu Li,
+    nication partitioning. In Proceedings of the 29th ACM               Yufei Ding, and Adnan Aziz. Mercury: Unlocking multi-
+    International Conference on Architectural Support for               gpu operator optimization for llms via remote memory
+    Programming Languages and Operating Systems, Vol-                   scheduling. In Proceedings of the ACM SIGOPS 31st
+    ume 3, pages 178–191, 2024.                                         Symposium on Operating Systems Principles, SOSP ’25,
+                                                                        page 1046–1061, New York, NY, USA, 2025. Associa-
+[5] Tianqi Chen, Thierry Moreau, Ziheng Jiang, Lianmin                  tion for Computing Machinery.
+    Zheng, Eddie Yan, Haichen Shen, Meghan Cowan,
+    Leyuan Wang, Yuwei Hu, Luis Ceze, et al. {TVM}:                [14] Ke Hong, Xiuhong Li, Minxu Liu, Qiuli Mao, Tianqi
+    An automated {End-to-End} optimizing compiler for                   Wu, Zixiao Huang, Lufang Chen, Zhong Wang, Yichong
+    deep learning. In 13th USENIX Symposium on Oper-                    Zhang, Zhenhua Zhu, et al. Flashoverlap: A lightweight
+    ating Systems Design and Implementation (OSDI 18),                  design for efficiently overlapping communication and
+    pages 578–594, 2018.                                                computation. arXiv preprint arXiv:2504.19519, 2025.
+
+
+                                                              13
+[15] Sam Ade Jacobs, Masahiro Tanaka, Chengming Zhang,             [25] Keshav Santhanam, Siddharth Krishna, Ryota Tomioka,
+     Minjia Zhang, Shuaiwen Leon Song, Samyam Rajb-                     Tim Harris, and Matei Zaharia. Distir: An intermediate
+     handari, and Yuxiong He. Deepspeed ulysses: Sys-                   representation and simulator for efficient neural network
+     tem optimizations for enabling training of extreme                 distribution. arXiv preprint arXiv:2111.05426, 2021.
+     long sequence transformer models. arXiv preprint
+     arXiv:2309.14509, 2023.                                       [26] Jay Shah, Ganesh Bikshandi, Ying Zhang, Vijay
+                                                                        Thakkar, Pradeep Ramani, and Tri Dao. Flashattention-
+[16] Abhinav Jangda, Jun Huang, Guodong Liu, Amir                       3: Fast and accurate attention with asynchrony and low-
+     Hossein Nodehi Sabet, Saeed Maleki, Youshan Miao,                  precision. Advances in Neural Information Processing
+     Madanlal Musuvathi, Todd Mytkowicz, and Olli                       Systems, 37:68658–68685, 2024.
+     Saarikivi. Breaking the computation and commu-
+     nication abstraction barrier in distributed machine           [27] Junru Shao, Xiyou Zhou, Siyuan Feng, Bohan Hou, Rui-
+     learning workloads. In Proceedings of the 27th ACM                 hang Lai, Hongyi Jin, Wuwei Lin, Masahiro Masuda,
+     International Conference on Architectural Support for              Cody Hao Yu, and Tianqi Chen. Tensor program opti-
+     Programming Languages and Operating Systems, pages                 mization with probabilistic programs. Advances in Neu-
+     402–416, 2022.                                                     ral Information Processing Systems, 35:35783–35796,
+                                                                        2022.
+[17] Vijay Anand Korthikanti, Jared Casper, Sangkug Lym,
+     Lawrence McAfee, Michael Andersch, Mohammad                   [28] Noam Shazeer, Youlong Cheng, Niki Parmar, Dustin
+     Shoeybi, and Bryan Catanzaro. Reducing activation re-              Tran, Ashish Vaswani, Penporn Koanantakool, Peter
+     computation in large transformer models. Proceedings               Hawkins, HyoukJoong Lee, Mingsheng Hong, Cliff
+     of Machine Learning and Systems, 5:341–353, 2023.                  Young, Ryan Sepassi, and Blake Hechtman. Mesh-
+[18] Hao Liu, Matei Zaharia, and Pieter Abbeel. Ringat-                 tensorflow: Deep learning for supercomputers, 2018.
+     tention with blockwise transformers for near-infinite
+     context. In The Twelfth International Conference on           [29] Mohammad Shoeybi, Mostofa Patwary, Raul Puri,
+     Learning Representations.                                          Patrick LeGresley, Jared Casper, and Bryan Catanzaro.
+                                                                        Megatron-lm: Training multi-billion parameter lan-
+[19] NVIDIA. NVIDIA H100 Tensor Core GPU Architec-                      guage models using model parallelism. arXiv preprint
+     ture. Technical report, NVIDIA, mar 2022. White paper.             arXiv:1909.08053, 2019.
+
+[20] NVIDIA. NVIDIA Scalable Hierarchical Aggregation              [30] Benjamin F. Spector, Simran Arora, Aaryan Singhal,
+     and Reduction Protocol (SHARP) Rev 3.0.0, 2024. Ac-                Daniel Y. Fu, and Christopher Ré. Thunderkittens: Sim-
+     cessed: 2025-02-10.                                                ple, fast, and adorable ai kernels, 2024.
+[21] NVIDIA Corporation. Nvidia nvlink high-speed inter-           [31] Stuart H. Sul, Simran Arora, Benjamin F. Spector, and
+     connect: Application performance. Technical report,                Christopher Ré. Parallelkittens: Systematic and practical
+     NVIDIA Corporation, 2015. Accessed: 2025-04-16.                    simplification of multi-gpu ai kernels, 2025.
+[22] NVIDIA Corporation. NVIDIA Collective Communica-
+                                                                   [32] Philippe Tillet, H. T. Kung, and David Cox. Triton:
+     tions Library (NCCL), 2025. Version 2.26.2.
+                                                                        an intermediate language and compiler for tiled neural
+[23] OpenMP Architecture Review Board. Openmp appli-                    network computations. In Proceedings of the 3rd ACM
+     cation programming interface. https://www.openmp.                  SIGPLAN International Workshop on Machine Learning
+     org/specifications/, 2023.                                         and Programming Languages, MAPL 2019, page 10–19,
+                                                                        New York, NY, USA, 2019. Association for Computing
+[24] Qwen, :, An Yang, Baosong Yang, Beichen Zhang,                     Machinery.
+     Binyuan Hui, Bo Zheng, Bowen Yu, Chengyuan Li, Day-
+     iheng Liu, Fei Huang, Haoran Wei, Huan Lin, Jian Yang,        [33] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob
+     Jianhong Tu, Jianwei Zhang, Jianxin Yang, Jiaxi Yang,              Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser,
+     Jingren Zhou, Junyang Lin, Kai Dang, Keming Lu, Ke-                and Illia Polosukhin. Attention is all you need. Advances
+     qin Bao, Kexin Yang, Le Yu, Mei Li, Mingfeng Xue, Pei              in neural information processing systems, 30, 2017.
+     Zhang, Qin Zhu, Rui Men, Runji Lin, Tianhao Li, Tianyi
+     Tang, Tingyu Xia, Xingzhang Ren, Xuancheng Ren,               [34] Guanhua Wang, Chengming Zhang, Zheyu Shen, Ang
+     Yang Fan, Yang Su, Yichang Zhang, Yu Wan, Yuqiong                  Li, and Olatunji Ruwase. Domino: Eliminating commu-
+     Liu, Zeyu Cui, Zhenru Zhang, and Zihan Qiu. Qwen2.5                nication in llm training via generic tensor slicing and
+     technical report, 2025.                                            overlapping, 2024.
+
+
+                                                              14
+[35] Haoran Wang, Lei Wang, Haobo Xu, Ying Wang, Yum-                     Size Zheng, Li-Wen Chang, et al. Comet: Fine-grained
+     ing Li, and Yinhe Han. Primepar: Efficient spatial-                  computation-communication overlapping for mixture-
+     temporal tensor partitioning for large transformer model             of-experts. arXiv preprint arXiv:2502.19811, 2025.
+     training. In Proceedings of the 29th ACM International
+     Conference on Architectural Support for Programming             [42] Lianmin Zheng, Chengfan Jia, Minmin Sun, Zhao Wu,
+     Languages and Operating Systems, Volume 3, ASPLOS                    Cody Hao Yu, Ameer Haj-Ali, Yida Wang, Jun Yang,
+     ’24, page 801–817, New York, NY, USA, 2024. Associ-                  Danyang Zhuo, Koushik Sen, et al. Ansor: Generating
+     ation for Computing Machinery.                                       {High-Performance} tensor programs for deep learn-
+                                                                          ing. In 14th USENIX symposium on operating systems
+[36] Shibo Wang, Jinliang Wei, Amit Sabne, Andy                           design and implementation (OSDI 20), pages 863–879,
+     Davis, Berkin Ilbeyi, Blake Hechtman, Dehao Chen,                    2020.
+     Karthik Srinivasa Murthy, Marcello Maggioni, Qiao
+     Zhang, et al. Overlap communication with dependent              [43] Lianmin Zheng, Chengfan Jia, Minmin Sun, Zhao Wu,
+     computation via decomposition in large deep learning                 Cody Hao Yu, Ameer Haj-Ali, Yida Wang, Jun Yang,
+     models. In Proceedings of the 28th ACM International                 Danyang Zhuo, Koushik Sen, Joseph E. Gonzalez, and
+     Conference on Architectural Support for Programming                  Ion Stoica. Ansor: generating high-performance ten-
+     Languages and Operating Systems, Volume 1, pages                     sor programs for deep learning. In Proceedings of the
+     93–106, 2022.                                                        14th USENIX Conference on Operating Systems Design
+                                                                          and Implementation, OSDI’20, USA, 2020. USENIX
+[37] Shibo Wang, Jinliang Wei, Amit Sabne, Andy                           Association.
+     Davis, Berkin Ilbeyi, Blake Hechtman, Dehao Chen,
+                                                                     [44] Lianmin Zheng, Zhuohan Li, Hao Zhang, Yonghao
+     Karthik Srinivasa Murthy, Marcello Maggioni, Qiao
+                                                                          Zhuang, Zhifeng Chen, Yanping Huang, Yida Wang,
+     Zhang, Sameer Kumar, Tongfei Guo, Yuanzhong Xu,
+                                                                          Yuanzhong Xu, Danyang Zhuo, Eric P Xing, et al. Alpa:
+     and Zongwei Zhou. Overlap communication with
+                                                                          Automating inter-and {Intra-Operator} parallelism for
+     dependent computation via decomposition in large
+                                                                          distributed deep learning. In 16th USENIX Sympo-
+     deep learning models. In Proceedings of the 28th ACM
+                                                                          sium on Operating Systems Design and Implementation
+     International Conference on Architectural Support
+                                                                          (OSDI 22), pages 559–578, 2022.
+     for Programming Languages and Operating Systems,
+     Volume 1, ASPLOS 2023, page 93–106, New York, NY,               [45] Size Zheng, Wenlei Bao, Qi Hou, Xuegui Zheng, Jin
+     USA, 2022. Association for Computing Machinery.                      Fang, Chenhui Huang, Tianqi Li, Haojie Duanmu, Renze
+                                                                          Chen, Ruifan Xu, et al. Triton-distributed: Programming
+[38] William Won, Midhilesh Elavazhagan, Sudarshan Srini-
+                                                                          overlapping kernels on distributed ai systems with the
+     vasan, Swati Gupta, and Tushar Krishna.       Tacos:
+                                                                          triton compiler. arXiv preprint arXiv:2504.19442, 2025.
+     Topology-aware collective algorithm synthesizer for
+     distributed machine learning. In Proceedings of the             [46] Size Zheng, Jin Fang, Xuegui Zheng, Qi Hou, Wen-
+     2024 57th IEEE/ACM International Symposium on Mi-                    lei Bao, Ningxin Zheng, Ziheng Jiang, Dongyang
+     croarchitecture, MICRO ’24, page 856–870. IEEE Press,                Wang, Jianxi Ye, Haibin Lin, et al. Tilelink: Gen-
+     2024.                                                                erating efficient compute-communication overlapping
+                                                                          kernels using tile-centric primitives. arXiv preprint
+[39] Mengdi Wu, Xinhao Cheng, Shengyu Liu, Chunan Shi,
+                                                                          arXiv:2503.20313, 2025.
+     Jianan Ji, Man Kit Ao, Praveen Velliengiri, Xupeng
+     Miao, Oded Padon, and Zhihao Jia. Mirage: A {Multi-             [47] Kan Zhu, Yufei Gao, Yilong Zhao, Liangyu Zhao,
+     Level} superoptimizer for tensor programs. In 19th                   Gefei Zuo, Yile Gu, Dedong Xie, Tian Tang, Qinyu
+     USENIX Symposium on Operating Systems Design and                     Xu, Zihao Ye, Keisuke Kamahori, Chien-Yu Lin, Ziren
+     Implementation (OSDI 25), pages 21–38, 2025.                         Wang, Stephanie Wang, Arvind Krishnamurthy, and
+                                                                          Baris Kasikci. Nanoflow: Towards optimal large lan-
+[40] Yuanzhong Xu, HyoukJoong Lee, Dehao Chen, Blake                      guage model serving throughput, 2025.
+     Hechtman, Yanping Huang, Rahul Joshi, Maxim Krikun,
+     Dmitry Lepikhin, Andy Ly, Marcello Maggioni, Ruom-
+     ing Pang, Noam Shazeer, Shibo Wang, Tao Wang,
+     Yonghui Wu, and Zhifeng Chen. Gspmd: General
+     and scalable parallelization for ml computation graphs,
+     2021.
+
+[41] Shulai Zhang, Ningxin Zheng, Haibin Lin, Ziheng Jiang,
+     Wenlei Bao, Chengquan Jiang, Qi Hou, Weihao Cui,
+
+
+                                                                15
+

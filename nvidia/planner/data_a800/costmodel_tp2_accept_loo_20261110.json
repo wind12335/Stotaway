@@ -1,0 +1,479 @@
+{
+  "classification": "UNVALIDATED exploratory analysis; no deployment decision",
+  "source": "planner/data_a800/cells_tp2_accept_20261110.json",
+  "method": "leave-one-model-out; original DCU model structure",
+  "summary": {
+    "cells": 32,
+    "matching_oracle": 19,
+    "chosen_slower_than_stock": 0,
+    "stock_total_ms": 314.4511432647705,
+    "chosen_total_ms": 306.48128889501095,
+    "oracle_total_ms": 302.4382566064596
+  },
+  "cells": [
+    {
+      "heldout": "27b_vehicle",
+      "site": "qkv",
+      "M": 4096,
+      "choice": "stock",
+      "oracle": "stock",
+      "stock_ms": 0.886790007352829,
+      "dx_ms": 0.9385240077972412,
+      "chosen_ms": 0.886790007352829,
+      "oracle_ms": 0.886790007352829,
+      "predicted_ms": {
+        "stock": 1.040438848262106
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "o_proj",
+      "M": 4096,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 0.6182830035686493,
+      "dx_ms": 0.47926799952983856,
+      "chosen_ms": 0.47926799952983856,
+      "oracle_ms": 0.47926799952983856,
+      "predicted_ms": {
+        "stock": 0.4976167552491325,
+        "dx": 0.468122999648456
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "fc1",
+      "M": 4096,
+      "choice": "stock",
+      "oracle": "stock",
+      "stock_ms": 3.1428850889205933,
+      "dx_ms": 3.1835830211639404,
+      "chosen_ms": 3.1428850889205933,
+      "oracle_ms": 3.1428850889205933,
+      "predicted_ms": {
+        "stock": 3.1612908120205745
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "fc2",
+      "M": 4096,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 1.591130018234253,
+      "dx_ms": 1.476153016090393,
+      "chosen_ms": 1.591130018234253,
+      "oracle_ms": 1.476153016090393,
+      "predicted_ms": {
+        "stock": 1.5021847360154288,
+        "dx": 1.4882678329992958
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "qkv",
+      "M": 8192,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 1.6313700079917908,
+      "dx_ms": 1.600603997707367,
+      "chosen_ms": 1.6313700079917908,
+      "oracle_ms": 1.600603997707367,
+      "predicted_ms": {
+        "stock": 1.7080648385411985
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "o_proj",
+      "M": 8192,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 1.2127019762992859,
+      "dx_ms": 0.9687440097332001,
+      "chosen_ms": 0.9687440097332001,
+      "oracle_ms": 0.9687440097332001,
+      "predicted_ms": {
+        "stock": 1.1221607061827612,
+        "dx": 0.9617669236133949
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "fc1",
+      "M": 8192,
+      "choice": "stock",
+      "oracle": "stock",
+      "stock_ms": 6.123051881790161,
+      "dx_ms": 6.169661045074463,
+      "chosen_ms": 6.123051881790161,
+      "oracle_ms": 6.123051881790161,
+      "predicted_ms": {
+        "stock": 6.226438864362884
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "fc2",
+      "M": 8192,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 3.1880120038986206,
+      "dx_ms": 2.963912010192871,
+      "chosen_ms": 2.963912010192871,
+      "oracle_ms": 2.963912010192871,
+      "predicted_ms": {
+        "stock": 3.1148856910670233,
+        "dx": 2.985391144712015
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "qkv",
+      "M": 16384,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 3.1216700077056885,
+      "dx_ms": 2.9988149404525757,
+      "chosen_ms": 3.1216700077056885,
+      "oracle_ms": 2.9988149404525757,
+      "predicted_ms": {
+        "stock": 3.264069773582416
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "o_proj",
+      "M": 16384,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 2.4028480052948,
+      "dx_ms": 1.93510502576828,
+      "chosen_ms": 1.93510502576828,
+      "oracle_ms": 1.93510502576828,
+      "predicted_ms": {
+        "stock": 2.3792705885740815,
+        "dx": 1.957201141068829
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "fc1",
+      "M": 16384,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 12.253551959991455,
+      "dx_ms": 12.20225191116333,
+      "chosen_ms": 12.253551959991455,
+      "oracle_ms": 12.20225191116333,
+      "predicted_ms": {
+        "stock": 12.375833966163592
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "fc2",
+      "M": 16384,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 6.342854022979736,
+      "dx_ms": 5.934453010559082,
+      "chosen_ms": 5.934453010559082,
+      "oracle_ms": 5.934453010559082,
+      "predicted_ms": {
+        "stock": 6.362054502186447,
+        "dx": 6.00174218718616
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "qkv",
+      "M": 32768,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 6.232687950134277,
+      "dx_ms": 5.8048741817474365,
+      "chosen_ms": 6.232687950134277,
+      "oracle_ms": 5.8048741817474365,
+      "predicted_ms": {
+        "stock": 6.511208022532953
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "o_proj",
+      "M": 32768,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 4.800133943557739,
+      "dx_ms": 3.914553999900818,
+      "chosen_ms": 3.914553999900818,
+      "oracle_ms": 3.914553999900818,
+      "predicted_ms": {
+        "stock": 4.877332309018495,
+        "dx": 3.9316609846605495
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "fc1",
+      "M": 32768,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 24.787094116210938,
+      "dx_ms": 24.184382438659668,
+      "chosen_ms": 24.787094116210938,
+      "oracle_ms": 24.184382438659668,
+      "predicted_ms": {
+        "stock": 24.88545533507873
+      }
+    },
+    {
+      "heldout": "27b_vehicle",
+      "site": "fc2",
+      "M": 32768,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 12.826428890228271,
+      "dx_ms": 12.024300575256348,
+      "chosen_ms": 12.024300575256348,
+      "oracle_ms": 12.024300575256348,
+      "predicted_ms": {
+        "stock": 12.811076620351198,
+        "dx": 11.988426104885466
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "qkv",
+      "M": 4096,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 1.6369709968566895,
+      "dx_ms": 1.5424460172653198,
+      "chosen_ms": 1.6369709968566895,
+      "oracle_ms": 1.5424460172653198,
+      "predicted_ms": {
+        "stock": 1.713975730439934
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "o_proj",
+      "M": 4096,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 1.3907139897346497,
+      "dx_ms": 1.20169997215271,
+      "chosen_ms": 1.20169997215271,
+      "oracle_ms": 1.20169997215271,
+      "predicted_ms": {
+        "stock": 1.3562385634469198,
+        "dx": 1.2126442337788317
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "fc1",
+      "M": 4096,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 7.8498029708862305,
+      "dx_ms": 7.7950119972229,
+      "chosen_ms": 7.8498029708862305,
+      "oracle_ms": 7.7950119972229,
+      "predicted_ms": {
+        "stock": 7.89968955804995
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "fc2",
+      "M": 4096,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 4.092188835144043,
+      "dx_ms": 3.936993956565857,
+      "chosen_ms": 3.936993956565857,
+      "oracle_ms": 3.936993956565857,
+      "predicted_ms": {
+        "stock": 4.047975619225423,
+        "dx": 3.9170961237604267
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "qkv",
+      "M": 8192,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 3.2601200342178345,
+      "dx_ms": 3.0846270322799683,
+      "chosen_ms": 3.2601200342178345,
+      "oracle_ms": 3.0846270322799683,
+      "predicted_ms": {
+        "stock": 3.389062717004148
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "o_proj",
+      "M": 8192,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 2.6838459968566895,
+      "dx_ms": 2.388612985610962,
+      "chosen_ms": 2.388612985610962,
+      "oracle_ms": 2.388612985610962,
+      "predicted_ms": {
+        "stock": 2.7113346940578844,
+        "dx": 2.346712548336461
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "fc1",
+      "M": 8192,
+      "choice": "stock",
+      "oracle": "stock",
+      "stock_ms": 15.62320613861084,
+      "dx_ms": 15.649785995483398,
+      "chosen_ms": 15.62320613861084,
+      "oracle_ms": 15.62320613861084,
+      "predicted_ms": {
+        "stock": 15.729559853120175
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "fc2",
+      "M": 8192,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 7.9446940422058105,
+      "dx_ms": 7.916543006896973,
+      "chosen_ms": 7.916543006896973,
+      "oracle_ms": 7.916543006896973,
+      "predicted_ms": {
+        "stock": 7.974062669903222,
+        "dx": 7.634299829634831
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "qkv",
+      "M": 16384,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 6.519032955169678,
+      "dx_ms": 6.163782119750977,
+      "chosen_ms": 6.519032955169678,
+      "oracle_ms": 6.163782119750977,
+      "predicted_ms": {
+        "stock": 6.76706776770826
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "o_proj",
+      "M": 16384,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 5.3630452156066895,
+      "dx_ms": 4.658431053161621,
+      "chosen_ms": 4.658431053161621,
+      "oracle_ms": 4.658431053161621,
+      "predicted_ms": {
+        "stock": 5.455510901126371,
+        "dx": 4.64899365169613
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "fc1",
+      "M": 16384,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 31.325973510742188,
+      "dx_ms": 31.0357608795166,
+      "chosen_ms": 31.325973510742188,
+      "oracle_ms": 31.0357608795166,
+      "predicted_ms": {
+        "stock": 31.308779336540656
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "fc2",
+      "M": 16384,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 16.044978141784668,
+      "dx_ms": 15.430519580841064,
+      "chosen_ms": 15.430519580841064,
+      "oracle_ms": 15.430519580841064,
+      "predicted_ms": {
+        "stock": 16.122925089511384,
+        "dx": 15.366797012563591
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "qkv",
+      "M": 32768,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 13.108093738555908,
+      "dx_ms": 12.470195770263672,
+      "chosen_ms": 13.108093738555908,
+      "oracle_ms": 12.470195770263672,
+      "predicted_ms": {
+        "stock": 13.461238765417754
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "o_proj",
+      "M": 32768,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 10.802381992340088,
+      "dx_ms": 9.46152639389038,
+      "chosen_ms": 9.46152639389038,
+      "oracle_ms": 9.46152639389038,
+      "predicted_ms": {
+        "stock": 11.065877837815837,
+        "dx": 9.376146735341539
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "fc1",
+      "M": 32768,
+      "choice": "stock",
+      "oracle": "dx",
+      "stock_ms": 63.43039512634277,
+      "dx_ms": 62.345956802368164,
+      "chosen_ms": 63.43039512634277,
+      "oracle_ms": 62.345956802368164,
+      "predicted_ms": {
+        "stock": 63.526564502417266
+      }
+    },
+    {
+      "heldout": "70b_vehicle",
+      "site": "fc2",
+      "M": 32768,
+      "choice": "dx",
+      "oracle": "dx",
+      "stock_ms": 32.21420669555664,
+      "dx_ms": 30.742798805236816,
+      "chosen_ms": 30.742798805236816,
+      "oracle_ms": 30.742798805236816,
+      "predicted_ms": {
+        "stock": 32.57115499464567,
+        "dx": 30.98300737817853
+      }
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "classification": "exploratory operator-only; not an E2E training plan",
+  "model": "Qwen3.6-27B-text-megatron-local-vehicle",
+  "tp": 8,
+  "M": 8192,
+  "warnings": [
+    "GDN uses the same adapter names as MLP; per-shape choices not yet deployable",
+    "no backward/step calibration; do not interpret as training speedup",
+    "G probe uses 16-call timing; existing operator component G was single-call timing"
+  ],
+  "results": [
+    {
+      "site": "full_qkv",
+      "layer_type": "full_attention",
+      "adapter_name": "qkv",
+      "op": "ag_up",
+      "M": 8192,
+      "K": 5120,
+      "N": 1792,
+      "layers": 16,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_b2b_ms": 0.7777889966964722,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 1.0277886005855894,
+        "dx": 1.4888647344048132
+      },
+      "relative_choice": "stock",
+      "relative_prediction": {
+        "log_speedup": -0.21908606383736212,
+        "guard": 0.0637649265271951,
+        "lower_log_speedup": -0.28285099036455724
+      }
+    },
+    {
+      "site": "full_proj",
+      "layer_type": "full_attention",
+      "adapter_name": "proj",
+      "op": "rs",
+      "M": 8192,
+      "K": 768,
+      "N": 5120,
+      "layers": 16,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_b2b_ms": 0.32936298847198486,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 0.6292038769126568,
+        "dx": 0.7433740906744679
+      },
+      "relative_choice": "dx",
+      "relative_prediction": {
+        "log_speedup": 0.17670902177196524,
+        "guard": 0.05810692175084447,
+        "lower_log_speedup": 0.11860210002112076
+      }
+    },
+    {
+      "site": "gdn_in",
+      "layer_type": "linear_attention",
+      "adapter_name": "fc1",
+      "op": "ag_up",
+      "M": 8192,
+      "K": 5120,
+      "N": 2060,
+      "layers": 48,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_b2b_ms": 1.369832992553711,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 1.6198325964428282,
+        "dx": 2.0738224764675177
+      },
+      "relative_choice": "stock",
+      "relative_prediction": {
+        "log_speedup": -0.20187594875184167,
+        "guard": 0.0637649265271951,
+        "lower_log_speedup": -0.2656408752790368
+      }
+    },
+    {
+      "site": "gdn_out",
+      "layer_type": "linear_attention",
+      "adapter_name": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "K": 768,
+      "N": 5120,
+      "layers": 48,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_b2b_ms": 0.2772739976644516,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 0.5771148861051235,
+        "dx": 0.7077370224165507
+      },
+      "relative_choice": "dx",
+      "relative_prediction": {
+        "log_speedup": 0.18161697541922658,
+        "guard": 0.05810692175084447,
+        "lower_log_speedup": 0.12351005366838211
+      }
+    },
+    {
+      "site": "mlp_fc1",
+      "layer_type": "all",
+      "adapter_name": "fc1",
+      "op": "ag_gu",
+      "M": 8192,
+      "K": 5120,
+      "N": 4352,
+      "layers": 64,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_b2b_ms": 1.520497977733612,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 1.5930097190485126,
+        "dx": 2.2718486220185157
+      },
+      "relative_choice": "stock",
+      "relative_prediction": {
+        "log_speedup": -0.17834523357339602,
+        "guard": 0.03672766035658671,
+        "lower_log_speedup": -0.21507289392998272
+      }
+    },
+    {
+      "site": "mlp_fc2",
+      "layer_type": "all",
+      "adapter_name": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "K": 2176,
+      "N": 5120,
+      "layers": 64,
+      "payload_MB": 83.88608,
+      "status": "static code-derived shape; runtime verification pending",
+      "G_b2b_ms": 0.7369070053100586,
+      "original_choice": "stock",
+      "original_pred_ms": {
+        "stock": 1.0367478937507306,
+        "dx": 1.0345650395139978
+      },
+      "relative_choice": "dx",
+      "relative_prediction": {
+        "log_speedup": 0.11375985929260758,
+        "guard": 0.05810692175084447,
+        "lower_log_speedup": 0.05565293754176311
+      }
+    }
+  ],
+  "calibration_sha256": "5e1d1bfdfb810fb5a50ae0569db18d8b857b073ff8dfaa9ccb7007b635bc4b15",
+  "gemm_probe_sha256": "e58f32c315f65053f9afb9b9a3da230c0e6a9e23692c97d026d6776b265be4fd"
+}

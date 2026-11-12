@@ -1,0 +1,361 @@
+{
+  "classification": "inventory only; not matched training predictor calibration",
+  "model": "Qwen3.6 text hybrid vehicle",
+  "tp": 8,
+  "warning": "runs and baselines may be from different windows; see source report",
+  "runs": {
+    "mbs1_forward": {
+      "base": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/tp8_qwen36_tune12_stock_r0_20261111.log",
+          "sha256": "d67e4a6640939d0602bf6e29c241d3398285eeb8c1c59d7ce3651adbff30bf95",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 1271.1,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/tp8_qwen36_tune12_stock_r1_20261111.log",
+          "sha256": "c13a15aee46ed36fb0b445360f733c3c65fda1f82667b276718934abff75e235",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 1266.8,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        }
+      ],
+      "row": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/tp8_qwen36_tune12_dx_r0_20261111.log",
+          "sha256": "9d011e90285e5ab1536b003ae0592b56ffefe5356a2491f65c8338ef63a75a4a",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 1241.8,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": null
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/tp8_qwen36_tune12_dx_r1_20261111.log",
+          "sha256": "cb6638b71c7c15774207ebdde0cca8300d87594c44a4c78f88004351be361555",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 1252.0,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": null
+        }
+      ]
+    },
+    "mbs1_full": {
+      "base": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_full_dx_base_mbs1_b1_20261111.log",
+          "sha256": "62214466d47a5c5e7f9b723058d183f966ea6cc1dba6b66338e3189ffefd08c1",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 1263.8,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_full_dx_base_mbs1_b2_20261111.log",
+          "sha256": "674e037d0bed0dbdf66fc828bc81bd29b721e43a1169de58db42e65e75624a64",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 1261.8,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        }
+      ],
+      "fbag": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_full_dx_fbag_mbs1_b1_20261111.log",
+          "sha256": "0dae30fc9f10fd2bd5583f6c77ebbf55efdef38086b1d3adb465ac59aabcb6d9",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 1295.1,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": [
+            0,
+            0
+          ]
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_full_dx_fbag_mbs1_b2_20261111.log",
+          "sha256": "0eeff7653c83e249d02c538f1c038a13e77a63ccc871468de48382d6515c219d",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 1294.2,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "mbs2": {
+      "base": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs2_base_a1_20261111.log",
+          "sha256": "f96fd5815b6f4a345ee19fba99fad6e504e5bf5fbd03bffbcbf4f687fc29d694",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 2167.5,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs2_base_a2_20261111.log",
+          "sha256": "201b614782c1bae6655f21c1c2ed823898534f3fa7310b4e73fc13f3f9941bc8",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 2169.7,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs2_full_base_b1_20261111.log",
+          "sha256": "913664892dcab1cef099a221a79be2d93d16ed895d046a07f2fdb6ad9a30b0e8",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 2170.0,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        }
+      ],
+      "row": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs2_row_a1_20261111.log",
+          "sha256": "ce00f0d4b3f6eed46ec80f7b3f48b71c2df351889fd1b262721768cab5b90991",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 2138.0,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": null
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs2_row_a2_20261111.log",
+          "sha256": "ffd3fa10d53633f9001f9a418cbbfa421a16e4f7f9fd4cc37715384a62efc181",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 2138.6,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": null
+        }
+      ],
+      "fbag": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs2_fbag_a1_20261111.log",
+          "sha256": "6481a4a409240a2d5b7403124ab51a709d9160c1a51faf5bab48db28ae71cdbc",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 2171.7,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": [
+            0,
+            192
+          ]
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs2_fbag_a2_20261111.log",
+          "sha256": "57db01d9df567b8b33080bf2d94f32c2f89be71c8da641e2306cafac360c74eb",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 2168.7,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": [
+            0,
+            192
+          ]
+        }
+      ],
+      "fbc": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs2_fbc_a1_20261111.log",
+          "sha256": "4b521f111f99ffe90f128f9baa57a7ea7e6e3cfb8e2db4fd6822e507c8bac0d8",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 2282.9,
+          "rank0_dx_row_column": [
+            3072,
+            3072
+          ],
+          "rank0_brs_layers_mappings": [
+            0,
+            192
+          ]
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs2_fbc_a2_20261111.log",
+          "sha256": "b348a1ec6926bcd6adb9e727c1703b7beec7f8b6af67fdaaddf12f55f115f9ef",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 2290.3,
+          "rank0_dx_row_column": [
+            3072,
+            3072
+          ],
+          "rank0_brs_layers_mappings": [
+            0,
+            192
+          ]
+        }
+      ]
+    },
+    "mbs4": {
+      "base": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs4_base_a1_20261111.log",
+          "sha256": "0fa9defb7c3e7e633df7ea6ebbf2b0e6057f6e8fd4fb8657f57c1b8346160d15",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 4076.7,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs4_base_a2_20261111.log",
+          "sha256": "9c0aeb61301d7c31751114de4c6ae6cfd48180617fbd26db3cc82ba9844ddd14",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 4021.3,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        }
+      ],
+      "row": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs4_row_a1_20261111.log",
+          "sha256": "633639ea1ae4ebae04289058fb92fc5b476ce96efe407050d1225562df6389c5",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 3912.5,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": null
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs4_row_a2_20261111.log",
+          "sha256": "740ce69da449607a7bbb303b05387eec80b0e81b3b0a663a32cedb2b4bea009c",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 3905.0,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": null
+        }
+      ],
+      "fbag": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs4_fbag_a1_20261111.log",
+          "sha256": "da6d85e2d4adc0e4943c5ecb21395443f9824724e0658b64a0d79b5d1cd1a055",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 4099.2,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": [
+            1548,
+            192
+          ]
+        }
+      ],
+      "fbc": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs4_fbc_a1_20261111.log",
+          "sha256": "5401972d1e156f8411298f1e166cf0f528f852fa6b550e08645d99c26b6791b0",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 4206.0,
+          "rank0_dx_row_column": [
+            3072,
+            3072
+          ],
+          "rank0_brs_layers_mappings": [
+            1548,
+            192
+          ]
+        }
+      ]
+    },
+    "mbs8": {
+      "base": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs8_base_a1_expand_20261111.log",
+          "sha256": "4455e29d73cba68adb017a89a9709a0e406b2a27b0c499d811b5ea3da1f3349a",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 7680.3,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs8_base_a2_expand_20261111.log",
+          "sha256": "5b30168f7b648f3a3f46325c849c86518669b43a131dc85579e4cf3d68358278",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 7676.1,
+          "rank0_dx_row_column": null,
+          "rank0_brs_layers_mappings": null
+        }
+      ],
+      "row": [
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs8_row_a1_expand_20261111.log",
+          "sha256": "235bc8ea8e5b741b3912bc9a023c4acd5b2e54f30dcde0867cbd0c5efe9768ca",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 7736.3,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": null
+        },
+        {
+          "source": "/root/data/stowaway-nvidia/results/raw/qwen36_mbs8_row_a2_expand_20261111.log",
+          "sha256": "ef78fba0f0e1392f2892db5f79c5ed9e3526091ad66c7b40d8a16f7f2a1a7d47",
+          "steps": 12,
+          "warmup_excluded": 3,
+          "median_ms": 7678.3,
+          "rank0_dx_row_column": [
+            3072,
+            0
+          ],
+          "rank0_brs_layers_mappings": null
+        }
+      ]
+    }
+  }
+}

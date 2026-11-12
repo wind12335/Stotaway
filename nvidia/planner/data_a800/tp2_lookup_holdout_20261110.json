@@ -1,0 +1,210 @@
+{
+  "classification": "diagnostic independent measurement on calibrated shapes",
+  "profile": "planner/data_a800/tp2_forward_lookup_20261110.json",
+  "inputs": [
+    "/root/data/stowaway-nvidia/results/raw/tp2_lookup_holdout_m4096_20261110.json",
+    "/root/data/stowaway-nvidia/results/raw/tp2_lookup_holdout_m8192_20261110.json"
+  ],
+  "summary": {
+    "cells": 16,
+    "match_oracle": 11,
+    "chosen_slower_than_stock": 0,
+    "stock_sum_ms": 62.979254722595215,
+    "chosen_sum_ms": 61.487891644239426,
+    "oracle_sum_ms": 61.17542091012001
+  },
+  "cells": [
+    {
+      "model": "27b_vehicle",
+      "site": "qkv",
+      "M": 4096,
+      "K": 5120,
+      "N": 3584,
+      "choice": "stock",
+      "stock_ms": 0.8786239922046661,
+      "dx_ms": 0.9413969814777374,
+      "chosen_ms": 0.8786239922046661,
+      "oracle": "stock"
+    },
+    {
+      "model": "27b_vehicle",
+      "site": "proj",
+      "M": 4096,
+      "K": 2560,
+      "N": 5120,
+      "choice": "dx",
+      "stock_ms": 0.6179589927196503,
+      "dx_ms": 0.4774149954319,
+      "chosen_ms": 0.4774149954319,
+      "oracle": "dx"
+    },
+    {
+      "model": "27b_vehicle",
+      "site": "fc1",
+      "M": 4096,
+      "K": 5120,
+      "N": 17408,
+      "choice": "stock",
+      "stock_ms": 3.139127016067505,
+      "dx_ms": 3.2148009538650513,
+      "chosen_ms": 3.139127016067505,
+      "oracle": "stock"
+    },
+    {
+      "model": "27b_vehicle",
+      "site": "fc2",
+      "M": 4096,
+      "K": 8704,
+      "N": 5120,
+      "choice": "dx",
+      "stock_ms": 1.6233089566230774,
+      "dx_ms": 1.4886249899864197,
+      "chosen_ms": 1.4886249899864197,
+      "oracle": "dx"
+    },
+    {
+      "model": "70b_vehicle",
+      "site": "qkv",
+      "M": 4096,
+      "K": 8192,
+      "N": 5120,
+      "choice": "dx",
+      "stock_ms": 1.6392710208892822,
+      "dx_ms": 1.5596979856491089,
+      "chosen_ms": 1.5596979856491089,
+      "oracle": "dx"
+    },
+    {
+      "model": "70b_vehicle",
+      "site": "proj",
+      "M": 4096,
+      "K": 4096,
+      "N": 8192,
+      "choice": "dx",
+      "stock_ms": 1.389726996421814,
+      "dx_ms": 1.1948540210723877,
+      "chosen_ms": 1.1948540210723877,
+      "oracle": "dx"
+    },
+    {
+      "model": "70b_vehicle",
+      "site": "fc1",
+      "M": 4096,
+      "K": 8192,
+      "N": 28672,
+      "choice": "stock",
+      "stock_ms": 7.855935096740723,
+      "dx_ms": 7.79021692276001,
+      "chosen_ms": 7.855935096740723,
+      "oracle": "dx"
+    },
+    {
+      "model": "70b_vehicle",
+      "site": "fc2",
+      "M": 4096,
+      "K": 14336,
+      "N": 8192,
+      "choice": "stock",
+      "stock_ms": 4.112824201583862,
+      "dx_ms": 3.929679036140442,
+      "chosen_ms": 4.112824201583862,
+      "oracle": "dx"
+    },
+    {
+      "model": "27b_vehicle",
+      "site": "qkv",
+      "M": 8192,
+      "K": 5120,
+      "N": 3584,
+      "choice": "stock",
+      "stock_ms": 1.6417959928512573,
+      "dx_ms": 1.629980981349945,
+      "chosen_ms": 1.6417959928512573,
+      "oracle": "dx"
+    },
+    {
+      "model": "27b_vehicle",
+      "site": "proj",
+      "M": 8192,
+      "K": 2560,
+      "N": 5120,
+      "choice": "dx",
+      "stock_ms": 1.2127780318260193,
+      "dx_ms": 0.9706020057201385,
+      "chosen_ms": 0.9706020057201385,
+      "oracle": "dx"
+    },
+    {
+      "model": "27b_vehicle",
+      "site": "fc1",
+      "M": 8192,
+      "K": 5120,
+      "N": 17408,
+      "choice": "stock",
+      "stock_ms": 6.123089075088501,
+      "dx_ms": 6.176069021224976,
+      "chosen_ms": 6.123089075088501,
+      "oracle": "stock"
+    },
+    {
+      "model": "27b_vehicle",
+      "site": "fc2",
+      "M": 8192,
+      "K": 8704,
+      "N": 5120,
+      "choice": "dx",
+      "stock_ms": 3.1880019903182983,
+      "dx_ms": 2.963575005531311,
+      "chosen_ms": 2.963575005531311,
+      "oracle": "dx"
+    },
+    {
+      "model": "70b_vehicle",
+      "site": "qkv",
+      "M": 8192,
+      "K": 8192,
+      "N": 5120,
+      "choice": "dx",
+      "stock_ms": 3.271151065826416,
+      "dx_ms": 3.0829269886016846,
+      "chosen_ms": 3.0829269886016846,
+      "oracle": "dx"
+    },
+    {
+      "model": "70b_vehicle",
+      "site": "proj",
+      "M": 8192,
+      "K": 4096,
+      "N": 8192,
+      "choice": "dx",
+      "stock_ms": 2.6988919973373413,
+      "dx_ms": 2.412029981613159,
+      "chosen_ms": 2.412029981613159,
+      "oracle": "dx"
+    },
+    {
+      "model": "70b_vehicle",
+      "site": "fc1",
+      "M": 8192,
+      "K": 8192,
+      "N": 28672,
+      "choice": "stock",
+      "stock_ms": 15.632014274597168,
+      "dx_ms": 15.617260932922363,
+      "chosen_ms": 15.632014274597168,
+      "oracle": "dx"
+    },
+    {
+      "model": "70b_vehicle",
+      "site": "fc2",
+      "M": 8192,
+      "K": 14336,
+      "N": 8192,
+      "choice": "stock",
+      "stock_ms": 7.954756021499634,
+      "dx_ms": 7.917716979980469,
+      "chosen_ms": 7.954756021499634,
+      "oracle": "dx"
+    }
+  ]
+}

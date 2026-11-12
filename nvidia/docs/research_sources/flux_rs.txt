@@ -1,0 +1,548 @@
+flux_rs
+m 8192 n 29568 k 8192
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/Triton-distributed/flux#
+./launch.sh test/python/gemm_rs/test_gemm_rs.py 8192 29568 8192 --dtype=float16 --iters=10
+torchrun --node_rank=0 --nproc_per_node=4 --nnodes=1 --rdzv_endpoint=127.0.0.1:23456
+test/python/gemm_rs/test_gemm_rs.py 8192 29568 8192 --dtype=float16 --iters=10
+W0520 20:53:06.271000 30748 site-packages/torch/distributed/run.py:766]
+W0520 20:53:06.271000 30748 site-packages/torch/distributed/run.py:766] *
+W0520 20:53:06.271000 30748 site-packages/torch/distributed/run.py:766] Setting
+OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your
+system being overloaded, please further tune the variable for optimal performance in your
+application as needed.
+W0520 20:53:06.271000 30748 site-packages/torch/distributed/run.py:766] *
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank2]:[W520 20:53:10.081830672 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 2]
+using GPU 2 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank1]:[W520 20:53:10.081933768 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 1]
+using GPU 1 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+[rank3]:[W520 20:53:10.081948708 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 3]
+using GPU 3 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+[rank0]:[W520 20:53:10.082025104 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 0]
+using GPU 0 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+torch #2: gemm 4.276 ms, comm 1.957 ms, total 6.233 ms
+torch #3: gemm 4.285 ms, comm 1.949 ms, total 6.234 ms
+torch #1: gemm 4.271 ms, comm 1.964 ms, total 6.235 ms
+flux #2: gemm 4.113 ms, comm 0.824 ms, total 4.936 ms
+flux #3: gemm 4.201 ms, comm 0.735 ms, total 4.935 ms
+flux #1: gemm 4.114 ms, comm 0.822 ms, total 4.935 ms
+组别 加速比（保留 位小数）
+|     |            4        |
+|---|---|
+|#1|1.2634|
+|#2|1.2628|
+|#3|1.2632|
+SOL gemm TensorCore 3.180ms Memory read: 0.076ms write: 0.238ms
+torch #0: gemm 4.158 ms, comm 2.076 ms, total 6.234 ms
+flux #0: gemm 4.130 ms, comm 0.805 ms, total 4.935 ms
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+❌ flux vs torch bitwise check failed
+8192 53248 16284
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/Triton-distributed/flux#
+./launch.sh test/python/gemm_rs/test_gemm_rs.py 8192 16384 53248 --dtype=float16 --iters=10
+torchrun --node_rank=0 --nproc_per_node=4 --nnodes=1 --rdzv_endpoint=127.0.0.1:23456
+test/python/gemm_rs/test_gemm_rs.py 8192 16384 53248 --dtype=float16 --iters=10
+W0520 22:17:31.554000 33431 site-packages/torch/distributed/run.py:766]
+W0520 22:17:31.554000 33431 site-packages/torch/distributed/run.py:766] *
+W0520 22:17:31.554000 33431 site-packages/torch/distributed/run.py:766] Setting
+OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your
+system being overloaded, please further tune the variable for optimal performance in your
+application as needed.
+W0520 22:17:31.554000 33431 site-packages/torch/distributed/run.py:766] *
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank3]:[W520 22:17:36.642108098 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 3]
+using GPU 3 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank1]:[W520 22:17:36.642251689 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 1]
+using GPU 1 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+[rank0]:[W520 22:17:36.642252670 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 0]
+using GPU 0 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank2]:[W520 22:17:36.642576529 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 2]
+using GPU 2 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+torch #2: gemm 14.659 ms, comm 1.437 ms, total 16.096 ms
+torch #1: gemm 14.949 ms, comm 1.149 ms, total 16.098 ms
+flux #2: gemm 15.355 ms, comm 0.590 ms, total 15.944 ms
+flux #1: gemm 15.531 ms, comm 0.414 ms, total 15.945 ms
+torch #3: gemm 14.809 ms, comm 1.283 ms, total 16.092 ms
+flux #3: gemm 15.626 ms, comm 0.317 ms, total 15.943 ms
+SOL gemm TensorCore 11.453ms Memory read: 0.321ms write: 0.132ms
+torch #0: gemm 14.748 ms, comm 1.344 ms, total 16.092 ms
+flux #0: gemm 15.488 ms, comm 0.456 ms, total 15.944 ms
+组别 加速比（保留 4 位小数）|
+|       |
+|---|---|
+|#0|1.0093|
+|#1|1.0096|
+|#2|1.0095|
+|#3|1.0093|
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+❌ flux vs torch bitwise check failed
+
+8192 49152 12288
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/Triton-distributed/flux#
+./launch.sh test/python/gemm_rs/test_gemm_rs.py 8192 12288 49152 --dtype=fl
+oat16 --iters=10
+torchrun --node_rank=0 --nproc_per_node=4 --nnodes=1 --rdzv_endpoint=127.0.0.1:23456
+test/python/gemm_rs/test_gemm_rs.py 8192 12288 49152 --dtype=float16 --iters=10
+W0520 22:22:52.026000 38212 site-packages/torch/distributed/run.py:766]
+W0520 22:22:52.026000 38212 site-packages/torch/distributed/run.py:766] *
+W0520 22:22:52.026000 38212 site-packages/torch/distributed/run.py:766] Setting
+OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your
+system being overloaded, please further tune the variable for optimal performance in your
+application as needed.
+W0520 22:22:52.026000 38212 site-packages/torch/distributed/run.py:766] *
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank2]:[W520 22:22:56.002446948 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 2]
+using GPU 2 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank3]:[W520 22:22:56.002887356 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 3]
+using GPU 3 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank0]:[W520 22:22:56.003073315 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 0]
+using GPU 0 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank1]:[W520 22:22:56.003315746 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 1]
+using GPU 1 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+torch #1: gemm 10.028 ms, comm 1.354 ms, total 11.382 ms
+torch #2: gemm 10.257 ms, comm 1.123 ms, total 11.379 ms
+torch #3: gemm 10.533 ms, comm 0.845 ms, total 11.378 ms
+flux #1: gemm 10.603 ms, comm 0.548 ms, total 11.151 ms
+flux #2: gemm 10.570 ms, comm 0.581 ms, total 11.151 ms
+flux #3: gemm 10.635 ms, comm 0.517 ms, total 11.151 ms
+SOL gemm TensorCore 7.929ms Memory read: 0.247ms write: 0.099ms
+torch #0: gemm 10.322 ms, comm 1.057 ms, total 11.380 ms
+flux #0: gemm 10.605 ms, comm 0.546 ms, total 11.151 ms
+组别 加速比（保留 4 位小数）|
+|       |
+|---|---|
+|#0|1.0205|
+|#1|1.0207|
+|#2|1.0204|
+|#3|1.0204|
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+❌ flux vs torch bitwise check failed
+[rank0]:[W520 22:22:59.271860403 ProcessGroupNCCL.cpp:1479] Warning: WARNING:
+destroy_process_group() was not called before program exit, which can leak resources. For more
+info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+4096 4096 4096
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/Triton-distributed/flux#
+./launch.sh test/python/gemm_rs/test_gemm_rs.py 4096 4096 4096 --dtype=floa
+t16 --iters=10
+torchrun --node_rank=0 --nproc_per_node=4 --nnodes=1 --rdzv_endpoint=127.0.0.1:23456
+test/python/gemm_rs/test_gemm_rs.py 4096 4096 4096 --dtype=float16 --iters=10
+W0520 22:24:41.421000 39008 site-packages/torch/distributed/run.py:766]
+W0520 22:24:41.421000 39008 site-packages/torch/distributed/run.py:766] *
+W0520 22:24:41.421000 39008 site-packages/torch/distributed/run.py:766] Setting
+OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your
+system being overloaded, please further tune the variable for optimal performance in your
+application as needed.
+W0520 22:24:41.421000 39008 site-packages/torch/distributed/run.py:766] *
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank3]:[W520 22:24:46.358259441 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 3]
+using GPU 3 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+  init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank1]:[W520 22:24:46.358505950 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 1]
+using GPU 1 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+[rank2]:[W520 22:24:46.358538877 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 2]
+using GPU 2 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+[rank0]:[W520 22:24:46.358601809 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 0]
+using GPU 0 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+torch #2: gemm 0.181 ms, comm 0.189 ms, total 0.370 ms
+torch #3: gemm 0.181 ms, comm 0.189 ms, total 0.370 ms
+torch #1: gemm 0.180 ms, comm 0.191 ms, total 0.371 ms
+flux #2: gemm 0.167 ms, comm 0.121 ms, total 0.287 ms
+flux #3: gemm 0.197 ms, comm 0.091 ms, total 0.287 ms
+flux #1: gemm 0.169 ms, comm 0.119 ms, total 0.287 ms
+SOL gemm TensorCore 0.110ms Memory read: 0.008ms write: 0.016ms
+torch #0: gemm 0.180 ms, comm 0.190 ms, total 0.370 ms
+flux #0: gemm 0.168 ms, comm 0.119 ms, total 0.287 ms
+组别 加速比（保留 位小数）
+|       |             4          |
+|---|---|
+|#0|1.2892|
+|#1|1.2927|
+|#2|1.2892|
+|#3|1.2892|
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+❌ flux vs torch bitwise check failed
+
+8192 11008 4096
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/Triton-distributed/flux#
+./launch.sh test/python/gemm_rs/test_gemm_rs.py 8192 4096 11008 --dtype=flo
+at16 --iters=10
+torchrun --node_rank=0 --nproc_per_node=4 --nnodes=1 --rdzv_endpoint=127.0.0.1:23456
+test/python/gemm_rs/test_gemm_rs.py 8192 4096 11008 --dtype=float16 --iters=10
+W0520 22:26:05.425000 39944 site-packages/torch/distributed/run.py:766]
+W0520 22:26:05.425000 39944 site-packages/torch/distributed/run.py:766] *
+W0520 22:26:05.425000 39944 site-packages/torch/distributed/run.py:766] Setting
+OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your
+system being overloaded, please further tune the variable for optimal performance in your
+application as needed.
+W0520 22:26:05.425000 39944 site-packages/torch/distributed/run.py:766] *
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank3]:[W520 22:26:10.385526642 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 3]
+using GPU 3 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank1]:[W520 22:26:10.385687160 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 1]
+using GPU 1 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+[rank2]:[W520 22:26:10.385742659 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 2]
+using GPU 2 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank0]:[W520 22:26:10.386106902 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 0]
+using GPU 0 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+torch #1: gemm 0.823 ms, comm 0.339 ms, total 1.162 ms
+torch #2: gemm 0.825 ms, comm 0.340 ms, total 1.165 ms
+torch #3: gemm 0.827 ms, comm 0.335 ms, total 1.161 ms
+flux #1: gemm 0.763 ms, comm 0.204 ms, total 0.967 ms
+flux #3: gemm 0.771 ms, comm 0.196 ms, total 0.967 msflux #2: gemm 0.748 ms, comm 0.220
+ms, total 0.967 ms
+
+SOL gemm TensorCore 0.592ms Memory read: 0.033ms write: 0.033ms
+torch #0: gemm 0.819 ms, comm 0.344 ms, total 1.163 ms
+flux #0: gemm 0.758 ms, comm 0.210 ms, total 0.968 ms
+
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+❌ flux vs torch bitwise check failed
+[rank0]:[W520 22:26:12.257615620 ProcessGroupNCCL.cpp:1479] Warning: WARNING:
+destroy_process_group() was not called before program exit, which can leak resources. For more
+info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+
+16384 29568 8192
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/Triton-distributed/flux#
+./launch.sh test/python/gemm_rs/test_gemm_rs.py 16384 8192 29568 --dtype=fl
+oat16 --iters=10
+torchrun --node_rank=0 --nproc_per_node=4 --nnodes=1 --rdzv_endpoint=127.0.0.1:23456
+test/python/gemm_rs/test_gemm_rs.py 16384 8192 29568 --dtype=float16 --iters=10
+W0520 22:26:54.693000 40457 site-packages/torch/distributed/run.py:766]
+W0520 22:26:54.693000 40457 site-packages/torch/distributed/run.py:766] *
+W0520 22:26:54.693000 40457 site-packages/torch/distributed/run.py:766] Setting
+OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your
+system being overloaded, please further tune the variable for optimal performance in your
+application as needed.
+W0520 22:26:54.693000 40457 site-packages/torch/distributed/run.py:766] *
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank1]:[W520 22:26:59.652181292 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 1]
+using GPU 1 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank2]:[W520 22:26:59.652293370 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 2]
+using GPU 2 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+[rank3]:[W520 22:26:59.652381008 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 3]
+using GPU 3 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+  init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank0]:[W520 22:26:59.652906305 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 0]
+using GPU 0 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+torch #2: gemm 8.892 ms, comm 1.572 ms, total 10.465 ms
+torch #3: gemm 8.695 ms, comm 1.770 ms, total 10.465 ms
+torch #1: gemm 9.326 ms, comm 1.139 ms, total 10.465 ms
+flux #2: gemm 8.441 ms, comm 0.544 ms, total 8.985 ms
+flux #3: gemm 8.656 ms, comm 0.329 ms, total 8.985 ms
+flux #1: gemm 8.428 ms, comm 0.560 ms, total 8.987 ms
+SOL gemm TensorCore 6.360ms Memory read: 0.178ms write: 0.132ms
+torch #0: gemm 8.654 ms, comm 1.810 ms, total 10.464 ms
+flux #0: gemm 8.418 ms, comm 0.569 ms, total 8.987 ms
+组别 加速比（保留 位小数）
+|       |             4          |
+|---|---|
+|#0|1.1643|
+|#1|1.1645|
+|#2|1.1647|
+|#3|1.1647|
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+❌ flux vs torch bitwise check failed
+[rank0]:[W520 22:27:01.823325194 ProcessGroupNCCL.cpp:1479] Warning: WARNING:
+destroy_process_group() was not called before program exit, which can leak resources. For more
+info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/Triton-distributed/flux#
+./launch.sh test/python/gemm_rs/test_gemm_rs.py 16384 29568 8192 --dtype=fl
+oat16 --iters=10
+torchrun --node_rank=0 --nproc_per_node=4 --nnodes=1 --rdzv_endpoint=127.0.0.1:23456
+test/python/gemm_rs/test_gemm_rs.py 16384 29568 8192 --dtype=float16 --iters=10
+W0520 22:27:23.269000 40871 site-packages/torch/distributed/run.py:766]
+W0520 22:27:23.269000 40871 site-packages/torch/distributed/run.py:766] *
+W0520 22:27:23.269000 40871 site-packages/torch/distributed/run.py:766] Setting
+OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your
+system being overloaded, please further tune the variable for optimal performance in your
+application as needed.
+W0520 22:27:23.269000 40871 site-packages/torch/distributed/run.py:766] *
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/dvs/p4/build/sw/rel/gpgpu/toolkit/r12.8/main_nvshmem/src/modules/transport/ibrc/ibrc.cpp:1646:
+non-zero status: 7 Unable to dlopen libibverbs. Skipping devx transport.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank3]:[W520 22:27:28.371154210 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 3]
+using GPU 3 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank2]:[W520 22:27:28.371352258 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 2]
+using GPU 2 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+/data/miniconda/envs/torch/lib/python3.10/site-
+packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via
+ init_process_group or barrier . Using the current device set by the user.
+warnings.warn( # warn only once
+[rank1]:[W520 22:27:28.371627945 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 1]
+using GPU 1 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+[rank0]:[W520 22:27:28.371654993 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 0]
+using GPU 0 as device used by this process is currently unknown. This can potentially cause a
+hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to
+force use of a particular device.
+torch #1: gemm 7.630 ms, comm 3.880 ms, total 11.510 ms
+torch #2: gemm 7.585 ms, comm 3.927 ms, total 11.512 ms
+torch #3: gemm 7.929 ms, comm 3.582 ms, total 11.511 ms
+flux #1: gemm 8.715 ms, comm 1.007 ms, total 9.722 ms
+flux #2: gemm 8.665 ms, comm 1.057 ms, total 9.721 ms
+flux #3: gemm 8.786 ms, comm 0.936 ms, total 9.722 ms
+SOL gemm TensorCore 6.360ms Memory read: 0.092ms write: 0.475ms
+torch #0: gemm 7.683 ms, comm 3.828 ms, total 11.511 ms
+flux #0: gemm 8.701 ms, comm 1.019 ms, total 9.720 ms
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+all close!
+✅ flux check passed
+❌ flux vs torch bitwise check failed
+[rank0]:[W520 22:27:30.842115188 ProcessGroupNCCL.cpp:1479] Warning: WARNING:
+destroy_process_group() was not called before program exit, which can leak resources. For more
+info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+

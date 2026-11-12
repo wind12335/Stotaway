@@ -1,0 +1,247 @@
+{
+  "source_sha256": "bd4257aa07d03f84520f345599dc7ee60badd3e981e2352e829f56553cd0eede",
+  "warning": "four GPUs; GPU/topology unknown; FP16; Flux AG iters=1; stock latency is measured input",
+  "split": "leave one entire shape out; nested training-only residual guard; method/direction separate",
+  "results": {
+    "flux_ag": {
+      "status": "exploratory; tiny non-independent development dataset",
+      "shapes": 5,
+      "correct": 3,
+      "speedup_gmean": 1.066036559146392,
+      "slower_than_stock": 0,
+      "baselines": {
+        "stock": {
+          "correct": 1,
+          "speedup_gmean": 1.0,
+          "slower_than_stock": 0
+        },
+        "overlap": {
+          "correct": 4,
+          "speedup_gmean": 1.1286104684814815,
+          "slower_than_stock": 1
+        },
+        "oracle": {
+          "correct": 5,
+          "speedup_gmean": 1.1302083531443636,
+          "slower_than_stock": 0
+        }
+      },
+      "rows": [
+        {
+          "shape": [
+            4096,
+            1024,
+            4096
+          ],
+          "stock_ms": 0.371,
+          "overlap_ms": 0.286,
+          "records": 1,
+          "pred_log_ratio": -0.11944248331512022,
+          "guard_log_ratio": 0.09544158523666071,
+          "pick": "overlap",
+          "oracle": "overlap",
+          "speedup": 1.2972027972027973
+        },
+        {
+          "shape": [
+            8192,
+            7392,
+            8192
+          ],
+          "stock_ms": 9.967,
+          "overlap_ms": 9.391,
+          "records": 1,
+          "pred_log_ratio": -0.13927275780390982,
+          "guard_log_ratio": 0.12809653512129915,
+          "pick": "overlap",
+          "oracle": "overlap",
+          "speedup": 1.0613353210520713
+        },
+        {
+          "shape": [
+            8192,
+            12288,
+            12288
+          ],
+          "stock_ms": 24.08,
+          "overlap_ms": 22.814,
+          "records": 1,
+          "pred_log_ratio": -0.062147732033552255,
+          "guard_log_ratio": 0.09016962207471602,
+          "pick": "stock",
+          "oracle": "overlap",
+          "speedup": 1.0
+        },
+        {
+          "shape": [
+            8192,
+            13312,
+            16384
+          ],
+          "stock_ms": 15.495,
+          "overlap_ms": 15.605,
+          "records": 1,
+          "pred_log_ratio": -0.046821246771442546,
+          "guard_log_ratio": 0.10401490859638579,
+          "pick": "stock",
+          "oracle": "stock",
+          "speedup": 1.0
+        },
+        {
+          "shape": [
+            16384,
+            7392,
+            8192
+          ],
+          "stock_ms": 11.561,
+          "overlap_ms": 9.11,
+          "records": 1,
+          "pred_log_ratio": -0.005772447533250624,
+          "guard_log_ratio": 0.0460798787909954,
+          "pick": "stock",
+          "oracle": "overlap",
+          "speedup": 1.0
+        }
+      ]
+    },
+    "flux_rs": {
+      "status": "exploratory; tiny non-independent development dataset",
+      "shapes": 7,
+      "correct": 5,
+      "speedup_gmean": 1.1530449031869334,
+      "slower_than_stock": 0,
+      "baselines": {
+        "stock": {
+          "correct": 0,
+          "speedup_gmean": 1.0,
+          "slower_than_stock": 0
+        },
+        "overlap": {
+          "correct": 7,
+          "speedup_gmean": 1.1580060154343994,
+          "slower_than_stock": 0
+        },
+        "oracle": {
+          "correct": 7,
+          "speedup_gmean": 1.1580060154343994,
+          "slower_than_stock": 0
+        }
+      },
+      "rows": [
+        {
+          "shape": [
+            4096,
+            4096,
+            1024
+          ],
+          "stock_ms": 0.371,
+          "overlap_ms": 0.287,
+          "records": 1,
+          "pred_log_ratio": -0.2259040819189465,
+          "guard_log_ratio": 0.07418842911111953,
+          "pick": "overlap",
+          "oracle": "overlap",
+          "speedup": 1.2926829268292683
+        },
+        {
+          "shape": [
+            8192,
+            4096,
+            2752
+          ],
+          "stock_ms": 1.165,
+          "overlap_ms": 0.968,
+          "records": 1,
+          "pred_log_ratio": -0.18151573163226759,
+          "guard_log_ratio": 0.0755755635711504,
+          "pick": "overlap",
+          "oracle": "overlap",
+          "speedup": 1.203512396694215
+        },
+        {
+          "shape": [
+            8192,
+            12288,
+            12288
+          ],
+          "stock_ms": 11.382,
+          "overlap_ms": 11.151,
+          "records": 1,
+          "pred_log_ratio": -0.08374420767495783,
+          "guard_log_ratio": 0.16491139485066728,
+          "pick": "stock",
+          "oracle": "overlap",
+          "speedup": 1.0
+        },
+        {
+          "shape": [
+            8192,
+            16384,
+            13312
+          ],
+          "stock_ms": 16.098,
+          "overlap_ms": 15.945,
+          "records": 1,
+          "pred_log_ratio": -0.0805629455308065,
+          "guard_log_ratio": 0.15423504867175106,
+          "pick": "stock",
+          "oracle": "overlap",
+          "speedup": 1.0
+        },
+        {
+          "shape": [
+            8192,
+            29568,
+            2048
+          ],
+          "stock_ms": 6.235,
+          "overlap_ms": 4.936,
+          "records": 1,
+          "pred_log_ratio": -0.135277213437394,
+          "guard_log_ratio": 0.05701409589452008,
+          "pick": "overlap",
+          "oracle": "overlap",
+          "speedup": 1.2631685575364668
+        },
+        {
+          "shape": [
+            16384,
+            8192,
+            7392
+          ],
+          "stock_ms": 10.465,
+          "overlap_ms": 8.987,
+          "records": 1,
+          "pred_log_ratio": -0.0785787209856673,
+          "guard_log_ratio": 0.05784514311401031,
+          "pick": "overlap",
+          "oracle": "overlap",
+          "speedup": 1.164459775230889
+        },
+        {
+          "shape": [
+            16384,
+            29568,
+            2048
+          ],
+          "stock_ms": 11.512,
+          "overlap_ms": 9.722,
+          "records": 1,
+          "pred_log_ratio": -0.20998058533526762,
+          "guard_log_ratio": 0.07342288444084034,
+          "pick": "overlap",
+          "oracle": "overlap",
+          "speedup": 1.1841184941370089
+        }
+      ]
+    },
+    "flashoverlap_rs": {
+      "status": "insufficient distinct shapes for nested validation",
+      "shapes": 3
+    },
+    "flashoverlap_ar": {
+      "status": "insufficient distinct shapes for nested validation",
+      "shapes": 2
+    }
+  }
+}

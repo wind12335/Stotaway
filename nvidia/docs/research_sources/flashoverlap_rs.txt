@@ -1,0 +1,268 @@
+flashoverlap_rs
+8192 29568 8192
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/FlashOverlap/tune#
+CUDA_VISIBLE_DEVICES=0,1,2,3 python search.py --m 8192 --n 29568 --k 8192 --comm_op
+reduce_scatter
+--predictive_search True
+Bandwidth curve captured.
+W0520 21:06:35.673000 48952 site-packages/torch/multiprocessing/spawn.py:169] Terminating
+process 49048 via signal SIGTERM
+W0520 21:06:35.676000 48952 site-packages/torch/multiprocessing/spawn.py:169] Terminating
+process 49049 via signal SIGTERM
+W0520 21:06:35.677000 48952 site-packages/torch/multiprocessing/spawn.py:169] Terminating
+process 49051 via signal SIGTERM
+Traceback (most recent call last):
+File "/data/coding/FlashOverlap/tune/search.py", line 528, in
+main()
+File "/data/coding/FlashOverlap/tune/search.py", line 522, in main
+fast_search(args.m, args.n, args.k, comm_array, args.comm_op)
+File "/data/coding/FlashOverlap/tune/search.py", line 464, in fast_search
+result = compute_hint(M, N, K, BM, BN, Algo, min_group_size * (sm_count - 2), comm_op)
+File "/data/coding/FlashOverlap/tune/search.py", line 172, in compute_hint
+mp.spawn(
+File "/data/miniconda/envs/torch/lib/python3.10/site-packages/torch/multiprocessing/spawn.py",
+line 340, in spawn
+return start_processes(fn, args, nprocs, join, daemon, start_method="spawn")
+File "/data/miniconda/envs/torch/lib/python3.10/site-packages/torch/multiprocessing/spawn.py",
+line 296, in start_processes
+while not context.join():
+File "/data/miniconda/envs/torch/lib/python3.10/site-packages/torch/multiprocessing/spawn.py",
+line 215, in join
+raise ProcessRaisedException(msg, error_index, failed_process.pid)
+torch.multiprocessing.spawn.ProcessRaisedException:
+
+-- Process 2 terminated with the following error:
+Traceback (most recent call last):
+File "/data/miniconda/envs/torch/lib/python3.10/site-packages/torch/multiprocessing/spawn.py",
+line 90, in _wrap
+fn(i, *args)
+File "/data/coding/FlashOverlap/tune/search.py", line 116, in compute_hint_process
+RowArray = generate_row_remap_array(M, N, BM, BN, cSeg, world_size)
+File "/data/coding/FlashOverlap/tune/search.py", line 57, in generate_row_remap_array
+assert sum(S_list) == total_tiles, "sum(S_list) must equal total number of tiles"
+AssertionError: sum(S_list) must equal total number of tiles
+
+报错的根因是 reduce_scatter 这条路径里，代码对 tile 数的计算前后用了两套不一致的公式，而
+你的这组尺寸刚好触发了这个不一致。
+在 tune/search.py:53 里，generate_row_remap_array() 用的是
+total_tiles = (M N) // (BM BN)
+
+这是“向下取整”的 tile 数。
+但它的调用方 compute_hint_process() 在 tune/search.py:88 里构造 cSeg 时，用的是
+TileNum = div_up(M, BM) * div_up(N, BN)
+
+这是“向上取整”的 tile 数。
+只要 M 不能整除 BM，或者 N 不能整除 BN，这两个值就可能不相等，断言就会炸。
+你的具体 case 是：
+    M = 8192
+    N = 29568
+  配置文件 configs/m8192n29568k8192_a100.json 的第一个候选是 BM=128, BN=256
+代进去：
+    div_up(8192, 128) = 64
+    div_up(29568, 256) = 116
+  所以 TileNum = 64 * 116 = 7424
+但另一边：
+    total_tiles = (8192 29568) // (128 256) = 7392
+
+于是：
+    sum(S_list) = 7424
+    total_tiles = 7392
+
+不相等，所以在 tune/search.py:57 触发：
+assert sum(S_list) == total_tiles
+为什么偏偏你这个尺寸会中招：
+    8192 能整除 128 和 256
+    29568 能整除 128
+    但 29568 不能整除 256
+所以只要搜索先试到 BN=256 的候选，就会直接报错。fast_search() 在 tune/search.py:452 是从
+第 0 个候选开始试的，而第 0 个候选正是 BN=256，所以它还没来得及试后面的
+BN=128 候选，就先死掉了。mp.spawn 只显示 “Process 2” 是正常现象，其他 worker 会被主进
+程一起 SIGTERM 掉。
+补充一点，这个问题只会在 reduce_scatter 路径暴露出来，因为只有这条路径会调用
+generate_row_remap_array()；all_reduce 不走这里。
+
+你现在有三个处理办法：
+ 1. 直接换尺寸，让 N 能被候选 BN 整除。
+    例如把 N 改成 29440、29696 这类 256 的倍数。
+ 2. 临时绕开不合法候选。
+    让搜索先跳过 BN=256、只试 BN=128 的配置。
+ 3. 从代码上修。
+    把 generate_row_remap_array() 的 tile 计数逻辑改成和外部一致，或者显式处理最后那一列
+    partial tile。
+
+如果你要，我可以直接帮你改 search.py，让它在 reduce_scatter 下正确处理 N 不是 BN 整数倍
+的情况，或者至少先自动跳过这类非法候选，不再因为第一个候选直接崩掉。
+─ Worked for 7m 06s
+─────────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────────
+──────────────────────
+
+› 也就是说这相当于flashoverlap的一个缺点对吧？必须得能整除才行是吧
+• 更准确地说：这是这个仓库当前 reduce_scatter 实现和调优脚本的限制，不一定是
+FlashOverlap 这个想法本身的“理论缺点”。
+
+就你现在这份代码来看，确实有明显的整除假设：
+    reduce_scatter 路径里，M 至少要能被 world_size 整除，因为输出 D 直接按 M // world_size
+    分配，见 tune/search.py:115。
+    当前 search.py 的 remap 逻辑默认按“完整 tile”处理，所以一旦某个候选 BM/BN 让边界出现
+    partial tile，就可能出错。你这次就是 N % BN != 0 触发了这个问题，见 tune/
+    search.py:56 和 tune/search.py:88。
+所以结论不是“所有情况都必须整除”，而是：
+  对这个仓库当前的 reduce_scatter 调优流程，最好满足 M % world_size == 0。
+  对当前会被尝试的 tile 配置，最好满足 M % BM == 0 且 N % BN == 0。
+  现在的 fast_search() 没有先过滤掉不满足整除条件的候选，所以会直接崩，而不是自动跳
+  过。
+这和“FlashOverlap 天生做不了非整除尺寸”不是一回事。更像是：当前实现为了简单和性能，没
+把边界 tile 和 remap 的尾块处理补完整。工程上通常有两种改法：
+  输入 padding 到合法尺寸，再在外面裁掉。
+  代码里显式支持 partial tile，并在搜索时过滤非法候选。
+如果你愿意，我可以直接把这个仓库改成“reduce_scatter 搜索时自动跳过不合法 BM/BN 候选”，
+这样你现在这组尺寸至少不会再因为第一个候选崩掉。
+8192 49152 12288
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/FlashOverlap/test#
+UDA_VISIBLE_DEVICES=0,1,2,3 python test.py --m 8192 --n 49152 --k 12288 --comm_op
+reduce_sca
+tter
+
+
+       Item                 Value
+       -----                -----
+       m                     8192
+       n                    49152
+       k                    12288
+       tile_num             12288
+       gemm_dur (ms)         38.5684
+       comm_dur (ms)          3.0044
+       baseline_dur (ms)         40.9216
+       overlap_dur (ms)         42.2772
+       speedup             0.9679
+
+
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/FlashOverlap/test#
+UDA_VISIBLE_DEVICES=0,1,2,3 python test.py --m 8192 --n 49152 --k 12288 --comm_op
+reduce_scatter
+
+
+       Item                 Value
+       -----                -----
+       m                     8192
+       n                    49152
+      k                     12288
+      tile_num              12288
+      gemm_dur (ms)          38.5684
+      comm_dur (ms)           2.9936
+      baseline_dur (ms)          41.0009
+      overlap_dur (ms)          42.3047
+      speedup              0.9692
+
+
+8192 53248 16384
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/FlashOverlap/test#
+UDA_VISIBLE_DEVICES=0,1,2,3 python test.py --m 8192 --n 53248 --k 16384 --comm_op
+reduce_scatter
+
+
+      Item                  Value
+      -----                 -----
+      m                      8192
+      n                     53248
+      k                     16384
+      tile_num              13312
+      gemm_dur (ms)          55.6999
+      comm_dur (ms)           3.2332
+      baseline_dur (ms)          58.7582
+      overlap_dur (ms)          60.0479
+      speedup              0.9785
+
+
+
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/FlashOverlap/test#
+UDA_VISIBLE_DEVICES=0,1,2,3 python test.py --m 8192 --n 53248 --k 16384 --comm_op
+reduce_scatter
+
+
+      Item                  Value
+      -----                 -----
+      m                      8192
+      n                     53248
+      k                     16384
+      tile_num              13312
+      gemm_dur (ms)          55.6999
+      comm_dur (ms)           3.2275
+      baseline_dur (ms)          67.1583
+      overlap_dur (ms)          60.0416
+      speedup              1.1185
+(torch) root@cbpcueohrpvfpkmf-open-b8969c99c-958dc:/data/coding/FlashOverlap/test#
+UDA_VISIBLE_DEVICES=0,1,2,3 python test.py --m 8192 --n 53248 --k 16384 --comm_op
+reduce_scatter
+
+
+      Item                  Value
+      -----                 -----
+      m                      8192
+      n                     53248
+      k                     16384
+      tile_num              13312
+      gemm_dur (ms)          55.6999
+      comm_dur (ms)           3.2558
+      baseline_dur (ms)          58.8957
+      overlap_dur (ms)          59.9241
+      speedup              0.9828
+
+
+16384 29568 8192
+(torch) root@obqrxcmlmsmwgleu-open-c779c8db4-f6gz4:/data/coding/FlashOverlap/test#
+CUDA_VISIBLE_DEVICES=0,1,2,3 python test.py --m 16384 --n 29568 --k 8192 --comm_op
+reduce_scatter
+
+
+      Item                  Value
+      -----                 -----
+      m                     16384
+      n                     29568
+      k                      8192
+      tile_num              14784
+      gemm_dur (ms)          31.1122
+      comm_dur (ms)           3.5647
+      baseline_dur (ms)          35.9004
+      overlap_dur (ms)          33.9446
+      speedup              1.0576
+
+
+
+(torch) root@obqrxcmlmsmwgleu-open-c779c8db4-f6gz4:/data/coding/FlashOverlap/test#
+CUDA_VISIBLE_DEVICES=0,1,2,3 python test.py --m 16384 --n 29568 --k 8192 --comm_op
+reduce_scatter
+
+
+      Item                  Value
+      -----                 -----
+      m                     16384
+      n                     29568
+      k                     8192
+      tile_num             14784
+      gemm_dur (ms)         31.1122
+      comm_dur (ms)          3.5575
+      baseline_dur (ms)         35.9045
+      overlap_dur (ms)         33.9276
+      speedup             1.0583
+
+
+
+(torch) root@obqrxcmlmsmwgleu-open-c779c8db4-f6gz4:/data/coding/FlashOverlap/test#
+CUDA_VISIBLE_DEVICES=0,1,2,3 python test.py --m 16384 --n 29568 --k 8192 --comm_op
+reduce_scatter
+
+
+      Item                 Value
+      -----                -----
+      m                    16384
+      n                    29568
+      k                     8192
+      tile_num             14784
+      gemm_dur (ms)         31.1122
+      comm_dur (ms)          3.5443
+      baseline_dur (ms)         35.8731
+      overlap_dur (ms)         33.9221
+      speedup             1.0575
+

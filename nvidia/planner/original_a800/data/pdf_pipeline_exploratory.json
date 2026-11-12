@@ -1,0 +1,67 @@
+{
+  "ar": {
+    "status": "insufficient distinct shapes for leave-one-shape-out",
+    "shapes": 2
+  },
+  "rs": {
+    "status": "exploratory; only 3 shapes, no independent generalization claim",
+    "shapes": 3,
+    "correct": 3,
+    "entries": [
+      {
+        "shape_MNK": [
+          8192,
+          49152,
+          12288
+        ],
+        "repeats": 2,
+        "stock_ms": 40.96125,
+        "overlap_ms": 42.290949999999995,
+        "pred_overlap_ms": 41.735282395070804,
+        "guard_ms": 0.06100040770668613,
+        "choice": "stock",
+        "oracle": "stock",
+        "calibration": {
+          "scale": 1.0614762493929855,
+          "fixed_ms": 0.0
+        }
+      },
+      {
+        "shape_MNK": [
+          8192,
+          53248,
+          16384
+        ],
+        "repeats": 3,
+        "stock_ms": 58.8957,
+        "overlap_ms": 60.0416,
+        "pred_overlap_ms": 60.35016979352166,
+        "guard_ms": 0.28438300713215625,
+        "choice": "stock",
+        "oracle": "stock",
+        "calibration": {
+          "scale": 1.0679895978552079,
+          "fixed_ms": 0.0
+        }
+      },
+      {
+        "shape_MNK": [
+          16384,
+          29568,
+          8192
+        ],
+        "repeats": 3,
+        "stock_ms": 35.9004,
+        "overlap_ms": 33.9276,
+        "pred_overlap_ms": 34.75219061597759,
+        "guard_ms": 0.03999723486020201,
+        "choice": "overlap",
+        "oracle": "overlap",
+        "calibration": {
+          "scale": 1.0303695603040257,
+          "fixed_ms": 1.7787418541912885
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "classification": "A800 TP8 forward-only leave-one-model-out",
+  "warning": "Not an E2E predictor; no BW1000 anomalies automatically excluded.",
+  "modes": {
+    "1": {
+      "status": "insufficient_data",
+      "cells": 0,
+      "models": 0
+    },
+    "16": {
+      "status": "insufficient_data",
+      "cells": 0,
+      "models": 0
+    }
+  }
+}
