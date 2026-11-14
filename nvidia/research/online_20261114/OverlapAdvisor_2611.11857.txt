@@ -1,0 +1,1336 @@
+                                             OverlapAdvisor: Modeling and Adapting
+                                        Computation–Communication Overlap for Distributed
+                                                         MoE Serving
+                                                     Chutong Ding                             Kaixuan Zhang                            Luping Wang
+                                              Shanghai Jiao Tong University            Shanghai Jiao Tong University                  Alibaba Group
+                                                          China                                    China                                  China
+                                                 dingct2004@sjtu.edu.cn                    zks1anx@sjtu.edu.cn                  chamu.wlp@alibaba-inc.com
+
+                                                      Shiyou Qian                                 Jian Cao                            Cheng Huang
+                                              Shanghai Jiao Tong University             Shanghai Jiaotong University                   Alibaba Group
+arXiv:2611.11857v1 [cs.DC] 9 Nov 2026
+
+
+
+
+                                                          China                                    China                                   China
+                                                  qshiyou@sjtu.edu.cn                      cao-jian@sjtu.edu.cn                 xiaoluo.hc@alibaba-inc.com
+
+                                                                         Guodong Yang                             Liping Zhang
+                                                                          Alibaba Group                            Alibaba Group
+                                                                              China                                    China
+                                                                      luren.ygd@taobao.com                   liping.z@alibaba-inc.com
+
+                                        Abstract                                                         parallelism (EP) [16] as its most common distribution strat-
+                                        Mixture-of-Experts (MoE) inference with expert parallelism       egy. EP routes tokens to experts via All-to-All communica-
+                                        (EP) relies on All-to-All communication, making computation–     tion, whose cost scales with token count, hidden dimension,
+                                        communication overlap strategies critical for achieving high     and parallelism degree, creating a critical inference bottle-
+                                        performance. However, no strategy is universally optimal.        neck [17, 38]. Computation–communication overlap is the
+                                        Across 103 production configurations, varying input lengths,     key to mitigating this bottleneck [38].
+                                        and four hardware platforms, we observe that the fastest            Many MoE EP strategies use kernel fusion and device-side
+                                        strategy shifts based on model shape, EP degree, input length,   scheduling for fine-grained communication–computation
+                                        and hardware. Since no strategy dominates more than 80.6%        overlap, reducing launch and synchronization overheads.
+                                        of configurations, configuration-aware selection is necessary.   For example, Comet [33] manages dependencies for fine-
+                                        In this work, we propose OverlapAdvisor, which models over-      grained overlap, while FlashMoE [3] fuses overlap stages
+                                        lap stages using two granularities to capture computation–       using device-initiated primitives. Section 2.2 reviews these
+                                        communication dependencies. OverlapAdvisor builds a uni-         and other strategies.
+                                        fied performance model, accounting for deviations from              Despite these advances, strategies are typically evaluated
+                                        peak compute, memory, and communication performance              on limited model configurations and hardware, leaving no
+                                        across workloads and hardware. This model enables launch-        systematic comparison of major strategies under unified
+                                        time, configuration-aware strategy selection within two serv-    conditions. Prior work also implicitly assumes a universally
+                                        ing engines. We conduct experiments on four MoE models           optimal strategy, yet our measurements reveal distinct advan-
+                                        (30B–235B) against three baselines, utilizing SGLang and         tage regions across model shapes, input lengths, EP degrees,
+                                        vLLM. At the kernel level, OverlapAdvisor achieves 1.16×         and hardware, with no strategy consistently dominating.
+                                        average and 1.59× maximum speedups, with a prediction            Context-aware strategy adaptation is thus essential, but ex-
+                                        MAPE of 3.3%–15.9%. In SGLang and vLLM, it improves              isting performance models characterize overlap in strategy-
+                                        end-to-end throughput up to 31.7%. Its granularity-guided        specific ways, preventing a common analytical comparison.
+                                        optimizations further achieve median speedups of 1.10× for       Practitioners deploying MoE in SGLang [37] or vLLM [15]
+                                        DeepEP-v1 and 1.22× for FlashMoE.                                must therefore rely on ad-hoc benchmarking or a fixed de-
+                                                                                                         fault strategy.
+                                                                                                            We propose OverlapAdvisor, a unified model for launch-
+                                                                                                         time strategy adaptation, addressing three challenges. (i)
+                                        1   Introduction                                                 Strategies differ in kernel structure (separate kernels or a
+                                        Trillion-parameter LLMs [13] exceed single-GPU memory            megakernel), communication/memory mechanisms (copy
+                                        and compute limits, necessitating distributed inference [15,     engine, TMA, LD/ST), and code implementations (CUTLASS,
+                                        27, 37]. Mixture-of-Experts (MoE) is a dominant architec-        cuBLASDx, Triton, PTX), making accurate ranking under
+                                        ture for scaling capacity at fixed compute cost, with expert
+                             Chutong Ding, Kaixuan Zhang, Luping Wang, Shiyou Qian, Jian Cao, Cheng Huang, Guodong Yang, and Liping Zhang
+
+
+one unified model difficult. (ii) Achieved bandwidth and                     and vLLM yields significant kernel and end-to-end per-
+throughput deviate substantially from hardware peaks; these                  formance improvements. We further leverage Overla-
+deviations vary across the token-count range from decode to                  pAdvisor to analyze and optimize existing strategies.
+prefill and grow with finer work partitioning. (iii) Adaptation
+must integrate easily into serving engines and cost far less          2     Background
+than benchmarking candidates.
+                                                                      2.1   MoE and EP
+   Rather than introducing another overlap implementation,
+OverlapAdvisor treats overlap strategy adaptation as an opti-         An MoE layer replaces dense feed-forward networks with
+mization problem. It models why strategies excel in different         multiple experts, activating only the top-𝑘 per token to scale
+regimes to recommend the optimal strategy for any deploy-             capacity without increasing compute cost. EP [16] distributes
+ment configuration—MoE shape, input length, and EP degree.            these experts across GPUs. Dispatch routes tokens to experts
+To achieve this objective, OverlapAdvisor builds a unified            for computation, while Combine returns outputs to their
+performance model that enables launch-time strategy selec-            origins. Both rely on All-to-All communication, whose cost
+tion. This model can also analyze the performance bottleneck          depends on token count, hidden dimension, and EP degree,
+of existing strategies to suggest optimization solutions. Fur-        often creating a bottleneck in MoE inference [17, 38].
+thermore, OverlapAdvisor is lightweight and non-intrusive,
+taking about 6 µs without online profiling.                           2.2   Overlap Strategies for MoE EP
+   We evaluate OverlapAdvisor against six fixed-strategy              Computation–communication overlap enables concurrent
+baselines, 103 production MoE shapes, 10 token counts (from           execution and data transfer across streaming multiprocessors
+decode to 16K-token chunked prefill), and four GPU plat-              (SMs), copy engines, or dedicated warps. An overlap strat-
+forms spanning three generations: A100, H20, H800, and                egy partitions and schedules MoE operations to exploit this
+GB200. (1) Across 20 strategy–hardware pairs, the perfor-             concurrency. These strategies integrate communication and
+mance model achieves 3.3%–15.9% MAPE, and the selector                computation via device-side scheduling to minimize launch
+achieves 85.3%–91.6% top-1 accuracy (88.43% on average).              and synchronization overhead. For example, Comet [33] re-
+(2) OverlapAdvisor delivers 1.16× average and 1.59× maxi-             solves dependencies for fine-grained overlap; FlashMoE [3]
+mum kernel speedups over each platform’s strongest fixed              utilizes device-initiated primitives to fuse overlap stages; and
+strategy, and up to 5.62× over baselines. Even where Meg-             UniEP [39] unifies strategies through parameterized MegaK-
+aMoE [34] is often optimal, OverlapAdvisor outperforms it             ernel abstractions. We evaluate Comet, FlashMoE, MegaMoE,
+by over 5% in up to 23.83% of configurations. (3) In SGLang           and UniEP as overlap strategies, while using Torch- and
+and vLLM, OverlapAdvisor improves end-to-end throughput               DeepEP-based implementations as serialized baselines with
+over MegaMoE, UniEP [39], and DeepEP [36] by 1.78%, 4.57%,            sequential communication and computation. The DeepEP-
+and 9.97% on average, respectively, with gains up to 31.72%.          based baseline uses DeepEP for communication and Deep-
+(4) OverlapAdvisor diagnoses granularity bottlenecks and              GEMM [35] for computation.
+guides finer-grained Dispatch in DeepEP-v1 and coarser-                  Strategies differ in kernel partitioning, execution mecha-
+grained Combine in FlashMoE, achieving median speedups                nisms, and code implementations. (1) Communication mech-
+of 1.10× and 1.22×, respectively.                                     anisms transfer data across ranks via load/store pipeline
+   We make the following contributions:                               (LD/ST), Tensor Memory Accelerator (TMA), or copy en-
+                                                                      gines (CEs). (2) Memory mechanisms load data from local
+                                                                      high bandwidth memory (HBM) via LD/ST or TMA. Both
+                                                                      communication and memory loading use LD/ST, but with
+    • A comprehensive evaluation of MoE EP over-                      different instructions and transfer semantics: the former ac-
+      lap strategies. We compare six strategies, including            cesses peer memory via ld.global/st.global, while the
+      Comet [33], FlashMoE [3], Torch [22], MegaMoE [34],             latter uses cp.async for asynchronous local HBM-to-shared-
+      UniEP [39], and DeepEP [36], under identical condi-             memory transfers that bypass registers. (3) Computation
+      tions across 103 production MoE shapes, EP 2–8, 10              mechanisms use Tensor Cores for expert computation and
+      input lengths from decode to 16K prefill, and four              CUDA Cores for activations and other element-wise opera-
+      platforms spanning three GPU generations.                       tions. (4) Implementations realize these mechanisms using
+    • A unified performance model. Building on existing               low-level instructions (CUDA C++ with inline PTX), GPU
+      strategies, we propose a unified performance model              DSLs (Triton), or CUDA libraries (CUTLASS and cuBLASDx).
+      that combines granularity-aware analytical model-                  Mechanism choices and their code implementations af-
+      ing for core dependencies with data-driven efficiency           fect instruction scheduling and resource efficiency, yielding
+      modeling for specific configurations.                           performance differences among similar strategies. Table 1
+    • Implementation and evaluation in mainstream                     summarizes the execution mechanisms and implementations
+      engines. Implementing OverlapAdvisor within SGLang              of the evaluated strategies.
+OverlapAdvisor: Modeling and Adapting Computation–Communication Overlap for Distributed MoE Serving
+
+
+Table 1. Execution mechanisms and implementations of                                                                       Table 2. Notations used in this work.
+MoE EP strategies.
+                                                                                                                    Symbol            Description
+                   Comm                                                                                             Workload
+Strategy                                 Mem               Comp       Impl
+              Dispatch Combine                                                                                      𝐻, 𝐼              Hidden size, MoE intermediate size
+                                                                                                                    𝐸                 Total number of experts
+Comet          CE         LD/ST      LD/ST, TMA      Tensor Core      CUTLASS
+                                                                                                                    𝑘                 Number of experts per token (top-𝑘)
+FlashMoE      LD/ST       LD/ST        LD/ST         Tensor Core      cuBLASDx
+                                                                                                                    𝑆𝑅in              Input tokens per rank
+UniEP         TMA         LD/ST         TMA          Tensor Core      Triton
+                                                                                                                    𝐷                 Expert-parallelism degree
+MegaMoE       TMA         LD/ST         TMA          Tensor Core      CUDA C++
+                                                                                                                    𝛽                 Bytes per element (BF16/FP8)
+DeepEP-v1     LD/ST       LD/ST
+                                         TMA         Tensor Core CUDA C++                                           𝑆𝑅a = 𝑆𝑅in · 𝑘    Tokens assigned per rank (average)
+DeepEP-v2     TMA         TMA
+                                                                                                                    𝑆𝑅max
+                                                                                                                       a
+                                                                                                                                      Tokens assigned to the hottest rank
+                                                                                                                    𝜌 = 𝑆𝑅max
+                                                                                                                           a
+                                                                                                                              /𝑆𝑅a    Imbalance factor
+2.3       Strategy Selection and Modeling                                                                           𝐸 L = 𝐸/𝐷         Local experts per rank
+                                                                                                                    𝑆 𝐸 = 𝑆𝑅a /𝐸 L    Tokens assigned per expert (average)
+              Serving                                              Mechanisms/                                      Hardware
+    LLM                     MoE strategy          Kernel
+              Engine                                              Implementations                                   𝐹                 Peak compute rate (BF16/FP8)
+                                                                                                                    𝐵 HBM , 𝐵 NVL     Peak HBM, NVLink bandwidth
+                                      Select
+                                                  OverlapAdvisor                                                    𝑁 SM              Number of SMs on the GPU
+                        Modeled as
+                                                                                                                    Kernel
+                                               Analyzed                                                             𝐵𝑀 , 𝐵 𝑁          Block M and block N in GroupGEMM
+                                                 by
+                            Overlap stages
+                                                                                                                    Performance Model
+                                                                                                                    𝑇               Total MoE execution time
+Figure 1. OverlapAdvisor in the execution stack. Solid ar-                                                          𝑇comp , 𝑇comm   Computation / communication time
+rows show execution flow; dashed arrows show OverlapAd-                                                             𝐺 comp , 𝐺 comm Computation / communication granularity
+visor’s optimal strategy selection via two-stage overlap anal-
+ysis.                                                                                    deployments, yet prior work often assumes universal op-
+   Figure 1 locates OverlapAdvisor in the execution stack: a                             timality. Figure 2 compares six MoE EP strategies, using
+serving engine runs an LLM whose MoE layers use EP strate-                               single-layer kernel-level benchmarks with MoE configura-
+gies implemented by kernels with specific execution mecha-                               tions from DeepSeek-V3 [8] and Qwen3 [24] on A100, H800
+nisms and implementations. Given the router’s assignments,                               and GB200. The evaluation covers two settings: BF16 with a
+OverlapAdvisor models each strategy’s full MoE layer from                                standard MLP and FP8 with a gated MLP. No single strategy
+Dispatch to Combine through two logical overlap stages in                                is optimal across the evaluated configurations and hardware
+the execution pipeline: Dispatch+GroupGEMM couples dis-                                  platforms; different strategies excel in different regions. From
+patch with the first GroupGEMM, while GroupGEMM+Combine                                  this analysis, we identify three observations.
+couples the second GroupGEMM with Combine. These stages
+are analytical units, not kernel boundaries: a strategy may
+                                                                                    Relative Performance (%)
+
+
+
+
+                                                                                                           100                                       100
+split a stage across multiple kernels or fuse both stages into
+                                                                                                               75                                     75
+one kernel. OverlapAdvisor uses this stage-based analysis to
+predict each strategy’s MoE execution time and select the                                                      50                                     50
+fastest strategy.                                                                                              25     Comet     FlashMoE              25   Comet     FlashMoE
+                                                                                                                      Torch                                Torch     DeepEP-v1
+                                                                                                                0                                      0
+2.4       Key Notations and Workload Configuration
+                                                                                                               64
+                                                                                                                      8
+                                                                                                                           6
+                                                                                                                                 2
+                                                                                                                                1K
+                                                                                                                                           2K
+                                                                                                                                                4K
+
+
+                                                                                                                                                       64
+                                                                                                                                                         8
+                                                                                                                                                         6
+                                                                                                                                                         2
+                                                                                                                                                       1K
+                                                                                                                                                                             2K
+                                                                                                                                                                                   4K
+                                                                                                                    12
+                                                                                                                         25
+                                                                                                                               51
+
+
+
+
+                                                                                                                                                      12
+                                                                                                                                                      25
+                                                                                                                                                      51
+
+
+
+
+                                                                                                                             tokens                           tokens
+Table 2 lists the key notations used in this paper, covering                                                       (a) A100: DeepSeek-V3/R1         (b) H800: Qwen3-30B-A3B
+                                                                                                               (H=7168, I=2048, E=256, k=8, D=8) (H=2048, I=768, E=128, k=8, D=2)
+workload dimensions, hardware capabilities, kernel settings,
+                                                                                    Relative Performance (%)
+
+
+
+
+                                                                                                           100                                       100
+and performance-model quantities. We define a workload
+                                                                                                               75                                     75
+configuration as the tuple (𝐻, 𝐼, 𝐸, 𝑘, 𝑆𝑅in , 𝐷), capturing model
+                                                                                                               50                                     50
+dimensions, token counts, and parallelism settings, indepen-
+dent of hardware and strategy.                                                                                 25     MegaMoE       DeepEP-v1         25   MegaMoE     DeepEP-v2
+                                                                                                                      UniEP                                UniEP
+                                                                                                                0                                      0
+3     Observations
+                                                                                                                64
+                                                                                                                  8
+                                                                                                                  6
+                                                                                                                  2
+                                                                                                                1K
+                                                                                                                2K
+                                                                                                                4K
+                                                                                                                8K
+
+
+                                                                                                                                                       8
+                                                                                                                                                           6
+                                                                                                                                                                 2
+                                                                                                                                                                1K
+                                                                                                                                                                        2K
+                                                                                                                                                                             4K
+                                                                                                                                                                                   8K
+                                                                                                               12
+                                                                                                               25
+                                                                                                               51
+
+
+
+
+                                                                                                                                                     12
+                                                                                                                                                           25
+                                                                                                                                                                51
+
+
+
+
+                                                                                                                            tokens                            tokens
+MoE EP strategy performance depends on various factors:                                                           (c) H800: Qwen3-235B-A22B       (d) GB200: Qwen3-Next-80B-A3B
+                                                                                                               (H=4096, I=1536, E=128, k=8, D=8) (H=2048, I=512, E=512, k=10, D=4)
+the communication mechanism, token layout, resource par-                                Figure 2. Relative performance of six MoE EP strategies at
+titioning, synchronization boundaries, and hardware char-                               the kernel level, normalized per configuration to the fastest
+acteristics such as SM count and interconnect bandwidth.                                strategy (best is 100%). (a) and (b): BF16 with a standard MLP;
+Fixing these choices limits a strategy’s effectiveness across                           (c) and (d): FP8 with a gated MLP.
+                                  Chutong Ding, Kaixuan Zhang, Luping Wang, Shiyou Qian, Jian Cao, Cheng Huang, Guodong Yang, and Liping Zhang
+
+
+Observation 1: Existing strategies lack general effec-                             Inputs                        UPP: Unified Performance Predictor                       SSL: Strategy
+                                                                                                                                                                        Serving Launcher
+                                                                                                                                                                                                     Results
+                                                                            MoE Config                     Analytical        Data-Driven            Candidate
+tiveness.                                                                                                   Model              Model                 Models              Build & Launch
+
+   Figure 2 shows that different strategies excel under differ-                                        1     2
+
+                                                                                                             1
+                                                                                                                  3
+
+                                                                                                                  2    3
+                                                                                                                                                       T = max(…)
+                                                                                                                                                         + min(…)
+                                                                                                                                                                          Compile / launch flags
+                                                                                                                                                                                                      Kernel
+                                                                                   Model                                                                    ⋮                                        Speedup
+ent conditions, but prior evaluations cover limited configu-                  t1    t2   t3   t4
+                                                                                                           Computation
+                                                                                                           Communication
+                                                                                                                                                       T = max(…)
+                                                                                                                                                         + min(…)       Weight Conversion
+                                                                                                                                                                          Load-time adaptation
+rations and may miss these trade-offs. Table 3 summarizes                     t5    t6   t7
+
+                                                                            Tokens per rank
+                                                                                              t8
+                                                                                                    Predicted performance
+                                                                                                                                                                                                   Throughput Up
+the evaluation scope of strategies by the number of reported
+                                                                                                                                   Colocated                            Runtime Integration
+                                                                                                    Strategy Selection             Min. weighted
+                                                                                                                                                    Prefill   Decode
+                                                                                                                                                                         Unified MoE interface
+                                                                                                                                   time
+
+(𝐻, 𝐼, 𝐸, 𝑘, 𝑆𝑅in , 𝐷) configurations. We omit 𝐷 as a separate
+                                                                                                                                                                 time
+                                                                            GPU     GPU       GPU
+
+                                                                                                                                   PD-disaggregated
+
+column because it remains fixed for each (𝐻, 𝐼, 𝐸, 𝑘, 𝑆𝑅in ) tu-
+                                                                                                                                   Min. time       Prefill                                           Bottleneck
+                                                                                                    Strategy Library Launch-Time   per phase                              Serving Engines
+                                                                             Hardware &                                                            Decode                                            Analysis &
+                                                                              EP degree                                                                                  Compatibility Support      Optimization
+ple. Existing evaluations utilize diverse, self-selected hard-                                                   CSA: Config-aware Strategy Adapter
+
+
+ware and workloads. For instance, FlashMoE compares against
+Comet and Megatron [19] on H100 across 14 configurations,                                     Figure 3. Overall structure of OverlapAdvisor.
+while Comet compares against Megatron and FasterMoE [31]
+on H800 and L20 across 22 configurations. Due to the lack of
+a common platform or unified configuration, these results                     A Unified Performance Predictor (UPP). To enhance
+neither facilitate direct comparison nor establish general per-            both generality and accuracy, we employ a hybrid approach
+formance metrics beyond the specific workloads evaluated.                  to model the kernel performance of both overlap and se-
+Observation 2: Existing kernel performance models                          rial strategies. First, OverlapAdvisor constructs an analytical
+are strategy-specific, not unified.                                        model for MoE strategies from the perspective of execution
+   Current kernel performance models fail to support context-              granularity. Second, we treat efficiency-related parameters
+aware strategy selection. Most models approximate over-                    that cannot be directly derived from hardware specifications,
+lap as max(𝑇comp,𝑇comm ), while refinements involving non-                 such as memory and communication bandwidth utilization
+overlappable terms remain strategy-specific [26, 39]. Lacking              and peak computational efficiency, as strategy-specific vari-
+a unified performance model for guidance, practitioners rely               ables to be fitted. OverlapAdvisor samples the execution time
+on costly benchmarking or potentially suboptimal defaults.                 of each strategy using only a limited set of configurations,
+Observation 3: Effective strategies require configura-                     and utilizes a differential evolution (DE) [25] optimizer to
+tion adaptation.                                                           estimate these parameters. Finally, incorporating these fitted
+   Achieving effective MoE EP overlap is challenging, which                parameters yields hardware- and strategy-aware models that
+is manifested in three aspects. First, input-dependent routing             predict performance for arbitrary configurations (§4.2).
+creates dynamic communication–computation dependencies,                       A Configuration-aware Strategy Adapter (CSA). At
+which complicates static partitioning for fine-grained pipelin-            server launch, OverlapAdvisor reads the deployment con-
+ing [33]. Second, mapping tokens to destination buffers intro-             figuration and uses UPP to select strategies that minimize
+duces extra metadata and synchronization costs [40]. Third,                predicted MoE execution time. For PD-disaggregated de-
+overlap also causes contention for SM resources, memory                    ployments, CSA selects prefill and decode strategies inde-
+bandwidth, and L2 cache [7, 41]. Furthermore, GPU multi-                   pendently; for colocated deployments, it selects a shared
+stream scheduling remains non-deterministic in real-world                  strategy by weighting each phase’s predicted time. Since
+production environments [6]. Consequently, selecting the                   all inputs are deployment invariants, selection runs once
+right strategy requires balancing both hardware and work-                  in about 6 𝜇s, requiring no profiling or runtime adaptation
+load factors, resulting in a complex, high-dimensional opti-               (§4.3).
+mization problem that makes manual tuning impractical.                        A Strategy Serving Launcher (SSL). Since a decision is
+                                                                           only valuable if it can be implemented, multiple strategies
+4     Design                                                               are integrated into serving engines (such as SGLang [37],
+                                                                           vLLM [15]) via a unified, interchangeable MoE backend inter-
+4.1   Overview
+                                                                           face. SSL applies CSA’s selections through launch options or
+As illustrated in Figure 3, the overall structure of OverlapAd-            environment variables, supporting hardware-specific kernel
+visor consists of three components.                                        builds, load-time weight conversion, and lightweight run-
+                                                                           time integration. These additive changes require only minor
+Table 3. Evaluation scope of MoE overlapping strategies.                   compatibility adjustments, preserve existing code paths, and
+                                                                           leave non-MoE layers unchanged (§4.4).
+Strategy         (𝐻, 𝐼, 𝐸, 𝑘 ) 𝑆𝑅in Configurations Platforms
+Comet                10       5         22        H800, L20                4.2                Unified Performance Predictor (UPP)
+FlashMoE             6        3         14        H100
+UniEP                12       2         24        2 Hopper clusters
+                                                                           Predicting a strategy’s kernel execution time requires two
+                                                                           key components: an analytical model of the fundamental
+OverlapAdvisor      103      10        1030       A100, H20, H800,         computation–communication dependencies based on a gran-
+                                                  GB200
+                                                                           ularity abstraction, independent of strategy-specific kernel
+OverlapAdvisor: Modeling and Adapting Computation–Communication Overlap for Distributed MoE Serving
+
+
+implementations; and data-driven fitting of efficiency param-           4.2.2 Data-Driven Efficiency Modeling for Strategies
+eters that capture bandwidth utilization and compute effi-              and Platforms. Routing-induced load imbalance across
+ciency while retaining a shared prediction structure across             ranks affects MoE execution time. Following [11], we quan-
+strategies. OverlapAdvisor derives the former analytically              tify it as 𝜌 = 𝑆𝑅max a
+                                                                                               /𝑆𝑅a , where 𝑆𝑅a and 𝑆𝑅maxa
+                                                                                                                             denote the av-
+(§4.2.1) and fits the latter from a small sample set (§4.2.2).          erage and maximum numbers of tokens received per rank,
+                                                                        respectively; 𝜌 = 1 indicates uniform loading. To model
+4.2.1 Granularity-aware Analytical Modeling. We fo-
+                                                                        inter-rank imbalance, we approximate the load of each local
+cus on Dispatch + GroupGEMM and GroupGEMM + Com-
+                                                                        expert on the busiest rank by the rank’s average expert load,
+bine, which dominate MoE layer execution time and capture
+                                                                        𝜌𝑆 𝐸 = 𝑆𝑅max  /𝐸 L , where 𝐸 L is the number of local experts per
+key overlap differences across strategies. The total execution                     a
+                                                                        rank and 𝑆 𝐸 = 𝑆𝑅a /𝐸 L is the average expert load. This approx-
+time is determined by combining these two stages as follows:
+                                                                        imation does not explicitly capture load imbalance among
+                                         𝑇 𝑗misc,                       experts within a rank. We evaluate all granularities at this
+                                      ∑︁
+                 𝑇b = 𝑇 (1) + 𝑇 (2) +                       (1)
+                                       𝑗                                busiest-rank load to approximate the execution bottleneck.
+                                                                            While the analytical model captures the overlap structure,
+where𝑇 (1) and𝑇 (2) model Dispatch+GroupGEMM and Group                  it fails to fully characterize actual performance. Data-driven
+GEMM+Combine, respectively. 𝑇 𝑗misc covers memory-bound                 efficiency modeling improves accuracy and distinguishes
+kernels (e.g., SwiGLU/GELU element-wise activations, per-               between strategies with similar overlap granularities but
+mute that groups tokens by expert, and unpermute that                   different efficiencies, such as MegaMoE and UniEP. The two
+restores their original order).                                         primary factors affecting resource efficiency in MoE EP are
+   Modeling the two stages involves characterizing two fac-             bandwidth and GEMM.
+tors: the granularity at which communication data enables                   Bandwidth Efficiency Modeling. In GPU systems, the
+computation, and the granularity at which computation re-               effective bandwidth of NVLink and HBM varies with the
+sults enable communication. Let 𝑇comp and 𝑇comm represent               volume of data transferred [26]. At small volumes, startup
+the computation and communication time within the Dis-                  overheads, such as kernel launch or communication startup,
+patch+GroupGEMM or GroupGEMM+Combine stages. Seri-                      account for a large fraction of execution time, and limited
+alized execution gives 𝑇 = 𝑇comp +𝑇comm , reflecting strict data        parallelism further constrains bandwidth utilization. As data
+dependencies; perfect overlap gives 𝑇 = max(𝑇comp,𝑇comm ),              volume increases, these overheads are amortized, and effec-
+assuming no such dependencies. In practice, however, the                tive bandwidth generally rises before reaching saturation.
+execution time falls between these two bounds because com-              The saturation level can be below the hardware peak and
+putation and communication exhibit data dependencies at                 depends on the platform and the data-movement mechanism,
+a specific granularity. We abstract each computation– com-              such as CE, TMA, or LD/ST instructions (Table 1).
+munication stage using two granularities, 𝐺 comp and 𝐺 comm ,               UPP uses a shared capped power law to model communi-
+defined as the numbers of rounds into which computation                 cation and HBM bandwidth efficiency across strategies:
+and communication are partitioned. These quantities char-
+acterize the granularity of data dependencies between com-
+                                                                                                                        𝛼 
+                                                                                                                    𝑉
+putation and communication.                                                             𝜂 comm/mem = min 𝜂𝑐𝑎𝑝 ,                ,        (3)
+                                                                                                                   𝑉𝑟𝑒 𝑓
+   Overall, in each MoE EP stage, three factors impact execu-
+tion time. The first is the temporal ordering of computation                                       Comp longer                                              Comm longer
+and communication. The second is the execution time of                                                        Different
+                                                                                  (a)    M1        M2                     (c)                        M1                M1
+computation and communication. As the communication                                                           granularity
+                                                                                                   P1        P2        P3    P4                                  P1        P2        P3    P4
+workload is 𝑂 (𝑆𝑅in · 𝐻 ) while the computation workload is               Comm first
+
+𝑂 (𝑆𝑅in · 𝐻 · 𝐼 ), the dominant term alternates between 𝑇comp                     (b) M1 M2 M3 M4                                           (d) M1 M2 M3 M4
+
+and 𝑇comm as 𝐼 varies. The third is the granularity, which                                                   P1                   P2                             P1             P2
+
+partitions tasks into various rounds. Figure 4 shows stage ex-                    (e) P1      P2        P3        P4                        (g) P1     P2      P3      P4
+ecution times for all eight combinations of the three factors.                                          M1                  M2                                        M1              M2
+                                                                          Comp first
+We model each computation–communication stage as:
+                                                                                   (f)     P1                     P2                        (h)   P1        P2
+
+                               min(𝑇comp,𝑇comm )                                                         M1        M2            M3    M4                 M1     M2        M3   M4
+       𝑇 = max(𝑇comp,𝑇comm ) +                      ,          (2)
+                               min(𝐺 comp, 𝐺 comm )                                                                                    T                                                    T
+
+For example, Figure 4(a) has 𝑇comp > 𝑇comm , 𝐺 comp = 4, and            Figure 4. Overlap schematic (M: communication; P: com-
+𝐺 comm = 2, giving 𝑇 = 𝑇comp + 𝑇comm /2.                                putation), showing how 𝑇 is determined by the sequence of
+   Contention for SM resources, L2 cache, and bandwidth                 execution–whether computation or communication takes
+during overlap is captured by the data-driven model below               precedence–as well as the dominant time factor and the
+rather than explicitly modeled in this equation.                        coarser granularity between the two.
+                                  Chutong Ding, Kaixuan Zhang, Luping Wang, Shiyou Qian, Jian Cao, Cheng Huang, Guodong Yang, and Liping Zhang
+
+
+where 𝜂 cap is the saturation efficiency, 𝑉 is the data vol-               all SMs, and computational efficiency remains approximately
+ume, 𝑉ref is a reference volume that sets the scale of the                 constant at 𝜂𝑔𝑒𝑚𝑚 . In the memory-bound regime, memory-
+efficiency curve, and 𝛼 is the power-law exponent. Below                   access efficiency varies with data volume and is modeled
+              1/𝛼                                                          using the same power-law efficiency formulation as Eq. (3).
+𝑉sat = 𝑉ref 𝜂 cap , efficiency increases with 𝑉 , and transfer time
+grows as 𝑉 1−𝛼 . Above saturation, efficiency stays at 𝜂 cap and           Here, 𝜂 gemm is fitted for each strategy and hardware.
+transfer time grows linearly. For a fixed saturation point,                   We model GroupGEMM execution time 𝑇comp as:
+larger 𝛼 gives a steeper efficiency decline at smaller volumes.
+                                                                                                     2 𝑚 𝑆𝑅max    𝐻𝐼 𝛾 pad, 𝑖 = 1,
+                                                                                                   (
+We fit 𝜂 cap , 𝑉ref , and 𝛼 for each strategy and platform.                               (𝑖 )
+                                                                                        𝐶 gemm =             a
+                                                                                                                                      (8)
+   We model two primary communication topologies: ring-                                              2 𝑆𝑅max  𝐻𝐼 𝛾 pad,        𝑖 = 2,
+                                                                                                          a
+based (Comet dispatch; Torch) and P2P (Comet combine;
+                                                                                                               (𝑖 )
+                                                                                                                                 !
+FlashMoE, MegaMoE, UniEP, DeepEP), as follows:                                             (𝑖 )             𝐶 gemm         (𝑖 )
+                                                                                         𝑇comp = max                                  (9)
+                                                                                                           𝐹 · 𝜂 gemm mem
+                                                                                                                        ,𝑇         ,
+            (𝐷 − 1) · 𝑆𝑅in · 𝐻 · 𝛽,              ring-based,
+           
+           
+           
+                                                                  (4)
+           
+   𝑉comm =                 𝑆𝑅in                                            where 𝐶 gemm is the floating-point workload of GroupGEMM,
+            𝜌 · (𝐷 − 1) ·      · 𝑘 · 𝐻 · 𝛽,      P2P-based.
+           
+                                                                                                                               ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉𝐵𝑀
+                                                                           𝐹 is the peak compute rate (TFLOPs), and 𝛾 pad =
+           
+                           𝐷                                                                                                        𝜌𝑆 𝐸
+                                                                           is the padding inflation factor along the token dimension,
+   𝑇comm =
+                           𝑉comm
+                                              ,                   (5)      which accounts for the computational waste incurred when
+              𝐵 NVL · 𝜂 comm (𝑉comm /𝐺 comm )                              𝜌𝑆 𝐸 is not an integer multiple of 𝐵𝑀 .
+where 𝐷 is the EP degree, 𝑆𝑅in the input tokens per rank, 𝐻                   Parameter Fitting. The performance models established
+the hidden size, 𝑘 selected experts, 𝛽 the bytes per element               above for MoE EP strategies include several physical param-
+(e.g., BF16 or FP8), and 𝐵 NVL the peak NVLink bandwidth.                  eters that must be fitted, primarily the bandwidth efficiency
+P2P communication time is determined by the busiest rank’s                 parameters (𝜂𝑐𝑎𝑝 , 𝑉𝑟𝑒 𝑓 , 𝛼) and the GEMM efficiency param-
+receive load, and 𝜂 comm is evaluated at the per-round volume              eter (𝜂 gemm ). These parameters cannot be read off directly
+𝑉comm /𝐺 comm .                                                            from hardware specifications. For each ⟨strategy, platform⟩
+   GroupGEMM memory-access time 𝑇mem is modeled as:                        pair, we fit the relevant parameters separately for each ker-
+            ( max                                                          nel (e.g., Dispatch, permute, GroupGEMM, and GELU) by
+       (𝑖 )   𝑆𝑅a (𝐻 + 𝑚𝐼 ) 𝛽 + 𝐸 L · 𝑚 · 𝐻𝐼 𝛽, 𝑖 = 1,                     minimizing MAPE over 𝑛 measured configurations. Parame-
+    𝑉mem =                                                 (6)             ter bounds enforce physical validity (e.g., 𝛼, 𝜂 gemm ∈ (0, 1)).
+              𝑆𝑅max (𝐼 + 𝐻 ) 𝛽 + 𝐸 L · 𝐻𝐼 𝛽,       𝑖 = 2,
+                 a
+                                                                           Since the model’s min, max, and ⌈·⌉ operations make the
+     (𝑖 )
+                           (𝑖 )
+                          𝑉mem                                             objective nonsmooth and nonconvex, we use DE for global
+    𝑇mem  =                                 ,                   (7)      optimization rather than gradient-based methods [14, 18].
+                                (𝑖 )
+              𝐵 HBM · 𝜂 mem 𝑉mem     /𝐺 comp
+                                                                           4.3   Configuration-aware Strategy Adapter (CSA)
+where 𝑖 = 1, 2 denote up- and down-projection GroupGEMMs,
+respectively, and 𝑚 denotes the number of first-layer pro-                 MoE EP strategies differ in overlap behavior, execution mech-
+jection matrices (1 for standard MLPs, 2 for gated MLPs).                  anisms and implementations, with no universal winner. There-
+𝑆𝑅max  is the busiest rank’s received token count, 𝐸 L local               fore, an effective serving engine must select the strategy that
+   a
+experts per rank, 𝐼 the MoE intermediate size, and 𝐵 HBM                   maximizes end-to-end throughput. OverlapAdvisor performs
+the peak HBM bandwidth. Since each GroupGEMM runs in                       model-driven, launch-time selection: it uses UPP to predict
+𝐺 comp rounds, 𝜂 mem is evaluated at the per-round volume                  candidate performance from the deployment configuration
+  (𝑖 )                                                                     and selects the best strategy before server startup, without
+𝑉mem   /𝐺 comp . Small memory-bound kernels, including activa-
+                                                                           online profiling or runtime adaptation. Strategy selection is
+tion kernels, permute, and unpermute, are modeled similarly.
+                                                                           phase-aware because prefill and decode operate at signifi-
+   GEMM Efficiency Modeling. Following the Roofline
+                                                                           cantly different sequence lengths.
+model [29], GroupGEMM is limited by compute or mem-
+                                                                               With data-parallel attention, prefill and decode have differ-
+ory performance. As shown in Table 1, all strategies use
+                                                                           ent input token counts. The decode per-kernel token count
+Tensor Cores but differ in memory-access mechanisms and
+                                                                           𝑆𝑅dec equals the number of concurrent requests per rank, as
+kernel implementations. The bottleneck depends on problem                     in
+
+size: more tokens per expert increase weight reuse and arith-              each request contributes one token per step. The prefill per-
+                                                                                                 pre
+metic intensity, shifting GroupGEMM toward the compute-                    kernel token count 𝑆𝑅in is set by the per-rank chunked-prefill
+bound regime. Conversely, when the number of tokens is                     budget [2]. For example, 32 decode requests yield 𝑆𝑅dec in
+                                                                                                                                      = 32,
+                                                                                    pre
+small, the memory-access overhead of the weight matrices                   versus 𝑆𝑅in = 4096 for a full 4096-token chunk. These differ-
+cannot be sufficiently amortized, causing the operation to                 ences place the phases at different points on the efficiency
+be memory-bound. Consequently, in the compute-bound                        curves in Eq. (3), potentially favoring different backends even
+regime, a large number of tiles are evenly distributed across              for the same model and EP degree.
+OverlapAdvisor: Modeling and Adapting Computation–Communication Overlap for Distributed MoE Serving
+
+
+  For each phase 𝜑 ∈ {pre, dec}, OverlapAdvisor selects                 Table 4. Instantiation of the granularity abstraction for MoE
+                                                                                                                                  P ,
+                                                                        EP strategies. Tile counts (𝑊1 , 𝑊2 ) and SM allocations (𝑁 SM
+           𝑠𝜑★ = arg min 𝑇b𝑠,𝜑 𝐻, 𝐼, 𝐸, 𝑘, 𝑆𝑅in , 𝐷 , (10)
+                                            𝜑
+                                                                          M
+                                                                        𝑁 SM ) are strategy-specific.
+                       𝑠∈S
+where S contains the strategies available on the target plat-
+form and 𝑇b𝑠,𝜑 is the predicted MoE execution time. All inputs                                Dispatch + GroupGEMM
+are deployment configurations fixed during server operation,                Strategy            𝐺 comm                      𝐺 comp
+so ranking is computed only once.
+    CSA’s launch-time selection avoids three limitations: (i)               Comet              𝐷−1              min( ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉, ⌈𝑊1 /𝑁 SM ⌉ )
+                                                                            FlashMoE                  M ⌉                        P ⌉
+fixed strategies are suboptimal as rankings vary across con-                                 ⌈𝐷𝐸 L /𝑁 SM                 ⌈𝑊1 /𝑁 SM
+figurations; (ii) profiling-based autotuning benchmarks every               MegaMoE         ⌈𝑆𝑅in 𝑘/𝑁 SM ⌉     min(𝐸 L ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉, ⌈𝑊1 /𝑁 SM ⌉ )
+                                                                            UniEP                     M ⌉                                  P ⌉)
+                                                                                                               min(𝐸 L ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉, ⌈𝑊1 /𝑁 SM
+candidate on the target cluster at each launch or configu-                                  ⌈𝑆𝑅in 𝑘/𝑁 SM
+ration change, incurring profiling overhead, whereas our                    Torch/DeepEP           1                           1
+model is fitted once per platform; and (iii) runtime adap-                                    GroupGEMM + Combine
+tation requires online strategy evaluation and may incur
+                                                                            Strategy            𝐺 comp                      𝐺 comm
+switching and warm-up costs. Instead, Eq. (10) evaluates |S|
+candidates in closed form using a few hundred arithmetic                    Comet                    P ⌉
+                                                                                              ⌈𝑊2 /𝑁 SM                     𝑁 split
+operations per phase, completing selection in approximately                 FlashMoE       ⌈𝑊2 /(𝑁 SM − 1) ⌉           ⌈𝑊2 /(𝑁 SM − 1) ⌉
+6 𝜇s at launch.                                                             MegaMoE          ⌈𝑊2 /𝑁 SM ⌉                 ⌈𝑊2 /𝑁 SM ⌉
+    OverlapAdvisor supports both PD-disaggregated deploy-                   UniEP                    P ⌉
+                                                                                              ⌈𝑊2 /𝑁 SM                  ⌈𝑆𝑅max
+                                                                                                                             a
+                                                                                                                                   M ⌉
+                                                                                                                                /𝑁 SM
+ments with separate phase-specific strategies and colocated                 Torch/DeepEP          1                            1
+deployments sharing one backend.
+    PD Disaggregation. Prefill and decode run on separate
+GPU sets with EP degrees 𝐷 p and 𝐷 d . OverlapAdvisor ap-               through a lightweight MoE-forward branch in SGLang (≈0.5k
+                           pre
+plies Eq. (10) at (𝐷 p, 𝑆𝑅in ) and (𝐷 d, 𝑆𝑅dec
+                                            in
+                                               ), configuring each      lines) or a wrapper at vLLM’s MoE-method selection point
+instance via separate flags. Unlike fixed-backend systems,              (≈0.35k lines). Non-MoE layers remain unchanged. Compati-
+this permits heterogeneous choices, such as DeepEP for pre-             bility (≈0.02k lines per engine): bypass unquantized-weight
+fill and MegaMoE for decode.                                            fast paths during online quantization, adapt configurations
+    Colocated Deployment. A shared backend minimizes                    to newer model-library versions, and size communication
+total MoE time per GPU. For 𝐿 MoE layers, 𝐵 concurrent                  buffers for single-node use.
+requests per rank, input length ISL, and output length OSL,                The changes span ≈0.7k lines across 11 files in SGLang
+                                     pre
+the instance executes 𝐿𝐵 ISL/𝑆𝑅in prefill and 𝐿 OSL decode              (∼0.1% of ∼600k Python lines) and ≈0.4k lines across 3 files
+MoE invocations. Weighting each phase’s predicted time by               in vLLM (∼0.1% of ∼320k). Once weight conversion and
+its invocation count gives                                              runtime paths are in place, strategies sharing the same buffer
+                  𝐿 · 𝐵 · ISL b      pre
+                                                                     and weight contracts need only minor kernel-call updates,
+ 𝑠 ★ = arg min         pre     𝑇𝑠 𝐷, 𝑆𝑅in + 𝐿 · OSL 𝑇b𝑠 𝐷, 𝑆𝑅dec
+                                                              in
+                                                                    .   typically tens of lines.
+           𝑠∈S        𝑆𝑅in
+                                                                 (11)
+                                                                        5    Implementation
+4.4   Strategy Serving Launcher (SSL)                                   5.1 Strategy Granularity Instantiation for Analytical
+To support strategy selection, we integrate candidate strate-               Modeling
+gies as interchangeable MoE backends in SGLang and vLLM,                Table 4 instantiates the two granularities defined in Sec-
+selected via existing launch options or environment variables           tion 4.2.1 for six representative MoE EP strategies: four over-
+(e.g., –moe-a2a-backend in SGLang and –all2all-backend                  lap approaches (Comet [33], FlashMoE [3], MegaMoE [34],
+in vLLM), leaving the rest of the serving stack unchanged.              UniEP [39]) and two serialized methods (Torch [22] and
+   Integration comprises three steps and minor compatibil-              DeepEP [36]). Specifically, Comet and UniEP explicitly split
+ity adjustments, all additive and preserving existing code              execution into three kernels: Dispatch+GroupGEMM, Activa-
+paths: (S1) Build and Launch (≈0.03k lines per engine): ex-             tion, and GroupGEMM+Combine. FlashMoE and MegaMoE
+pose kernels through hardware-specific compile flags and                utilize a single fused kernel while maintaining a strict order-
+add selector launch options. (S2) Weight Conversion: con-               ing between the two overlap stages. Conversely, Torch and
+vert checkpoints at load time to the required kernel layout             DeepEP execute computation and communication serially
+in SGLang (≈0.15k lines), and adapt weights through na-                 with 𝐺 comm = 𝐺 comp = 1, representing a rigid, coarse-grained
+tive online block-FP8 quantization in vLLM (≈0.05k lines).              boundary between computation and communication.
+(S3) Runtime Path: prepare activations and routing metadata                We examine the granularity of the four overlapping strate-
+in the backend’s cross-rank buffer and invoke its kernels                            P and 𝑁 M denote the numbers of SMs allocated
+                                                                        gies. Let 𝑁 SM        SM
+                               Chutong Ding, Kaixuan Zhang, Luping Wang, Shiyou Qian, Jian Cao, Cheng Huang, Guodong Yang, and Liping Zhang
+
+
+to computation and communication, respectively. In Dis-                 The final 𝑇 is the stage time. For GroupGEMM+Combine,
+patch+GroupGEMM, Comet runs ring All-Gather on the CE,                  we swap comp and comm.
+transferring one peer’s full shard per step, so 𝐺 comm = 𝐷 − 1.
+FlashMoE distributes 𝐷𝐸 L transfer tasks, one per (peer, local-         6     Evaluation
+                        M dispatch-specialized blocks, giving
+expert) pair, across 𝑁 SM                                               6.1   Experiment Setup
+                    M
+𝐺 comm = ⌈𝐷𝐸 L /𝑁 SM ⌉. MegaMoE and UniEP both use 𝑆𝑅in 𝑘               6.1.1 Hardware Platforms. The experiments were con-
+token-level communication tasks. MegaMoE uses commu-                    ducted on four NVIDIA GPU hardware platforms, covering
+nication warps on every SM through warp specialization,                 three generations of mainstream data center GPU architec-
+with 𝐺 comm = ⌈𝑆𝑅in 𝑘/𝑁 SM ⌉, whereas UniEP uses dedicated              tures: Ampere, Hopper, and Blackwell. Table 5 lists the key
+communication SMs, with 𝐺 comm = ⌈𝑆𝑅in 𝑘/𝑁 SM        M ⌉. The first
+                                                                        parameters of each platform.
+GroupGEMM processes 𝑊1 = 𝐸 L ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉ ⌈𝑚𝐼 /𝐵 𝑁(1) ⌉ output
+tiles on the hottest rank. Computation requires ⌈𝑊1 /𝑁 SM ⌉             6.1.2 Kernel-Level Configurations. We extracted and
+waves, with 𝑁 SM replaced by 𝑁 SM  P for FlashMoE and UniEP.            de-duplicated (𝐻, 𝐼, 𝐸, 𝑘) from the config.json files of all
+However, wave counts alone can overstate overlap: a tile be-            Hugging Face MoE checkpoints with at least 3,000 down-
+comes computable only after 𝐵𝑀 tokens of its expert arrive.             loads as of May 1, 2026, yielding 103 shapes spanning 𝐻 ∈
+Comet receives tokens for all experts at the same rate, so a            [1024, 8192], 𝐼 ∈ [256, 5120], 𝐸 ∈ [8, 512], and 𝑘 ∈ [2, 12].
+single hot expert bounds the rounds by ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉, yielding            These cover 7 LLM families, including DeepSeek-V3/V4 [8, 9],
+𝐺 comp = min( ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉, ⌈𝑊1 /𝑁 SM ⌉). MegaMoE and UniEP              Qwen3 [24], GLM-4.x/5 [5], Kimi-K2 [13], Mixtral [12], gpt-
+accumulate tokens expert by expert, relaxing this bound to              oss [20], and Phi-3 [1].
+𝐸 L ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉. Thus, MegaMoE has 𝐺 comp = min(𝐸 L ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉,           We test each shape at 𝑆𝑅in ∈ {32, 64, 128, 256, 512, 1K, 2K, 4K,
+⌈𝑊1 /𝑁 SM ⌉), while UniEP has 𝐺 comp = min(𝐸 L ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉,             8K, 16K}, covering decode-scale batches through 8K-token
+⌈𝑊1 /𝑁 SMP ⌉). FlashMoE’s (peer, expert) task unit imposes no           chunked prefill. Of 1030×20 = 20,600 configuration–strategy–
+additional gating bound, so 𝐺 comp = ⌈𝑊1 /𝑁 SM    P ⌉.                  platform combinations, 13,734 (66.7%) are measurable. The
+    In GroupGEMM+Combine, the second GroupGEMM pro-                     rest violate implementation constraints (e.g. constraints on
+                                                                        𝐸, 𝑘 or 𝐵𝑀 divisibility). Feasibility is a property of the im-
+cesses𝑊2 = 𝐸 L ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉ ⌈𝐻 /𝐵 𝑁(2) ⌉ output tiles on the hottest
+                                                                P ,     plementation, not a choice on our part: a strategy is never
+rank. Both tile counts (𝑊1 , 𝑊2 ) and SM allocations (𝑁 SM              penalized on a configuration it cannot run.
+   M
+𝑁 SM ) are strategy-specific. Comet and UniEP use 𝑁 SM com-P
+                                                                           Differences in supported precision, MLP structure, and
+putation SMs, giving 𝐺 comp = ⌈𝑊2 /𝑁 SM       P ⌉. For MegaMoE,
+                                                                        platform require two experiment groups (Table 6). Before
+𝐺 comp = ⌈𝑊2 /𝑁 SM ⌉, as computation uses all SMs. FlashMoE             timing, we validate every strategy on all measured configura-
+reserves one block for an in-kernel scheduler that never                tions against two serial methods: Torch (Group I) or DeepEP
+handles data, so 𝐺 comp = ⌈𝑊2 /(𝑁 SM − 1)⌉. Communication               (Group II). Relative ℓ2 errors remain below 10−2 for BF16 and
+differs most sharply. Comet splits Combine along the out-               5 × 10−2 for FP8, consistent with accumulation-order and
+put dimension into 𝑁 split rounds, with 𝐺 comm = 𝑁 split . Meg-         quantization effects. All speedups thus compare functionally
+aMoE and FlashMoE fuse the return into the GEMM epilogue:               equivalent implementations.
+each block directly pushes its completed tile, so communi-                 Figure 5 illustrates the proportion of test configurations
+cation is tile-granular and shares the computation round                in which each strategy performs best, highlighting distinct
+count. Thus, 𝐺 comm = 𝐺 comp = ⌈𝑊2 /𝑁 SM ⌉ for MegaMoE and              regions of advantage. Across all platforms, no single strategy
+𝐺 comm = 𝐺 comp = ⌈𝑊2 /(𝑁 SM − 1)⌉ for FlashMoE. UniEP                  achieves optimality in more than 80.6% of cases.
+instead returns each routed-token output through its com-
+munication SMs, yielding 𝐺 comm = ⌈𝑆𝑅max           M ⌉.
+                                               /𝑁 SM                    6.1.3 Data-Driven Model Configurations. We fit each
+                                            a
+                                                                        strategy on a random 20% of measured samples (averaging
+5.2   Analytical Model Refinement                                       137 per strategy–hardware pair) by minimizing MAPE with
+                                                                        DE, and evaluate on the remaining 80%. Five seeds control
+Eq. (2) can be inaccurate when neither granularity divides
+                                                                        both data splitting and DE initialization. This small training
+the other: misaligned chunk boundaries may delay compu-
+                                                                        fraction is deliberate: the 17–23 physically interpretable pa-
+tation until the next communication round completes. In
+                                                                        rameters per strategy (bandwidth utilization and compute
+practice, we therefore compute stage time round by round.
+For Dispatch+GroupGEMM, starting with 𝑇 = 0, we update                           Table 5. Hardware platform specifications.
+                                                                                       𝐹 (TFLOPs)   𝐵 HBM    𝐵 NVL
+                      𝑗𝐺 comm 𝑇comm      𝑇comp                                 Platform                                   𝑁 SM    𝐷
+          𝑇 ← max 𝑇 ,                  +        ,            (12)                         BF16    FP8   (GB/s)   (GB/s)
+                       𝐺 comp 𝐺 comm     𝐺 comp
+                                                                               A100       312      –     2039     600     108    2/4/8
+for 𝑗 = 1, . . . , 𝐺 comp . Each computation round starts only                 H20        148     296    4022     900      78    2/4/8
+                                                                               H800       989    1979    3350     400     132    2/4/8
+after the previous round finishes and all required data arrives.
+                                                                               GB200      2500   5000    8000    1800     152     2/4
+OverlapAdvisor: Modeling and Adapting Computation–Communication Overlap for Distributed MoE Serving
+
+
+                           Torch           Comet           FlashMoE     MegaMoE       UniEP        DeepEP   graphs enabled; an 8192-token per-rank prefill budget; and
+                         100                                                       9.2%
+                                                                                                            a GPU memory budget of 80% per device.
+Measured win share (%)
+
+
+
+
+                                                                                               14.4%
+                                                                        29.1%
+                          80       48.4%
+                                                   62.7%
+                                                               70.8%
+                                                                                  38.4%                        Both engines share the models and deployments in Ta-
+                          60
+                                                                                                            ble 8. SGLang replays the Mooncake production trace [23],
+                          40
+                                   37.2%                                68.6%
+                                                                                               80.6%
+                                                                                                            and vLLM replays ShareGPT V3 [4] conversations, preserv-
+                                                                                  52.4%
+                          20                       32.1%
+                                                               25.9%                                        ing natural length distributions under PD disaggregation.
+                                   14.4%
+                           0
+                                   A100-I          H20-I       H800-I   H20-II    H800-II     GB200-II
+                                                                                                            Colocated deployments use two subsets per trace: prefill-
+Figure 5. Performance win rates of MoE EP strategies across                                                 dominated and decode-dominated. We run 32𝐷 concurrent
+test configurations.                                                                                        requests in total (32 per rank) and report the median of three
+                                                                                                            runs per scenario after one warm-up.
+efficiency) are far fewer than the training samples, limiting                                               6.1.5 Baselines. We compare OverlapAdvisor with six
+overfitting risk, while the large remaining set tests general-                                              fixed-strategy baselines (Table 6) at the kernel level and
+ization to unseen configurations.                                                                           three of them (MegaMoE, UniEP, and DeepEP) end to end.
+   Table 7 lists kernel decompositions and DE budgets. For                                                  Each baseline uses one strategy across configurations and,
+kernels with ≤ 4, 5–9, and ≥ 10 parameters, we empirically                                                  under PD disaggregation, for both prefill and decode.
+set (𝑁𝑝 , maxiter) to (15, 80), (20, 120), and (30, 200), respec-
+tively, where 𝑁𝑝 is population size and maxiter is the itera-                                               6.1.6 Metrics.
+tion limit. All use mutation-factor dithering and 𝐶𝑅 = 0.9.                                                    Performance Improvement. Speedup over each base-
+Fitting all 90 instances across four GPU platforms takes about                                              line is𝑇baseline /𝑇OverlapAdvisor for kernels and 𝑄 OverlapAdvisor /𝑄 baseline
+13 minutes on an 8-vCPU Intel Xeon host (2.50 GHz, 16 GB                                                    end to end, where 𝑇 is execution time (𝜇s) and 𝑄 is through-
+memory), negligible compared with measurement collection.                                                   put (tokens/s); values above 1 indicate improvement. Kernel
+                                                                                                            speedups are averaged over test configurations per seed; we
+6.1.4 E2E-Level Configurations. We evaluate Group II                                                        report the mean and min–max range across five seeds.
+(Table 6) on one fully NVLink-connected 8×H20 node using                                                       Execution Time Regret. For each test configuration,
+SGLang v0.5.15-post1 and vLLM 0.28.0, with CUDA 13.0                                                                                               !
+(nvcc 12.8), PyTorch 2.13.0, and NCCL 2.30.7. Both use DP                                                                                 𝑇𝑖
+                                                                                                                                 𝑅𝑖 = best − 1 × 100%,                        (13)
+attention (dp_size = 𝐷), EP = 𝐷, and TP = 1. (1) SGLang                                                                                 𝑇𝑖
+uses FlashInfer attention, Mooncake PD KV transfer, and a
+                                                                                                            where 𝑇𝑖best is the fastest measured kernel execution time
+PD-aware router; (2) vLLM uses FlashAttention-3/FA-MLA,
+                                                                                                            among feasible strategies. A CDF closer to the upper-left
+NIXL over NVLink, and an OpenAI-compatible proxy.
+                                                                                                            indicates lower regret across more configurations.
+   The three Group II strategies replace only the MoE layer
+                                                                                                              Prediction Error. We use mean absolute percentage er-
+and are selected via launch flags or environment variables.
+                                                                                                            ror:
+BF16 checkpoints are quantized to block-FP8 at load time;                                                                              100% ∑︁ |𝑇b𝑖 − 𝑇𝑖 |
+                                                                                                                                             𝑛
+Qwen3-235B-A22B-FP8 uses native block-FP8. Each scenario                                                                     MAPE =                        ,       (14)
+                                                                                                                                         𝑛 𝑖=1      𝑇𝑖
+starts a fresh server with overlap/async scheduling, prefix
+caching, and shared-expert fusion disabled; decode CUDA                                                     where 𝑇b𝑖 and 𝑇𝑖 are the predicted and measured execution
+                                                                                                            times for test configuration 𝑖, and 𝑛 is the test-set size per
+                                                                                                            strategy–hardware pair and seed. We report mean MAPE
+Table 6. Two experiment groups to evaluate OverlapAdvisor.
+                                                                                                            and its min–max range across five seeds for each pair.
+                                    Group I                               Group II                             Selection Accuracy. Top-1 accuracy is the fraction of
+                                                                                                            test configurations where OverlapAdvisor selects the fastest
+Precision                           BF16                                  FP8
+                                                                                                            strategy, reported as the mean and min–max range across
+MLP                                 Standard, GELU                        Gated, SwiGLU
+Routing                             Non-uniform, 𝜌 = 2.0                  Non-uniform, 𝜌 = 2.0
+                                                                                                            five seeds at each token batch size 𝑆𝑅in .
+Timing                              CUDA Grapha                           CUDA Grapha
+                                                                                                            6.2   Results and Analysis
+A100                                Comet, FlashMoE, Torch                –                                 6.2.1 Kernel-Level Performance.
+H20, H800                           Comet, FlashMoE, Torch,               MegaMoEc , UniEP,                    Kernel Execution Time. Figures 6(a)–(b) compare Over-
+                                    DeepEP-v1b                            DeepEP-v1b
+                                                                                                            lapAdvisor with six fixed-strategy baselines in execution-
+GB200                               –                                     MegaMoE, UniEP, DeepEP-v2
+a Comet and DeepEP-v1 Normal are timed with CUDA Event.
+                                                                                                            time speedup. (1) OverlapAdvisor outperforms all available
+b DeepEP-v1 uses LowLatency (LL) for 𝑆 ≤ 256 and Normal otherwise,
+                                                                                                            fixed strategies, achieving 5.62× over the FlashMoE on GroupI-
+fitted separately but treated as one strategy by the selector.
+                                                                                                            H800 and 1.86× over the DeepEP-v1 on GroupII-H20. (2)
+c Cross-architecture ports: MegaMoE on Hopper follows the SM90                                              Against the strongest fixed strategy on each platform, Over-
+megakernel design of [28], and UniEP on Blackwell is ported from Hopper.                                    lapAdvisor achieves 1.59× speedup over Comet on GroupI-
+Both preserve the original overlap structure.                                                               A100; 1.15× and 1.14× over DeepEP-v1 on GroupI-H20 and
+                                                                Chutong Ding, Kaixuan Zhang, Luping Wang, Shiyou Qian, Jian Cao, Cheng Huang, Guodong Yang, and Liping Zhang
+
+
+Table 7. Kernel decomposition and DE budget of each strategy. |𝜃 | k denotes the number of fitted parameters per kernel, and
+|𝜃 | tot denotes the total number per strategy.
+            Strategy                              Partitioned Kernels                                                                                                                Kernels      |𝜽 | k     (𝑵𝒑 , maxiter)       |𝜽 | tot
+            Comet / UniEP                         Dispatch+GroupGEMM / Act / GroupGEMM+Combine                                                                                           3        3–7 (15, 80), (20, 120)           17
+            Torch                                 AG / permute / GroupGEMM / Act / GroupGEMM+unpermute+RS                                                                                5       3–10 (15, 80), (30, 200)           23
+            FlashMoE / MegaMoE                    MegaKernel                                                                                                                             1         17 (30, 200)                     17
+            DeepEP-v1 Normal                      Dispatch / permute / GroupGEMM / Act / GroupGEMM / unpermute / Combine                                                                 7        3–4 (15, 80)                      23
+            DeepEP-v1 LL                          Dispatch / GroupGEMM / Act / GroupGEMM / Combine                                                                                       5        3–4 (15, 80)                      17
+            DeepEP-v2                             Dispatch / GroupGEMM+Act+GroupGEMM / Combine                                                                                           3       3–11 (15, 80), (30, 200)           17
+
+
+Table 8. Models and deployments used in E2E evaluation.                                                                           6.3                        Overhead
+PD 𝑎+𝑏 denotes 𝑎 GPUs for prefill and 𝑏 GPUs for decode.                                                                          OverlapAdvisor incurs a one-time fitting cost of approxi-
+                  ID        Model                                    𝑯 /𝑰 /𝑬 /𝒌                 EP degree (𝑫 )                    mately 13 minutes per seed across all evaluated strategies and
+            E2E-1 Qwen3-30B-A3B                                  2048/768/128/8                    PD 2+2 (2)
+                                                                                                                                  platforms on an 8-vCPU Intel Xeon host. At server launch,
+            E2E-2 GLM-4.7-Flash                                  2048/1536/64/4                    PD 2+2 (2)                     strategy selection takes approximately 6 𝜇s without online
+            E2E-3 Qwen3-Next-80B                                 2048/512/512/10                   PD 4+4 (4)                     profiling or warm-up. The performance-model code and fit-
+                                                                                                                                  ted parameters for all 24 models together occupy approxi-
+            E2E-4
+            E2E-5
+                  Qwen3-235B-A22B-FP8 4096/1536/128/8                                             colocated (8)                   mately 26 KB of storage. The selected backend remains fixed
+                                                                                                                                  during serving, requiring no profiling or runtime selection.
+
+GroupI-H800; and 1.02×–1.03× over MegaMoE on the three                                                                            6.4                        Ablation Study
+Group II platforms. (3) Across both experiment groups, the                                                                        6.4.1 Prediction Accuracy of UPP. Figure 9 reports UPP’s
+average gain is 1.16×, peaking at 1.59×.                                                                                          MAPE across 20 ⟨strategy, platform⟩ pairs. DeepEP-v1’s LL
+   The modest 2–3% average gains over MegaMoE on Group II                                                                         and Normal modes are fitted separately but treated as one
+reflect many configurations where MegaMoE is already fastest                                                                      strategy by CSA, yielding 24 models across 8 implementa-
+and selection offers no gain. However, OverlapAdvisor out-                                                                        tions of 6 strategies. Errors range from 3.3% to 15.9% (median
+performs MegaMoE by more than 5% on 107/773 (13.84%),
+184/772 (23.83%), and 55/504 (10.91%) test configurations                                                                                 1.0
+                                                                                                                                                                  A100                         H20         Ours
+                                                                                                                                                                                                                            H800         Ours
+
+on GroupII-H20, GroupII-H800, and GroupII-GB200, respec-
+                                                                                                                                                                              Ours                         To                            To
+                                                                                                                                   CDF
+
+
+
+
+                                                                                                                                                                              To                           Co                            Co
+                                                                                                                                          0.5
+tively (Fig. 7). Thus, CSA avoids substantial performance
+                                                                                                                                                                              Co                           Fl                            Fl
+                                                                                                                                                                              Fl                           v1                            v1
+                                                                                                                                          0.0
+losses in configurations where MegaMoE is suboptimal.                                                                                                0        100   101  102
+                                                                                                                                                             Oracle regret (%)
+                                                                                                                                                                               103   0   100 101 102 103
+                                                                                                                                                                                         Oracle regret (%)
+                                                                                                                                                                                                                   0   100 101 102 103 104
+                                                                                                                                                                                                                       Oracle regret (%)
+                                                                                                                                                                                         (a) GroupI
+                                                                                                                                                                   H20                        H800                         GB200
+6.2.2 Across-Engine E2E-Level Performance. Across                                                                                         1.0
+                                                                                                                                                                              Ours                         Ours                          Ours
+
+five deployments on two serving engines (Figure 8), Overla-
+                                                                                                                                   CDF
+
+
+
+
+                                                                                                                                                                              Me                           Me                            Me
+                                                                                                                                          0.5
+                                                                                                                                                                              Un                           Un                            Un
+
+pAdvisor improves throughput over fixed-strategy baselines                                                                                0.0
+                                                                                                                                                     0        100   101  102
+                                                                                                                                                                              v1
+                                                                                                                                                                               103   0    100   101   102
+                                                                                                                                                                                                           v1
+                                                                                                                                                                                                           103     0     100    101   102
+                                                                                                                                                                                                                                         v2
+
+
+
+MegaMoE, UniEP, and DeepEP by averages of 1.78%, 4.57%,                                                                                                      Oracle regret (%)           Oracle regret (%)
+                                                                                                                                                                                         (b) GroupII
+                                                                                                                                                                                                                       Oracle regret (%)
+
+
+and 9.97%, respectively, with maxima of 9.28%, 9.95%, and
+31.72%. These results demonstrate the necessity of strategy                                                                       Figure 7. Kernel regret CDF of OverlapAdvisor and base-
+selection across different configurations and serving engines.                                                                    lines.
+
+                                                                                                                                                                          MegaMoE                    UniEP           DeepEP
+                            To: Torch         Co: Comet            Fl: FlashMoE                 v1: DeepEP-v1                                        15
+                                                                                                                                  improvement (%)
+
+
+
+
+                                                                                                                                                                      PD disaggregation                      Colocated deployment
+                                    Me: MegaMoE               Un: UniEP               v2: DeepEP-v2
+                                                                                                                                    Throughput
+
+
+
+
+                                                                                                                                                     10
+                              A100                                 H20                                      H800                                         5
+            2.5                                                         5.62×                                     7.15×
+                   2.21×                            6                                     7.5    6.32×
+                                                        3.90×
+  Speedup
+
+
+
+
+                                        1.94×       4                                       5
+            2.0
+                                                    2
+                                                                1.77×                     2.5             2.03×                                          0
+                              1.59×
+                                                  1.2                           1.15×     1.2                             1.14×
+            1.5
+                                                  1.1                                     1.1                                                       −5
+            1.0                                   1.0                                     1.0
+                                                                                                                                                               E2E-1            E2E-2          E2E-3              E2E-4          E2E-5
+                       To      Co        Fl              To     Co        Fl     v1               To      Co        Fl     v1                                                                (a) SGLang
+                                                           (a) GroupI
+                                                                                                                                   improvement (%)
+
+
+
+
+                                                                                                                                                                      PD disaggregation                      Colocated deployment
+                              H20                                 H800                                     GB200                                     30
+                                                                                                                                     Throughput
+
+
+
+
+              2                         1.86×       2                           1.89×    1.75                1.66×
+                                                                                                                          1.55×
+Speedup
+
+
+
+
+            1.6                                   1.6                                     1.5                                                        20
+            1.2                                   1.2                                    1.25
+            1.1               1.08×               1.1                                     1.1
+                                                                   1.06×                                                                             10
+          1.05     1.02×                         1.05   1.03×                            1.05     1.02×
+            1.0                                   1.0                                     1.0                                                            0
+                   Me          Un        v1              Me          Un          v1               Me           Un          v2
+                                                          (b) GroupII                                                                                          E2E-1            E2E-2          E2E-3              E2E-4          E2E-5
+Figure 6. OverlapAdvisor kernel-level speedup over base-                                                                                                                                      (b) vLLM
+
+lines.                                                                                                                            Figure 8. E2E-Level Evaluation: OverlapAdvisor throughput
+                                                                                                                                  improvement over baselines (%).
+OverlapAdvisor: Modeling and Adapting Computation–Communication Overlap for Distributed MoE Serving
+
+
+                 To: Torch           Co: Comet                Fl: FlashMoE                v1-N: DeepEP-v1 Normal                      Analytical Model Effectiveness. We replace the an-
+                v1-L: DeepEP-v1 LL                Me: MegaMoE                      Un: UniEP            v2: DeepEP-v2
+                                                                                                                                   alytical model (Eq. (2)) with serialized execution or per-
+                         A100
+                                         11.3%
+                                                                     H20                                     H800
+                                                                                                                  14.5%
+                                                                                                                                   fect overlap, leaving the remaining model unchanged (Ta-
+                         10.5%                                             14.0%
+MAPE (%)
+
+
+
+
+                                                                                                                                   ble 9(b)). With fixed efficiencies, OverlapAdvisor achieves
+                                                                   12.7%                           12.6%     12.1%
+           10
+                                                  10                                8.1%    10
+                                                              6.9%
+                                                                                                                                   55.68% MAPE, below both alternatives (62.95% and 59.08%).
+                 4.2%                                  5.6%                                      5.7%
+            5                                                                                                               3.3%
+
+            0
+                  To         Co           Fl
+                                                   0
+                                                        To    Co     Fl     v1-N    v1-L
+                                                                                             0
+                                                                                                  To    Co    Fl    v1-N    v1-L   After fitting, OverlapAdvisor retains an advantage of up
+                                                             (a) GroupI
+                         H20                                         H800                                    GB200                 to 0.23 percentage points on the random split. Although
+                                                                                                                                   fitted efficiency functions partially compensate for analyt-
+                                          15.3%                                    15.9%                      12.8%
+MAPE (%)
+
+
+
+
+                11.3% 10.7%                                                                                                9.2%
+                                                                                            10    7.7%
+                                                  10 9.2%       9.0%
+                                                                                                                                   ical model errors, this compensation lacks a physical basis
+           10                                                              8.9%
+                                  7.1%
+
+
+            0
+                 Me     Un    v1-N        v1-L
+                                                   0
+                                                        Me         Un      v1-N    v1-L
+                                                                                             0
+                                                                                                   Me          Un          v2
+                                                                                                                                   and generalizes poorly under extrapolation: OverlapAdvisor
+                                                             (b) GroupII
+                                                                                                                                   achieves 30.97% MAPE versus 39.31% and 35.45%, an advan-
+                Figure 9. Ablation Study: Prediction MAPE of UPP.                                                                  tage of up to 8.34 percentage points. Together, these three
+                                                                                                                                   settings demonstrate the effectiveness of OverlapAdvisor’s
+9.9%), demonstrating UPP’s effectiveness in modeling com-                                                                          analytical overlap structure.
+plex kernels such as FlashMoE and MegaMoE.                                                                                            Data-Driven Model Effectiveness. On the same random-
+6.4.2 Predictor Comparison and Component Ablation                                                                                  split test set, fitting reduces OverlapAdvisor’s MAPE from
+of UPP. We compare UPP with learned predictors and ablate                                                                          55.68% to 9.76% (Table 9(b)). This demonstrates the impor-
+its analytical and data-driven models (Table 9), reporting                                                                         tance of platform- and strategy-specific parameter fitting.
+mean MAPE across ⟨strategy, platform⟩ pairs under two data                                                                         6.4.3 Training Data Ratio of UPP. Following the pro-
+splits. The random split follows §6.1.3, training on 20% of                                                                        tocol in Section 6.1.3, we vary the training ratio over 5%,
+the configurations. The extrapolation split trains on the four                                                                     10%, 20%, 40%, 60%, and 80%, reporting average MAPE and
+smallest token batches (𝑆𝑅in ≤ 256, 40% of configurations)                                                                         strategy-selection accuracy. Figure 10 shows the mean and
+and tests on the six largest (𝑆𝑅in ≥ 512). All fitted predictors                                                                   min–max range across five random seeds.
+use identical training and test data within each split. Fixed-
+efficiency variants use 𝜂 gemm = 𝜂 mem = 𝜂 comm = 0.80 and are
+
+
+
+
+                                                                                                                                                                                        Accuracy (%)
+                                                                                                                                              14
+                                                                                                                                                                       Seed range
+                                                                                                                                   MAPE (%)
+
+
+
+
+                                                                                                                                                                                                       90
+evaluated on the same random-split test set.                                                                                                  12                       Five-seed mean
+                                                                                                                                                                                                                                Seed range
+   Model Effectiveness. XGBoost and MLP use configura-                                                                                        10                                                       85
+                                                                                                                                                                                                                                Five-seed mean
+
+tions, hardware specifications, and derived quantities 𝑉comm ,                                                                                     5   10 20       40       60     80                       5   10 20       40       60     80
+
+𝑉mem , and 𝐶 gemm , but not our granularity or efficiency func-                                                                                             training ratio (%)
+                                                                                                                                                         (a) Prediction MAPE
+                                                                                                                                                                                                                     training ratio (%)
+                                                                                                                                                                                                                (b) Selection Accuracy
+tions. As Table 9(a) shows, OverlapAdvisor achieves 9.76%
+                                                                                                                                               Figure 10. Training efficiency and accuracy of UPP.
+MAPE on the random split, versus 13.23% and 13.30% for
+XGBoost and MLP. Its advantage grows under extrapolation:                                                                             As the training ratio increases from 5% to 20%, UPP’s
+30.97% versus 53.85% and 49.90%. With limited training data,                                                                       MAPE drops from 13.36% to 9.76%, and CSA’s accuracy rises
+these predictors must learn execution time relationships                                                                           from 83.52% to 88.43%; both curves flatten thereafter. At 20%,
+from samples, whereas OverlapAdvisor explicitly models                                                                             each seed uses about 2.75K hardware–strategy samples and
+how volumes, granularities, and efficiencies compose.                                                                              takes 13 minutes on an eight-core Intel Xeon 2.50 GHz CPU.
+                                                                                                                                   Raising the ratio to 40% doubles profiling to 5.50K samples
+Table 9. Prediction MAPE (%, lower is better). (a) Overla-                                                                         for marginal gains. We therefore select 20% using the elbow
+pAdvisor versus learned predictors, all fitted. (b) Ablation of                                                                    method to balance prediction accuracy, selection accuracy,
+analytical model and data-driven model.                                                                                            and profiling overhead. OverlapAdvisor generalizes from
+                                               (a) Model effectiveness                                                             this limited train set to the remaining 80% of configurations,
+Predictor                                               Random split                                    Extrapolation              supporting the effectiveness of UPP and CSA.
+OverlapAdvisor                                                  9.76                                           30.97               6.4.4 Selection Accuracy of CSA. Figure 11 shows top-1
+XGBoost                                                         13.23                                          53.85               selection accuracy versus token size. Accuracies are 89.2%,
+MLP                                                             13.30                                          49.90               85.4%, and 89.9% for GroupI-A100/H20/H800, and 89.2%,
+                                                                                                                                   85.3%, and 91.6% for GroupII-H20/H800/GB200, respectively,
+                (b) Analytical and data-driven model effectiveness
+                                                                                                                                   giving an average accuracy of 88.43% across both experiment
+                                                                                  Random split Extrapolation                       groups.
+Analytical model                                                                  Fixed Fitted                      Fitted            Accuracy is generally lower when leading strategies have
+                                                                                                                                   nearly identical performance, such as MegaMoE and UniEP
+Granularity-aware (OverlapAdvisor) 55.68                                                      9.76                  30.97          at small token size on GroupII-H20 and GroupII-H800, or
+Serialized                         62.95                                                      9.99                  39.31
+                                                                                                                                   MegaMoE and DeepEP-v2 at large token size on GroupII-
+Perfect overlap                    59.08                                                      9.89                  35.45
+                                                                                                                                   GB200. In these near-tie regimes, selecting the second-fastest
+                                                                     Chutong Ding, Kaixuan Zhang, Luping Wang, Shiyou Qian, Jian Cao, Cheng Huang, Guodong Yang, and Liping Zhang
+
+                                 A100                                 H20                                  H800
+                                                                                                                                 1 to 𝑔. As shown in Figure 12(c), the refinement achieves a
+Accuracy (%)
+
+
+
+               100                                      100                               100
+
+
+                50
+                                  Overall 89.2%          50
+                                                                      Overall 85.4%         50
+                                                                                                            Overall 89.9%
+                                                                                                                                 median speedup of 1.099×, reaching 1.158× at 𝑆𝑅in = 16𝐾
+                 0
+                 32      128     512
+                                    [88.6, 89.9]
+                                       2K         16K
+                                                          0
+                                                          32   128
+                                                                        [83.6, 88.3]
+                                                                      512   2K      16K
+                                                                                             0
+                                                                                             32      128   512
+                                                                                                              [86.0, 92.9]
+                                                                                                                 2K       16K
+                                                                                                                                 and improving 511 of 594 configurations.
+                                 tokens                               tokens
+                                                               (a) GroupI
+                                                                                                           tokens
+                                                                                                                                    Excessive granularity reduces efficiency. Only Flash-
+                                  H20                                 H800                                 GB200                 MoE has a median 𝜆★ < 1 (0.57), with a median predicted
+Accuracy (%)
+
+
+
+
+               100                                      100                               100
+
+
+                50
+                                  Overall 89.2%          50
+                                                                      Overall 85.3%         50
+                                                                                                            Overall 91.6%
+                                                                                                                                 speedup of 1.047× from coarsening. On H800-I with (𝑆𝑅in , 𝐻, 𝐼,
+                 0
+                                    [85.8, 93.5]
+                                                          0
+                                                                        [82.5, 88.1]
+                                                                                             0
+                                                                                                              [89.4, 93.7]       𝐸, 𝑘, 𝐷) = (4096, 4096, 2048, 128, 8, 8), 𝜌 = 2, and 𝐵𝑀 = 𝐵 𝑁 =
+                 32      128     512   2K         16K     32   128    512   2K      16K      32      128   512   2K       16K
+                                 tokens                               tokens
+                                                               (b) GroupII
+                                                                                                           tokens                128, Dispatch+GroupGEMM splits the 131 non-scheduler
+                                                                                                                                 SMs into 98 compute and 33 communication blocks, giv-
+               Figure 11. Ablation Study: Selection Accuracy of CSA.                                                                    (1)                             (1)
+                                                                                                                                 ing 𝐺 comp  = ⌈𝑊1 /98⌉ = 84 and 𝐺 comm       = ⌈𝐷𝐸 L /33⌉ = 4. In
+                     To: Torch        Co: Comet       Fl: FlashMoE      v1: DeepEP-v1        Me: MegaMoE            Un: UniEP
+                                                                          T/T( )                                                 GroupGEMM + Combine, each block computes and returns
+  64                                                                3.0                                                                                         (2)       (2)
+  16
+   4                                                                2.5                                                          one output tile, yielding 𝐺 comp    = 𝐺 comm  = ⌈𝑊2 /131⌉ = 126.
+                                                                    2.0
+   1
+ 1/4                                                                1.5                                                             We coarsen only second-stage communication by group-
+1/16 To /                    v1 /       Fl /   Co /       Me / Un / 1.0 To /         v1 /         Fl /     Co /     Me / Un /    ing each row block’s ⌈𝐻 /𝐵 𝑁(2) ⌉ = 32 tiles under one signal.
+     A100                   H800       H800    H20       GB200 GB200 A100           H800         H800      H20     GB200 GB200
+                 (a) Optimal granularity distribution                              (b) Potential improvement                     This increases the Combine payload by 32×, cuts signals by
+               Speedup                                                    Speedup                                                                       (2)
+      1.4
+                                                                        2.0                                                      32×, and reduces 𝐺 comm     from 126 to ⌈𝐸 L ⌈𝜌𝑆 𝐸 /𝐵𝑀 ⌉/131⌉ = 4.
+      1.0                                                               1.4                                                      Communication efficiency improves, but the overlap divisor
+                                                                        1.0
+      0.6                                                               0.8                                                              (2)
+                                                                                                                                 min(𝐺 comp      (2)
+                                                                                                                                                      ) in Eq. (2) drops from 126 to 4. OverlapAd-
+                      512        1K     2K     4K         8K    16K           32     128           512        2K       8K 16K                , 𝐺 comm
+                                         tokens                                                    tokens
+                     (c) v1-Normal H800 improvement                                (d) Fl H800 improvement                       visor identifies when the efficiency gain outweighs this over-
+                                                                                                                                 lap loss. Across 1030 measured configurations on 8×H800,
+Figure 12. Optimal granularity distribution, potential im-
+                                                                                                                                 coarsening achieves a median speedup of 1.217×, improving
+provement and realized improvement.
+                                                                                                                                 910 configurations (Figure 12(d)).
+strategy incurs little penalty, so occasional top-1 errors have                                                                     Granularity is not always the bottleneck. MegaMoE
+limited impact on the speedups and regret in Fig. 6 and Fig. 7.                                                                  and UniEP lie near flat optima: their median 𝜆★ values are
+                                                                                                                                 1.35 and 1.41, but median potential improvements are only
+6.5 Analysis and Optimization of Existing Strategies                                                                             1.017× and 1.015×. On GB200-II with (𝑆𝑅in , 𝐻, 𝐼, 𝐸, 𝑘, 𝐷) =
+Beyond strategy selection, OverlapAdvisor can diagnose                                                                           (8K, 2048, 512, 512, 10, 4), MegaMoE takes 2.328 ms versus
+bottlenecks related to granularity by assessing whether na-                                                                      DeepEP-v2’s 1.862 ms despite much finer granularities. Its ef-
+tive granularities effectively balance overlap and efficiency,                                                                   fective (GEMM, HBM, NVLink) efficiencies are (0.576, 0.701,
+while identifying opportunities for tuning. With fitted ef-                                                                      0.598) versus (0.763, 0.790, 0.804); granularity tuning alone
+ficiency parameters fixed, we scale native granularities as                                                                      cannot close this efficiency gap.
+𝐺 𝑗 (𝜆) = max(1, 𝜆𝐺 native
+                     𝑗     ) and find the 𝜆★ minimizing pre-
+dicted execution time. Finer partitioning improves overlap                                                                       7   Related Work
+but reduces per-round volume, potentially lowering commu-                                                                        We group related work into kernel modeling, overlap opti-
+nication and memory efficiency. Figures 12(a) and (b) show                                                                       mization, and strategy integration (Table 10).
+the distributions of 𝜆★ and potential improvement relative                                                                          Kernel modeling. Roofline [29] identifies compute and
+to native granularities, respectively, revealing three regimes.                                                                  memory bottlenecks through arithmetic intensity and peak
+   Coarse granularity limits overlap. Torch and DeepEP-                                                                          performance bounds. PipeWeave [32] combines analytical
+v1 lack native overlap, with median 𝜆★ values of 6.58 and 5.30                                                                   pipeline-cycle estimates with a lightweight MLP for cross-
+and median potential improvement of 1.123× and 1.149×,                                                                           pipeline coupling. Both focus on individual kernels rather
+respectively. Comet supports overlap but remains too coarse:                                                                     than cross-strategy EP overlap.
+communication limits its two stages to 𝐷 − 1 ring steps                                                                             Overlap optimization. Lagom [30] uses a unified overlap
+and 𝑁 split combine rounds, preventing pipeline depth from                                                                       loss to tune kernel communication parameters. Tutel [10]
+scaling with workload. Refinement yields a median 𝜆★ = 3.67,                                                                     supports low-cost parallelism switching through an invari-
+but only 1.036× median headroom.                                                                                                 ant expert-weight layout and tunes pipeline depth at the en-
+   Guided by this diagnosis, we refine DeepEP-v1 by parti-                                                                       gine/runtime layer. Neither provides a unified performance
+tioning tokens into 𝑔 groups and dispatching them in group-                                                                      model across diverse EP overlap implementations.
+major order. We choose 𝑔 from 2 to 8 depending on the token                                                                         Strategy integration. DynaFlow [21] decouples model
+count (e.g., 𝑔 = 2 for 512 tokens and 𝑔 = 8 for 16𝐾 tokens)                                                                      definitions from execution schedules to integrate intra-device
+to balance computation efficiency and overlap. Per-group                                                                         parallelism strategies, but provides no predictive selector.
+arrival counters allow each group’s GroupGEMM to start                                                                              OverlapAdvisor instead provides a unified EP overlap
+as soon as its inputs arrive, overlapping computation with                                                                       model for strategy selection and granularity diagnosis, vali-
+                                            (1)      (1)
+the remaining dispatch. This increases 𝐺 comp    = 𝐺 comm from                                                                   dated across MoE workloads and hardware.
+OverlapAdvisor: Modeling and Adapting Computation–Communication Overlap for Distributed MoE Serving
+
+
+            Table 10. Comparison of related work.                                Adaptive Mixture-of-Experts at Scale. arXiv:2206.03382 [cs.DC] https:
+                                                                                 //arxiv.org/abs/2206.03382
+Work             Scope         Layer      Function                          [11] JianboDong. 2025. Add imbalance factor in test_low_latency. DeepEP
+Roofline         Kernel        Kernel     Performance model                      Pull Request #393. https://github.com/deepseek-ai/DeepEP/pull/393.
+PipeWeave        Kernel        Kernel     Performance model                 [12] Albert Q. Jiang et al. 2024. Mixtral of Experts. arXiv:2401.04088 [cs.LG]
+                                                                                 https://arxiv.org/abs/2401.04088
+Lagom            Overlap       Kernel     Parameter tuning
+                                                                            [13] Kimi Team. 2026.             Kimi K2: Open Agentic Intelligence.
+Tutel            MoE overlap   Engine     Mode switching
+                                                                                 arXiv:2507.20534 [cs.LG] https://arxiv.org/abs/2507.20534
+DynaFlow         Overlap       Strategy   Strategy integration              [14] Diederik P. Kingma and Jimmy Ba. 2017. Adam: A Method for Sto-
+                                          Performance model, strat-              chastic Optimization. arXiv:1412.6980 [cs.LG] https://arxiv.org/abs/
+OverlapAdvisor EP overlap      Strategy                                          1412.6980
+                                          egy adaptation and tuning
+                                                                            [15] Woosuk Kwon, Zhuohan Li, Siyuan Zhuang, Ying Sheng, Lianmin
+                                                                                 Zheng, Cody Hao Yu, Joseph E. Gonzalez, Hao Zhang, and Ion Stoica.
+8    Conclusion and Future Work                                                  2023. Efficient Memory Management for Large Language Model
+                                                                                 Serving with PagedAttention. arXiv:2309.06180 [cs.LG] https://arxiv.
+OverlapAdvisor unifies performance modeling for MoE EP                           org/abs/2309.06180
+strategies, enabling selection and optimization in two serv-                [16] Dmitry Lepikhin, HyoukJoong Lee, Yuanzhong Xu, Dehao Chen,
+ing engines. First, it predicts performance with 3.3%–15.9%                      Orhan Firat, Yanping Huang, Maxim Krikun, Noam Shazeer, and
+MAPE. Second, its launch-time selection takes about 6 𝜇s                         Zhifeng Chen. 2020. GShard: Scaling Giant Models with Condi-
+without profiling, achieving 88.43% top-1 accuracy. Third, it                    tional Computation and Automatic Sharding. arXiv:2006.16668 [cs.CL]
+                                                                                 https://arxiv.org/abs/2006.16668
+delivers 1.16× average and 1.59× maximum kernel speedups                    [17] Wanqian Li, Jintao Peng, Zongfei Jing, Tianyu Zhang, Ze Long, Xi-
+over the best fixed strategies. Fourth, it improves end-to-end                   anjie Qiao, Xiaoming Chen, Dongxu Yang, Kefeng Duan, and June
+throughput over MegaMoE, UniEP, and DeepEP by averages                           Yang. 2026. DWDP: Distributed Weight Data Parallelism for High-
+of 1.78%, 4.57%, and 9.97%, with gains up to 31.72%.                             Performance LLM Inference on NVL72. arXiv:2604.01621 [cs.DC]
+   Future work will extend OverlapAdvisor to multi-node                          https://arxiv.org/abs/2604.01621
+                                                                            [18] Dong C. Liu and Jorge Nocedal. 1989. On the limited memory BFGS
+deployments, model SM- and warp-level resource contention                        method for large scale optimization. Mathematical Programming 45
+among overlapping kernels, and further unify prediction                          (1989), 503–528. https://api.semanticscholar.org/CorpusID:5681609
+across platforms and strategies without separate fitting.                   [19] Deepak Narayanan, Mohammad Shoeybi, Jared Casper, Patrick
+                                                                                 LeGresley, Mostofa Patwary, Vijay Anand Korthikanti, Dmitri Vain-
+References                                                                       brand, Prethvi Kashinkunti, Julie Bernauer, Bryan Catanzaro, Amar
+                                                                                 Phanishayee, and Matei Zaharia. 2021.              Efficient Large-Scale
+ [1] Marah Abdin et al. 2024. Phi-3 Technical Report: A Highly Capable           Language Model Training on GPU Clusters Using Megatron-LM.
+     Language Model Locally on Your Phone. arXiv:2404.14219 [cs.CL]              arXiv:2104.04473 [cs.CL] https://arxiv.org/abs/2104.04473
+     https://arxiv.org/abs/2404.14219                                       [20] OpenAI. 2025.            gpt-oss-120b & gpt-oss-20b Model Card.
+ [2] Amey Agrawal, Ashish Panwar, Jayashree Mohan, Nipun Kwatra,                 arXiv:2508.10925 [cs.CL] https://arxiv.org/abs/2508.10925
+     Bhargav S. Gulavani, and Ramachandran Ramjee. 2023. SARATHI: Ef-       [21] Yi Pan, Yile Gu, Jinbin Luo, Yibo Wu, Ziren Wang, Hongtao Zhang, Ziyi
+     ficient LLM Inference by Piggybacking Decodes with Chunked Prefills.        Xu, Shengkai Lin, Baris Kasikci, and Stephanie Wang. 2026. DynaFlow:
+     arXiv:2308.16369 [cs.LG] https://arxiv.org/abs/2308.16369                   Transparent and Flexible Intra-Device Parallelism via Programmable
+ [3] Osayamen Jonathan Aimuyo, Byungsoo Oh, and Rachee Singh.                    Operator Scheduling. arXiv:2605.21603 [cs.DC] https://arxiv.org/abs/
+     2025.     FlashMoE: Fast Distributed MoE in a Single Kernel.                2605.21603
+     arXiv:2506.04667 [cs.DC] https://arxiv.org/abs/2506.04667
+                                                                            [22] Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James
+ [4] anon8231489123. 2023.              ShareGPT Vicuna Unfiltered.              Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia
+     https://huggingface.co/datasets/anon8231489123/ShareGPT_                    Gimelshein, Luca Antiga, Alban Desmaison, Andreas Köpf, Edward
+     Vicuna_unfiltered.                                                          Yang, Zach DeVito, Martin Raison, Alykhan Tejani, Sasank Chil-
+ [5] Aohan Zeng and others. 2026. GLM-5: from Vibe Coding to Agentic             amkurthy, Benoit Steiner, Lu Fang, Junjie Bai, and Soumith Chintala.
+     Engineering. arXiv:2602.15763 [cs.LG] https://arxiv.org/abs/2602.           2019. PyTorch: An Imperative Style, High-Performance Deep Learning
+     15763                                                                       Library. arXiv:1912.01703 [cs.LG] https://arxiv.org/abs/1912.01703
+ [6] Li-Wen Chang, Wenlei Bao, Qi Hou, Chengquan Jiang, Ningxin Zheng,      [23] Ruoyu Qin, Zheming Li, Weiran He, Jialei Cui, Feng Ren, Mingxing
+     Yinmin Zhong, Xuanrun Zhang, Zuquan Song, Chengji Yao, Ziheng               Zhang, Yongwei Wu, Weimin Zheng, and Xinran Xu. 2025. Moon-
+     Jiang, Haibin Lin, Xin Jin, and Xin Liu. 2024. FLUX: Fast Software-         cake: Trading More Storage for Less Computation — A KVCache-
+     based Communication Overlap On GPUs Through Kernel Fusion.                  centric Architecture for Serving LLM Chatbot. In 23rd USENIX Confer-
+     arXiv:2406.06858 [cs.LG] https://arxiv.org/abs/2406.06858                   ence on File and Storage Technologies (FAST 25). USENIX Association,
+ [7] Minyu Cui and Miquel Pericas. 2026. Resource-aware Computation-             Santa Clara, CA, 155–170. https://www.usenix.org/conference/fast25/
+     Communication Overlap for multi-GPU ML Workloads.                           presentation/qin
+     arXiv:2606.09200 [cs.DC] https://arxiv.org/abs/2606.09200
+                                                                            [24] Qwen Team. 2025. Qwen3 Technical Report. arXiv:2505.09388 [cs.CL]
+ [8] DeepSeek-AI. 2025.               DeepSeek-V3 Technical Report.              https://arxiv.org/abs/2505.09388
+     arXiv:2412.19437 [cs.CL] https://arxiv.org/abs/2412.19437              [25] Rainer Storn and Kenneth V. Price. 1997. Differential Evolution –
+ [9] DeepSeek-AI. 2026. DeepSeek-V4: Towards Highly Efficient Million-           A Simple and Efficient Heuristic for global Optimization over Con-
+     Token Context Intelligence. arXiv:2606.19348 [cs.CL] https://arxiv.         tinuous Spaces. Journal of Global Optimization 11 (1997), 341–359.
+     org/abs/2606.19348                                                          https://api.semanticscholar.org/CorpusID:5297867
+[10] Changho Hwang, Wei Cui, Yifan Xiong, Ziyue Yang, Ze Liu, Han           [26] Stuart H. Sul, Simran Arora, Benjamin F. Spector, and Christopher
+     Hu, Zilong Wang, Rafael Salas, Jithin Jose, Prabhat Ram, Joe Chau,          Ré. 2025. ParallelKittens: Systematic and Practical Simplification of
+     Peng Cheng, Fan Yang, Mao Yang, and Yongqiang Xiong. 2023. Tutel:
+                                  Chutong Ding, Kaixuan Zhang, Luping Wang, Shiyou Qian, Jian Cao, Cheng Huang, Guodong Yang, and Liping Zhang
+
+
+     Multi-GPU AI Kernels. arXiv:2511.13940 [cs.DC] https://arxiv.org/           https://arxiv.org/abs/2605.05888
+     abs/2511.13940                                                         [41] Kan Zhu, Yufei Gao, Yilong Zhao, Liangyu Zhao, Gefei Zuo, Yile Gu,
+[27] Octavian Alexandru Trifan, Karthik Sangaiah, Muhammad Awad,                 Dedong Xie, Tian Tang, Qinyu Xu, Zihao Ye, Keisuke Kamahori, Chien-
+     Muhammad Osama, Sumanth Gudaparthi, Alexandru Nicolau, Alexan-              Yu Lin, Ziren Wang, Stephanie Wang, Arvind Krishnamurthy, and
+     der Veidenbaum, and Ganesh Dasika. 2025. Eliminating Multi-GPU              Baris Kasikci. 2025. NanoFlow: Towards Optimal Large Language
+     Performance Taxes: A Systems Approach to Efficient Distributed LLMs.        Model Serving Throughput. arXiv:2408.12757 [cs.DC] https://arxiv.
+     arXiv:2511.02168 [cs.DC] https://arxiv.org/abs/2511.02168                   org/abs/2408.12757
+[28] usernamehaha2022. 2026. DeepGEMM add_hopper_mega branch:
+     SM90 MegaMoE megakernel optimizations. https://github.com/
+     usernamehaha2022/DeepGEMM/tree/add_hopper_mega.                Com-
+     mit 6c3e048; shared via the discussion of DeepGEMM PR #323,
+     https://github.com/deepseek-ai/DeepGEMM/pull/323.
+[29] Samuel Williams, Andrew Waterman, and David Patterson. 2009.
+     Roofline: an insightful visual performance model for multicore ar-
+     chitectures. Commun. ACM 52, 4 (April 2009), 65–76. doi:10.1145/
+     1498765.1498785
+[30] Guanbin Xu, ZhenGuo Xu, Yuzhe Li, Youhui Bai, Ping Gong, Chaoyi
+     Ruan, and Cheng Li. 2026. Lagom: Unleashing the Power of Commu-
+     nication and Computation Overlapping for Distributed LLM Training.
+     arXiv:2602.20656 [cs.DC] https://arxiv.org/abs/2602.20656
+[31] Haoqi Yang, Luohe Shi, Qiwei Li, Zuchao Li, Ping Wang, Bo Du,
+     Mengjia Shen, and Hai Zhao. 2025. Faster MoE LLM Inference for
+     Extremely Large Models. arXiv:2505.03531 [cs.CL] https://arxiv.org/
+     abs/2505.03531
+[32] Kaixuan Zhang, Yunfan Cui, Shuhao Zhang, Chutong Ding, Shiyou
+     Qian, Luping Wang, Jian Cao, Guangtao Xue, Cheng Huang, Guodong
+     Yang, and Liping Zhang. 2026. PipeWeave: Synergizing Analyti-
+     cal and Learning Models for Unified GPU Performance Prediction.
+     arXiv:2601.14910 [cs.PF] https://arxiv.org/abs/2601.14910
+[33] Shulai Zhang, Ningxin Zheng, Haibin Lin, Ziheng Jiang, Wen-
+     lei Bao, Chengquan Jiang, Qi Hou, Weihao Cui, Size Zheng, Li-
+     Wen Chang, Quan Chen, and Xin Liu. 2025. Comet: Fine-grained
+     Computation-communication Overlapping for Mixture-of-Experts.
+     arXiv:2502.19811 [cs.DC] https://arxiv.org/abs/2502.19811
+[34] Chenggang Zhao et al. 2026. [Public release 26/04] Introducing
+     Mega MoE, FP4 Indexer and other features/fixes. https://github.
+     com/deepseek-ai/DeepGEMM/pull/304. GitHub pull request #304,
+     deepseek-ai/DeepGEMM.
+[35] Chenggang Zhao, Zhean Xu, Liang Zhao, Jiashi Li, Chenhao Xu, Anyi
+     Xu, Shengyu Liu, Kexing Zhou, and Kuai Yu. 2025. DeepGEMM:
+     clean and efficient BLAS kernel library on GPU. https://github.com/
+     deepseek-ai/DeepGEMM.
+[36] Chenggang Zhao, Shangyan Zhou, Liyue Zhang, Chengqi Deng, Zhean
+     Xu, Yuxuan Liu, Kuai Yu, Jiashi Li, and Liang Zhao. 2025. DeepEP: an
+     efficient expert-parallel communication library. https://github.com/
+     deepseek-ai/DeepEP.
+[37] Lianmin Zheng, Liangsheng Yin, Zhiqiang Xie, Chuyue Sun, Jeff
+     Huang, Cody Hao Yu, Shiyi Cao, Christos Kozyrakis, Ion Sto-
+     ica, Joseph E. Gonzalez, Clark Barrett, and Ying Sheng. 2024.
+     SGLang: Efficient Execution of Structured Language Model Programs.
+     arXiv:2312.07104 [cs.AI] https://arxiv.org/abs/2312.07104
+[38] Size Zheng, Jin Fang, Xuegui Zheng, Qi Hou, Wenlei Bao, Ningxin
+     Zheng, Ziheng Jiang, Dongyang Wang, Jianxi Ye, Haibin Lin, Li-Wen
+     Chang, and Xin Liu. 2025. TileLink: Generating Efficient Compute-
+     Communication Overlapping Kernels using Tile-Centric Primitives.
+     arXiv:2503.20313 [cs.DC] https://arxiv.org/abs/2503.20313
+[39] Size Zheng, Xuegui Zheng, Li wen Chang, and Jidong Zhai. 2026.
+     UniEP: Unified Expert-Parallel MoE MegaKernel for LLM Training.
+     arXiv:2604.19241 [cs.DC] https://arxiv.org/abs/2604.19241
+[40] Zhuoshan Zhou, Chen Zhang, Shuyi Zhang, Qijun Zhang, Haibo Wang,
+     Zhe Zhou, Zhipeng Tu, Guangyu Sun, Yijia Diao, Zhigang Ji, Jingwen
+     Leng, Guanghui He, and Minyi Guo. 2026. MoE-Hub: Taming Software
+     Complexity for Seamless MoE Overlap with Hardware-Accelerated
+     Communication on Multi-GPU Systems. arXiv:2605.05888 [cs.AR]
+

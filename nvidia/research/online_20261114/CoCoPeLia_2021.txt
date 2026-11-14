@@ -1,0 +1,978 @@
+ \
+
+
+
+
+Anastasiadis, P., Papadopoulou, N. , Goumas, G. and Koziris, N. (2021)
+CoCoPeLia: Communication-Computation Overlap Prediction for Efficient
+Linear Algebra on GPUs. In: 2021 IEEE International Symposium on
+Performance Analysis of Systems and Software (ISPASS), Stony Brook,
+NY, USA, 28-30 Mar 2021, pp. 36-47. ISBN 9781728186436 (doi:
+10.1109/ispass51385.2021.00015)
+
+
+
+The material cannot be used for any other purpose without further
+permission of the publisher and is for private use only.
+
+
+
+There may be differences between this version and the published version.
+You are advised to consult the publisher’s version if you wish to cite from
+it.
+
+
+
+
+ https://eprints.gla.ac.uk/320559/
+
+
+
+
+     Deposited on 25 April 2024
+
+
+
+
+      Enlighten – Research publications by members of the University of
+                                     Glasgow
+                               http://eprints.gla.ac.uk
+  CoCoPeLia: Communication-Computation Overlap
+   Prediction for Efficient Linear Algebra on GPUs
+                 Petros Anastasiadis† , Nikela Papadopoulou† , Georgios Goumas† and Nectarios Koziris†
+                        † Computing Systems Laboratory, National Technical University of Athens, Greece
+
+                                    Email: {panastas,nikela,goumas,nkoziris}@cslab.ece.ntua.gr
+
+
+    Abstract—Graphics Processing Units (GPUs) are well estab-           practice relies on splitting the initial problem data into smaller
+lished in HPC systems and frequently used to accelerate linear          chunks and offloading it to the GPU in a pipelined manner,
+algebra routines. Since data transfers pose a severe bottleneck         allowing the computation on a chunk to be performed while
+for GPU offloading, modern GPUs provide the ability to overlap
+communication with computation by splitting the problem to fine-        output data from the previous chunk and input data for the
+grained sub-kernels that are executed in a pipelined manner.            next chunk are being transferred. This optimization is usually
+This optimization is currently underutilized by GPU BLAS                left to the programmer for level-1 and level-2 BLAS but
+libraries, since it requires an approach to select an efficient         is integrated into the state-of-art multi-GPU level-3 BLAS
+tiling size, which in turn leads to a challenging problem that          libraries like cuBLASXt [6], the multi-GPU cuBLAS exten-
+needs to consider routine, system, data, and problem-specific
+characteristics. In this work, we introduce an elaborate 3-way          sion for level-3 BLAS, NVBLAS [7], a LAPACK-compatible
+concurrency model for GPU BLAS offload time that considers              wrapper for cuBLASXt, as well as BLASx [8] and XKBlas [9],
+previously neglected features regarding data access and machine         two approaches focusing on reducing avoidable transfers and
+behavior. We then incorporate our model in an automated,                load-balancing overheads to improve performance. All these
+end-to-end framework (called CoCoPeLia) that supports overlap           libraries are CUDA-based and their input data may reside on
+prediction, tile selection and effective tile scheduling. We validate
+our model’s efficacy for dgemm, sgemm, and daxpy on two                 host memory, GPU memory or a combination of both.
+testbeds, with our experimental results showing that it achieves           3-way-concurrency for BLAS on GPUs requires an ap-
+significantly lower prediction error than previous models and           proach to select the size for the computational chunks, (hence-
+provides near-optimal tiling sizes for all problems. We also            forth tiling size T ) which is a complex problem [8], since tiling
+demonstrate that CoCoPeLia leads to considerable performance            size affects the granularity of computation and communication,
+improvements compared to the state of the art BLAS routine
+implementations for GPUs.                                               together with other parameters like the nature of the routines
+                                                                        itself, the data layout, the initial data locations, the problem
+                     I. I NTRODUCTION                                   size, and the underlying architecture. Existing libraries trade
+   Dense linear algebra operations appear very frequently               performance for programmability or conversely, to simplify
+in high-performance computing (HPC) applications render-                the problem of tiling size selection. cuBLASXt extends BLAS
+ing their performance highly critical for their scalability.            parameters with the tiling size and assigns its selection to
+The standardization of the Basic Linear Algebra suprograms              the programmer. This approach cannot guarantee optimal
+(BLAS) [1] in the early days of HPC has eased the devel-                performance unless the programmer tests the library and tunes
+opment of scientific code since domain experts have been                the tiling size for each specific problem size. BLASX, and
+relying on standardized and performance-optimized libraries             NVBLAS, on the other hand, set the tiling size internally to
+to build more complex simulations at scale. The regular                 a static value, presumed to provide an average performance
+parallelism of BLAS routines makes them a good fit for                  gain across a range of commonly used system characteristics,
+GPUs, hence the existence of many GPU-BLAS libraries, the               routine parameters, and problem sizes. While this approach is
+most common being cuBLAS, a CUDA-like BLAS library for                  more user-friendly, it still sacrifices performance for generality.
+NVIDIA GPUs [2]. cuBLAS offers highly optimized primitive               XKBlas provides both options through wrapping.
+BLAS operations, however requires input data to reside on the              In order to get the best out of both worlds (performance and
+GPU memory, a task that is left to the programmer.                      programmability), we need to incorporate within an optimized
+   To ease the programming effort of moving data between the            GPU BLAS library an adequately accurate performance pre-
+GPU and host memory, NVIDIA introduced unified memory                   diction model for 3-way concurrency that will support effective
+in CUDA 6.0, enabling the GPU to directly access host                   tile selection. Prior work copes with the problem of 3-way-
+memory. Despite the improvement in programmability, critical            concurrency modeling [10]–[12], but because of the problem’s
+performance issues exist: the limited bandwidth between the             complexity these models need to make restricting assumptions
+host and the GPU imposes a transfer overhead, while the                 regarding data location, shape, and kernel execution charac-
+unified memory abstraction can lead to additional performance           teristics deeming them inaccurate or completely inapplicable
+loss [3]–[5]. A common practice to reduce these overheads               to BLAS - especially level-3 BLAS. Werkhoven et al. [11]
+is to overlap host-to-device (h2d) and device-to-host (d2h)             propose the most relevant generic 3-way-concurrency model
+transfers with computation, known as 3-way-concurrency. This            for the total offload time. Their model takes as input the kernel
+execution time on the GPU and estimates transfer times with                                                      M, N = 8K, K = 8K               M, N = 16K, K = 16K
+semi-empirical sampling, but does not take into account data                                                     M, N = 12K, K = 3K              M, N = 24K, K = 7K
+reuse and non-linearities in execution time. These restrictions                                  1.2
+
+
+
+
+                                                                        Performance (TFlops/s)
+make the model more applicable to lower-level BLAS routines
+but inaccurate for many scenarios of level-3 BLAS GPU
+                                                                                                 1.0
+offloading.                                                                                      0.8
+   In this paper we provide a solution for the 3-way-
+concurrency optimization problem on GPUs that supports
+                                                                                                 0.6
+near-optimal offload BLAS performance. To achieve this, we                                       0.4
+
+
+
+
+                                                                                                                       3072
+                                                                                                                              4096
+                                                                                                                              4608
+                                                                                                                              5120
+focus on 1) how to accurately predict the performance of GPU
+BLAS kernels including 3-way-concurrency and 2) how to uti-
+                                                                                                 0.2
+                                                                                                                2000      4000         6000         8000      10000
+lize this prediction to reach near-optimal automated overlap.                                                                    Tiling size T
+Overall, this paper makes the following contributions:                                                                    (a) Testbed I - K40
+   1) It introduces two 3-way-concurrency analytical models                                                 6
+
+
+
+
+                                                                                   Performance (TFlops/s)
+       for BLAS GPU offload time, for cases with and without
+       data reuse (Section III).
+                                                                                                            5
+   2) It develops an automated empirical methodology to                                                     4
+       instantiate these models on a system and offers three                                                3
+       example models for daxpy, dgemm, and sgemm (Sec-
+       tion IV).                                                                                            2
+
+
+
+
+                                                                                                                       3072
+
+                                                                                                                              4352
+
+                                                                                                                                      5632
+                                                                                                                                      6144
+   3) It combines the above with a runtime tile scheduler                                                   1
+       into CoCoPeLia, an end-to-end GPU BLAS framework                                                         2000      4000         6000         8000      10000
+       utilizing automatic tiling size selection (Section IV),                                                                   Tiling size T
+       which demonstrates considerable performance improve-                                                              (b) Testbed II - V100
+       ment over similar state-of-the-art libraries (Section V).        Fig. 1. cuBLASXtDgemm performance on two different testbeds, relative to
+                                                                        the tiling size T used for internal 3-way overlap with T × T tiles, for four
+                II. M OTIVATION -BACKGROUND                             different problem sizes (no transpose). The vertical lines outline the tiling size
+A. Motivation                                                           that achieves the best performance for each problem.
+
+    To achieve performance gain with 3-way-concurrency, GPU             B. Related work
+BLAS libraries need to internally split the initial problem
+size into tiles (more details are provided in Sections III and             1) Models for GPU offloading: A signigicant amount of
+IV). Most optimized overlap libraries use square tiling, i.e.           prior work focuses on modeling the computation time or
+they split matrices to equal squares T × T , where T is the             performance of GPU kernels [13]–[18]. However, these mod-
+tiling size. Irrespective of the tile distribution mechanism of         els neglect offload time when data transfers are required
+each library, selecting the appropriate tiling size significantly       before, after or during kernel execution. Gregg et al. [19]
+affects the resulting performance [8], [9], [11], [12]. Figure          first highlighted this problem, arguing against the trend of
+1 illustrates the effect of tiling sizes T on performance               scientific reporting of the performance of GPU applications,
+for cuBLASXtDgemm on two testbeds. As the tiling size                   transfers overhead excluded, and propose a taxonomy for data
+decreases, the performance increases due to better overlap, but         transfers and their impact on offload performance. Numerous
+after reaching one or two maxima, it rapidly degrades. These            later works model CPU-GPU transfers, using variances of the
+maxima “break-points” vary greatly across the two testbeds              linear latency-bandwidth model for PCIe transfers [20]–[23].
+and problem sizes.                                                         When modeling the serial offload scenario, including trans-
+    GPU BLAS libraries follow different strategies for tiling           fers improves prediction accuracy. However, if there is com-
+size selection, trading between programming ease and perfor-            munication/computation overlap, simplistic models fail to pre-
+mance. We argue that none of these approaches are generic               dict the actual performance, therefore modeling overlap areas
+enough or performance-optimal. As an example, we annotate               is a crucial step in performance modeling [24]. Towards this
+dgemm performance using the static tiling size of T = 4096,             direction, Gómez-Luna et al. [10] explore the use of CUDA
+which offers the best average performance for cuBLASXt                  streams for 3-way concurrency, but they consider the stream
+(details in Section V), for the examples in Figure 1; it results        creation time as the only overlap overhead. Werkhoven et
+in up to 9.4% slowdown on testbed I and up to 14.7%                     al. [11] enhance this work by offering multiple performance
+slowdown for testbed II. Furthermore, static tiling sizes offer         models for communication/computation overlap for various
+no performance guarantee for future machines with different             common offload scenarios (RMA, 2-way, 3-way), introduce
+transfer bandwidth/computation ratios and can result in in-             stream transfer overlap latency, and provide methods to obtain
+creased slowdowns in such cases. These observations make a              the optimal number of CUDA streams for a given problem.
+compelling case for dynamic tiling size selection, driven by            Their models offer high accuracy, however, their modeling
+accurate performance models.                                            approach does not capture all problem characteristics present
+
+
+
+                                                                    2
+in BLAS (details in Section III). Liu et al. [12] offer a                                              TABLE I
+mathematical framework for software pipelining on GPUs,                                         BLAS MODELING NOTATION
+using non-equal tiles and focus on partitioning, scheduling and           D1[, D2[, D3]         routine problem size dimensions
+granularity. However, they target problems defined by linear              dtype                 routine datatype
+                                                                          k                     the number of subproblems after tiling
+functions and with equal input/output bytes, which does not               kin                   the number of subproblems with input after tiling
+apply to most BLAS routines.                                              T                     tiling size
+   2) GPU BLAS tiling libraries: When considering GPU                     opd                   number of input/output data structures
+BLAS offloading, there is limited interest in level-1 and level-          Per data structure:   i : 0 → opd
+                                                                          geti                  flag to denote if data requires transferring from the
+2 routines, which are usually heavily transfer bound and                                        host to the GPU
+offloading them individually is inefficient. On the contrary,             seti                  flag to denote if data requires transferring from the
+multiple level-3 BLAS libraries internally use tiling for better                                GPU to the host
+                                                                          S1i , S2i             initial dimensions, extracted from the routine prob-
+cache and memory utilization and to enable task parallelism                                     lem size dimensions
+[25]–[29]. Among these, PaRSEC [29] is the most efficient for
+multi-GPU execution, however, it is not compatible with the              without complex dependencies. We are interested in 3-way
+legacy LAPACK layout and also suffers from high scheduling               concurrency for BLAS, where the problem is split into subker-
+overheads in small problems. Some existing libraries are                 nels, each of which requires 1) host-to-device (h2d) transfers
+specifically designed for level-3 BLAS multi-GPU usage [6]–              for its input, 2) computation on the GPU and 3) device-to-host
+[9]. cuBLASXt, and its wrapper NVBLAS [6], [7], the state-               (d2h) transfers of its output. The three steps must be executed
+of-practice libraries introduced by NVIDIA for automatic GPU             serially for each subkernel, but can be overlapped with the
+offloading, do not account for data reuse and leave tiling size          steps of previous and following subkernels. 3-way concurrency
+tuning to the user. BLASX [8] overcomes the first problem with           execution time prediction relies on modeling computation
+a runtime tile management engine, significantly decreasing the           time, transfer time and computation/communication overlap,
+transfer volume and thus increasing performance. The tiling              with the latter being a highly challenging problem. In order to
+size in this case is static and selected at compile time, to             simplify this problem, overlap models often make a number
+provide good average performance. XKBLAS [9] focuses on                  of assumptions, outlined below.
+problems that perform multiple subsequent BLAS invocations,                  1) Non-linear kernel execution times: Previous approaches
+like iterative solvers, and provides a library which further             make the assumption that if a problem is split in k subproblems
+limits transfers, by taking into account intermediate data               and these are executed sequentially on the GPU, the total
+locations, but offers no insights regarding tiling size selection.       execution time will not change considerably, which does not
+In this work, we propose a performance-aware static workload             hold for most BLAS routines. First, BLAS operations have
+distribution based on problem-specific tiling size selection,            internal dimensions and dependencies, which, in the case of
+achieved through a prediction model for 3-way overlap offload            tiling, may require additional reduction operations, while not
+time prediction and incorporate our method in an end-to-end              necessarily producing output that requires transfers. Second,
+framework, which offers optimized BLAS offloading through                the performance of level-2/3 BLAS kernels does not depend
+runtime tiling size prediction.                                          linearly on their working set [26], [30], [31], since the prob-
+                                                                         lem shape (e.g. square vs fat-by-thin matrix multiplications)
+          III. M ODELS FOR GPU BLAS OVERLAP                              influences performance. Third, if a subproblem becomes too
+   This section covers the core of this work, the CoCoPeLia              small, the GPU is underutilized and performance drops.
+3-way concurrency prediction models. We first discuss 3-way                  2) Data location awareness: Previous work [10]–[12] as-
+concurrency on BLAS. Then, we build upon a baseline model                sumes that all data is initially resident on the memory of the
+and propose adjustments to improve prediction accuracy.                  host CPU, and only targets the full offload scenario. However,
+   Table I describes the notation used throughout this Section,          a common scenario for BLAS execution is for a kernel to be
+split in two categories; routine-specific (e.g. for a single gemm        executed iteratively. In this case, some of the data may still
+problem) and data specific (e.g. A,B,C - the matrices of the             be resident on the GPU [9].
+gemm routine) values. Certain parameters (e.g. opd, dtype)                   3) Bidirectional overlap: 3-way concurrency goes beyond
+are inferred directly from the BLAS standard, others (e.g. D1,           simple communication/computation overlap, considering also
+D2, D3) are problem-specific, while others are a combination             bidirectional host-device overlap (h2d with d2h transfers).
+of both (e.g. geti , seti , S1i , S2i ). We provide details on           While modern GPUs have virtually separate copy engines for
+obtaining or instantiating these parameters in Section IV. T is          h2d and d2h, both engines utilize the same communication
+the optimization target parameter, namely the tiling size, and           medium and therefore simultaneous usage imposes a slow-
+the formulas for k, kin are defined later in this section.               down [11], [12]. This slowdown is asymmetric; usually the
+                                                                         d2h transfers are more heavily affected, but the extent of this
+A. BLAS overlap characteristics                                          effect depends on the underlying interconnect [5].
+  In CUDA, concurrency is a term referring to software                       4) Data reuse: Data reuse refers to the case when in a tiled
+pipelining, in order to overlap CPU-GPU communication with               problem, part of the data required for a subkernel’s execution
+GPU computation, for any problem that can be split in parts              is also needed by subsequent subkernels. In level-3 BLAS,
+
+
+
+                                                                     3
+                       D2          D3/T reductions                                that all data initially reside on the CPU and are both input and
+         D3=3T                                                                    output data, the 3-way-concurrency execution time for a BLAS
+                                                                                  routine is then:
+                                                          Transfers(PCIe)
+  D1                          D3           D1=2T                                     tbaseline
+                                                                                      total    = max(tTGP U , opd · tTh2d , opd · tTd2h ) × (k − 1)
+                                                          GPU execution                        + opd · tTh2d + tTGP U + opd · tTd2h                   (1)
+                                   D2=2T
+                                                                                    1) Data Location Modeling: In practice, Eq. 1 overesti-
+                                                                                  mates transfers to and from the GPU; by including the opd
+                                                                                  multiplier, we assume that all data is both input and output
+                                                                                  data and therefore must be transferred. To avoid this, we use
+                                                                                  the geti , seti flags, which determine which of the opd tiles
+                                                                                  require to be fetched to the GPU or returned to the host. We
+Fig. 2. An example of the 3-way concurrency pipeline for a gemm imple-            define tTin and tTout as the time required to transfer all tiles for
+mentation which iterates through the tiles of the M, N, K dimensions, for a       which geti = 1 and seti = 1, respectively, as follows:
+problem with tT
+              h2d < tGP U < 2 · th2d .
+                       T           T
+                                                                                                opd                            opd
+                                                                                                X                              X
+                                                                                        tTin =       geti · tTh2d and tTout =      seti · tTd2h
+                                                                                                i=0                               i=0
+it can be present in all three dimensions of the problem.                            Following the notion of Eq. 1, the location-aware execution
+Level-3 BLAS GPU libraries take advantage of data reuse,                          time of a BLAS problem using 3-way concurrency is:
+to better utilize caches and limit transfers [8], [9]. However,
+the reuse pattern and overlap percentage depend on the GPU                                    tloc          T       T     T
+                                                                                               total = max(tGP U , tin , tout ) × (k − 1)
+architecture and the BLAS operation, making it difficult to                                           + tTin + tTGP U + tTout                         (2)
+accurately model data reuse.                                                         2) Bidirectional Slowdown Modeling: As simultaneous h2d
+B. BLAS 3-way concurrency models.                                                 and d2h transfers impose a slowdown on both sides, we define
+                                                                                  the slowdown factors slh2d bid , sld2h bid for each direction
+   As previous models outline, to enable 3-way concurrency                        as scaling factors applied to transfer time, in the case the
+the initial problem is split to k equal parts. We split all problem               opposite direction is also in use for the whole duration of the
+dimensions, and use an equal tiling size T across them. This                      transfer. We estimate the slowdown factors empirically in the
+applies to level-1 BLAS, as well as level-2 and -3 BLAS                           CoCoPeLia framework (Section IV). The bidirectional transfer
+square tiling, with the latter being the typical approach in                      time tT{in,out} bid of a h2d or d2h transfer, when the opposite
+BLAS GPU libraries [6], [8]. Thus, k is given by:                                 link is also in use, then becomes:
+                            D1 D2          D3
+                      k=        [×     ][×    ]                                               tT{in,out} bid = sl{h2d,d2h} bid · tT{in,out}
+                             T      T      T
+where D2 (D2 and D3) applies to level-2 (level-3) BLAS.                           However, full bidirectional overlap only applies in practice
+   In our approach, modeling 3-way concurrency requires                           if tTin = tTout . In a common case, two simultaneous opposite
+knowledge of the execution times for each of the overlapped                       transfers have different duration, and the total overlap time
+parts. Since we do not assume a linear relation of the total                      tTover is split in two parts; 1) the part during which actual
+time with the subkernel execution times, we consider that the                     overlap occurs and 2) the single-way transfer of the remaining
+total execution time (overlap time) is a function of k and                        partially-complete transfer:
+the individual times for h2d transfer tTh2d , kernel execution                                
+                                                                                                   T        tT        T
+                                                                                                             in bid −tout bid
+                                                                                                                              , if tTin bid ≥ tTout bid
+tTGP U , and d2h transfer tTd2h , for each subproblem with tiling                             tout bid +
+                                                                                                               slh2d bid
+                                                                                       T
+size T that is overlapped. Thus, we consider the following                            tover =
+                                                                                                           tT       −tT
+                                                                                              
+contributions to the total execution time:                                                                                   , otherwise
+                                                                                              T
+                                                                                                 tin bid + outslbid   in bid
+                                                                                                                 d2h bid
+
+               tTh2d = f1 (system, dtype, T [, T ])                                                                                                    (3)
+                                                                                  The fraction in the equation corresponds to the time required
+               tTd2h = f2 (system, dtype, T [, T ])                               to transfer the remaining part of the longer transfer. Eq.
+             tTGP U = f3 (routine, dtype, T [, T [, T ]])                         2 therefore evolves to account for bidirectional overlap as
+                                                                                  follows:
+where tTh2d , tTd2h are the system-wide transfer times for a single
+tile of size T (if it is a vector) or T × T (if it is a matrix), and                 tbi              T     T                      T       T
+                                                                                      total = max(tGP U , tover ) × (k − 1) + tin + tGP U + tout
+                                                                                                                                                     T
+
+
+tTGP U is the BLAS routine-specific execution time for a kernel                                                                                        (4)
+where D1[= D2[= D3]] = T . These times are empirically                               3) Data Reuse Modeling: All previous models are not
+collected in the CoCoPeLia framework (see Section IV).                            accurate for optimized level-3 BLAS problems, as they do
+   We assume that in the 3-way-concurrency scenario, each                         not account for data reuse. Reuse exists in both level-2 BLAS
+subkernel execution on the GPU is overlapped with 1) the                          (vector reuse) and level-3 BLAS (matrix reuse), but is mostly
+subsequent subkernel input and 2) the previous subkernel                          relevant to level-3 BLAS performance. Figure 2 shows an ex-
+output, in a pipelined manner [10]–[12]. Under the assumption                     ample of a level-3 BLAS routine with data reuse. Initially, the
+
+
+
+                                                                              4
+problem is transfer-bound. Then, h2d transfers decrease due
+                                                                                 Micro-              Empirical Transfer Models
+to data reuse, and the problem becomes execution-bound. The                    benchmarks
+example refers to a specific tTh2d , tTGP U ratio, and the amount                                   th2d(bytes)       td2h(bytes)
+                                                                                 System
+of reuse and this ratio can significantly alter performance. We                   wise
+                                                                                                     slh2d_bid         sld2h_bid
+
+construct a generic model, for the ideal reuse case, namely
+                                                                                                                           st
+full reuse, where all available tile reuse potential is utilized.                Routine          texec(T[,T[,T]])
+                                                                                  wise
+   Given the tiling size T , we can compute how many tiles an                                                                    File
+initial matrix i of dimensions S1i , S2i is split into, as follows:                              Deployment Phase
+                          S1i S2i
+                 tilesi =     ·      , i : 0 → opd
+                           T     T                                           BLAS Routine                            no                                    Result
+                                                                                                     First Call             Same Params
+                                                                              Invocation
+   In level-3 BLAS, we opt to account for the transfer of                                                                                     yes
+                                                                                                                          no
+tiles only once, assuming that they then become available                                   ld      yes
+for all subsequent subkernels that use them. Depending on
+its dependencies and what has already been transferred to the                       CoCopeLia_select
+                                                                                                                                 Backend Wrapper
+                                                                                                                                  cuBLAS Kernels
+GPU, a subkernel may require the transfer of zero up to three
+tiles (i.e., the case of the first subkernel).                                     CoCopeLia_predict
+                                                                                                                                   Tile scheduler
+   We compute the number of subkernels among the k total                          No-reuse:      Reuse:                             Square Tiling
+subkernels that require one or two tile transfers, as follows:                     Eq. 4         Eq. 5                             CUDA Streams
+                           opd
+                           X
+                    kin =      (geti · tilesi − 1)                                Tile selection Runtime                            Initialization
+                                                                                                                                ( Buffers, Streams etc.)
+                           i=0
+   For a more optimized implementation, the larger percentage                                              Tbest                        Library
+of kin collapses to single tile transfers. We follow this assump-
+tion for our final 3-way-concurrency offload time model with        Fig. 3. The CoCoPeLia framework pipeline. During the offline deployment
+reuse, which is given by the following model:                       phase the framework performs micro-benchmarks. Then, when a BLAS
+                                                                    routine is invoked with some problem parameters for the first time, the tile
+tre           T      T               T                    T     T   selection runtime uses them in conjugation with the values obtained during
+ total = max(th2d , tGP U ) · kin + tGP U · (k − kin ) + tin + tout deployment to predict the best tiling size T for this problem. Finally the
+                                                              (5) library is invoked to perform the operation for the given Tbest and produce
+                                                                    the routine result. In case the routine has been called with the same problem
+C. Model overview per level                                         parameters before, all unnecessary steps are skipped and the previous tiling
+   Level-1 BLAS routines perform vector-vector operations and scheme and Tbest is reused.
+their working set is D1 = N . These transfer bound routines                framework that handles all the necessary steps including the
+have no working set overlaps and are therefore modeled                     automatic instantiation of the model for a specific machine
+effectively by Eq. 4.                                                      and the development of a proof-of-concept library that utilizes
+   Level-2 BLAS routines perform matrix-vector operations                  the model itself at runtime. Figure 3 shows the complete
+and have two problem dimensions D1, D2 where D1 is the                     CoCoPeLia framework. At the heart of the framework lies the
+output vector length and D2 is the remaining dimension of the              Tile selection runtime which employs the prediction models
+multiplied matrix. There exists a minor working set overlap                described in detail in Section III. The deployment module
+among sub-kernels for the vector, but it is relatively small (D1)          feeds the runtime with the proper transfer and execution sub-
+compared to the matrix dimensions (D1 × D2), and therefore                 models (predictors for tTh2d , tTd2h and tTGP U , slh2d bid , sld2hb id
+Eq. 4 is still sufficient for modeling them.                               – details in Section IV-A) while the library implements an
+   Level-3 BLAS routines perform matrix-matrix operations                  optimized subset of the BLAS prototype on top of basic GPU
+and have 3 problem dimensions D1, D2, D3 where D1, D2                      BLAS kernels (details in Section IV-C). During application
+are the output matrix dimensions and D3 is the internal matrix             execution, when a BLAS routine with a specific set of param-
+multiplication dimension. Although Eq. 4 can provide an                    eters is invoked for the first time, the CoCoPeLia model is
+estimate for the offload time of many applications, optimized              consulted in order to pick the best tiling size.
+implementations that employ tiling and data reuse lead to
+higher performance. Since our focus is tiling size selection               A. Deployment
+for state of the art performance, we devise Eq. 5 to account                  To instantiate the models of Section III, we first model
+for data reuse in level-3 BLAS.                                            the transfer time of the target system, with a semi-empirical
+                                                                           approach. We perform a set of micro-benchmarks offline and
+    IV. P UTTING IT ALL TOGETHER : T HE C O C O P E L IA                   use them to fit the coefficients of basic linear models for
+                       framework                                           transfer time. We use the well-accepted latency/bandwidth
+  Having presented elaborate 3-way concurrency prediction                  model [10]–[12], [21], [30], which estimates transfer time as
+models for BLAS routines on GPUs, we now turn our attention                a function of bytes. In our case the latency/bandwidth model
+on how to utilize them in practice. We present the CoCoPeLia               for host to device transfers takes the form:
+
+
+
+                                                                       5
+                             TABLE II                                     small tiling sizes, therefore we measure the execution time
+          T RANSFER SUB - MODELS FOR THE TWO TESTBEDS .                   for a set of tiling sizes T for each routine, store them and
+                               System                                     perform value lookups at runtime, for usage in our models.
+           ti       1/tb       RSE      1/tb bid.   RSE bid.    sl        The usage of empirical estimates is favored by the tiled
+                    Testbed I (Nvidia Tesla K40)                          execution and the non-linear execution time assumption in
+ h2d     2.4e−6    3.15e9     1.1e−6     2.94e9     2.7e−6     1.07       CoCoPeLia, since micro-benchmarks for these chunks are
+ d2h     2.2e−6    3.29e9     2.1e−6     2.84e9     3.4e−6     1.16
+                                                                          much more lightweight than an approach that would require
+                   Testbed II (Nvidia Tesla V100)
+ h2d     2.5e−6    12.18e9    1.7e−6     9.59e9     3.4e−6     1.27
+                                                                          the full problem’s execution time, as in [11]. For example,
+ d2h     2.5e−6    12.98e9    2.8e−6     9.21e9     4.2e−6     1.41       empirically estimating the execution time for a gemm problem
+                                                                          of size M = N = K = 32K using T = 2048 would
+                                        bytes
+                                                                          require texex routine (M, N, K) for [11], while for our case
+                              z          }|          {                    texex routine (T, T, T ), which requires 4096 times less com-
+           tTh2d = ti + tb · (T [·T ] · sizeof (dtype))                   putations, would be sufficient. To measure the GPU BLAS
+As discussed, we assume that bidirectional overlap imposes a              execution time, we use cuBLAS, but given that kernel execu-
+constant slowdown (sl) to transfer, and therefore the bidirec-            tion is wrapped and all libraries follow the BLAS standard,
+tional transfer time can be estimated by:                                 this benchmarking method is applicable to any BLAS GPU
+                    th2d bid = slh2d × th2d                               library with minimal adjustments.
+                                                                              We choose three representative routines; axpy for 1D
+Similarly, tTd2h , td2h bid are modeled with the same equations.          splitting and gemm for single and double precision for square
+Therefore, the system-wise transfer parameters required for               tiling. For daxpy, we run 256 benchmarks for D1 = N =
+prediction are ti , tb and sl for h2d and d2h (six in total). To                step=218
+                                                                          218 −−−−−→ 226 . For dgemm and sgemm, we use 64
+fit these coefficients, we conduct a set of micro-benchmarks,
+                                                                          benchmarks with square dimensions D1 = D2 = D3 =
+subset of those proposed by Pearson [5]. For all transfer                       step=256
+experiments, we use the cublas{Set/Get}MatrixAsync                        256 −−−−−→ 16384 for value lookup of tiled sub-kernels.
+routines for h2d, d2h transfers respectively, with pinned host            Therefore, the sub-model tTGP U can only predict time for these
+memory, as required by these asynchronous calls. We obtain                380 and 64 tile sizes (via direct value lookup) for daxpy and
+ti empirically as the average latency of multiple single-byte             gemm respectively. We repeat the micro-benchmarks, until the
+transfers. For tb , we run benchmarks for square transfers                95% confidence interval of the mean falls within 5% of the
+                                                          step=256        reported mean value. The required time for the benchmark
+with dtype = double, for D1 = D2 = 256 −−−−−→
+                                                                          execution is less than 6 minutes for each routine on Testbed
+max device memory/2, and follow the same approach for
+                                                                          I, and less than 2 minutes on Testbed II.
+sl, but couple the entire transfer with a concurrent transfer
+                                                                             CoCoPeLia automates the micro-benchmark execution on
+towards the opposite direction. We use least square regressions
+                                                                          any new system without modifications. Upper limits for the
+on the 64 samples to compute tb , both in the case of uni-
+                                                                          required benchmarks are extracted based on the available GPU
+directional and in the case of bi-directional transfers, excluding
+                                                                          memory. Additionally, CoCoPeLia can be easily extended for
+ti from the transfer time during the regression (assuming zero
+                                                                          any BLAS routine by modifying the existing micro-benchmark
+intercept), in the manner of [32], and then estimate sl. We
+                                                                          template scripts with the new routine and its parameters.
+ensure the statistical robustness of the empirical values by
+collecting repetitive measurements, until the 95% confidence
+                                                                          B. Tile selection
+interval of the mean falls within 5% of the reported mean
+value, for all micro-benchmarks. The micro-benchmarks for                    The CoCoPeLia runtime includes two functions for tile
+transfer times are lightweight (requiring less than 10 minutes            selection. The function CoCoPeLia_predict combines the
+and less than 3 minutes on Testbed I and II, respectively), and           empirical values obtained at deployment with the problem-
+only need to be run once on every new system CoCoPeLia is                 specific parameters used in the BLAS routine invocation
+deployed.                                                                 listed in Table I, to provide the execution time of a BLAS
+    Table II contains the obtained values for the two testbeds            routine, as a function of the tiling size T , using Eq. 4
+used in this work, described later in Section V-A. The dis-               and 5 for cases without and with data reuse. The problem
+played 1/tb is equal to each system’s PCIe bandwidth for each             dimensions D1[, D2[, D3]] are inferred from the BLAS di-
+direction. Testbed II has almost 3× higher bandwidth than                 mensions M, N, K, and S1i , S2i are then calculated based
+testbed I, but also has much larger bidirectional slowdowns sl            on the above. Finally, geti , seti are obtained by querying the
+for both directions, indicating that overlapping h2d and d2h              pointers of the respective i−th data structure (e.g. matrix, vec-
+transfers is not going to be as effective. The least square regres-       tor) using cudaPointerGetAttributes. The function
+sion coefficient p-values for tb and slbid are < 2.2e − 16, and           CoCoPeLia_select is used to provide the best tiling size
+the RSEs are between 1 and 4.2e−6 , which is comparable to                T for a specific problem, using the CoCoPeLia_predict
+ti , however this only affects the prediction of small transfers.         routine to find Tbest , which minimizes the total offload time,
+    Second, we estimate routine GPU execution time. We are                by iterating through all sizes T obtained at deployment for
+only interested in the time of fine-grained chunks of specific            the target routine. The function can be extended to include
+
+
+
+                                                                      6
+different optimization criteria (e.g. GPU utilization, memory                                         TABLE III
+etc.). We have measured model initialization to take 2-3 ms                                   T ESTBED CHARACTERISTICS
+and prediction time to be negligible (less than 100 µs).                                         Testbed I              Testbed II
+   The extension of the CoCoPeLia Tile selection runtime with             CPU                    Intel Core i7-4820K    Intel Xeon Silver 4114
+                                                                                                 3.7GHz                 2.2GHz
+additional BLAS routines, besides the micro-benchmarks ex-                GPU                    NVIDIA Tesla K40       NVIDIA Tesla V100
+plained in IV-A, requires the following modifications: i) the ex-                                FP Peak 4.3 TFlop/s    FP Peak 14 TFlop/s
+tension of a skeleton for a CoCoPeLia_{routine}_init                                             DP Peak 1.4 TFlop/s    DP Peak 7 TFlop/s
+                                                                          PCIe                   Gen2 x8                Gen3 x16
+function, that matches the routine’s parameters to the struct             Compiler (host)        g++ 4.7.2              g++ 7.5.0
+with the model parameters of table I, and ii) the selection               Compiler flags         -O3, -lm, -std=gnu99   -O3, -lm, -std=gnu99
+of a CoCoPeLia_predict_{ModelName} function for                           CUDA                   9.2                    9.2
+                                                                          Compiler flags (GPU)   -O3, -arch=sm 35       -O3, -arch=sm 75
+Tile prediction of this routine. The extension of CoCoPeLia
+with new prediction models is possible by defining a new
+                                                                                                 V. E VALUATION
+CoCoPeLia_predict_{ModelName}. However, if any
+additional parameters are required, the struct of table I must              In this section, we evaluate the CoCoPeLia framework for
+be also modified accordingly.                                            three example kernels; daxpy, sgemm, and dgemm. First,
+                                                                         we present our experimental setup, and describe the micro-
+                                                                         benchmark and validation sets we used. Then, we validate
+C. Library-Tile scheduler
+                                                                         the proposed 3-way concurrency time prediction model error
+    While selecting an appropriate tiling size T should suffice          and the ability of CoCoPeLia to select near-optimal tile sizes.
+for a 3-way concurrency optimized library to achieve near-               Finally, we present the end-to-end performance achieved with
+optimal performance, existing libraries do not optimize level-           CoCoPeLia using our own 3-way concurrency implementation
+1 and -2 BLAS routines, while cuBLASXt and BLASX often                   coupled with automatic tile selection, and compare it with the
+result in less performance than what Eq. 5 hints.                        state of the art.
+    To validate the accuracy of the proposed data-reuse model
+and fill this performance gap, as a part of CoCoPeLia, we                A. Experimental setup
+implement an optimized end-to-end library for a subset of                   We perform experiments for the validation of our models
+the BLAS prototype on top of state-of-the art primitive li-              and the evaluation of CoCoPeLia on two different testbeds,
+braries. We use cuBLAS as the GPU execution and data                     the details of which are presented in Table III, along with
+transfer backend, utilizing cublas{Dtype}{Routine} and                   the information on code compilation. For time measure-
+cublas{Set/Get}MatrixAsync routines respectively.                        ments we use clock_gettime, with device synchroniza-
+For 3-way concurrency, we use CUDA streams, utilizing                    tion (cudaDeviceSynchronize()) also included; both
+one stream per operation (h2d transfer, d2h transfer, kernel             timer and synchronization overhead were less than 1% of
+execution). The tile splitting, address matching and distribu-           the benchmarked times. We perform 100 executions for each
+tion (tile scheduler) are implemented based on the square                benchmark, after a warmup run, not accounted for, and we
+tiling approach (as implied in Eq 5), also used by [6],                  report the average time for all models, unless otherwise noted.
+[8]. After calculating these, the tile scheduler hands over              The allocation time needed for CPU/GPU buffers is not
+all underlying transfers and execution to the aforementioned             modeled or included in the total time, and all matrices/vectors
+cuBLAS calls. Additionally, we enable GPU buffer and CUDA                are initialized with random values before execution. We use
+stream reuse after the first routine call, to avoid allocation/de-       pinned host memory to enable Async CUDA calls and the
+allocation overheads, as proposed by BLASX [8] to emulate                cashes/buffers are not flushed between runs.
+an iterative use-case scenario. Finally, CoCoPeLia routines
+support either passing the tiling size T as an extra BLAS                B. Validation sets
+parameter, similar to cuBLASXt, for validation reasons, or                  To validate different initial memory locations and prob-
+using CoCoPeLia_select internally to predict Tbest during                lem sizes, we select four large problem sizes (N =
+invocation. CoCoPeLia routines also take advantage of model              {8, 64, 128, 256} · 220 ) for daxpy, for all 22 − 1 = 3 location
+reuse in the second case; they initialize the corresponding              combinations (15 problems). Similarly, for sgemm and dgemm
+model only the first time a user makes a call to CoCoPeLia               we want to validate different locations, problem sizes and
+with a set of parameters (routine, problem size, flags, etc)             shapes. We use four square problem sizes M = N = K =
+and use the preobtained Tbest in subsequent calls. The tile              {4, 8, 12, 16} · 210 , for all 23 − 1 = 7 location combinations
+scheduler is generalized per BLAS-level. To add a new BLAS               (28 problems) to validate the location-problem size, and 3
+routine that utilizes the tile scheduler requires the creation of        problem sizes with M · N · K = {4, 8, 12, 16} · 210·3 for 3
+                                                                                                               3
+a routine wrapper, since the specifics of each BLAS operation            fat-by-thin ratios M = N = K · r8 , r ∈ [3, 4, 5] and 3 thin-
+differ, but transfer/ execution overlap is then achieved by the          by-fat ratios M = N = K · r83 , r ∈ [3, 4, 5] for the scenario
+tile scheduler without modifications. The underlying backend             of all data initially residing on the CPU (24 problems). We
+functions are wrapped and can also be modified, as long as an            exclude the scenario where all data is located on the GPU,
+overlap mechanism similar to CUDA streams is available.                  since there is no overlap. All selected problem sizes can fit in
+
+
+
+                                                                     7
+                              testbed-I               testbed-II                                            testbed-I              testbed-II
+                                                                                                       40               Dgemm
+                        100               Dgemm
+                                                                                                       20
+                         50                                                                             0
+                          0                                                                           −20
+                       −50                                                                            −40
+                                                                                                      −60
+                       −100
+
+
+
+
+                                                                               Prediction Error (%)
+Prediction Error (%)
+
+
+
+
+                                                                                                       40               Sgemm
+                        100               Sgemm
+                                                                                                       20
+                         50                                                                             0
+                          0                                                                           −20
+                       −50                                                                            −40
+                       −100                                                                           −60
+
+                                                                                                            CSO-Model [11]      DR-Model
+                        100               Daxpy
+                         50
+                                                                              Fig. 5. Error distribution of the CSO-Model and the DR-Model for our
+                          0                                                   CoCoPeLia wrapper BLAS implementation of sgemm and dgemm on testbeds
+                       −50                                                    I and II.
+                       −100
+                                                                              with median errors between 1 to 2%, while the CSO-Model
+                              CSO-Model [11]      BTS-Model
+                                                                              underpredicts execution time with median errors between -3%
+                                                                              to -7%. This is attributed to the CSO-Model not accurately
+Fig. 4. Error distribution of the CSO-Model and the BTS-Model for daxpy
+                                                                              modeling the actual bidirectional overlap, and is more evident
+and cublasXt_{D,S}gemm without data reuse on testbeds I and II.               on Testbed-II, where the slowdown is larger on both directions.
+                                                                              Second, for both sgemm and dgemm, the prediction error is
+                                                                              higher. The CSO-Model again significantly underestimates the
+the device memory; we do not consider larger problem sizes                    execution time in almost all cases, with median errors between
+since that would require a considerably more sophisticated                    -20% to -34%. On the other hand, the BTS-Model demonstrates
+implementation of overlap with memory constraints, which is                   smaller median errors between -10% to -15% and a better error
+outside the scope of this work. For each problem size, we                     distribution with no bias towards underprediction.
+measure the execution time t of 1) the CoCoPeLia wrapper                         We then validate the prediction accuracy of the DR-Model,
+                                              step=256
+and 2) cuBLASXt, for all tile sizes T = 1024 −−−−−→ 16384                     using our aforementioned implementations for sgemm and
+for which T ≤ min(D1[,D2,D3])
+                     1.5        .                                             dgemm, in the CoCoPeLia library, which have near-optimal
+                                                                              data reuse on single-GPU scenarios, when the problem fits
+C. Time prediction validation                                                 the GPU memory. Figure 5 demonstrates the relative error
+   We first focus on validating the prediction ability of our                 distribution on both testbeds. The CSO-Model underestimates
+bidirectional transfer overlap-aware model of Eq. 4, hereafter                execution times, similarly to the cuBLASXt case in Figure 4,
+referred to as BTS-Model, and our data reuse-aware model                      however with fewer underestimations with errors ranging from
+of Eq. 5, hereafter referred to as DR-Model, used in tover =                  -20% to -60% and a lower median error of -7% to -15%.
+CoCoPeLia_predict of Figure 3. We examine their error                         Again, our DR-Model is significantly more accurate, with
+over measured execution time and compare their predictive                     median errors ranging from 2% to -5%, and a few high positive
+power against the analytical CUDA stream overlap model with                   errors (overestimations). It is interesting to note that both
+two copy engines, proposed in [11], hereafter referred to as                  models exhibit higher errors for sgemm, where the memory
+CSO-Model. We evaluate the percentage (relative) error e% =                   footprint is half than the equivalent of dgemm, and smaller
+100·(tpredicted −tmeasured )/tmeasured . We highlight that both               problems are more prone to second order errors from the
+models include empirical parts, which impose second order                     empirical value acquisition. Additionally, our DR-Model is
+errors. Nonetheless, the comparison between different models                  more accurate for Testbed I, than Testbed II. This is due to
+is fair, as we rely on the same micro-benchmarks to collect                   spikes in performance on the NVIDIA Tesla V100 GPU of
+the empirical values.                                                         Testbed II for cublas {D,S}gemm, which are not present in
+   We first validate the prediction accuracy of the BTS-Model,                the NVIDIA Tesla K40 of Testbed I. We attribute these to the
+which is suitable for problems without data reuse between                     more complex GPU architecture of the former.
+subkernels, using the level-1 BLAS daxpy, which does
+not reuse data, and cuBLASXt sgemm and dgemm, which                           D. Validation of tiling size selection
+do not sufficiently utilize data reuse to minimize transfers                     Subsequently, we validate the CoCoPeLia tiling size selec-
+[8], [9]. Figure 4 shows the relative error distribution for                  tion ability when used in practice. The target of the CoCoPeLia
+daxpy, sgemm and dgemm, for both testbeds, in the form                        framework is to predict the tiling size that leads to near-optimal
+of violinplots. First, we note that, on both testbeds, the BTS-               performance. We hence consider the following scenario: for all
+Model achieves very high prediction accuracy for daxpy                        validation cases in Section V-B, we explore the performance
+
+
+
+                                                                          8
+                         14000
+
+
+
+
+                                                                                                                  Relative Normalized Performance
+                                                                                                                                                    1.1
+Performance (Gflops/s)
+
+
+                         12000
+                                                                                                                                                    1.0
+
+                         10000                                                                                                                      0.9
+
+                         8000                                                                                                                       0.8
+
+                                                                                                                                                    0.7
+                         6000
+                                                                                                                                                    0.6
+                         4000
+                                   (2, 2, 16, 1, 1, 1)
+                                     (4, 4, 4, 0, 0, 1)
+                                     (4, 4, 4, 0, 1, 0)
+                                     (4, 4, 4, 0, 1, 1)
+                                     (4, 4, 4, 1, 0, 0)
+                                     (4, 4, 4, 1, 0, 1)
+                                     (4, 4, 4, 1, 1, 0)
+                                     (4, 4, 4, 1, 1, 1)
+                                   (4, 4, 32, 1, 1, 1)
+                                     (6, 6, 1, 1, 1, 1)
+                                   (6, 6, 48, 1, 1, 1)
+                                     (8, 8, 8, 0, 0, 1)
+                                     (8, 8, 8, 0, 1, 0)
+                                     (8, 8, 8, 0, 1, 1)
+                                     (8, 8, 8, 1, 0, 0)
+                                     (8, 8, 8, 1, 0, 1)
+                                     (8, 8, 8, 1, 1, 0)
+                                     (8, 8, 8, 1, 1, 1)
+                                   (8, 8, 27, 1, 1, 1)
+                                   (8, 8, 64, 1, 1, 1)
+                                  (12, 12, 3, 1, 1, 1)
+                                 (12, 12, 12, 0, 0, 1)
+                                 (12, 12, 12, 0, 1, 0)
+                                 (12, 12, 12, 0, 1, 1)
+                                 (12, 12, 12, 1, 0, 0)
+                                 (12, 12, 12, 1, 0, 1)
+                                 (12, 12, 12, 1, 1, 0)
+                                 (12, 12, 12, 1, 1, 1)
+                                  (16, 16, 2, 1, 1, 1)
+                                 (16, 16, 16, 0, 0, 1)
+                                 (16, 16, 16, 0, 1, 0)
+                                 (16, 16, 16, 0, 1, 1)
+                                 (16, 16, 16, 1, 0, 0)
+                                 (16, 16, 16, 1, 0, 1)
+                                 (16, 16, 16, 1, 1, 0)
+                                 (16, 16, 16, 1, 1, 1)
+                                  (18, 18, 6, 1, 1, 1)
+                                  (24, 24, 3, 1, 1, 1)
+                                  (24, 24, 8, 1, 1, 1)
+                                  (30, 30, 1, 1, 1, 1)
+                                  (32, 32, 4, 1, 1, 1)
+                                  (40, 40, 3, 1, 1, 1)
+                                                                                                                                                          Topt
+                                                                                                                                                          CSO-Model [11]
+                                                                                                                                                          Baseline-Model (1)
+                                                                                                                                                          Dataloc-Model (2)
+                                                                                                                                                          BTS-Model (4)
+                                      ( {M, N, K} · 210 , {A, B,C}loc = {GPU : 0,CPU : 1} )                                                               DR-Model (5)
+
+                                                                           (a) Sgemm
+
+                         7000
+
+
+
+
+                                                                                                                Relative Normalized Performance
+                                                                                                                                                    1.2
+Performance (Gflops/s)
+
+
+
+
+                         6000
+                                                                                                                                                    1.1
+                         5000
+                                                                                                                                                    1.0
+
+                         4000                                                                                                                       0.9
+
+                         3000                                                                                                                       0.8
+
+                                                                                                                                                    0.7
+                                   (2, 2, 16, 1, 1, 1)
+                                     (4, 4, 4, 0, 0, 1)
+                                     (4, 4, 4, 0, 1, 0)
+                                     (4, 4, 4, 0, 1, 1)
+                                     (4, 4, 4, 1, 0, 0)
+                                     (4, 4, 4, 1, 0, 1)
+                                     (4, 4, 4, 1, 1, 0)
+                                     (4, 4, 4, 1, 1, 1)
+                                   (4, 4, 32, 1, 1, 1)
+                                     (6, 6, 1, 1, 1, 1)
+                                   (6, 6, 48, 1, 1, 1)
+                                     (8, 8, 8, 0, 0, 1)
+                                     (8, 8, 8, 0, 1, 0)
+                                     (8, 8, 8, 0, 1, 1)
+                                     (8, 8, 8, 1, 0, 0)
+                                     (8, 8, 8, 1, 0, 1)
+                                     (8, 8, 8, 1, 1, 0)
+                                     (8, 8, 8, 1, 1, 1)
+                                   (8, 8, 27, 1, 1, 1)
+                                   (8, 8, 64, 1, 1, 1)
+                                  (12, 12, 3, 1, 1, 1)
+                                 (12, 12, 12, 0, 0, 1)
+                                 (12, 12, 12, 0, 1, 0)
+                                 (12, 12, 12, 0, 1, 1)
+                                 (12, 12, 12, 1, 0, 0)
+                                 (12, 12, 12, 1, 0, 1)
+                                 (12, 12, 12, 1, 1, 0)
+                                 (12, 12, 12, 1, 1, 1)
+                                  (16, 16, 2, 1, 1, 1)
+                                 (16, 16, 16, 0, 0, 1)
+                                 (16, 16, 16, 0, 1, 0)
+                                 (16, 16, 16, 0, 1, 1)
+                                 (16, 16, 16, 1, 0, 0)
+                                 (16, 16, 16, 1, 0, 1)
+                                 (16, 16, 16, 1, 1, 0)
+                                 (16, 16, 16, 1, 1, 1)
+                                  (18, 18, 6, 1, 1, 1)
+                                  (24, 24, 3, 1, 1, 1)
+                                  (24, 24, 8, 1, 1, 1)
+                                  (30, 30, 1, 1, 1, 1)
+                                  (32, 32, 4, 1, 1, 1)
+                                  (40, 40, 3, 1, 1, 1)
+                                                                                                                                                          Topt
+                                                                                                                                                          CSO-Model [11]
+                                                                                                                                                          Baseline-Model (1)
+                                                                                                                                                          Dataloc-Model (2)
+                                                                                                                                                          BTS-Model (4)
+                                     ( {M, N, K} · 210 , {A, B,C}loc = {GPU : 0,CPU : 1} )                                                                DR-Model (5)
+
+                                                                           (b) Dgemm
+Fig. 6. Evaluation of Tile selection ability for Sgemm (a) and Dgemm (b) on testbed II. The baseline performance (gray bars) is acquired using a static
+tiling size T = 2048, also used by BLASx. We compare this against the experimentally achieved performance using the optimal tiling size for each problem,
+T = Topt , the performance achieved using the tiling size predicted with the CSO-Model [11] and c) the performance achieved using T = Tbest returned
+by CoCoP eLia select using Equations 1, 2, 4, 5 respectively.
+
+achieved by the prediction of each model, and how this                              Topt is able to provide improvements of a median of 13.5%
+compares with a good baseline tiling size and the maximum                           and up to 20%. In this case, the incremental improvement of
+achievable performance, using the optimal tiling size Topt .                        each CoCoPeLia model is more evident; the Baseline-Model
+                                                                                    (Equation 1) provides a median speedup of 7%, the Dataloc-
+    Figure 6 shows the results of this comparison for dgemm                         Model (Equation 2) and BTS-Model (Equation 4) both provide
+and sgemm on Testbed II. The selected baseline tiling size                          median improvement of 10%, and the DR-Model (Equation 5)
+is T = 2048. First, the CSO-Model mispredicts the optimal                           provides 12% improved performance, which is very close
+tiling sizes in both cases leading to performance degradation                       to the Topt median. We note that bidirectional slowdown,
+compared to the baseline. This happens mostly because the                           considered by the BTS-Model, does not significantly affect
+CSO-Model does not take into account the non-linearity of                           the performance of gemm, which requires fewer d2h than h2d
+execution time, which results in favoring small tiles with lim-                     transfers. Its impact is more evident in level-1 BLAS functions
+ited performance. Additionally, it is evident that the baseline                     with similar transfers to and from device memory.
+is enough to provide near-optimal performance for Figure 6a,
+where even Topt provides a median performance improvement
+                                                                                    E. Performance evaluation
+of 1%, and a maximum of 10%. The CoCoPeLia models
+provide performance close to the baseline, with the DR-Model                          To evaluate the end-to-end performance of the runtime
+surpassing its performance, but less than 1% (which is close to                     scheme proposed in Figure 3, we extend the validation set
+the Topt median). On the other hand, in the case of Figure 6b,                      of Section V-B. For daxpy, we select 11 large problem
+
+
+
+                                                                                9
+                                                               cuBLASXt Sq. C:CPU mem        cuBLASXt Sq. Data:CPU mem                                                     cuBLASXt Fat-by-thin-8 Data:CPU mem
+                                                               BLASX Sq. C:CPU mem           BLASX Sq. Data:CPU mem                                                        BLASX Fat-by-thin-8 Data:CPU mem
+                                                               CoCoPeLia Sq. C:CPU mem       CoCoPeLia Sq. Data:CPU mem                                                    CoCoPeLia Fat-by-thin-8 Data:CPU mem
+                                                                             Dgemm@testbed-I                                                                                 Dgemm@testbed-II
+                                                         1.2
+         Performance (TFlops/s) Performance (TFlops/s)
+
+
+
+
+                                                                                                            Performance (TFlops/s) Performance (TFlops/s)
+                                                         1.0                                                                                                6
+                                                         0.8
+                                                                                                                                                            4
+                                                         0.6
+                                                         0.4                                                                                                2
+                                                         0.2
+                                                                             Sgemm@testbed-I                                                                                 Sgemm@testbed-II
+                                                         3.0                                                                                       15
+                                                         2.5
+                                                         2.0                                                                                       10
+                                                         1.5
+                                                                                                                                                            5
+                                                         1.0
+                                                         0.5
+                                                               4       6      8      10    12     14      16                                                    4     6      8      10    12     14             16
+                                                                     Problem Size (N 2 x N 2 ) x N 210
+                                                                                      10    10                                                                      Problem Size (N 2 x N 2 ) x N 210
+                                                                                                                                                                                     10    10
+
+
+Fig. 7. dgemm and sgemm performance evaluation for various problem sizes on testbeds I,II. We use three scenarios with different transfer-to-computation
+ratios: 1) M = N = K with A, B on the GPU and C requiring update from the CPU (blue), 2) M = N = K with A, B, C on the CPU (red) and 3)
+N =M = K    8
+              with A, B, C on the CPU (green).
+
+                                                                step=N ∗2
+sizes N = (1 −−−−−−→ 1024) · 220 for all three location                                                                                                                      TABLE IV
+combinations. For sgemm and dgemm, we select 25 square                                                                                           ( GEO ) MEAN PERCENTILE C O C O P E L IA PERFORMANCE IMPROVEMENT
+                                           step=0.5                                                                                                         OVER STATE OF THE ART GPU BLAS LIBRARIES .
+problem sizes M = N = K = (4 −−−−−→ 16) · 210 for
+all seven location combinations and for all thin/fat ratios of                                                                                                       System           Testbed I          Testbed II
+the aforementioned validation set. Overall, we evaluate 33                                                                                                      Offload Scenario    Full    Partial    Full    Partial
+                                                                                                                                                                      daxpy        21.5%     9.4%     19.9%     9.1%
+problems for daxpy and 325 for dgemm and sgemm.                                                                                                                      dgemm         16.2%     5.8%     32.2%    15.6%
+   We compare the performance of CoCoPeLia sgemm and                                                                                                                 sgemm         20.6%     5.7%     33.3%    15.7%
+dgemm against cuBLASXt and BLASX. These are both multi-
+GPU libraries, but cuBLASXt is the state of practice and
+BLASX offers the most performance for transfer-bound cases,                                                                     the other two libraries for the full offload scenario (red) and
+deeming them the most relevant comparison targets for single                                                                    the transfer-heavy fat-by-thin matrix multiplication (green).
+GPU 3-way concurrency. We compare the performance of                                                                            Third, CoCoPeLia provides better relative performance on
+CoCoPeLia daxpy against a unified memory implementation                                                                         testbed II, which has a lower bandwidth/FLOP ratio and
+with prefetching. Our BLASX results use the library default -                                                                   therefore transfers are a bigger bottleneck.
+static - tiling size T = 2048. For cuBLASXt, which accepts
+the tiling size as an input parameter, we test 10 different tiling                                                                 In Table IV we summarize the mean percentile performance
+sizes and choose the best for each problem. We note that                                                                        improvement of CoCoPeLia over the best among the two
+this nearly-exhaustive tiling size selection gives a performance                                                                other libraries for each problem size, calculated using the
+advantage to cuBLASXt over BLASX.                                                                                               geometric mean of the fraction of their times, respectively.
+   Figure 7 visualizes the performance of the three libraries                                                                   We separate full and partial offload cases for reference with
+for dgemm and sgemm on our two testbeds, for three sce-                                                                         relevant literature, where full offload refers to all data residing
+narios of problem sizes and data locations. We first note that                                                                  on the CPU, and partial offload to some of the data residing
+BLASX outperforms cuBLASXt in fat-by-thin matrices, while                                                                       on the GPU. The results are similar to the outlined cases in
+cuBLASXt shows better performance in the low transfer cases,                                                                    Figure 7; CoCoPeLia outperforms the other libraries by 16-
+where only the C matrix resides on the CPU. Second, Co-                                                                         33% in the full offload case and 5-15% in the partial offload
+CoPeLia outperforms both BLASX and cuBLASXt in all three                                                                        case, indicating that it is able to improve cuBLAS performance
+scenarios. For the low-transfer scenario (blue), its performance                                                                without architecture-specific tuning or bias towards specific
+is on par with cuBLASXt, but it considerably outperforms                                                                        data shapes.
+
+
+
+                                                                                                           10
+                          VI. C ONCLUSION                                           [12] B. Liu, W. Qiu, L. Jiang, and Z. Gong, “Software pipelining
+                                                                                         for graphic processing unit acceleration: Partition, scheduling and
+   In this work we outlined that 3-way concurrency is currently                          granularity,” The International Journal of High Performance Computing
+not well utilized in BLAS GPU offload libraries, since the                               Applications, vol. 30, no. 2, pp. 169–185, 2016. [Online]. Available:
+                                                                                         https://doi.org/10.1177/1094342015585845
+efficient split tile size depends on routine, problem, and                          [13] S. Hong and H. Kim, “An analytical model for a gpu architecture
+system-specific parameters. Since part of these only become                              with memory-level and thread-level parallelism awareness,” SIGARCH
+available during runtime, we propose a) two models for the                               Comput. Archit. News, vol. 37, no. 3, p. 152–163, Jun. 2009. [Online].
+                                                                                         Available: https://doi.org/10.1145/1555815.1555775
+3-way overlap offload time as a function of tile size, b) a
+                                                                                    [14] S. S. Baghsorkhi, M. Delahaye, S. J. Patel, W. D. Gropp, and W.-m. W.
+micro-benchmark approach for initializing the empirical model                            Hwu, “An adaptive performance modeling tool for gpu architectures,”
+parameters offline, and c) a runtime tile scheduler for efficient                        SIGPLAN Not., vol. 45, no. 5, p. 105–114, Jan. 2010. [Online].
+3-way overlap and data reuse. We combine these into an end-                              Available: https://doi.org/10.1145/1837853.1693470
+                                                                                    [15] Y. Zhang and J. D. Owens, “A quantitative performance analysis model
+to-end GPU BLAS framework, CoCoPeLia, and demonstrate                                    for gpu architectures,” in 2011 IEEE 17th International Symposium on
+its use for dgemm, sgemm and daxpy; our evaluation shows                                 High Performance Computer Architecture, 2011, pp. 382–393.
+that it achieves lower errors than previous approaches and is                       [16] J. Meng, V. A. Morozov, K. Kumaran, V. Vishwanath, and T. D. Uram,
+                                                                                         “Grophecy: Gpu performance projection from cpu code skeletons,” in SC
+usable in practice for efficient tile prediction. Furthermore, our                       ’11: Proceedings of 2011 International Conference for High Performance
+BLAS wrapper with runtime tile prediction offers considerable                            Computing, Networking, Storage and Analysis, 2011, pp. 1–11.
+performance improvement over previous offload approaches                            [17] M. Martell and H. Sato, “Linear performance-breakdown model: A
+                                                                                         framework for gpu kernel programs performance analysis,” International
+for all tested routines.                                                                 Journal of Networking and Computing, vol. 5, pp. 86–104, 01 2015.
+   The proposed model offers many directions for future work,                       [18] E. Konstantinidis and Y. Cotronis, “A quantitative roofline model
+since all components in Figure 3 can be improved separately;                             for gpu kernel performance estimation using micro-benchmarks
+                                                                                         and hardware metric profiling,” Journal of Parallel and Distributed
+the empirical modeling can be improved to limit second order                             Computing, vol. 107, pp. 37 – 56, 2017. [Online]. Available:
+errors; the models can be fine-tuned to specific implementa-                             http://www.sciencedirect.com/science/article/pii/S0743731517301247
+tions and/or other routines; the tile scheduling strategy can                       [19] C. Gregg and K. Hazelwood, “Where is the data? why you cannot
+be further optimized. We plan to extend the model to more                                debate cpu vs. gpu performance without the answer,” in (IEEE ISPASS)
+                                                                                         IEEE International Symposium on Performance Analysis of Systems
+complex tiling schemes for level-3 BLAS, and include multi-                              and Software, 2011, pp. 134–144.
+GPU and host-assisted execution, with the vision of providing                       [20] D. Schaa and D. Kaeli, “Exploring the multiple-gpu design space,” in
+a portable auto-tuned heterogeneous BLAS library.                                        2009 IEEE International Symposium on Parallel Distributed Processing,
+                                                                                         2009, pp. 1–12.
+                                                                                    [21] M. Boyer, J. Meng, and K. Kumaran, “Improving gpu performance
+                             R EFERENCES                                                 prediction with data transfer modeling,” in 2013 IEEE International
+ [1] J. Dongarra, “Basic linear algebra subprograms technical (blast) forum              Symposium on Parallel Distributed Processing, Workshops and Phd
+     standard ii,” IJHPCA, vol. 16, pp. 1–111, 05 2002.                                  Forum, 2013, pp. 1097–1106.
+ [2] “developer.nvidia.com/cublas.”                                                 [22] A. Riahi, A. Savadi, and M. Naghibzadeh, “Comparison of analytical and
+ [3] W. Li, G. Jin, X. Cui, and S. See, “An evaluation of unified memory                 ml-based models for predicting cpu–gpu data transfer time,” Computing,
+     technology on nvidia gpus,” in 2015 15th IEEE/ACM International                     January 2020.
+     Symposium on Cluster, Cloud and Grid Computing, 2015, pp. 1092–                [23] M. R. Meswani, L. Carrington, D. Unat, A. Snavely, S. Baden, and
+     1098.                                                                               S. Poole, “Modeling and predicting performance of high performance
+ [4] A. Mishra, L. Li, M. Kong, H. Finkel, and B. Chapman, “Bench-                       computing applications on hardware accelerators,” in 2012 IEEE 26th
+     marking and evaluating unified memory for openmp gpu offloading,”                   International Parallel and Distributed Processing Symposium Workshops
+     in Proceedings of the Fourth Workshop on the LLVM Compiler                          PhD Forum, 2012, pp. 1828–1837.
+     Infrastructure in HPC, 2017, pp. 1–10.                                         [24] T. Hoefler, W. Gropp, W. Kramer, and M. Snir, “Performance modeling
+ [5] C. Pearson, A. Dakkak, S. Hashash, C. Li, I.-H. Chung, J. Xiong,                    for systematic performance tuning,” in SC ’11: Proceedings of 2011
+     and W.-M. Hwu, “Evaluating characteristics of cuda communication                    International Conference for High Performance Computing, Networking,
+     primitives on high-bandwidth interconnects,” in Proceedings of the 2019             Storage and Analysis, 2011, pp. 1–12.
+     ACM/SPEC International Conference on Performance Engineering,                  [25] E. Chan, F. Van Zee, P. Bientinesi, E. Quintana-Orti, G. Quintana-Orti,
+     2019, pp. 209–218.                                                                  and R. Van de Geijn, SuperMatrix: a Multithreaded Runtime Scheduling
+ [6] “developer.nvidia.com/cublasxt.”                                                    System for Algorithms-by-blocks, ser. Technical report (University
+ [7] “docs.nvidia.com/cuda/nvblas.”                                                      of Texas at Austin. Department of Computer Sciences). Computer
+ [8] L. Wang, W. Wu, J. Xiao, and Y. Yang, “BLASX: A high                                Science Department, University of Texas at Austin, 2007. [Online].
+     performance level-3 BLAS library for heterogeneous multi-gpu                        Available: https://books.google.gr/books?id=ggn-jwEACAAJ
+     computing,” CoRR, vol. abs/1510.05041, 2015. [Online]. Available:              [26] S. Tomov, J. Dongarra, and M. Baboulin, “Towards dense
+     http://arxiv.org/abs/1510.05041                                                     linear algebra for hybrid gpu accelerated manycore systems,”
+ [9] T. Gautier and J. V. F. Lima, “Xkblas: a high performance implementa-               Parallel Computing, vol. 36, no. 5, pp. 232 – 240, 2010,
+     tion of blas-3 kernels on multi-gpu server,” in 2020 28th Euromicro                 parallel Matrix Algorithms and Applications. [Online]. Available:
+     International Conference on Parallel, Distributed and Network-Based                 http://www.sciencedirect.com/science/article/pii/S0167819109001276
+     Processing (PDP), 2020, pp. 1–8.                                               [27] E. Agullo, C. Augonnet, J. Dongarra, H. Ltaief, R. Namyst,
+[10] J. Gómez-Luna, J. M. González-Linares, J. I. Benavides, and                       S. Thibault, and S. Tomov, “Faster, Cheaper, Better – a Hybridization
+     N. Guil, “Performance models for asynchronous data transfers                        Methodology to Develop Linear Algebra Software for GPUs,” in
+     on consumer graphics processing units,” Journal of Parallel and                     GPU Computing Gems, W. mei W. Hwu, Ed. Morgan Kaufmann,
+     Distributed Computing, vol. 72, no. 9, pp. 1117 – 1126, 2012,                       Sep. 2010, vol. 2. [Online]. Available: https://hal.inria.fr/inria-00547847
+     accelerators for High-Performance Computing. [Online]. Available:              [28] F. G. Van Zee and R. A. van de Geijn, “BLIS: A framework for rapidly
+     http://www.sciencedirect.com/science/article/pii/S0743731511001468                  instantiating BLAS functionality,” ACM Transactions on Mathematical
+[11] B. v. Werkhoven, J. Maassen, F. J. Seinstra, and H. E. Bal, “Perfor-                Software, vol. 41, no. 3, pp. 14:1–14:33, Jun. 2015. [Online]. Available:
+     mance models for cpu-gpu data transfers,” in 2014 14th IEEE/ACM                     http://doi.acm.org/10.1145/2764454
+     International Symposium on Cluster, Cloud and Grid Computing, 2014,            [29] W. Wu, A. Bouteiller, G. Bosilca, M. Faverge, and J. Dongarra, “Hier-
+     pp. 11–20.                                                                          archical dag scheduling for hybrid distributed systems,” in 2015 IEEE
+
+
+
+
+                                                                               11
+     International Parallel and Distributed Processing Symposium, 2015, pp.
+     156–165.
+[30] G. Bernabé, J. Cuenca, L.-P. Garcı́a, and D. Giménez, “Tuning
+     basic linear algebra routines for hybrid cpu+gpu platforms,”
+     Procedia Computer Science, vol. 29, pp. 30 – 39, 2014, 2014
+     International Conference on Computational Science. [Online]. Available:
+     http://www.sciencedirect.com/science/article/pii/S187705091400180X
+[31] E. Peise and P. Bientinesi, “Performance modeling for dense
+     linear algebra,” CoRR, vol. abs/1209.2364, 2012. [Online]. Available:
+     http://arxiv.org/abs/1209.2364
+[32] T. Hoefler, T. Schneider, and A. Lumsdaine, “Loggp in theory and
+     practice–an in-depth analysis of modern interconnection networks and
+     benchmarking methods for collective operations,” Simulation Modelling
+     Practice and Theory, vol. 17, no. 9, pp. 1511–1521, 2009.
+
+
+
+
+                                                                               12
+
