@@ -1,0 +1,519 @@
+--- a/src/baseline_impl.cu
++++ b/src/baseline_impl.cu
+@@ -42,24 +42,24 @@
+     half beta_half = __float2half(beta);
+ 
+     // prepare for NCCL
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
+ 
+     // Launch GEMM
+     cublasGemmEx(this->my_handle, CUBLAS_OP_T, CUBLAS_OP_N, 
+                     N, M, K,
+-                    (const void*)reinterpret_cast<half *>(&alpha_half),
+-                    (const void*)reinterpret_cast<half *>(B.data_ptr<at::Half>()),
+-                    CUDA_R_16F, K, 
+-                    (const void*)reinterpret_cast<half *>(A.data_ptr<at::Half>()), 
+-                    CUDA_R_16F, K, 
+-                    (const void*)reinterpret_cast<half *>(&beta_half),
+-                    (void*)reinterpret_cast<half *>(C.data_ptr<at::Half>()), 
+-                    CUDA_R_16F, N,
+-                    CUBLAS_COMPUTE_16F,
++                    (const void*)&alpha,
++                    (const void*)reinterpret_cast<half *>(B.data_ptr<at::BFloat16>()),
++                    CUDA_R_16BF, K, 
++                    (const void*)reinterpret_cast<half *>(A.data_ptr<at::BFloat16>()), 
++                    CUDA_R_16BF, K, 
++                    (const void*)&beta,
++                    (void*)reinterpret_cast<half *>(C.data_ptr<at::BFloat16>()), 
++                    CUDA_R_16BF, N,
++                    CUBLAS_COMPUTE_32F,
+                     CUBLAS_GEMM_DEFAULT_TENSOR_OP);
+ 
+     // Launch AllReduce after GEMM
+-    NCCL_CHECK(ncclAllReduce((void *)c_ptr, (void *)c_ptr, (M * N), ncclFloat16, ncclSum, this->comm, this->my_stream));
++    NCCL_CHECK(ncclAllReduce((void *)c_ptr, (void *)c_ptr, (M * N), ncclBfloat16, ncclSum, this->comm, this->my_stream));
+ }
+ 
+ void BaselineImpl::GemmReduceScatter(
+@@ -84,27 +84,27 @@
+     half beta_half = __float2half(beta);
+ 
+     // prepare for NCCL
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
+-    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::Half>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
++    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::BFloat16>());
+ 
+     // Launch GEMM
+     cublasGemmEx(this->my_handle, CUBLAS_OP_T, CUBLAS_OP_N, 
+                     N, M, K,
+-                    (const void*)reinterpret_cast<half *>(&alpha_half),
+-                    (const void*)reinterpret_cast<half *>(B.data_ptr<at::Half>()),
+-                    CUDA_R_16F, K, 
+-                    (const void*)reinterpret_cast<half *>(A.data_ptr<at::Half>()), 
+-                    CUDA_R_16F, K, 
+-                    (const void*)reinterpret_cast<half *>(&beta_half),
+-                    (void*)reinterpret_cast<half *>(C.data_ptr<at::Half>()), 
+-                    CUDA_R_16F, N,
+-                    CUBLAS_COMPUTE_16F,
++                    (const void*)&alpha,
++                    (const void*)reinterpret_cast<half *>(B.data_ptr<at::BFloat16>()),
++                    CUDA_R_16BF, K, 
++                    (const void*)reinterpret_cast<half *>(A.data_ptr<at::BFloat16>()), 
++                    CUDA_R_16BF, K, 
++                    (const void*)&beta,
++                    (void*)reinterpret_cast<half *>(C.data_ptr<at::BFloat16>()), 
++                    CUDA_R_16BF, N,
++                    CUBLAS_COMPUTE_32F,
+                     CUBLAS_GEMM_DEFAULT_TENSOR_OP);
+ 
+     // Launch AllReduce after GEMM
+     size_t recvcount = (M * N) / this->my_size;
+     NCCL_CHECK(ncclReduceScatter((void *)c_ptr, (void *)d_ptr, recvcount, 
+-        ncclFloat16, ncclSum, this->comm, this->my_stream));
++        ncclBfloat16, ncclSum, this->comm, this->my_stream));
+ }
+ 
+ void BaselineImpl::GemmAll2All(at::Tensor A, at::Tensor B, at::Tensor C,
+@@ -130,21 +130,21 @@
+     half beta_half = __float2half(beta);
+ 
+     // prepare for NCCL
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
+-    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::Half>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
++    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::BFloat16>());
+ 
+     // Launch GEMM
+     cublasGemmEx(this->my_handle, CUBLAS_OP_T, CUBLAS_OP_N, 
+                     N, M, K,
+-                    (const void*)reinterpret_cast<half *>(&alpha_half),
+-                    (const void*)reinterpret_cast<half *>(B.data_ptr<at::Half>()),
+-                    CUDA_R_16F, K, 
+-                    (const void*)reinterpret_cast<half *>(A.data_ptr<at::Half>()), 
+-                    CUDA_R_16F, K, 
+-                    (const void*)reinterpret_cast<half *>(&beta_half),
+-                    (void*)reinterpret_cast<half *>(C.data_ptr<at::Half>()), 
+-                    CUDA_R_16F, N,
+-                    CUBLAS_COMPUTE_16F,
++                    (const void*)&alpha,
++                    (const void*)reinterpret_cast<half *>(B.data_ptr<at::BFloat16>()),
++                    CUDA_R_16BF, K, 
++                    (const void*)reinterpret_cast<half *>(A.data_ptr<at::BFloat16>()), 
++                    CUDA_R_16BF, K, 
++                    (const void*)&beta,
++                    (void*)reinterpret_cast<half *>(C.data_ptr<at::BFloat16>()), 
++                    CUDA_R_16BF, N,
++                    CUBLAS_COMPUTE_32F,
+                     CUBLAS_GEMM_DEFAULT_TENSOR_OP);
+ 
+     // Launch All2All after GEMM
+@@ -156,11 +156,11 @@
+     for (int i = 0; i < this->my_size; i++){
+         if (i == this->my_rank){continue;}
+         size_t sendcount = mlen_cpu_ptr[this->my_rank * this->my_size + i] * N;
+-        NCCL_CHECK(ncclSend((void *)(c_ptr + src_acc_addr), sendcount, ncclFloat16, i, this->comm, this->my_stream));
++        NCCL_CHECK(ncclSend((void *)(c_ptr + src_acc_addr), sendcount, ncclBfloat16, i, this->comm, this->my_stream));
+         src_acc_addr += sendcount;
+ 
+         size_t recvcount = mlen_cpu_ptr[i * this->my_size + this->my_rank] * N;
+-        NCCL_CHECK(ncclRecv((void *)(d_ptr + dst_acc_addr), recvcount, ncclFloat16, i, this->comm, this->my_stream));
++        NCCL_CHECK(ncclRecv((void *)(d_ptr + dst_acc_addr), recvcount, ncclBfloat16, i, this->comm, this->my_stream));
+         dst_acc_addr += recvcount;
+     }
+     NCCL_CHECK(ncclGroupEnd());
+@@ -205,15 +205,15 @@
+ 
+     cublasGemmEx(cublasH, CUBLAS_OP_T, CUBLAS_OP_N, 
+                     N, M, K,
+-                    (const void*)reinterpret_cast<half *>(&alpha_half), 
+-                    (const void*)reinterpret_cast<half *>(B.data_ptr<at::Half>()),
+-                    CUDA_R_16F, K, 
+-                    (const void*)reinterpret_cast<half *>(A.data_ptr<at::Half>()), 
+-                    CUDA_R_16F, K,  
+-                    (const void*)reinterpret_cast<half *>(&beta_half),
+-                    (void*)reinterpret_cast<half *>(C.data_ptr<at::Half>()), 
+-                    CUDA_R_16F, N,
+-                    CUBLAS_COMPUTE_16F,
++                    (const void*)&alpha, 
++                    (const void*)reinterpret_cast<half *>(B.data_ptr<at::BFloat16>()),
++                    CUDA_R_16BF, K, 
++                    (const void*)reinterpret_cast<half *>(A.data_ptr<at::BFloat16>()), 
++                    CUDA_R_16BF, K,  
++                    (const void*)&beta,
++                    (void*)reinterpret_cast<half *>(C.data_ptr<at::BFloat16>()), 
++                    CUDA_R_16BF, N,
++                    CUBLAS_COMPUTE_32F,
+                     CUBLAS_GEMM_DEFAULT_TENSOR_OP);
+ }
+ 
+@@ -222,9 +222,9 @@
+     int M = C.size(0);
+     int N = C.size(1);
+ 
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
+ 
+-    ncclAllReduce((void *)c_ptr, (void *)c_ptr, (M * N), ncclFloat16, ncclSum, this->comm, this->my_stream);
++    ncclAllReduce((void *)c_ptr, (void *)c_ptr, (M * N), ncclBfloat16, ncclSum, this->comm, this->my_stream);
+ }
+ 
+ void BaselineImpl::NcclReduceScatter(at::Tensor C){
+@@ -232,11 +232,11 @@
+     int M = C.size(0);
+     int N = C.size(1);
+ 
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
+ 
+     size_t recvcount = (M * N) / this->my_size;
+     NCCL_CHECK(ncclReduceScatter((void *)c_ptr, (void *)(c_ptr + this->my_rank * recvcount), recvcount, 
+-        ncclFloat16, ncclSum, this->comm, this->my_stream));
++        ncclBfloat16, ncclSum, this->comm, this->my_stream));
+ }
+ 
+ void BaselineImpl::NcclAll2All(at::Tensor C, 
+@@ -251,8 +251,8 @@
+     assert(mLen_CPU.size(1) == this->my_size);
+ 
+     int* mlen_cpu_ptr = mLen_CPU.data_ptr<int>();
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
+-    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::Half>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
++    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::BFloat16>());
+ 
+     // First SEND
+     int src_acc_addr = 0;
+@@ -262,11 +262,11 @@
+     for (int i = 0; i < this->my_size; i++){
+         if (i == this->my_rank){continue;}
+         size_t sendcount = mlen_cpu_ptr[this->my_rank * this->my_size + i] * N;
+-        NCCL_CHECK(ncclSend((void *)(c_ptr + src_acc_addr), sendcount, ncclFloat16, i, this->comm, this->my_stream));
++        NCCL_CHECK(ncclSend((void *)(c_ptr + src_acc_addr), sendcount, ncclBfloat16, i, this->comm, this->my_stream));
+         src_acc_addr += sendcount;
+ 
+         size_t recvcount = mlen_cpu_ptr[i * this->my_size + this->my_rank] * N;
+-        NCCL_CHECK(ncclRecv((void *)(d_ptr + dst_acc_addr), recvcount, ncclFloat16, i, this->comm, this->my_stream));
++        NCCL_CHECK(ncclRecv((void *)(d_ptr + dst_acc_addr), recvcount, ncclBfloat16, i, this->comm, this->my_stream));
+         dst_acc_addr += recvcount;
+     }
+     NCCL_CHECK(ncclGroupEnd());
+--- a/src/gemm/gemm.cu
++++ b/src/gemm/gemm.cu
+@@ -30,22 +30,22 @@
+     cutlass::gemm::GemmCoord problem_size(M, N, K);
+ 
+     // A matrix configuration
+-    using ElementA = cutlass::half_t;                                // Element type for A matrix operand
++    using ElementA = cutlass::bfloat16_t;                                // Element type for A matrix operand
+     using LayoutA = cutlass::layout::RowMajor;                      // Layout type for A matrix operand
+     constexpr int AlignmentA  = 128 / cutlass::sizeof_bits<ElementA>::value;    // Memory access granularity/alignment of A matrix in units of elements (up to 16 bytes)
+ 
+     // B matrix configuration
+-    using ElementB = cutlass::half_t;                                // Element type for B matrix operand
++    using ElementB = cutlass::bfloat16_t;                                // Element type for B matrix operand
+     using LayoutB = cutlass::layout::ColumnMajor;                      // Layout type for B matrix operand
+     constexpr int AlignmentB  = 128 / cutlass::sizeof_bits<ElementB>::value;    // Memory access granularity/alignment of B matrix in units of elements (up to 16 bytes)
+ 
+     // C/D matrix configuration
+-    using ElementC = cutlass::half_t;                                // Element type for C and D matrix operands
++    using ElementC = cutlass::bfloat16_t;                                // Element type for C and D matrix operands
+     using LayoutC = cutlass::layout::RowMajor;                      // Layout type for C and D matrix operands
+     constexpr int AlignmentC  = 128 / cutlass::sizeof_bits<ElementC>::value;    // Memory access granularity/alignment of C/D matrices in units of elements (up to 16 bytes)
+ 
+     // Multiply-accumulate blocking/pipelining details
+-    using ElementAccumulator  = cutlass::half_t;                          // Element type for internal accumulation
++    using ElementAccumulator  = float;                          // Element type for internal accumulation
+     using ArchTag             = cutlass::arch::Sm80;                      // Tag indicating the minimum SM that supports the intended feature
+     using OperatorClass       = cutlass::arch::OpClassTensorOp;           // Operator class tag
+ 
+--- a/src/overlap/gemm_scatter.cu
++++ b/src/overlap/gemm_scatter.cu
+@@ -22,22 +22,22 @@
+     cutlass::gemm::GemmCoord problem_size(M, N, K);
+ 
+     // A matrix configuration
+-    using ElementA = cutlass::half_t;                                // Element type for A matrix operand
++    using ElementA = cutlass::bfloat16_t;                                // Element type for A matrix operand
+     using LayoutA = cutlass::layout::RowMajor;                      // Layout type for A matrix operand
+     constexpr int AlignmentA  = 128 / cutlass::sizeof_bits<ElementA>::value;    // Memory access granularity/alignment of A matrix in units of elements (up to 16 bytes)
+ 
+     // B matrix configuration
+-    using ElementB = cutlass::half_t;                                // Element type for B matrix operand
++    using ElementB = cutlass::bfloat16_t;                                // Element type for B matrix operand
+     using LayoutB = cutlass::layout::ColumnMajor;                      // Layout type for B matrix operand
+     constexpr int AlignmentB  = 128 / cutlass::sizeof_bits<ElementB>::value;    // Memory access granularity/alignment of B matrix in units of elements (up to 16 bytes)
+ 
+     // C/D matrix configuration
+-    using ElementC = cutlass::half_t;                                // Element type for C and D matrix operands
++    using ElementC = cutlass::bfloat16_t;                                // Element type for C and D matrix operands
+     using LayoutC = cutlass::layout::RowMajor;                      // Layout type for C and D matrix operands
+     constexpr int AlignmentC  = 128 / cutlass::sizeof_bits<ElementC>::value;    // Memory access granularity/alignment of C/D matrices in units of elements (up to 16 bytes)
+ 
+     // Multiply-accumulate blocking/pipelining details
+-    using ElementAccumulator  = cutlass::half_t;                          // Element type for internal accumulation
++    using ElementAccumulator  = float;                          // Element type for internal accumulation
+     using ArchTag             = cutlass::arch::Sm80;                      // Tag indicating the minimum SM that supports the intended feature
+     using OperatorClass       = cutlass::arch::OpClassTensorOp;           // Operator class tag
+ 
+@@ -70,10 +70,10 @@
+ 
+     typename GemmScatter::Arguments arguments(
+       problem_size,
+-      reinterpret_cast<cutlass::half_t*>(A),
+-      reinterpret_cast<cutlass::half_t*>(B), 
+-      reinterpret_cast<cutlass::half_t*>(D), 
+-      reinterpret_cast<cutlass::half_t*>(D), 
++      reinterpret_cast<cutlass::bfloat16_t*>(A),
++      reinterpret_cast<cutlass::bfloat16_t*>(B), 
++      reinterpret_cast<cutlass::bfloat16_t*>(D), 
++      reinterpret_cast<cutlass::bfloat16_t*>(D), 
+       (int64_t)K, 
+       (int64_t)K, 
+       (int64_t)N, 
+--- a/src/overlap/gemm_signal.cu
++++ b/src/overlap/gemm_signal.cu
+@@ -22,22 +22,22 @@
+     cutlass::gemm::GemmCoord problem_size(M, N, K);
+ 
+     // A matrix configuration
+-    using ElementA = cutlass::half_t;                                // Element type for A matrix operand
++    using ElementA = cutlass::bfloat16_t;                                // Element type for A matrix operand
+     using LayoutA = cutlass::layout::RowMajor;                      // Layout type for A matrix operand
+     constexpr int AlignmentA  = 128 / cutlass::sizeof_bits<ElementA>::value;    // Memory access granularity/alignment of A matrix in units of elements (up to 16 bytes)
+ 
+     // B matrix configuration
+-    using ElementB = cutlass::half_t;                                // Element type for B matrix operand
++    using ElementB = cutlass::bfloat16_t;                                // Element type for B matrix operand
+     using LayoutB = cutlass::layout::ColumnMajor;                      // Layout type for B matrix operand
+     constexpr int AlignmentB  = 128 / cutlass::sizeof_bits<ElementB>::value;    // Memory access granularity/alignment of B matrix in units of elements (up to 16 bytes)
+ 
+     // C/D matrix configuration
+-    using ElementC = cutlass::half_t;                                // Element type for C and D matrix operands
++    using ElementC = cutlass::bfloat16_t;                                // Element type for C and D matrix operands
+     using LayoutC = cutlass::layout::RowMajor;                      // Layout type for C and D matrix operands
+     constexpr int AlignmentC  = 128 / cutlass::sizeof_bits<ElementC>::value;    // Memory access granularity/alignment of C/D matrices in units of elements (up to 16 bytes)
+ 
+     // Multiply-accumulate blocking/pipelining details
+-    using ElementAccumulator  = cutlass::half_t;                          // Element type for internal accumulation
++    using ElementAccumulator  = float;                          // Element type for internal accumulation
+     using ArchTag             = cutlass::arch::Sm80;                      // Tag indicating the minimum SM that supports the intended feature
+     using OperatorClass       = cutlass::arch::OpClassTensorOp;           // Operator class tag
+ 
+@@ -70,10 +70,10 @@
+ 
+     typename GemmSignal::Arguments arguments(
+       problem_size,
+-      reinterpret_cast<cutlass::half_t*>(A),
+-      reinterpret_cast<cutlass::half_t*>(B), 
+-      reinterpret_cast<cutlass::half_t*>(D), 
+-      reinterpret_cast<cutlass::half_t*>(D), 
++      reinterpret_cast<cutlass::bfloat16_t*>(A),
++      reinterpret_cast<cutlass::bfloat16_t*>(B), 
++      reinterpret_cast<cutlass::bfloat16_t*>(D), 
++      reinterpret_cast<cutlass::bfloat16_t*>(D), 
+       (int64_t)K, 
+       (int64_t)K, 
+       (int64_t)N, 
+--- a/src/overlap_impl.cu
++++ b/src/overlap_impl.cu
+@@ -38,9 +38,9 @@
+     int K = A.size(1);
+     int N = B.size(0);
+ 
+-    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::Half>());
+-    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::Half>());
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
++    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::BFloat16>());
++    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::BFloat16>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
+ 
+     gemm_func_table[Algo](
+         M, N, K, a_ptr, b_ptr, c_ptr, this->gemm_stream
+@@ -68,15 +68,15 @@
+     int K = A.size(1);
+     int N = B.size(0);
+ 
+-    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::Half>());
+-    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::Half>());
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
++    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::BFloat16>());
++    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::BFloat16>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
+ 
+     gemm_func_table[Algo](
+         M, N, K, a_ptr, b_ptr, c_ptr, this->gemm_stream
+     );
+ 
+-    NCCL_CHECK(ncclAllReduce((void *)c_ptr, (void *)c_ptr, (M * N), ncclFloat16, ncclSum, this->comm, this->gemm_stream));
++    NCCL_CHECK(ncclAllReduce((void *)c_ptr, (void *)c_ptr, (M * N), ncclBfloat16, ncclSum, this->comm, this->gemm_stream));
+ }
+ 
+ void OverlapImpl::GemmReduceScatter(
+@@ -86,10 +86,10 @@
+     int K = A.size(1);
+     int N = B.size(0);
+ 
+-    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::Half>());
+-    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::Half>());
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
+-    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::Half>());
++    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::BFloat16>());
++    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::BFloat16>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
++    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::BFloat16>());
+ 
+     gemm_func_table[Algo](
+         M, N, K, a_ptr, b_ptr, c_ptr, this->gemm_stream
+@@ -97,7 +97,7 @@
+ 
+     size_t recvcount = (M * N) / this->my_size;
+     NCCL_CHECK(ncclReduceScatter((void *)c_ptr, (void *)d_ptr, recvcount, 
+-        ncclFloat16, ncclSum, this->comm, this->gemm_stream));
++        ncclBfloat16, ncclSum, this->comm, this->gemm_stream));
+ }
+ 
+ void OverlapImpl::GemmAll2All(at::Tensor A, at::Tensor B, at::Tensor C, at::Tensor D, 
+@@ -107,10 +107,10 @@
+     int K = A.size(1);
+     int N = B.size(0);
+ 
+-    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::Half>());
+-    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::Half>());
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
+-    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::Half>());
++    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::BFloat16>());
++    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::BFloat16>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
++    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::BFloat16>());
+     int* mlen_cpu_ptr = mLen_CPU.data_ptr<int>();
+ 
+     gemm_func_table[Algo](
+@@ -126,11 +126,11 @@
+     for (int i = 0; i < this->my_size; i++){
+         if (i == this->my_rank){continue;}
+         size_t sendcount = mlen_cpu_ptr[this->my_rank * this->my_size + i] * N;
+-        NCCL_CHECK(ncclSend((void *)(c_ptr + src_acc_addr), sendcount, ncclFloat16, i, this->comm, this->gemm_stream));
++        NCCL_CHECK(ncclSend((void *)(c_ptr + src_acc_addr), sendcount, ncclBfloat16, i, this->comm, this->gemm_stream));
+         src_acc_addr += sendcount;
+ 
+         size_t recvcount = mlen_cpu_ptr[i * this->my_size + this->my_rank] * N;
+-        NCCL_CHECK(ncclRecv((void *)(d_ptr + dst_acc_addr), recvcount, ncclFloat16, i, this->comm, this->gemm_stream));
++        NCCL_CHECK(ncclRecv((void *)(d_ptr + dst_acc_addr), recvcount, ncclBfloat16, i, this->comm, this->gemm_stream));
+         dst_acc_addr += recvcount;
+     }
+     NCCL_CHECK(ncclGroupEnd());
+@@ -145,9 +145,9 @@
+     int M = C.size(0);
+     int N = C.size(1);
+ 
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
+ 
+-    ncclAllReduce((void *)c_ptr, (void *)c_ptr, (M * N), ncclFloat16, ncclSum, this->comm, this->gemm_stream);
++    ncclAllReduce((void *)c_ptr, (void *)c_ptr, (M * N), ncclBfloat16, ncclSum, this->comm, this->gemm_stream);
+ }
+ 
+ void OverlapImpl::SegAllReduce(at::Tensor C, at::Tensor cSEG_CPU, int64_t SegNum){
+@@ -155,13 +155,13 @@
+     int M = C.size(0);
+     int N = C.size(1);
+ 
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
+     int* cseg_cpu_ptr = cSEG_CPU.data_ptr<int>();
+ 
+     int acc_addr = 0;
+     for (int s = 0; s < SegNum; s++){
+         int commSize = M * N / SegNum * cseg_cpu_ptr[s];
+-        NCCL_CHECK(ncclAllReduce((void *)(c_ptr + acc_addr), (void *)(c_ptr + acc_addr), commSize, ncclFloat16, ncclSum, this->comm, this->gemm_stream));
++        NCCL_CHECK(ncclAllReduce((void *)(c_ptr + acc_addr), (void *)(c_ptr + acc_addr), commSize, ncclBfloat16, ncclSum, this->comm, this->gemm_stream));
+         acc_addr += commSize;
+     }
+ }
+@@ -171,11 +171,11 @@
+     int M = C.size(0);
+     int N = C.size(1);
+ 
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
+ 
+     size_t recvcount = (M * N) / this->my_size;
+     NCCL_CHECK(ncclReduceScatter((void *)c_ptr, (void *)(c_ptr + this->my_rank * recvcount), recvcount, 
+-        ncclFloat16, ncclSum, this->comm, this->gemm_stream));
++        ncclBfloat16, ncclSum, this->comm, this->gemm_stream));
+ }
+ 
+ void OverlapImpl::NcclAll2All(at::Tensor C, 
+@@ -190,8 +190,8 @@
+     assert(mLen_CPU.size(1) == this->my_size);
+ 
+     int* mlen_cpu_ptr = mLen_CPU.data_ptr<int>();
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
+-    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::Half>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
++    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::BFloat16>());
+ 
+     // First SEND
+     int src_acc_addr = 0;
+@@ -201,11 +201,11 @@
+     for (int i = 0; i < this->my_size; i++){
+         if (i == this->my_rank){continue;}
+         size_t sendcount = mlen_cpu_ptr[this->my_rank * this->my_size + i] * N;
+-        NCCL_CHECK(ncclSend((void *)(c_ptr + src_acc_addr), sendcount, ncclFloat16, i, this->comm, this->gemm_stream));
++        NCCL_CHECK(ncclSend((void *)(c_ptr + src_acc_addr), sendcount, ncclBfloat16, i, this->comm, this->gemm_stream));
+         src_acc_addr += sendcount;
+ 
+         size_t recvcount = mlen_cpu_ptr[i * this->my_size + this->my_rank] * N;
+-        NCCL_CHECK(ncclRecv((void *)(d_ptr + dst_acc_addr), recvcount, ncclFloat16, i, this->comm, this->gemm_stream));
++        NCCL_CHECK(ncclRecv((void *)(d_ptr + dst_acc_addr), recvcount, ncclBfloat16, i, this->comm, this->gemm_stream));
+         dst_acc_addr += recvcount;
+     }
+     NCCL_CHECK(ncclGroupEnd());
+@@ -234,9 +234,9 @@
+ 
+     int SegSize = cSEG_GPU.size(0);
+ 
+-    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::Half>());
+-    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::Half>());
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
++    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::BFloat16>());
++    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::BFloat16>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
+     int* mm_ptr = MM.data_ptr<int>();
+     int* ra_ptr = RA.data_ptr<int>();
+ 
+@@ -253,7 +253,7 @@
+         // The signal is reset by the wait kernel
+         kernel_wait_flag<<<1, 1, 0, this->comm_stream>>> (this_seg, (mm_ptr + iter));
+         // Communicate the data
+-        NCCL_CHECK(ncclAllReduce((void *)(c_ptr + acc_addr), (void *)(c_ptr + acc_addr), commSize, ncclFloat16, ncclSum, this->comm, this->comm_stream));
++        NCCL_CHECK(ncclAllReduce((void *)(c_ptr + acc_addr), (void *)(c_ptr + acc_addr), commSize, ncclBfloat16, ncclSum, this->comm, this->comm_stream));
+         acc_addr += commSize;
+     }
+ 
+@@ -288,10 +288,10 @@
+ 
+     int SegSize = cSEG_GPU.size(0);
+ 
+-    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::Half>());
+-    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::Half>());
+-    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::Half>());
+-    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::Half>());
++    half* a_ptr = reinterpret_cast<half *>(A.data_ptr<at::BFloat16>());
++    half* b_ptr = reinterpret_cast<half *>(B.data_ptr<at::BFloat16>());
++    half* c_ptr = reinterpret_cast<half *>(C.data_ptr<at::BFloat16>());
++    half* d_ptr = reinterpret_cast<half *>(D.data_ptr<at::BFloat16>());
+     int* mm_ptr = MM.data_ptr<int>();
+     int* ra_ptr = RA.data_ptr<int>();
+     int* re_ptr = RE.data_ptr<int>();
+@@ -310,7 +310,7 @@
+         kernel_wait_flag<<<1, 1, 0, this->comm_stream>>> (this_seg, (mm_ptr + iter));
+         // Communicate the data
+         NCCL_CHECK(ncclReduceScatter((void *)(c_ptr + acc_addr), (void *)(d_ptr + acc_addr / this->my_size), 
+-            (commSize / this->my_size), ncclFloat16, ncclSum, this->comm, this->comm_stream));
++            (commSize / this->my_size), ncclBfloat16, ncclSum, this->comm, this->comm_stream));
+         acc_addr += commSize;
+     }
+ 

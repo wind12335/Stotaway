@@ -1,0 +1,146 @@
+diff --git a/syncopate/communication/comm_runtime/communication_context.py b/syncopate/communication/comm_runtime/communication_context.py
+index 5be6024..219168f 100644
+--- a/syncopate/communication/comm_runtime/communication_context.py
++++ b/syncopate/communication/comm_runtime/communication_context.py
+@@ -6,7 +6,11 @@ import torch
+ from syncopate.communication.comm_runtime.non_tma_persistent_copy import persistent_naive_copy_last_contig
+ from syncopate.communication.comm_runtime.operations import CollectiveComm, CommInfo, CopyEngineOp, IntraNodeSignal, SMCopyOp, WaitIntraNodeSignal
+ from syncopate.communication.descriptor import CollectiveOp, SignalType
+-from syncopate.communication.comm_runtime.all_reduce_collective import NVSHMEMAllReduceCollective
++from typing import TYPE_CHECKING
++if TYPE_CHECKING:
++    from syncopate.communication.comm_runtime.all_reduce_collective import NVSHMEMAllReduceCollective
++else:
++    NVSHMEMAllReduceCollective = object
+ from triton_dist.utils import nvshmem_create_tensors, NVSHMEM_SIGNAL_DTYPE, CUDA_CHECK, nvshmem_free_tensor_sync, dist_print
+ from triton_dist.kernels.nvidia.common_ops import _set_signal_cuda, _wait_eq_cuda
+ from syncopate.communication.comm_runtime.tma_persistent_copy import persistent_tma_copy_last_contig
+@@ -280,6 +284,7 @@ class CommContext:
+             block_m = 128
+             block_n = 256
+             use_multimem_st = True
++            from syncopate.communication.comm_runtime.all_reduce_collective import NVSHMEMAllReduceCollective
+             self.ar_collective = NVSHMEMAllReduceCollective(
+                 self.info.world_size,
+                 self.info.local_world_size,
+diff --git a/tests/test_ag_gemm_gen.py b/tests/test_ag_gemm_gen.py
+index 4350a81..f350271 100644
+--- a/tests/test_ag_gemm_gen.py
++++ b/tests/test_ag_gemm_gen.py
+@@ -7,7 +7,8 @@ from syncopate.communication.code_gen import CommGenerator
+ from syncopate.communication.comm_runtime.communication_context import CommContext
+ from syncopate.interface.lowering import lower_comm_plan_to_raw_schedules
+ from syncopate.computation.transform import AnnotationTransformer
+-from triton_dist.utils import initialize_distributed, nvshmem_barrier_all_on_stream, finalize_distributed, dist_print, group_profile, perf_func
++from triton_dist.utils import initialize_distributed, nvshmem_barrier_all_on_stream, finalize_distributed, dist_print
++from triton_dist.profiler_utils import group_profile, perf_func
+ import torch
+ from syncopate.communication.common_descriptors import build_all_gather_plan_1d_swizzle
+ import os
+@@ -19,7 +20,7 @@ def _load_transformed_gemm_consumer():
+     # the annotated local gemm kernel path
+     example_path = Path("tests/computation/transform/examples/example_persistent_gemm.py")
+     transformed_source = transformer.transform(example_path.read_text())
+-    store_path = Path("/tmp/" + example_path.name.replace(".py", "_consumer_transformed.py"))
++    store_path = Path("/tmp/" + example_path.name.replace(".py", "_consumer_transformed_" + os.environ.get("RANK", "0") + ".py"))
+     with open(store_path, "w") as f:
+         f.write(transformed_source)
+         
+@@ -83,7 +84,7 @@ if __name__ == "__main__":
+     TP_GROUP = initialize_distributed()
+     rank = TP_GROUP.rank()
+ 
+-    config = configs["LLaMA-3.1-70B"]
++    config = {"M": 1024, "N": 8192, "K": 4096, "BM": 128, "BN": 128, "BK": 64, "Stage": 3}
+     BM = config["BM"]
+     BN = config["BN"]
+     BK = config["BK"]
+@@ -171,7 +172,7 @@ if __name__ == "__main__":
+ 
+ 
+     def func():
+-        fused_all_gather_gemm(b, c, comm_runtime, block_shapes, block_offsets, signal_offsets, cum_tiles, 132
++        fused_all_gather_gemm(b, c, comm_runtime, block_shapes, block_offsets, signal_offsets, cum_tiles, torch.cuda.get_device_properties(0).multi_processor_count
+                               , BM, BN, BK, stage)
+ 
+     _, dur_ms = perf_func(func, iters=n_iters, warmup_iters=n_warmups)
+@@ -182,7 +183,7 @@ if __name__ == "__main__":
+ 
+     # with group_profile("all_gather_gemm", True, group=TP_GROUP):
+     #     for _ in range(10):
+-    #         fused_all_gather_gemm(b, c, comm_runtime, block_shapes, block_offsets, signal_offsets, cum_tiles, 132,
++    #         fused_all_gather_gemm(b, c, comm_runtime, block_shapes, block_offsets, signal_offsets, cum_tiles, torch.cuda.get_device_properties(0).multi_processor_count,
+     #                               BM, BN, BK, stage)
+ 
+     torch.testing.assert_close(comm_buf, golden_a, atol=1e-2, rtol=1e-2)
+diff --git a/tests/test_gemm_rs.py b/tests/test_gemm_rs.py
+index 6258d38..d18efe0 100644
+--- a/tests/test_gemm_rs.py
++++ b/tests/test_gemm_rs.py
+@@ -2,8 +2,9 @@ from syncopate.communication.code_gen import CommGenerator
+ from syncopate.communication.comm_runtime.communication_context import CommContext
+ from syncopate.interface.lowering import lower_comm_plan_to_raw_schedules
+ from syncopate.computation.gemm.template import gemm_producer
+-from triton_dist.utils import initialize_distributed, nvshmem_barrier_all_on_stream, finalize_distributed, dist_print, group_profile, perf_func, sleep_async
++from triton_dist.utils import initialize_distributed, nvshmem_barrier_all_on_stream, finalize_distributed, dist_print, sleep_async
+ from triton_dist.kernels.nvidia.common_ops import _wait_eq_cuda
++from triton_dist.profiler_utils import group_profile, perf_func
+ import torch
+ from syncopate.communication.common_descriptors import build_all_to_all_plan
+ import os
+diff --git a/tests/test_gemm_rs_transform.py b/tests/test_gemm_rs_transform.py
+index 2a5cab8..f9aa228 100644
+--- a/tests/test_gemm_rs_transform.py
++++ b/tests/test_gemm_rs_transform.py
+@@ -9,6 +9,7 @@ import os
+ import sys
+ from pathlib import Path
+ 
++from triton_dist.profiler_utils import group_profile, perf_func
+ import torch
+ 
+ from syncopate.communication.code_gen import CommGenerator
+@@ -16,14 +17,13 @@ from syncopate.communication.comm_runtime.communication_context import CommConte
+ from syncopate.communication.common_descriptors import build_all_to_all_plan
+ from syncopate.computation.transform import AnnotationTransformer
+ from syncopate.interface.lowering import lower_comm_plan_to_raw_schedules
+-from tests.test_gemm_rs import ring_reduce_tma, configs
++from test_gemm_rs import ring_reduce_tma, configs
+ from triton_dist.kernels.nvidia.common_ops import _wait_eq_cuda
+ from triton_dist.utils import (
+     dist_print,
+     finalize_distributed,
+     initialize_distributed,
+     nvshmem_barrier_all_on_stream,
+-    perf_func,
+     sleep_async,
+ )
+ 
+@@ -32,7 +32,8 @@ def _load_transformed_gemm_producer():
+     transformer = AnnotationTransformer(enable_producer=True)
+     example_path = Path("tests/computation/transform/examples/example_persistent_gemm.py")
+     transformed_source = transformer.transform(example_path.read_text())
+-    generated_path = Path("/tmp/" + example_path.name.replace(".py", "_producer_transformed.py"))
++    transformed_source = transformed_source.replace("import triton\n", "import triton\nimport triton_dist\n", 1).replace("@triton.jit\ndef kernel_gemm(", "@triton_dist.jit\ndef kernel_gemm(", 1)
++    generated_path = Path("/tmp/" + example_path.name.replace(".py", "_producer_transformed_" + os.environ.get("RANK", "0") + ".py"))
+     try:
+         with open(generated_path, "r") as f:
+             existing = f.read()
+@@ -64,7 +65,7 @@ def main():
+         LOCAL_WORLD_SIZE = WORLD_SIZE
+     torch.cuda.set_device(rank % LOCAL_WORLD_SIZE)
+ 
+-    config = configs["LLaMA-7B"]
++    config = {"M": 1024, "N": 4096, "K": 8192}
+ 
+     BM=128
+     BN=256
+@@ -143,7 +144,7 @@ def main():
+             b,
+             src_buf,
+             WORLD_SIZE,
+-            132,
++            torch.cuda.get_device_properties(rank).multi_processor_count,
+             BLOCK_SIZE_M=BM,
+             BLOCK_SIZE_N=BN,
+             BLOCK_SIZE_K=BK,

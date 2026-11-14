@@ -1,0 +1,1181 @@
+{
+  "classification": "FP16 leave-one-model-out development evaluation",
+  "backend": "flashoverlap",
+  "limitation": "separate process/batch; DX normalized against separate stock, flash timing contracts differ for 23 raw and 10 dispatcher samples",
+  "inventory_sha256": "5e1d1bfdfb810fb5a50ae0569db18d8b857b073ff8dfaa9ccb7007b635bc4b15",
+  "sources": [
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/dsv3-d_rs_16384_dx.json",
+      "sha256": "498bc21895ed89e268ff637e4e055d6004e8f6f784dd55bc4094effe6aa3db7a"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/dsv3-d_rs_32768_dx.json",
+      "sha256": "cbc477aa5fabefbc0c74aecce5e7b7e3185e7bf521b628fdfb5d69a6b5089663"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/dsv3-d_rs_8192_dx.json",
+      "sha256": "bd8959232715ff61a1a1213990867659c0d3547da3dfda92be88d36f4f45f9d1"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/gemma3-27b_rs_16384_dx.json",
+      "sha256": "4095ac22fdac6307fb9cf4d1f6f9bf3d4fb897c81caed60015e33d011e829ede"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/gemma3-27b_rs_32768_dx.json",
+      "sha256": "87b4f31c4b4805f6adaef5ded9b009593f5de14a5fdcca0f6394136d395a5580"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/gemma3-27b_rs_8192_dx.json",
+      "sha256": "1518d12e3e033522f496486a3cee9fa2b65f85f6f71b719e802121158421dd6f"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama3-70b_rs_16384_dx.json",
+      "sha256": "509446dd58a75a771570513d21029dfdceb0727f7997eca59384adcfa6dc02bc"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama3-70b_rs_32768_dx.json",
+      "sha256": "508c5ea5e443c98d37e1b9fa74f61661d1951c6e2f665947e85d5f49c2f00c41"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama3-70b_rs_8192_dx.json",
+      "sha256": "d38eedca9600abf44e29933d4963a5f334f16f923ea28abb1fc6ae7c57434205"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama3-8b_rs_16384_dx.json",
+      "sha256": "460c0f2df580eb225566cf66bd60fcb6b2ef8be980bc8d880b28b3b0379b4658"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama3-8b_rs_32768_dx.json",
+      "sha256": "763539c96ae72446221988d2b8d9563cf1a8632eff948654e2421680c78bd7e8"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama3-8b_rs_8192_dx.json",
+      "sha256": "5e0ed90532dacbf054520f3f8dc87ec884fea0b95c0b12d5f59ad02014939c60"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama31-405b_rs_16384_dx.json",
+      "sha256": "1e0a4f678c1ce2c1517ed1fae44acb6d602cc3d23fc6e8816001264bdc3a32e8"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama31-405b_rs_32768_dx.json",
+      "sha256": "4f2611e0f2b8cb58ac8f72c464a7bfe2fae89dbdcf39668fb0ed9505cf2d7670"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama31-405b_rs_8192_dx.json",
+      "sha256": "59c2ecacc3c288abc0b0f2d6de419769bb281bb29d0f4abd1dca3c2b95243b23"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama4-mav-d_rs_16384_dx.json",
+      "sha256": "813ab07e013bea7ddf6607105eec2ab432758f8b0f1aaa61ff9cfaf4e764e1c2"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama4-mav-d_rs_32768_dx.json",
+      "sha256": "dedbb5dcb1e01053de5a4c1bae548f0d1041afb2603fdd750f9c115e378b7f56"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/llama4-mav-d_rs_8192_dx.json",
+      "sha256": "f616b4bf6de44cdc1273ba017a7a76d010902ddcd9d13d8392c96f97260e7086"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/mistral-l-2407_rs_16384_dx.json",
+      "sha256": "f2a1af95a11c6bc7f3b8e776a0eb84889eaea62a79622cab744ee5befe0a0b0b"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/mistral-l-2407_rs_32768_dx.json",
+      "sha256": "569e36c5d25a1d671369ccfd8adadb3920a436390a741091c4d15e37182e0e09"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/mistral-l-2407_rs_8192_dx.json",
+      "sha256": "76b228f25e0c56898f48c7fedb02c5c47f1d3d09cad2696f722d2dcd38448c86"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/mistral3-d_rs_16384_dx.json",
+      "sha256": "0a8023b3d1cd38e9460b57ae8db37970b48d908274866dd01bdc4c1dee320631"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/mistral3-d_rs_32768_dx.json",
+      "sha256": "1cef9e485260d15ec5bed4dd7ce873ff5d3973f6921c3bffc139e28bd654b989"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/mistral3-d_rs_8192_dx.json",
+      "sha256": "baac7fdab0cf88d44c0de1662291d9b514ac2bda792657237c025c9fa095f452"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/qwen25-72b_rs_16384_dx.json",
+      "sha256": "e1ca7a40f2493468168da96bbfeb85e1658e90986b016f3f7040b019e989bf1e"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/qwen25-72b_rs_32768_dx.json",
+      "sha256": "5861a554dfeffea24e0a908322c680c2ce1bcc35f8d3f2eeda47452c20e2668b"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/qwen25-72b_rs_8192_dx.json",
+      "sha256": "cc61e7690aa8b542d1fa233f32f7ab0d101b00fd5723f9fac12417602f4a3601"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/qwen3-32b_rs_16384_dx.json",
+      "sha256": "696fdc64ce22de772143bd5c226d648d384dcd8d69ca003a2f66bf50beb9d462"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/qwen3-32b_rs_32768_dx.json",
+      "sha256": "5ff8a3a9d61980fac8adf29abe573ee5550699a80a80105e17a62eda125f1de9"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/qwen3-32b_rs_8192_dx.json",
+      "sha256": "7afd855583f47249db88a9b894f263cf4556fad43fe4fdd942c0f3ec166caaf2"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/qwen3-8b_rs_16384_dx.json",
+      "sha256": "a5d83ea933922f9607478efef8ceb44b4896cc86a559a79b486f207a3ab47456"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/qwen3-8b_rs_32768_dx.json",
+      "sha256": "da1cd8ba159237502c728bb47306a08a9acc4825cb426d81e0cfb7b4dbdc80dc"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_dx_fp16_matrix_20261114/qwen3-8b_rs_8192_dx.json",
+      "sha256": "cb442dfe59de24afb9f12065f47bc417e7b0a90639b4864430424b0f01e52477"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_b16_20261113.json",
+      "sha256": "0bdbe9f89474a7d725083f0e02ff5680786725a29244dc0334e2ea38a503b602"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/dsv3-d_16384_7168_2304.json",
+      "sha256": "6c1137c2d63e0b0376c51ee5b96243ec6c463221b0f4fa9870ac4c61bd3111fd"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/dsv3-d_32768_7168_2304.json",
+      "sha256": "fe64b1d584a51fb93426d6516130ed31741c6b835ea33f74754250e3f3a3bf16"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/dsv3-d_8192_7168_2304.json",
+      "sha256": "f726940fa279ab4e8b88f6cc6573afa27a04257147ddab398a1a2f2f466b188a"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama3-70b_16384_8192_3584.json",
+      "sha256": "ee27b521f439c95215565b9cc8e140d29a83f90bab11dca8dda412a7eb0ae390"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama3-70b_32768_8192_3584.json",
+      "sha256": "1ff0aca51bd94a2e777335eba384a46280600ea50a1223aed1a48e5f3f47660e"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama3-70b_8192_8192_3584.json",
+      "sha256": "7fe38a6ffdafeadec152a86754056f1df3640cfb00cd32592e7e34aff9775eab"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama3-8b_16384_4096_1792.json",
+      "sha256": "bf00168fa6265cf699241414ddb4220418262d49f1e931b1fe964a7c792a0077"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama3-8b_32768_4096_1792.json",
+      "sha256": "02091d0459bc0b30e6cf54c4f9f72b735ab1d32bba07ed074b0aa1760d8b317d"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama31-405b_16384_16384_6656.json",
+      "sha256": "c41f96dac4678fbee2add3cf5a49e2703600a103117e311531b87aac4dc7dc72"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama31-405b_8192_16384_6656.json",
+      "sha256": "4f7dee8edaaed77af028e34f001de977571e311feb62f45881116f500e29ead3"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral-l-2407_16384_12288_3584.json",
+      "sha256": "94c1a025d58ed8a4dcd36a20ce1755e3b49db91b231c131e0a3cda839295242f"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral-l-2407_32768_12288_3584.json",
+      "sha256": "d4b4014322dea948548da1b646e7d6e32579a887c533867c5ce8f92dbe37723c"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral-l-2407_8192_12288_3584.json",
+      "sha256": "d3c6b038bb5c9811343027b9b224ea0b83117d1e347c1c65bbdb7edfbda7680e"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral3-d_16384_7168_2048.json",
+      "sha256": "d8fcb2c3d71269d32cd9a2192c5c3bf9fbe61f5c4dc7ffe2130777ab6433b003"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral3-d_32768_7168_2048.json",
+      "sha256": "990a8d69a153d27ddaa7e07b6108b9e2b0c9b5d2e2bf52bc6a92793b414c7f5d"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral3-d_8192_7168_2048.json",
+      "sha256": "c36309fef261bd15fa8dc12bfb027b8bc4e7607e178eb92991f1ca12edd90d78"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen25-72b_16384_8192_3696.json",
+      "sha256": "dfa59ceace158e17bbbdd103abc05d01ab4abe2fb1b80c664d0fa9af6e66b4ca"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen25-72b_32768_8192_3696.json",
+      "sha256": "4488805714dbfa371267865249b0f32a0e2e93127a5ca9871a204877e008aac7"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen25-72b_8192_8192_3696.json",
+      "sha256": "57b67ae80402c324f670e244a1f6ad157396b3a929ebbc5ad2f78d49c4af23e7"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen3-8b_16384_4096_1536.json",
+      "sha256": "165ee79dfb676c5e59f8738f83d7ef344d1ed6a57a327aa4e7475b21798a8a57"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen3-8b_32768_4096_1536.json",
+      "sha256": "84c1234e538ce6e82afed5ebd1c1fd6cf101c1a1dfbcfe8185948f57d8e05352"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen3-8b_8192_4096_1536.json",
+      "sha256": "2aa2d0bd386c8cfe40201fc2bd6d66e858c31e050cda36178441a03cc1ee338a"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_missing_dispatch_20261114/gemma3-27b_16384_5376_2688.json",
+      "sha256": "c763ed3030b9b58fc3a4232d03c8e26602b57dafc23848457672bf8f98992f53"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_missing_dispatch_20261114/gemma3-27b_32768_5376_2688.json",
+      "sha256": "c99ab4a43f4a2be8c4bb995914bf337928b23aa659ee83bad588904b99ac6be4"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_missing_dispatch_20261114/gemma3-27b_8192_5376_2688.json",
+      "sha256": "58beecb38608cdc01fa67a5fbb06efa773848fe542f97715fdc9007ca58fbd2c"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_missing_dispatch_20261114/llama31-405b_32768_16384_6656.json",
+      "sha256": "bc435ed94eb939da0c610a95567932a531af8c7d41fa880bb8486112ceb3177d"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_missing_dispatch_20261114/llama4-mav-d_16384_5120_2048.json",
+      "sha256": "b021acecdee9e405183ab3ffe685aa543806573761cfc283651b1d638b5f0e7f"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_missing_dispatch_20261114/llama4-mav-d_32768_5120_2048.json",
+      "sha256": "657688709adba654c964e0cac1eed1ec35dd620aa85f126ea507fd4db3415e7e"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_missing_dispatch_20261114/llama4-mav-d_8192_5120_2048.json",
+      "sha256": "7e960981d033db315d2d35f1bba6d9c50c9f14cd1200c8283c178e20fea54bb6"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_missing_dispatch_20261114/qwen3-32b_16384_5120_1280.json",
+      "sha256": "e3e3021212bd7fe67349f2320134118ccb86fa86b7cc4fbdd19d0a7c505949c7"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_missing_dispatch_20261114/qwen3-32b_32768_5120_1280.json",
+      "sha256": "fdb6186479593cfe27b49ffedd2188523df361bb432302b6bfc187e67dd9c488"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_flash_missing_dispatch_20261114/qwen3-32b_8192_5120_1280.json",
+      "sha256": "661d136cbe737d243bbef54123a5ee81929c60aa3d0254ca063e0c5dc74a2635"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_rs_16384_stock.json",
+      "sha256": "6892fd680faf5bac277739d8db50de278e8b3361d3c4b1ec1de383540fe5828d"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_rs_32768_stock.json",
+      "sha256": "2c24320772266b58d48f0bced41f572fa13a4be6f3234f82b41d7b737821fcfa"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_rs_8192_stock.json",
+      "sha256": "1bf639c3774a9bc9fabacb580bdcdb14412b9b94229d7e069cd0a719e550a5ff"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_rs_16384_stock.json",
+      "sha256": "e8ac4e89d79257cacfeb164bded90f88499d3f86b0e3a6315a6bf9e04ad128e9"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_rs_32768_stock.json",
+      "sha256": "8745d3a8e977b295a3d18f6af94ac614b0d2d8c255c83750f5c8f64030a3074e"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_rs_8192_stock.json",
+      "sha256": "2457e11d24bbdba758aada37b716786f432d17ade10ba7a10178723c5367d050"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_rs_16384_stock.json",
+      "sha256": "822035ef2ffecf69889e174a1476e2556f89ea967c0f96db3ad924448f6839c8"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_rs_32768_stock.json",
+      "sha256": "3490681b5edbb50ec9eef8d429abdcf3712e5d07b168f53f0645e7212bdaa0dc"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_rs_8192_stock.json",
+      "sha256": "7cda5a745f7f61183f02fccb3254045925b736e0d0d2956bf4339c835cb01d7c"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_rs_16384_stock.json",
+      "sha256": "baf40a2bb569cd46e52265f96707e10d496d6967939d4f8f8811ffbf0c372208"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_rs_32768_stock.json",
+      "sha256": "a8db6b8921020a60701551db63031ab476f7c589bec0e221116ebbd418d082cd"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_rs_8192_stock.json",
+      "sha256": "19e10b3fcc4dc47de2721e7455fd7f89d3cc673e8b9b539fe3b821351579cd61"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_rs_16384_stock.json",
+      "sha256": "59f6b14a7548a2f417b7d911c5793696e1bc6e8ac90a6642c03b00c545435ef3"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_rs_32768_stock.json",
+      "sha256": "1f23ae710ba35139042429dd249515bf43929c015767772410de0cc843045ae5"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_rs_8192_stock.json",
+      "sha256": "548bdf1841a20933aed4ab6f8013857827a21bb3a85916f48549d8c4ce495766"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_rs_16384_stock.json",
+      "sha256": "af88be8faec850be00f254b1883a2d625b64f3600fb0e7a162e0245e148dc39e"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_rs_32768_stock.json",
+      "sha256": "80274ce44c3ceee4420caa9dfbb885251a08b96fd36a160b600785835e3d65dd"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_rs_8192_stock.json",
+      "sha256": "b949ae9c1d95d1c96e82798508c3a99cf6ed766026cb66ee48ed87fa5293179a"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_rs_16384_stock.json",
+      "sha256": "e6fcd160705cabe95683ac05a9351a4cc2ca048becc09d3cde0284d1443dbc9a"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_rs_32768_stock.json",
+      "sha256": "cf734427ae25c75cc867ba55a2fc772298b06fda8af424366b54241d4ae94644"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_rs_8192_stock.json",
+      "sha256": "a7e8c113c1c32f3301392c2dc1df26850023caa374884afddc1e75e6f8e56632"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_rs_16384_stock.json",
+      "sha256": "390fc516baab8a7a34ddcffb0cfa7fb2faad700d2ab604f4e99f48053a08ec5c"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_rs_32768_stock.json",
+      "sha256": "4e67bd0af872ac204a164c7c6dce4952178ea603146ab6a905986daed2f2ea18"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_rs_8192_stock.json",
+      "sha256": "ced6f57580519c9bb71f3f3fd7a0184763749b214598474f5de8d07afdfc5836"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_rs_16384_stock.json",
+      "sha256": "a3d00c7d3a1c07cc1f6f2c7052fe7f68a009d48678057863633eefba080c806e"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_rs_32768_stock.json",
+      "sha256": "7474c3e7dcb976c58dd9d4c26b0a70a16210568bd2c140081de1c2b1e9edf470"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_rs_8192_stock.json",
+      "sha256": "a11763c92fb968e023a7199d92244c3a3e2bc46e572fec9cdf61a14f04ac171b"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_rs_16384_stock.json",
+      "sha256": "29c802c411ee2fdfe4a3562c1d713435b40ebb4ca9759555350849664e814bf0"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_rs_32768_stock.json",
+      "sha256": "6f217d81bfcb6f98b481fc976659471820823d67c2b13b363fb121d30c3c25cb"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_rs_8192_stock.json",
+      "sha256": "f52f6432a14c372d7a2261082d597de4610c9b11cecf76fbb5db9c66d9513217"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_rs_16384_stock.json",
+      "sha256": "84cf89776517dbf237650c3e2c340f7b198d0d81f5e3aae4fbcd4c4582637061"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_rs_32768_stock.json",
+      "sha256": "6d2014042141302582f9cde447d27e3173d16854022db2bc828cb9f69738b480"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_rs_8192_stock.json",
+      "sha256": "f48c9462619be0533daa83277f260a3a91e46983cc73dbcc058f5608f0e14528"
+    }
+  ],
+  "summary": {
+    "rs": {
+      "count": 33,
+      "correct": 27,
+      "accuracy": 0.8181818181818182,
+      "selected_gmean_speedup": 1.1848438766158185,
+      "selected_below_stock": 3
+    },
+    "all": {
+      "count": 33,
+      "correct": 27,
+      "accuracy": 0.8181818181818182,
+      "selected_gmean_speedup": 1.1848438766158185,
+      "selected_below_stock": 3
+    }
+  },
+  "rows": [
+    {
+      "identity": [
+        "dsv3-d",
+        "rs",
+        8192,
+        7168,
+        2304
+      ],
+      "choice": "dx",
+      "oracle_choice": "flashoverlap",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.06297161322845177,
+        "dx": 0.20164068912326796
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.153010618541089,
+        "dx": 1.0210259929975414
+      },
+      "selected_speedup": 1.0210259929975414,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "rs",
+        16384,
+        7168,
+        2304
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.13256492342736212,
+        "dx": 0.23675823073168398
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.162624794592318,
+        "dx": 1.2743358973997307
+      },
+      "selected_speedup": 1.2743358973997307,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "rs",
+        32768,
+        7168,
+        2304
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.1531123355174684,
+        "dx": 0.20398721285473811
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.2217566257814254,
+        "dx": 1.22827334221728
+      },
+      "selected_speedup": 1.22827334221728,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "rs",
+        8192,
+        5376,
+        2688
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.07750628981504437,
+        "dx": 0.17481501107127762
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.0671408541026874,
+        "dx": 1.2226513976688302
+      },
+      "selected_speedup": 1.2226513976688302,
+      "external_timing_contract": "dispatcher_with_layout"
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "rs",
+        16384,
+        5376,
+        2688
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.11987698075112524,
+        "dx": 0.22995743311650194
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.2249282355889362,
+        "dx": 1.3319400923029745
+      },
+      "selected_speedup": 1.3319400923029745,
+      "external_timing_contract": "dispatcher_with_layout"
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "rs",
+        32768,
+        5376,
+        2688
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.1518962744377001,
+        "dx": 0.19975437917908967
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.1455883250867853,
+        "dx": 1.2386174701159955
+      },
+      "selected_speedup": 1.2386174701159955,
+      "external_timing_contract": "dispatcher_with_layout"
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "rs",
+        8192,
+        8192,
+        3584
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.09350852068112284,
+        "dx": 0.15715855209509783
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.112003642397798,
+        "dx": 1.1648775961886144
+      },
+      "selected_speedup": 1.1648775961886144,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "rs",
+        16384,
+        8192,
+        3584
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.10054822108417841,
+        "dx": 0.1702140059289178
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.0900423294774457,
+        "dx": 1.1724238147443973
+      },
+      "selected_speedup": 1.1724238147443973,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "rs",
+        32768,
+        8192,
+        3584
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.1437100254778661,
+        "dx": 0.2454309552502856
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.1384568002131334,
+        "dx": 1.1979091207276773
+      },
+      "selected_speedup": 1.1979091207276773,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "rs",
+        8192,
+        4096,
+        1792
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.00856696282799762,
+        "dx": 0.055053603563451084
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 0.9408991709529122,
+        "dx": 1.1203340176930736
+      },
+      "selected_speedup": 1.1203340176930736,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "rs",
+        16384,
+        4096,
+        1792
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.07373235850135457,
+        "dx": 0.21069325384964638
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.0716515468940822,
+        "dx": 1.3602142882007915
+      },
+      "selected_speedup": 1.3602142882007915,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "rs",
+        32768,
+        4096,
+        1792
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.11677900145345523,
+        "dx": 0.20811492917661456
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.2087840841148112,
+        "dx": 1.248145558285789
+      },
+      "selected_speedup": 1.248145558285789,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "rs",
+        8192,
+        16384,
+        6656
+      ],
+      "choice": "dx",
+      "oracle_choice": "flashoverlap",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.16375805065240434,
+        "dx": 0.19602250711994731
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.0370255844048553,
+        "dx": 0.9689090657611626
+      },
+      "selected_speedup": 0.9689090657611626,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "rs",
+        16384,
+        16384,
+        6656
+      ],
+      "choice": "dx",
+      "oracle_choice": "flashoverlap",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.1738798950681292,
+        "dx": 0.19810346242788757
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.1041880889002176,
+        "dx": 1.098802646742379
+      },
+      "selected_speedup": 1.098802646742379,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "rs",
+        32768,
+        16384,
+        6656
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.21354859600253287,
+        "dx": 0.24567897297778524
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 0.9203624024679133,
+        "dx": 1.1421081849146222
+      },
+      "selected_speedup": 1.1421081849146222,
+      "external_timing_contract": "dispatcher_with_layout"
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "rs",
+        8192,
+        5120,
+        2048
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.03632817107355795,
+        "dx": 0.15482900781240758
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.0864604021499757,
+        "dx": 1.4577639078215552
+      },
+      "selected_speedup": 1.4577639078215552,
+      "external_timing_contract": "dispatcher_with_layout"
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "rs",
+        16384,
+        5120,
+        2048
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.12203599378024046,
+        "dx": 0.23871774033167492
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.121373270651816,
+        "dx": 1.3947444907077389
+      },
+      "selected_speedup": 1.3947444907077389,
+      "external_timing_contract": "dispatcher_with_layout"
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "rs",
+        32768,
+        5120,
+        2048
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.15875001537692626,
+        "dx": 0.2262930717327968
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.1197805513313956,
+        "dx": 1.1733681050806233
+      },
+      "selected_speedup": 1.1733681050806233,
+      "external_timing_contract": "dispatcher_with_layout"
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "rs",
+        8192,
+        12288,
+        3584
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.0404423365311674,
+        "dx": 0.09090411913023579
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.1565014972337313,
+        "dx": 1.22673120340067
+      },
+      "selected_speedup": 1.22673120340067,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "rs",
+        16384,
+        12288,
+        3584
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.0571028175946111,
+        "dx": 0.11781471634288315
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.1379393322107707,
+        "dx": 1.196249634371972
+      },
+      "selected_speedup": 1.196249634371972,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "rs",
+        32768,
+        12288,
+        3584
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.0697423107377404,
+        "dx": 0.18117962255995343
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.1559611491354844,
+        "dx": 1.2021814660026149
+      },
+      "selected_speedup": 1.2021814660026149,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "rs",
+        8192,
+        7168,
+        2048
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.07358487353456138,
+        "dx": 0.1383487265342212
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.0742251038046975,
+        "dx": 1.2287902677750848
+      },
+      "selected_speedup": 1.2287902677750848,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "rs",
+        16384,
+        7168,
+        2048
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.11226023347258082,
+        "dx": 0.22172567276033178
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.2017076235867759,
+        "dx": 1.2998765737937261
+      },
+      "selected_speedup": 1.2998765737937261,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "rs",
+        32768,
+        7168,
+        2048
+      ],
+      "choice": "dx",
+      "oracle_choice": "flashoverlap",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.13385589651795227,
+        "dx": 0.20389151617494958
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.2477037209856512,
+        "dx": 1.2101882328536486
+      },
+      "selected_speedup": 1.2101882328536486,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "rs",
+        8192,
+        8192,
+        3696
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.09539767350436001,
+        "dx": 0.13269634219696697
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.1110812833692685,
+        "dx": 1.2312144768099151
+      },
+      "selected_speedup": 1.2312144768099151,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "rs",
+        16384,
+        8192,
+        3696
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.10653658961345405,
+        "dx": 0.16994453194780926
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.075113738908426,
+        "dx": 1.1399692905799923
+      },
+      "selected_speedup": 1.1399692905799923,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "rs",
+        32768,
+        8192,
+        3696
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.14482387204674466,
+        "dx": 0.1943466175725048
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.1392603119792888,
+        "dx": 1.3499796682276415
+      },
+      "selected_speedup": 1.3499796682276415,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "rs",
+        8192,
+        5120,
+        1280
+      ],
+      "choice": "flashoverlap",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.055391795474868666,
+        "dx": 0.050261276397592175
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 0.8651309242386027,
+        "dx": 1.1769132926793489
+      },
+      "selected_speedup": 0.8651309242386027,
+      "external_timing_contract": "dispatcher_with_layout"
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "rs",
+        16384,
+        5120,
+        1280
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.11966090514166138,
+        "dx": 0.2170805204960285
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.0340852320347589,
+        "dx": 1.2371895584018626
+      },
+      "selected_speedup": 1.2371895584018626,
+      "external_timing_contract": "dispatcher_with_layout"
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "rs",
+        32768,
+        5120,
+        1280
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.18147520122489877,
+        "dx": 0.20202237925453365
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.0294885259331326,
+        "dx": 1.2651916623686394
+      },
+      "selected_speedup": 1.2651916623686394,
+      "external_timing_contract": "dispatcher_with_layout"
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "rs",
+        8192,
+        4096,
+        1536
+      ],
+      "choice": "dx",
+      "oracle_choice": "stock",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": -0.011927355866528239,
+        "dx": 0.21320271259508308
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 0.9551419209292206,
+        "dx": 0.6960445076913031
+      },
+      "selected_speedup": 0.6960445076913031,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "rs",
+        16384,
+        4096,
+        1536
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.06631953478899966,
+        "dx": 0.2685842110187854
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.0539926995452886,
+        "dx": 1.239596083404998
+      },
+      "selected_speedup": 1.239596083404998,
+      "external_timing_contract": "raw_overlap_no_layout"
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "rs",
+        32768,
+        4096,
+        1536
+      ],
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "flashoverlap": 0.11152585440697645,
+        "dx": 0.23966081209832268
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "flashoverlap": 1.1839440189698975,
+        "dx": 1.2275020129467271
+      },
+      "selected_speedup": 1.2275020129467271,
+      "external_timing_contract": "raw_overlap_no_layout"
+    }
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "schema": "stowaway-tp8-auto-plan-v1",
+  "workload": "llama70_infer",
+  "tp": 8,
+  "dtype": "bfloat16",
+  "external_backend": "triton_dist",
+  "default": "stock",
+  "entries": [
+    {
+      "site": "qkv",
+      "op": "ag",
+      "M": 16384,
+      "N": 1280,
+      "K": 8192,
+      "choice": "triton_dist",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.31492464637469186,
+        "dx": -0.10258311442181266
+      }
+    },
+    {
+      "site": "proj",
+      "op": "rs",
+      "M": 16384,
+      "N": 8192,
+      "K": 1024,
+      "choice": "triton_dist",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.16804429295158443,
+        "dx": 0.26546877796388024
+      }
+    },
+    {
+      "site": "fc1",
+      "op": "ag",
+      "M": 16384,
+      "N": 7168,
+      "K": 8192,
+      "choice": "triton_dist",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.07869751518219542,
+        "dx": -0.059682463586868933
+      }
+    },
+    {
+      "site": "fc2",
+      "op": "rs",
+      "M": 16384,
+      "N": 8192,
+      "K": 3584,
+      "choice": "triton_dist",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.036354734022897475,
+        "dx": 0.1723585127567825
+      }
+    }
+  ],
+  "provenance": {
+    "sources": [
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_td_ag_20261113.jsonl",
+        "sha256": "9d92fd0bd09681f679aac42a032120e6410f94973a3a4fc7054f5cc91bfb3971"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_td_rs_20261113.jsonl",
+        "sha256": "11d025506258683645150c5c4beacab52dee38325b1b2ec8f001e460dc4a3c5c"
+      },
+      {
+        "path": "/root/Stotaway/nvidia/planner/original_a800/data/cells.json",
+        "sha256": "5e1d1bfdfb810fb5a50ae0569db18d8b857b073ff8dfaa9ccb7007b635bc4b15"
+      }
+    ],
+    "method": "independent route-local residual models with per-route stock normalization",
+    "limitation": "DX and Async measurements are from separate batches; operator estimates require E2E validation",
+    "routes": [
+      {
+        "method": "triton_dist",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "ag",
+        "actual_path": "triton_dist_tp8",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": 4,
+        "config_family": "default_no_autotune"
+      },
+      {
+        "method": "triton_dist",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "rs",
+        "actual_path": "triton_dist_tp8",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": 4,
+        "config_family": "default_no_autotune"
+      },
+      {
+        "method": "dx",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "ag",
+        "actual_path": "direct_exchange8",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": null,
+        "config_family": "dx_existing"
+      },
+      {
+        "method": "dx",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "rs",
+        "actual_path": "direct_exchange8",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": null,
+        "config_family": "dx_existing"
+      }
+    ],
+    "classification": "pure Triton-distributed baseline: all supported target sites, stock fallback for other shapes"
+  }
+}

@@ -9,7 +9,8 @@ from stowaway_nvidia.runtime import finalize, initialize
 
 
 def run_case(cuda, rank, dtype, rows, inner, columns, rounds, side_stream=False):
-    context = DirectExchange(cuda, rank, 2, rows, inner, columns, dtype)
+    context = DirectExchange(cuda, rank, 2, rows, inner, columns, dtype,
+                             reuse_rs_scratch=os.environ.get('TEST_REUSE_RS_SCRATCH') == '1')
     generator = torch.Generator(device="cuda").manual_seed(431 + rank)
     weights = torch.randn((columns, inner), generator=generator, device="cuda", dtype=dtype) * 0.1
     results = []

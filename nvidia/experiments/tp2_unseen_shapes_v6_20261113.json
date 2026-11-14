@@ -1,0 +1,7 @@
+{
+  "shape_vehicle_h3456_kv6": [3456, 9472, 27, 6],
+  "shape_vehicle_h4864_kv8": [4864, 13056, 38, 8],
+  "shape_vehicle_h5760_kv8": [5760, 15616, 45, 8],
+  "shape_vehicle_h7040_kv8": [7040, 19200, 55, 8],
+  "shape_vehicle_h8320_kv10": [8320, 22784, 65, 10]
+}

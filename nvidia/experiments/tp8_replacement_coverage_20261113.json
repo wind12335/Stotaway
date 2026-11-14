@@ -1,0 +1,43 @@
+{
+  "schema": "stowaway-tp8-replacement-v1",
+  "external_backend": "async_tp",
+  "runtime": {
+    "tp": 8,
+    "dtype": "bfloat16",
+    "gpu": "NVIDIA A800-SXM4-80GB",
+    "torch": "2.7.0+cu126",
+    "triton": "3.4.0",
+    "cuda_build": "12.6",
+    "cuda_device_max_connections": "8"
+  },
+  "selection_source": "manual_coverage",
+  "entries": [
+    {
+      "site": "qkv",
+      "op": "ag",
+      "M": 8192,
+      "N": 1792,
+      "K": 4096,
+      "choice": "async_tp"
+    },
+    {
+      "site": "o_proj",
+      "op": "rs",
+      "M": 8192,
+      "N": 4096,
+      "K": 1792,
+      "choice": "dx"
+    },
+    {
+      "site": "fc1",
+      "op": "ag",
+      "M": 8192,
+      "N": 3584,
+      "K": 4096,
+      "choice": "stock"
+    }
+  ],
+  "evidence": {
+    "method": "manual dispatch verification; not predictor accuracy"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "stowaway-tp8-auto-plan-v1",
+  "workload": "llama70_infer",
+  "tp": 8,
+  "dtype": "float16",
+  "external_backend": "syncopate",
+  "default": "stock",
+  "entries": [
+    {
+      "site": "qkv",
+      "op": "ag",
+      "M": 16384,
+      "N": 1280,
+      "K": 8192,
+      "choice": "stock",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "syncopate": -0.4654436007025389
+      }
+    },
+    {
+      "site": "proj",
+      "op": "rs",
+      "M": 16384,
+      "N": 8192,
+      "K": 1024,
+      "choice": "stock",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "syncopate": -0.19942088229821503
+      }
+    },
+    {
+      "site": "fc1",
+      "op": "ag",
+      "M": 16384,
+      "N": 7168,
+      "K": 8192,
+      "choice": "stock",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "syncopate": -0.991228205440197
+      }
+    },
+    {
+      "site": "fc2",
+      "op": "rs",
+      "M": 16384,
+      "N": 8192,
+      "K": 3584,
+      "choice": "stock",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "syncopate": -0.4097654928004238
+      }
+    }
+  ],
+  "provenance": {
+    "method": "route-local residual",
+    "external_points": 96,
+    "dx_source_sha256": "5e1d1bfdfb810fb5a50ae0569db18d8b857b073ff8dfaa9ccb7007b635bc4b15",
+    "limitation": "DX selection disabled: available DX data are BF16, external data FP16; output remains provisional until same-dtype measurements"
+  }
+}

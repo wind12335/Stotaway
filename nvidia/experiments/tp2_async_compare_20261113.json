@@ -1,0 +1,9 @@
+{
+  "tp": 2, "dtype": "bfloat16", "batch": 16, "repeats": 8, "warmup": 32,
+  "targets": [
+    {"op": "ag", "M": 1024, "N": 4096, "K": 4096},
+    {"op": "rs", "M": 1024, "N": 4096, "K": 4096}
+  ],
+  "orders": [["stock", "async_tp", "dx"], ["dx", "stock", "async_tp"], ["async_tp", "dx", "stock"]],
+  "warning": "direct PyTorch symmetric-memory fused operators, not model Inductor graph; K and N are per rank"
+}

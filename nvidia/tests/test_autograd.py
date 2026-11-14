@@ -11,7 +11,8 @@ from stowaway_nvidia.runtime import finalize, initialize
 
 def run(dtype, rank, cuda):
     rows, inner, columns = 128, 96, 64
-    context = DirectExchange(cuda, rank, 2, rows, inner, columns, dtype)
+    context = DirectExchange(cuda, rank, 2, rows, inner, columns, dtype,
+                             reuse_rs_scratch=os.environ.get('TEST_REUSE_RS_SCRATCH') == '1')
     backward_context = DirectExchange(cuda, rank, 2, rows, columns, inner, dtype)
     generator = torch.Generator(device="cuda").manual_seed(913 + rank)
     for turn in range(8):

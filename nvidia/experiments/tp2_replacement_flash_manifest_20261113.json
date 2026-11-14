@@ -1,0 +1,14 @@
+{
+  "tp": 2,
+  "dtype": "float16",
+  "batch": 16,
+  "repeats": 8,
+  "warmup": 32,
+  "targets": [
+    {"model":"flash_1024_4096_4096", "site":"o_proj", "op":"rs", "M":1024, "N":4096, "K":4096},
+    {"model":"flash_2048_4096_4096", "site":"o_proj", "op":"rs", "M":2048, "N":4096, "K":4096}
+  ],
+  "orders": [["stock","flashoverlap","dx"],["dx","stock","flashoverlap"],["flashoverlap","dx","stock"]],
+  "selection":"two previously observed FlashOverlap RS points with speedup below 0.95",
+  "warning":"FlashOverlap uses reordered RS output while stock/DX use rank-contiguous rows; compare performance only after normalizing output semantics"
+}

@@ -1,0 +1,52 @@
+{
+  "classification": "FlashOverlap TP8 output layout compatibility probe",
+  "shape": [
+    32768,
+    4096,
+    1536
+  ],
+  "rank_results": [
+    {
+      "rank": 0,
+      "normalized_allclose": true,
+      "max_abs_normalized": 0.0166015625
+    },
+    {
+      "rank": 1,
+      "normalized_allclose": true,
+      "max_abs_normalized": 0.017578125
+    },
+    {
+      "rank": 2,
+      "normalized_allclose": true,
+      "max_abs_normalized": 0.017578125
+    },
+    {
+      "rank": 3,
+      "normalized_allclose": true,
+      "max_abs_normalized": 0.0185546875
+    },
+    {
+      "rank": 4,
+      "normalized_allclose": true,
+      "max_abs_normalized": 0.017578125
+    },
+    {
+      "rank": 5,
+      "normalized_allclose": true,
+      "max_abs_normalized": 0.01953125
+    },
+    {
+      "rank": 6,
+      "normalized_allclose": true,
+      "max_abs_normalized": 0.01630401611328125
+    },
+    {
+      "rank": 7,
+      "normalized_allclose": true,
+      "max_abs_normalized": 0.01611328125
+    }
+  ],
+  "normalization": "upstream ReorderRMSNorm compared to even/odd logical rows",
+  "warning": "demonstrates required output permutation; does not measure standalone conversion cost or full model E2E"
+}

@@ -1,0 +1,14 @@
+{
+  "tp": 2,
+  "dtype": "bfloat16",
+  "batch": 16,
+  "repeats": 8,
+  "warmup": 32,
+  "targets": [
+    {"op": "ag", "M": 1024, "N": 4096, "K": 4096},
+    {"op": "rs", "M": 1024, "N": 4096, "K": 4096}
+  ],
+  "orders": [["stock", "flux", "dx"], ["dx", "stock", "flux"], ["flux", "dx", "stock"]],
+  "selection": "same shape as successful upstream Flux smoke; exploratory only",
+  "warning": "Flux links shared NCCL; CUDA_DEVICE_MAX_CONNECTIONS=1 for all arms; RS DX scratch"
+}

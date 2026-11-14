@@ -1,0 +1,6 @@
+{
+  "tp": 2, "dtype": "float16", "batch": 16, "warmup": 32, "repeats": 8,
+  "target": {"op": "ag", "M": 1024, "N": 4096, "K": 4096},
+  "orders": [["stock", "syncopate", "dx"], ["dx", "stock", "syncopate"], ["syncopate", "dx", "stock"]],
+  "warning": "exploratory shape already smoke-tested; 2 GPUs; Syncopate generated consumer and copy-engine communication"
+}

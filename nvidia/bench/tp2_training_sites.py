@@ -4,6 +4,7 @@ Reference follows the relevant unfused Megatron local SP communication order;
 it does not include optimizer hooks, activation checkpointing, or a full step.
 """
 import datetime
+import time
 import json
 import os
 import random
@@ -18,7 +19,7 @@ import triton
 from stowaway_nvidia.autograd import column_parallel, row_parallel
 from stowaway_nvidia.dx import DirectExchange
 from stowaway_nvidia.runtime import finalize, initialize
-from bench.tp2_cells import MODELS, shapes
+from bench.tp2_cells import configured_sites
 
 
 def timed(fn, rounds, batch):
@@ -42,6 +43,7 @@ def timed(fn, rounds, batch):
 
 
 def main():
+    total_start = time.monotonic()
     rank = int(os.environ["RANK"])
     torch.cuda.set_device(int(os.environ["LOCAL_RANK"]))
     dist.init_process_group("nccl", timeout=datetime.timedelta(seconds=300))
@@ -55,13 +57,13 @@ def main():
         raise ValueError("invalid measurement settings")
     gen = torch.Generator(device="cuda").manual_seed(881 + rank)
     metadata = {"tp": 2, "dtype": "bfloat16", "gpu": torch.cuda.get_device_name(),
+                "p2p_bidirectional": torch.cuda.can_device_access_peer(0, 1) and torch.cuda.can_device_access_peer(1, 0),
                 "torch": torch.__version__, "triton": triton.__version__, "cuda_build": torch.version.cuda,
                 "cuda_device_max_connections": os.environ.get("CUDA_DEVICE_MAX_CONNECTIONS", "unset"),
-                "M": m, "repeats": repeats, "batch": batch, "checks": checks, "seed": seed,
+                "M": m, "repeats": repeats, "batch": batch, "checks": checks, "seed": seed, "warmup": 3,
                 "python": sys.executable, "classification": "diagnostic unfused site forward+backward"}
     output = {"metadata": metadata, "results": []}
-    for model, dims in MODELS.items():
-        for site, op, _, k, n in shapes(*dims, m):
+    for model, site, op, _, k, n in configured_sites(m):
             x_shape = (m // 2, k) if op == "ag" else (m, k)
             y_shape = (m, n) if op == "ag" else (m // 2, n)
             x = (torch.randn(x_shape, device="cuda", dtype=torch.bfloat16, generator=gen) * .05).requires_grad_()
@@ -98,6 +100,7 @@ def main():
                     gw = gfull.t().matmul(x.detach())
                 return y, gx, gw
 
+            calibration_start=time.monotonic()
             for _ in range(checks):
                 with torch.no_grad():
                     x.normal_(generator=gen).mul_(.05)
@@ -109,7 +112,7 @@ def main():
             random.Random(f"{seed}:{model}:{site}:{m}").shuffle(funcs)
             measured = {name: timed(fn, repeats, batch) for name, fn in funcs}
             item = {"model": model, "site": site, "op": op, "M": m, "K": k, "N": n,
-                    "measurements": measured}
+                    "measurements": measured, "calibration_wall_ms": (time.monotonic()-calibration_start)*1000}
             output["results"].append(item)
             if rank == 0:
                 print(json.dumps({**{key: item[key] for key in ("model", "site", "M", "K", "N")},
@@ -121,6 +124,7 @@ def main():
             del x, w, grad, a, b, forward, backward
             torch.cuda.empty_cache()
     if rank == 0:
+        output['metadata']['collector_wall_ms']=(time.monotonic()-total_start)*1000
         path = Path(os.environ["TRAIN_CELL_OUT"])
         with path.open("x") as stream:
             json.dump(output, stream, indent=2)

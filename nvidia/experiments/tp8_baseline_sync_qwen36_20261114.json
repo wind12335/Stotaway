@@ -1,0 +1,1012 @@
+{
+  "schema": "stowaway-tp8-auto-plan-v1",
+  "workload": "qwen36_train",
+  "tp": 8,
+  "dtype": "bfloat16",
+  "external_backend": "syncopate",
+  "default": "stock",
+  "entries": [
+    {
+      "site": "qkv",
+      "op": "ag",
+      "M": 8192,
+      "N": 1792,
+      "K": 5120,
+      "choice": "syncopate",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "syncopate": -0.5736144395358743,
+        "dx": -0.2737512690064168
+      }
+    },
+    {
+      "site": "proj",
+      "op": "rs",
+      "M": 8192,
+      "N": 5120,
+      "K": 768,
+      "choice": "syncopate",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "syncopate": -0.06792489269957969,
+        "dx": 0.1222838377147987
+      }
+    },
+    {
+      "site": "fc1",
+      "op": "ag",
+      "M": 8192,
+      "N": 2060,
+      "K": 5120,
+      "choice": "syncopate",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "syncopate": -0.5887694171154164,
+        "dx": -0.23605891894518813
+      }
+    },
+    {
+      "site": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "N": 5120,
+      "K": 768,
+      "choice": "syncopate",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "syncopate": -0.06792489269957969,
+        "dx": 0.1222838377147987
+      }
+    },
+    {
+      "site": "fc1",
+      "op": "ag",
+      "M": 8192,
+      "N": 4352,
+      "K": 5120,
+      "choice": "syncopate",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "syncopate": -0.7807974558454694,
+        "dx": -0.23965891748892723
+      }
+    },
+    {
+      "site": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "N": 5120,
+      "K": 2176,
+      "choice": "syncopate",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "syncopate": -0.19262742224589485,
+        "dx": 0.11669787629857924
+      }
+    }
+  ],
+  "provenance": {
+    "sources": [
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_gu_16384_stock.json",
+        "sha256": "1a9e5bb89581916cbf471f7ecabd71ede2bd0691b5bf61a5e9f36c2b6af5ce5a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_gu_32768_stock.json",
+        "sha256": "1cbc1ff0412ac9a625e35f38ccad95c2ef6e9612dd59aea8c70fa8d3deb49041"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_gu_8192_stock.json",
+        "sha256": "7c3a032d8871906accd3e914ad54e08c5ed6bf753c4bef850ed573cfeddbd476"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_up_16384_stock.json",
+        "sha256": "9ebfffe2aa35b628ac209fd96afa7f2794f2df890578ca5670929cda40d2ee8e"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_up_32768_stock.json",
+        "sha256": "36982a297ea18408974e1f25bda3a726438ef4b46a76d52dd4bf7b99ce586f7a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_up_8192_stock.json",
+        "sha256": "3e4302d22fbf375a8dcf796846de0de52e4a823e24d6f3402972941b89e1c871"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_rs_16384_stock.json",
+        "sha256": "6892fd680faf5bac277739d8db50de278e8b3361d3c4b1ec1de383540fe5828d"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_rs_32768_stock.json",
+        "sha256": "2c24320772266b58d48f0bced41f572fa13a4be6f3234f82b41d7b737821fcfa"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_rs_8192_stock.json",
+        "sha256": "1bf639c3774a9bc9fabacb580bdcdb14412b9b94229d7e069cd0a719e550a5ff"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_gu_16384_stock.json",
+        "sha256": "83e20de87c8ae6624e0637d8b4ca8c9617526a2a26e24ef2851ee68994b37993"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_gu_32768_stock.json",
+        "sha256": "c25d95451e630b665d81c47cd7f31db86245fe2215261ebaabd6398a2c73b738"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_gu_8192_stock.json",
+        "sha256": "a829938d4d974d3b2a3b590711d81b9ed56c5cf5599551626e9ec42da4fadc3d"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_up_16384_stock.json",
+        "sha256": "39ef60d73594dcb830a95956759202d5132a2ad41ed76d79cda77282b0cc3749"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_up_32768_stock.json",
+        "sha256": "09f3d5f792974fd89e18e91075e09383a3ecef3ffec4e81f2b756efa68ddd5eb"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_up_8192_stock.json",
+        "sha256": "2fb01b069e18897e1a86bf7763eb157a8e916eba6ccdb6530c98dd6f3b1c2424"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_rs_16384_stock.json",
+        "sha256": "e8ac4e89d79257cacfeb164bded90f88499d3f86b0e3a6315a6bf9e04ad128e9"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_rs_32768_stock.json",
+        "sha256": "8745d3a8e977b295a3d18f6af94ac614b0d2d8c255c83750f5c8f64030a3074e"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_rs_8192_stock.json",
+        "sha256": "2457e11d24bbdba758aada37b716786f432d17ade10ba7a10178723c5367d050"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_gu_16384_stock.json",
+        "sha256": "ed595450e773b6b6b3139d8cb8aab845cf1f7caf2657ac250e2217143deab559"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_gu_32768_stock.json",
+        "sha256": "d9dd7aba2c460c9c2c90e2064da204aa5233b27e89092b02a4e3a5288bd31729"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_gu_8192_stock.json",
+        "sha256": "5ddab47a5f5e53e2c602efbe6f0b64786f7da22588ac22b458fed6bf472ce677"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_up_16384_stock.json",
+        "sha256": "6965bc6912da58028b1b1101f358f89a7645bc7cd920a6eeef581ca183bd48ca"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_up_32768_stock.json",
+        "sha256": "4120ef1ab8b5991bbe22b6f34532fc81680e1ae7cd21b6f8fea876d6c02232fd"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_up_8192_stock.json",
+        "sha256": "da739444e9490e29b02487019bab4fc82d178d720ab3c63d802bcfcd9653a8f9"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_rs_16384_stock.json",
+        "sha256": "822035ef2ffecf69889e174a1476e2556f89ea967c0f96db3ad924448f6839c8"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_rs_32768_stock.json",
+        "sha256": "3490681b5edbb50ec9eef8d429abdcf3712e5d07b168f53f0645e7212bdaa0dc"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_rs_8192_stock.json",
+        "sha256": "7cda5a745f7f61183f02fccb3254045925b736e0d0d2956bf4339c835cb01d7c"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_gu_16384_stock.json",
+        "sha256": "791fe8a6b38dfcd4df533282b19c63131a1024a77ef08f531ce7ba91e04412ba"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_gu_32768_stock.json",
+        "sha256": "72b5e15ec60513af76c5361b416907de3c851b7c7fe9d300cf513cf6342b140b"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_gu_8192_stock.json",
+        "sha256": "cafc7556454ba9bad79610718201e554eef09f8af88eb7aaa78a9c000207eb4a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_up_16384_stock.json",
+        "sha256": "16e8ec616583769b4502e2a17139d26dc447426dd990b654c6afa51eef017fb3"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_up_32768_stock.json",
+        "sha256": "319a8837b646a5935df31571aefb05f5c5f53d88b139e1ba7b28242ffe928a3a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_up_8192_stock.json",
+        "sha256": "2232eecb54d46a3c4883fdac604be0bb71302b3508e07a664d7171be520be0af"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_rs_16384_stock.json",
+        "sha256": "baf40a2bb569cd46e52265f96707e10d496d6967939d4f8f8811ffbf0c372208"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_rs_32768_stock.json",
+        "sha256": "a8db6b8921020a60701551db63031ab476f7c589bec0e221116ebbd418d082cd"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_rs_8192_stock.json",
+        "sha256": "19e10b3fcc4dc47de2721e7455fd7f89d3cc673e8b9b539fe3b821351579cd61"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_gu_16384_stock.json",
+        "sha256": "17b03360886790077e6f0b239aae95e82d0a19f5fb698ea4fc661fa04cfb05a4"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_gu_32768_stock.json",
+        "sha256": "d2e4bd5763a63c8949f7e43794a4b252e17df845136152a51e5a590940e08bb3"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_gu_8192_stock.json",
+        "sha256": "5f85f4f63353d084eee6c89a35a000e690cb418188dd34651a86d4c19d6f74dd"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_up_16384_stock.json",
+        "sha256": "57e14cf4701e5e9dafd1855382af10a41f361d14e970894988dac5cfa12c6fac"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_up_32768_stock.json",
+        "sha256": "c3b9e93dc6cc97bb171c1cbd6b53564e99dcaea2987a601ef8a1f625b24bc147"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_up_8192_stock.json",
+        "sha256": "4d36422a357c59e6b39530ef0a70ca4cc90100a3f20fbc6b050ddbc6500c58f9"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_rs_16384_stock.json",
+        "sha256": "59f6b14a7548a2f417b7d911c5793696e1bc6e8ac90a6642c03b00c545435ef3"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_rs_32768_stock.json",
+        "sha256": "1f23ae710ba35139042429dd249515bf43929c015767772410de0cc843045ae5"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_rs_8192_stock.json",
+        "sha256": "548bdf1841a20933aed4ab6f8013857827a21bb3a85916f48549d8c4ce495766"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_gu_16384_stock.json",
+        "sha256": "c139dfd14f73ab94de06ed7114267659a213aec80c261aeaea79aa65671444b1"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_gu_32768_stock.json",
+        "sha256": "fce9d108b45aa2852bc754b527dfcfedf48d28c0e35e2738989b343780ae2a9a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_gu_8192_stock.json",
+        "sha256": "790d6964ab0649a513b25f1893fc0ff2e68b43abb0016f346fdb948b7931850c"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_up_16384_stock.json",
+        "sha256": "6c5471ea8cd2ab2755b20f3bdb44412d2f07ad37272cdb10e0e05c58f46c8590"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_up_32768_stock.json",
+        "sha256": "4e75ba61c8fe69b3455d956245f2124ec94782af59cdb8fdfe436487b30df1ee"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_up_8192_stock.json",
+        "sha256": "222df58e7133292f7273917ed6bf8d4487c4bbe7211992956a83eadd7ee9a594"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_rs_16384_stock.json",
+        "sha256": "af88be8faec850be00f254b1883a2d625b64f3600fb0e7a162e0245e148dc39e"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_rs_32768_stock.json",
+        "sha256": "80274ce44c3ceee4420caa9dfbb885251a08b96fd36a160b600785835e3d65dd"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_rs_8192_stock.json",
+        "sha256": "b949ae9c1d95d1c96e82798508c3a99cf6ed766026cb66ee48ed87fa5293179a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_gu_16384_stock.json",
+        "sha256": "509f32e33472a9751f6e7658059d12a491884a27a276f7c4e480b5317e6aba75"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_gu_32768_stock.json",
+        "sha256": "c4e20f1e7979d0a936ee50c7195b189f587a0cbd3f6c5c8b7bdcd64c0bcb6f96"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_gu_8192_stock.json",
+        "sha256": "f1479fc803eff0dab6dbf72e662d9d86b0c7012a3218e3c4b8c912d2a6732ca3"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_up_16384_stock.json",
+        "sha256": "5c7b8a83128d31573689b460cede4c9255dec9867055fc1ebbd6851f6612af1a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_up_32768_stock.json",
+        "sha256": "c83ebbf3fbd8e1e97cc3f416eed82d91c201bf2cbd85555b0a2442bad68bdca0"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_up_8192_stock.json",
+        "sha256": "ecb0d278c12421e17fd689091f016286a00236aacd9e7971365907592e812fe9"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_rs_16384_stock.json",
+        "sha256": "e6fcd160705cabe95683ac05a9351a4cc2ca048becc09d3cde0284d1443dbc9a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_rs_32768_stock.json",
+        "sha256": "cf734427ae25c75cc867ba55a2fc772298b06fda8af424366b54241d4ae94644"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_rs_8192_stock.json",
+        "sha256": "a7e8c113c1c32f3301392c2dc1df26850023caa374884afddc1e75e6f8e56632"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_gu_16384_stock.json",
+        "sha256": "b9b47a3d1bde58470c5cf747481201a8ffc47843d588939d7745df881ffb4881"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_gu_32768_stock.json",
+        "sha256": "e4219417dfa405ca77020329c789e90394296d5fabc2b5c9a9c562829022e22b"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_gu_8192_stock.json",
+        "sha256": "0701fd4cda644d16382eb6e6a0291dcdb299d609909e20b529fcbc8b8342f0cc"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_up_16384_stock.json",
+        "sha256": "24d96524ea8acad30dba5cedb6fd81b1e59092f3839cdacadca16fd3a1772336"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_up_32768_stock.json",
+        "sha256": "0304c23f2f156a6a199746003932d27499c4f94a317e71bec2ce151ff9546d1c"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_up_8192_stock.json",
+        "sha256": "af503f89a48912afed0c231c86df82f1ffc62feceab47f03da0b998515403852"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_rs_16384_stock.json",
+        "sha256": "390fc516baab8a7a34ddcffb0cfa7fb2faad700d2ab604f4e99f48053a08ec5c"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_rs_32768_stock.json",
+        "sha256": "4e67bd0af872ac204a164c7c6dce4952178ea603146ab6a905986daed2f2ea18"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_rs_8192_stock.json",
+        "sha256": "ced6f57580519c9bb71f3f3fd7a0184763749b214598474f5de8d07afdfc5836"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_gu_16384_stock.json",
+        "sha256": "fe757388cfbacc245006154090268f6871d147248b88f66a9b4399f0e63e516d"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_gu_32768_stock.json",
+        "sha256": "909c7167d5fda01fe5c153c6d78f76d7871a9f1b670b7f0d42106a8f9a9100d9"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_gu_8192_stock.json",
+        "sha256": "a6f50243306c9d6c88b7c402f053a993757486904f6e5f2334315665d2e69064"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_up_16384_stock.json",
+        "sha256": "5bd9e557e9825a201184198104d6e603b9fa2e3268017af8a63bb6fdb21f47f3"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_up_32768_stock.json",
+        "sha256": "8bdd16f1e70020bb0e6478a4a152367a8501d414f4439843454d56b91ea7a2c8"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_up_8192_stock.json",
+        "sha256": "5f6ab578f847d44b21966d48a0f5378bd888675da3eb90d2eeafd646ea2bd57a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_rs_16384_stock.json",
+        "sha256": "a3d00c7d3a1c07cc1f6f2c7052fe7f68a009d48678057863633eefba080c806e"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_rs_32768_stock.json",
+        "sha256": "7474c3e7dcb976c58dd9d4c26b0a70a16210568bd2c140081de1c2b1e9edf470"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_rs_8192_stock.json",
+        "sha256": "a11763c92fb968e023a7199d92244c3a3e2bc46e572fec9cdf61a14f04ac171b"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_gu_16384_stock.json",
+        "sha256": "92c02ebbbb8cd76bd6f954b8ac3759125e29ba81bb32785f481bfb5cc23d4637"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_gu_32768_stock.json",
+        "sha256": "783187cc7c388d5e8c81ef3840f2e07cd3d1234472c23fcb14ffb07fca38429b"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_gu_8192_stock.json",
+        "sha256": "dbb9c6b67a2a22ffdfcd1f4a53c8c1a63c328126973dcfdc10f972947a91434f"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_up_16384_stock.json",
+        "sha256": "0b9bb40d3099c9a496a22d29d9d4c89465a1a85ccf481e2c5f7afb7465cc8923"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_up_32768_stock.json",
+        "sha256": "486b1e6fae11e0f4048f0b3e6787047d4d25972c1400b77fdbaa7bb89d63fe80"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_up_8192_stock.json",
+        "sha256": "4eaa2f93c9d3d01324afacce553fd7b7999415391978dfc788b2711572b62f74"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_rs_16384_stock.json",
+        "sha256": "29c802c411ee2fdfe4a3562c1d713435b40ebb4ca9759555350849664e814bf0"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_rs_32768_stock.json",
+        "sha256": "6f217d81bfcb6f98b481fc976659471820823d67c2b13b363fb121d30c3c25cb"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_rs_8192_stock.json",
+        "sha256": "f52f6432a14c372d7a2261082d597de4610c9b11cecf76fbb5db9c66d9513217"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_gu_16384_stock.json",
+        "sha256": "599b8eb2a1043357486c8603c50392e0ec298a9ff98f5d958e140f203ef3f9a2"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_gu_32768_stock.json",
+        "sha256": "786ba3d3df494c1702c2adc818d059f386fb8fd8ea04611f9980853b6be4e6c4"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_gu_8192_stock.json",
+        "sha256": "891b1f3667b226fe04f601895c06bf64a0a5f80510a597c25ce15ea3fd180885"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_up_16384_stock.json",
+        "sha256": "ae11e1f04d906f54540147ccebc61f34d486a74eb38489ec42bb63eeb065280e"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_up_32768_stock.json",
+        "sha256": "05a1b7efdd54abe39eb956a81eb524a23e2fbec53fdb7c99e57cb13cd2666eb7"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_up_8192_stock.json",
+        "sha256": "63926013ac4f8b28bc73bec898d5df8ec99c2168a9bfbd0e5440180e6be5376d"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_rs_16384_stock.json",
+        "sha256": "84cf89776517dbf237650c3e2c340f7b198d0d81f5e3aae4fbcd4c4582637061"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_rs_32768_stock.json",
+        "sha256": "6d2014042141302582f9cde447d27e3173d16854022db2bc828cb9f69738b480"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_rs_8192_stock.json",
+        "sha256": "f48c9462619be0533daa83277f260a3a91e46983cc73dbcc058f5608f0e14528"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_gu_16384_syncopate.json",
+        "sha256": "80e1cefecb1866d5108003259dcd870f595649853ff07860b16213033384d7c7"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_gu_32768_syncopate.json",
+        "sha256": "71c09a3c8965c6e6f109c0e2b7399a6daf9f3320fa1ad03b934361fb888d8975"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_gu_8192_syncopate.json",
+        "sha256": "e2f67cd3689ffb81bd130f98179afb575f13ddbb6b3c3d01acdd5176a3a5e99c"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_up_16384_syncopate.json",
+        "sha256": "a049a4a045cc133ed488cbee081fdfb7931f85329dd58c2902df0c6d4e6935e5"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_up_32768_syncopate.json",
+        "sha256": "aa6614524e0b05b9066940f6d51a8e18f863d1529f7263b8ae6a21a1f56e4512"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_ag_up_8192_syncopate.json",
+        "sha256": "7662c6e484466c0c4ad2b9db424f3986eb43796c04f009b61ca19b01872c4dec"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_rs_16384_syncopate.json",
+        "sha256": "fa95e2122bc3cd5fa57424b6464db63b8c054ab0a289993931ce35df197b08de"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_rs_32768_syncopate.json",
+        "sha256": "ec529ca02f8037168a348735458af2389f204f84160b73f1eb1a7c847bcce6ed"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/dsv3-d_rs_8192_syncopate.json",
+        "sha256": "89abc1f6c8af59f4fb287e19946ad5cdd01ec89ac91adf61fc4b74890e73022f"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_gu_16384_syncopate.json",
+        "sha256": "352310a0967dfa1da22fed160c98fbf8c4c38c19f367b3443d0c8ca466690080"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_gu_32768_syncopate.json",
+        "sha256": "3a9bfb913a2ab5a5a9eadaec0e85a3ac8f9e780765c6c644d9cf5d308b97bf93"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_gu_8192_syncopate.json",
+        "sha256": "7093f56b71784c0096b863070f69f7c2e1eeb157b0f86e4c904dfde3982f0a79"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_up_16384_syncopate.json",
+        "sha256": "760cd1bf2661d62fe2e41cd7d75805fca6c273d0dd7172f5cc62233d0d026804"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_up_32768_syncopate.json",
+        "sha256": "e5d6fe35cbdc27f7d25b52fa4edafcdf1420b7b2fddcb47790cf1365f2e72771"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_ag_up_8192_syncopate.json",
+        "sha256": "5c9cee3f3caf236798521f0802a6a63989940292da8b9f80560e6bc6dea6322c"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_rs_16384_syncopate.json",
+        "sha256": "c3d4655c26277a629883ea19dafa6ea203669f63f24ac1013c997c61a7ed1f40"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_rs_32768_syncopate.json",
+        "sha256": "ef386b3c49f98d98571659434c60ef2846c01339d401754d3c3a84b4bc239859"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/gemma3-27b_rs_8192_syncopate.json",
+        "sha256": "f3dc6d861de81a7731d83ff760e9f236b2296d860e4b99a0f2a102ebab763b46"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_gu_16384_syncopate.json",
+        "sha256": "b7d991ff03c1fe92f5b60e99b51066967820b0b8914d5011d94c798b2e5e0f37"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_gu_32768_syncopate.json",
+        "sha256": "0763c41a229ec2efe9deb47581e1e0e71704d8967797b3d9559140f88950273f"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_gu_8192_syncopate.json",
+        "sha256": "6c4301a9622e8554205736413f95d34ff8ac5d1faf5c4d45dfeb78d389fc7a74"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_up_16384_syncopate.json",
+        "sha256": "5636c32b3ff40f75dcf17feab82cc2058c428c53663320aac3e216fe3469b88c"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_up_32768_syncopate.json",
+        "sha256": "0b8c16a6478fc9ef2f915aeec2744e7030b45319609228886c41dffbb13ff952"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_ag_up_8192_syncopate.json",
+        "sha256": "3d5ba77bae4ed0efeb88f26f5ae0539794807b98a3571fd901b70cb67ae140d8"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_rs_16384_syncopate.json",
+        "sha256": "453daa36e9587a1140b04cae2e863b43a7a764a65fc24df1f62f10ddb21b3deb"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_rs_32768_syncopate.json",
+        "sha256": "80c3ef5e98433496d40cf1f0937ed0f97a38a319793928a80013096cd91253f0"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-70b_rs_8192_syncopate.json",
+        "sha256": "d925ddca00f47098253fbed77b142e966644d2077f9d7183b284168c65b8949f"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_gu_16384_syncopate.json",
+        "sha256": "14c4f4d5fe5fb997d7f99cf04ce20f7a79b4637f4310fe056c3ce1ea4ddadb78"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_gu_32768_syncopate.json",
+        "sha256": "d9009ee466de2e358bff8897aaf9226173738756519e7b13270858c693a86cd2"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_gu_8192_syncopate.json",
+        "sha256": "416268761f9168593cf7ce0a8c64d0f6d490b5e396ba4a9113bb6546fa5527af"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_up_16384_syncopate.json",
+        "sha256": "2b3e88c1cf58ceb193e79610e31d7f4ab10b721bf9c2027fc229b6dc4b385ab8"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_up_32768_syncopate.json",
+        "sha256": "b9f67fb5bde788e520d94a8dc536a0030220a4824b93dc805785c8c024c478d7"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_ag_up_8192_syncopate.json",
+        "sha256": "e0c243ee359f80ec1b23360126882c5a1824ec6053ee94992cfa770300c2d581"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_rs_16384_syncopate.json",
+        "sha256": "7f3f8d343bbd8bc6c8022d4173bc15bf55f6013a208fcbe215041defdb64333e"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_rs_32768_syncopate.json",
+        "sha256": "15e444d0ab131b6863a92e236f70a11ae98d15a72b93ee75cb7add69e709d309"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama3-8b_rs_8192_syncopate.json",
+        "sha256": "6fa22f896e1a56dc97d51cf99341a848921f44d9137c382e10dbdee501bd01ab"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_gu_16384_syncopate.json",
+        "sha256": "931bb5a3a79af412c0f15bd819a3e519480eba55afcbd46ac3920a02883849a9"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_gu_32768_syncopate.json",
+        "sha256": "19abc4273460331f14cb3e04b27b8e7ff317bea254a0646fcc873ebc4232dbdc"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_gu_8192_syncopate.json",
+        "sha256": "af76b08dbe30ad6a77ffa33669da898fd71432a775982039ee99709b367cb20e"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_up_16384_syncopate.json",
+        "sha256": "af24bb947969c0f9f91a91e7f8d19b419af49fb2da98014f08726d4f8c065217"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_up_32768_syncopate.json",
+        "sha256": "2ed128eb1e867bcff5b26f49dec0f14e6ab5253a04d6f5121f202dfc87ee6609"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_ag_up_8192_syncopate.json",
+        "sha256": "5166ca011ea89884bb7a7365dbea0bc5d13227f2cc457eabff999c26f523f805"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_rs_16384_syncopate.json",
+        "sha256": "c9e6f9e9a23f4d543d6a7b82992364c45acd67b2d623cb2c804045dc37080cc7"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_rs_32768_syncopate.json",
+        "sha256": "d30628b5e90d8c52f36d75aac321ef6fcf0eeb000d65014c6da93da8d71fd385"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama31-405b_rs_8192_syncopate.json",
+        "sha256": "5ac8910306d8feeb6702b14468ca067644d7af0016120323030e3cfefcb98325"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_gu_16384_syncopate.json",
+        "sha256": "700e42396bfa5e85b622678b9d7b6e3339991dd577b2c40c9c796a9328ed601a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_gu_32768_syncopate.json",
+        "sha256": "039db9822b5af39af72a347eb63fcfb20f0b5028c0020550cb4bd9bdff199c72"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_gu_8192_syncopate.json",
+        "sha256": "132ae39295c309382c7c1f2cfb64e7eabc94e2f72c2b01be0dcb86d2e78cb8ea"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_up_16384_syncopate.json",
+        "sha256": "14c5882284a0e0c3c23af61f2f1b7b72bba15ff60f22e9d278bb5bbc82023ccd"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_up_32768_syncopate.json",
+        "sha256": "70b40d32a6325996d29089779312213d87dcccf713f6a175f5e6092dfe57e005"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_ag_up_8192_syncopate.json",
+        "sha256": "816c62ce86d0c70421a8d9b8e07f30987908795ded23e396879ebf3c5361463f"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_rs_16384_syncopate.json",
+        "sha256": "aa0c2713e446f86d781eee5db8dd3d8c9da11e9ad6d55fdbca6701e3461c92c3"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_rs_32768_syncopate.json",
+        "sha256": "b4c58e6428fe4b6777c5bb49620739a8ab0d43df5c347f64c2d368cd898a3c78"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/llama4-mav-d_rs_8192_syncopate.json",
+        "sha256": "570d64c4e2c18e1807f109f752356d1b7ec05f2d52b1a0004205c3fe8183d723"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_gu_16384_syncopate.json",
+        "sha256": "2e1fa6fb182a68573d4e2ff3c2ad6f04ccdfb14c13a2b86588d0ba4bc1734dba"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_gu_32768_syncopate.json",
+        "sha256": "e6499b170b7353b442d4dc71dd9e308f8c29d4c3d7cefdea7acea470e3499cec"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_gu_8192_syncopate.json",
+        "sha256": "4de4932d4cab139b20fc0e07c5234ff68c3e1bec4f99be451eb079fc782cd1c0"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_up_16384_syncopate.json",
+        "sha256": "6c4388c3710b17f119f9003c0d3b249d3e1361f41edc4aa14b57681939f58d25"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_up_32768_syncopate.json",
+        "sha256": "0e97643c730cf7cd89e9cdd7e38f5683fed9389d4b8b9c251d2bd9081379d511"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_ag_up_8192_syncopate.json",
+        "sha256": "fe5f74475df726c1fe92ffa634a255750da1fae517302b6d792b4613a33548b5"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_rs_16384_syncopate.json",
+        "sha256": "cd7acb2d6eb54764efc2b9fe5b6bff3ca64145db43e340eecd31b004dab2596b"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_rs_32768_syncopate.json",
+        "sha256": "f54abee3378bbf6cd852388960aeebd493170dacf1d117a8b7575a475cf1c061"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral-l-2407_rs_8192_syncopate.json",
+        "sha256": "f7d5a5526fd062dd2bfb3c133681ed6c74f4c27c965d2c2e696812c5d43a8fb3"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_gu_16384_syncopate.json",
+        "sha256": "0b7648c18dc71afb1bd0d83dc27508a1d1d9aa323b9616bf494098633f217651"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_gu_32768_syncopate.json",
+        "sha256": "b35fb5a5e51c502a170241361cf25ca1996a76ad7e4586af721def175aeacd45"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_gu_8192_syncopate.json",
+        "sha256": "5057cc86d2c1f85f77e3c44d61b04e7995e3084c5871cc9881d46c09695e2764"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_up_16384_syncopate.json",
+        "sha256": "42e9b5ce18276c4daed55e7041b194a2005519d4c1b332c6ab91fc958a7dfecb"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_up_32768_syncopate.json",
+        "sha256": "043c31d18b6e27265d691ae1ae1c00670513fb8141c8420835a4b355a2d5201a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_ag_up_8192_syncopate.json",
+        "sha256": "7e107f6ce0ba648806fc5df5ef8fbe688266dcb5be2ceed53740f2297f1127d9"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_rs_16384_syncopate.json",
+        "sha256": "6333f0144bcc8927c38dcad677b7a01c5ce431593982406a5d21ca8b72dc6f31"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_rs_32768_syncopate.json",
+        "sha256": "62e91801b06ae1fb86d2bd232d5dc51101cbde30f5132d603bbb348b120196a9"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/mistral3-d_rs_8192_syncopate.json",
+        "sha256": "9d0d54c8aea650b206bd998b23cc47c3b3f6831e15caeac70063b26cca35b604"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_gu_16384_syncopate.json",
+        "sha256": "6a254143cccb9c787fa2aed08df468b8369bc87cbcc8e05568ed89dde8ad0fef"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_gu_32768_syncopate.json",
+        "sha256": "db64d4af372efaef0dcb451e88c99e4f7b499de152af4927700c9883a5b61986"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_gu_8192_syncopate.json",
+        "sha256": "c85b882ab8d3e6512c616a5caa752f90dd333616cd72133bc8098f00ac4021a2"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_up_16384_syncopate.json",
+        "sha256": "2dde1f74fc468d5d903ebb4176fa2b20068d0a0f5ac2455196299521735d1f82"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_up_32768_syncopate.json",
+        "sha256": "c48959767ad59122a7373cc8f684f698ffbfb1ef296c289ac18ff9fd764d9531"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_ag_up_8192_syncopate.json",
+        "sha256": "ce93573578c561147cc6e66d22afc4a00f3f612d4d00125b6093f4fe2970dd24"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_rs_16384_syncopate.json",
+        "sha256": "f2a4e379186840356b2d68d298dca8f562bea545a5a248251d9a41a3b39f0f3e"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_rs_32768_syncopate.json",
+        "sha256": "69b3d609f129f1a54dc4ede1df4c2c1440e7b5d92a6d7f8688e0ee60c41c30d2"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen25-72b_rs_8192_syncopate.json",
+        "sha256": "5aedd16fde4e11da11daf58308d2cd06b1663e6d0e71a502ab5944ad3fcad387"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_gu_16384_syncopate.json",
+        "sha256": "3c8a83a720601c11ef91f5b6dea6abf2d2fde208a5dd0da1ced04b659ae0a472"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_gu_32768_syncopate.json",
+        "sha256": "ae56a4ba18cc5b524c050f01eaab64b49c9fb67347d9fa1a0df82fcf0366000a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_gu_8192_syncopate.json",
+        "sha256": "48ddbe575ef91f9bbb1919a0f2bc28ff7bbc4c1cffa6efb91d60861a88e154b5"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_up_16384_syncopate.json",
+        "sha256": "20557d74e15fafacc2c7189df21334ad2983efdfc0a83e7311dbd2b464c14761"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_up_32768_syncopate.json",
+        "sha256": "c433c667fb054d31d80649dbb6ab9a4a79aa2770a22eaee691f6315d382697c2"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_ag_up_8192_syncopate.json",
+        "sha256": "398514314bbcff64da15637fae0245317442bed8ba3c74979da0eb245d923a37"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_rs_16384_syncopate.json",
+        "sha256": "f12c050c63983456adbdf8ce232c76f441f4180dc8bf2ed9a9deeaf9ccf753d4"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_rs_32768_syncopate.json",
+        "sha256": "36f479c1f23c9c0b657e66e287c2096e802ce94b85be7500203138e5a8045eb9"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-32b_rs_8192_syncopate.json",
+        "sha256": "109eeb307843709961f00fd4807359b6970772251ded1024b11eed30d7c4e248"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_gu_16384_syncopate.json",
+        "sha256": "b7426c41400772f5286db63504a0ed4514191bfc199ce73971c009a177e0ad10"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_gu_32768_syncopate.json",
+        "sha256": "1ca8f4d5027be2808c78200af80d2896e4aa06be51027f39082bf930543dded3"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_gu_8192_syncopate.json",
+        "sha256": "2c992361c42ee7fafd076d4664cfdaf995145efc3fac6823a58e486bbd960d9b"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_up_16384_syncopate.json",
+        "sha256": "f34143947cd98efeaf2726c47a23a0030c2fb71020d6a64fa14db3d529bd15ab"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_up_32768_syncopate.json",
+        "sha256": "603a4cf41f91cd8bffa621e1071e6178ba0c29df4ab2cf015e9ccd12d92a8ad4"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_ag_up_8192_syncopate.json",
+        "sha256": "7d37f744961bba478f8d7370b346d162af386d42ddb553071a257c6e2d260d91"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_rs_16384_syncopate.json",
+        "sha256": "4a8912d4086c73a84c9ce0f0015574485b14a73636ac616c11314fb26d244d81"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_rs_32768_syncopate.json",
+        "sha256": "1f392ff6b07e7fca30d09db123757d11177cc2743f2f2e811660855ebfefa6ac"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_sync_matrix_20261113/qwen3-8b_rs_8192_syncopate.json",
+        "sha256": "29fbb512037e13e14395dcbaa0a5d621f009f3e120a029fb8b25094bf2827a41"
+      },
+      {
+        "path": "/root/Stotaway/nvidia/planner/original_a800/data/cells.json",
+        "sha256": "5e1d1bfdfb810fb5a50ae0569db18d8b857b073ff8dfaa9ccb7007b635bc4b15"
+      }
+    ],
+    "method": "manual all eligible projections use Syncopate; stock fallback",
+    "limitation": "Syncopate model trained on FP16, DX on BF16; BF16 real-model runs required to validate",
+    "routes": [
+      {
+        "method": "syncopate",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "ag",
+        "actual_path": "syncopate_generated",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "float16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": 4,
+        "config_family": "measured_tp8"
+      },
+      {
+        "method": "syncopate",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "rs",
+        "actual_path": "syncopate_generated",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "float16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": 4,
+        "config_family": "measured_tp8"
+      },
+      {
+        "method": "dx",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "ag",
+        "actual_path": "direct_exchange8",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": null,
+        "config_family": "dx_existing"
+      },
+      {
+        "method": "dx",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "rs",
+        "actual_path": "direct_exchange8",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": null,
+        "config_family": "dx_existing"
+      }
+    ]
+  }
+}

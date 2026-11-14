@@ -1,0 +1,228 @@
+{
+  "schema": "stowaway-tp8-auto-plan-v1",
+  "workload": "qwen36_train",
+  "tp": 8,
+  "dtype": "bfloat16",
+  "external_backend": "async_tp",
+  "default": "async_tp",
+  "entries": [
+    {
+      "site": "qkv",
+      "op": "ag",
+      "M": 8192,
+      "N": 1792,
+      "K": 5120,
+      "choice": "async_tp",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.356715943184823,
+        "dx": -0.2737512690064168
+      }
+    },
+    {
+      "site": "proj",
+      "op": "rs",
+      "M": 8192,
+      "N": 5120,
+      "K": 768,
+      "choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.3261554370542802,
+        "dx": 0.1222838377147987
+      }
+    },
+    {
+      "site": "fc1",
+      "op": "ag",
+      "M": 8192,
+      "N": 2060,
+      "K": 5120,
+      "choice": "async_tp",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.3331736589804723,
+        "dx": -0.23605891894518813
+      }
+    },
+    {
+      "site": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "N": 5120,
+      "K": 768,
+      "choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.3261554370542802,
+        "dx": 0.1222838377147987
+      }
+    },
+    {
+      "site": "fc1",
+      "op": "ag",
+      "M": 8192,
+      "N": 4352,
+      "K": 5120,
+      "choice": "async_tp",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.18426477669335883,
+        "dx": -0.23965891748892723
+      }
+    },
+    {
+      "site": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "N": 5120,
+      "K": 2176,
+      "choice": "dx",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.28507925973438,
+        "dx": 0.11669787629857924
+      }
+    }
+  ],
+  "provenance": {
+    "sources": [
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_async_matrix_m16384_32768_20261113.jsonl",
+        "sha256": "a9ace9a855f7347ec91155a6f0a85d38d77901fa2836ca0af036b30e363061d6"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_async_matrix_m8192_20261113.jsonl",
+        "sha256": "93ef41a76c31c47e6a2f365cf3ea7ed49566e762e023ba4ce389f9b6aabddb00"
+      },
+      {
+        "path": "/root/Stotaway/nvidia/planner/original_a800/data/cells.json",
+        "sha256": "5e1d1bfdfb810fb5a50ae0569db18d8b857b073ff8dfaa9ccb7007b635bc4b15"
+      }
+    ],
+    "method": "independent route-local residual models with per-route stock normalization",
+    "limitation": "DX and Async measurements are from separate batches; operator estimates require E2E validation",
+    "routes": [
+      {
+        "method": "async_tp",
+        "compute": "pytorch_gemm",
+        "transport": "pytorch_symm_mem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "ag",
+        "actual_path": "torch.ops.symm_mem",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": 4,
+        "config_family": "pytorch_direct"
+      },
+      {
+        "method": "async_tp",
+        "compute": "pytorch_gemm",
+        "transport": "pytorch_symm_mem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "rs",
+        "actual_path": "torch.ops.symm_mem",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": 4,
+        "config_family": "pytorch_direct"
+      },
+      {
+        "method": "dx",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "ag",
+        "actual_path": "direct_exchange8",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": null,
+        "config_family": "dx_existing"
+      },
+      {
+        "method": "dx",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "rs",
+        "actual_path": "direct_exchange8",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": null,
+        "config_family": "dx_existing"
+      }
+    ]
+  }
+}

@@ -1,0 +1,2221 @@
+{
+  "classification": "development leave-one-model-out, independently normalized backends",
+  "limitation": "different batches and some CUDA_DEVICE_MAX_CONNECTIONS settings; approximate oracle",
+  "sources": [
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_td_ag_20261113.jsonl",
+      "sha256": "9d92fd0bd09681f679aac42a032120e6410f94973a3a4fc7054f5cc91bfb3971"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_td_rs_20261113.jsonl",
+      "sha256": "11d025506258683645150c5c4beacab52dee38325b1b2ec8f001e460dc4a3c5c"
+    },
+    {
+      "path": "/root/Stotaway/nvidia/planner/original_a800/data/cells.json",
+      "sha256": "5e1d1bfdfb810fb5a50ae0569db18d8b857b073ff8dfaa9ccb7007b635bc4b15"
+    }
+  ],
+  "summary": {
+    "ag": {
+      "count": 66,
+      "correct": 56,
+      "accuracy": 0.8484848484848485,
+      "selected_gmean_speedup": 1.1205063675926834,
+      "selected_below_stock": 5
+    },
+    "rs": {
+      "count": 33,
+      "correct": 29,
+      "accuracy": 0.8787878787878788,
+      "selected_gmean_speedup": 1.2015997351133942,
+      "selected_below_stock": 1
+    },
+    "all": {
+      "count": 99,
+      "correct": 85,
+      "accuracy": 0.8585858585858586,
+      "selected_gmean_speedup": 1.1469104079852175,
+      "selected_below_stock": 6
+    }
+  },
+  "rows": [
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_gu",
+        8192,
+        4608,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.0389095927997043,
+        "dx": -0.17498705220615404
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.053769832491803,
+        "dx": 0.8118950741169106
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.053769832491803
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_gu",
+        16384,
+        4608,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.009772127566519948,
+        "dx": -0.10391619564524868
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9944934346858336,
+        "dx": 0.9568963824583674
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "stock",
+      "selected_speedup": 0.9944934346858336
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_gu",
+        32768,
+        4608,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.008801578796791387,
+        "dx": -0.031344422959637276
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9868196156448548,
+        "dx": 0.9382452312648941
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "stock",
+      "selected_speedup": 0.9868196156448548
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_up",
+        8192,
+        2304,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.19138604377966661,
+        "dx": -0.1765577637370106
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.2529645917095402,
+        "dx": 0.8102682916035867
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.2529645917095402
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_up",
+        16384,
+        2304,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.1760942614195132,
+        "dx": -0.09966026433925594
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.219388429027095,
+        "dx": 0.9727023054912457
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.219388429027095
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_up",
+        32768,
+        2304,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.18108065318326058,
+        "dx": -0.05084137847223528
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.2363625092015444,
+        "dx": 1.0113366954184309
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.2363625092015444
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_gu",
+        8192,
+        5376,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.01148982487713766,
+        "dx": -0.21701662947134454
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9926873390127802,
+        "dx": 0.8827878447820792
+      },
+      "choice": "stock",
+      "oracle_choice": "stock",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_gu",
+        16384,
+        5376,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.022118666422808388,
+        "dx": -0.1050809369333434
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9594165029839401,
+        "dx": 0.876794630099404
+      },
+      "choice": "stock",
+      "oracle_choice": "stock",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_gu",
+        32768,
+        5376,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.025998505725587328,
+        "dx": -0.03406848769120004
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9528412957493799,
+        "dx": 0.9459314423644131
+      },
+      "choice": "stock",
+      "oracle_choice": "stock",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_up",
+        8192,
+        2688,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.1557112147270306,
+        "dx": -0.19780739317112292
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.223734859570063,
+        "dx": 0.8386123293628445
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.223734859570063
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_up",
+        16384,
+        2688,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.13783880871451076,
+        "dx": -0.12701874898728457
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1776843533405692,
+        "dx": 0.9455697283023894
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.1776843533405692
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_up",
+        32768,
+        2688,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.14517719091889278,
+        "dx": -0.03187411294806263
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.136276620782348,
+        "dx": 0.8775330081992402
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.136276620782348
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_gu",
+        8192,
+        7168,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.07734194660834785,
+        "dx": -0.11960576682320993
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.8988971842607918,
+        "dx": 0.8957259084111642
+      },
+      "choice": "stock",
+      "oracle_choice": "stock",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_gu",
+        16384,
+        7168,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.07934441529098418,
+        "dx": -0.05366032005555524
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9231525079001582,
+        "dx": 0.9308588104057882
+      },
+      "choice": "stock",
+      "oracle_choice": "stock",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_gu",
+        32768,
+        7168,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.0868076421125859,
+        "dx": 0.0009934816228522915
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9322331907162082,
+        "dx": 0.9838216257871519
+      },
+      "choice": "dx",
+      "oracle_choice": "stock",
+      "selected_speedup": 0.9838216257871519
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_up",
+        8192,
+        3584,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.10366326466121657,
+        "dx": -0.19606164519840735
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.2012313134121704,
+        "dx": 0.8414695408409252
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.2012313134121704
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_up",
+        16384,
+        3584,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.0647256298865076,
+        "dx": -0.08939494354210317
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0567437117403484,
+        "dx": 0.8914364457709716
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.0567437117403484
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_up",
+        32768,
+        3584,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.06058346044577498,
+        "dx": -0.027108553729966747
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.069400433872244,
+        "dx": 0.9257245794267065
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.069400433872244
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_gu",
+        8192,
+        3584,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.12551665747779972,
+        "dx": -0.18712032281803706
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.247492012235891,
+        "dx": 0.6843551841377663
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.247492012235891
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_gu",
+        16384,
+        3584,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.08138098605625306,
+        "dx": -0.09581190519093948
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.053092727353866,
+        "dx": 0.8445929203496041
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.053092727353866
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_gu",
+        32768,
+        3584,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.0738669841395536,
+        "dx": -0.023703528116005675
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.067030003944581,
+        "dx": 0.9457054276863573
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.067030003944581
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_up",
+        8192,
+        1792,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.25128662808971103,
+        "dx": -0.2355451754058615
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.417983134694163,
+        "dx": 0.7601072467662797
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.417983134694163
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_up",
+        16384,
+        1792,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.27471881336372556,
+        "dx": -0.11745237857971119
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.3979576286018573,
+        "dx": 0.6492175396692642
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.3979576286018573
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_up",
+        32768,
+        1792,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.29798471233239565,
+        "dx": -0.054837111224741636
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.3586748492793328,
+        "dx": 0.8876341638212945
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.3586748492793328
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_gu",
+        8192,
+        13312,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.27265127237494685,
+        "dx": -0.061287992073200834
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.8507761925644425,
+        "dx": 1.0249277488052198
+      },
+      "choice": "stock",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_gu",
+        16384,
+        13312,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.2675252581199273,
+        "dx": -0.005932753652767781
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.8627787492637017,
+        "dx": 1.0423808656130242
+      },
+      "choice": "stock",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_gu",
+        32768,
+        13312,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.2720743208950294,
+        "dx": 0.052980493180639424
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.8625060287387957,
+        "dx": 1.0533062007883114
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0533062007883114
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_up",
+        8192,
+        6656,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.09954947887757865,
+        "dx": -0.08824930064869127
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9396091799339295,
+        "dx": 1.016135068573231
+      },
+      "choice": "stock",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_up",
+        16384,
+        6656,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.09458154954182339,
+        "dx": -0.03297590444956926
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9213451236662753,
+        "dx": 1.0020877838916094
+      },
+      "choice": "stock",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_up",
+        32768,
+        6656,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.09904513295178324,
+        "dx": 0.024844081605767187
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9322062274225972,
+        "dx": 1.0189587904567596
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0189587904567596
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_gu",
+        8192,
+        4096,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.11581880198760879,
+        "dx": -0.1925842559697413
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.030184388123577,
+        "dx": 0.7164425379595817
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.030184388123577
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_gu",
+        16384,
+        4096,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.052359793628820976,
+        "dx": -0.11525510591627905
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.006615031353187,
+        "dx": 0.8997904780681082
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.006615031353187
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_gu",
+        32768,
+        4096,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.04201573740091852,
+        "dx": -0.04574359194471129
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0033988775043508,
+        "dx": 0.9875420900543503
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.0033988775043508
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_up",
+        8192,
+        2048,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.24882818472191087,
+        "dx": -0.21383378441267498
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1190539558364538,
+        "dx": 0.7494639598458764
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.1190539558364538
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_up",
+        16384,
+        2048,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.22958708575612535,
+        "dx": -0.17257737150590344
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1790448372746638,
+        "dx": 0.8034264808513222
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.1790448372746638
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_up",
+        32768,
+        2048,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.21670674912188156,
+        "dx": -0.07476853971102543
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.2544919532750387,
+        "dx": 0.8815754739290244
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.2544919532750387
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_gu",
+        8192,
+        7168,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.07049439092266636,
+        "dx": -0.06366289468518953
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.8974027101886641,
+        "dx": 0.929486765099849
+      },
+      "choice": "stock",
+      "oracle_choice": "stock",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_gu",
+        16384,
+        7168,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.07215879773136698,
+        "dx": -0.019676286992138255
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9128557216534049,
+        "dx": 0.9668746804237776
+      },
+      "choice": "stock",
+      "oracle_choice": "stock",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_gu",
+        32768,
+        7168,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.0743120362521846,
+        "dx": 0.03576907009108506
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9138363968261958,
+        "dx": 0.9984684254595038
+      },
+      "choice": "dx",
+      "oracle_choice": "stock",
+      "selected_speedup": 0.9984684254595038
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_up",
+        8192,
+        3584,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.13069206070866307,
+        "dx": -0.12784694672421876
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0830796089992016,
+        "dx": 0.8893141348206489
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.0830796089992016
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_up",
+        16384,
+        3584,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.07771505493665033,
+        "dx": -0.04979634701339986
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.033440583607741,
+        "dx": 0.8955103938429848
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.033440583607741
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_up",
+        32768,
+        3584,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.07669494226377756,
+        "dx": 0.0034102635655867165
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0484032076585768,
+        "dx": 0.9046956321615276
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.0484032076585768
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_gu",
+        8192,
+        4096,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.09826556786562225,
+        "dx": -0.19441269798838512
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9643955573700866,
+        "dx": 0.849481190807691
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "stock",
+      "selected_speedup": 0.9643955573700866
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_gu",
+        16384,
+        4096,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.0424238635300962,
+        "dx": -0.08774062851580156
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.00451867704504,
+        "dx": 0.8603131567993669
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.00451867704504
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_gu",
+        32768,
+        4096,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.03651169720553617,
+        "dx": -0.043446867557119837
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0091307968277463,
+        "dx": 0.9704390718854567
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.0091307968277463
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_up",
+        8192,
+        2048,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.22497476495300925,
+        "dx": -0.2085645088318436
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.23743918051479,
+        "dx": 0.846350081261346
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.23743918051479
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_up",
+        16384,
+        2048,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.21382867765140368,
+        "dx": -0.10168472413102815
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.2159965161272634,
+        "dx": 0.9196414754492593
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.2159965161272634
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_up",
+        32768,
+        2048,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.21508132405330063,
+        "dx": -0.05269701416191751
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.2658708725612908,
+        "dx": 0.9406573955956351
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.2658708725612908
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_gu",
+        8192,
+        7392,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.08859834258941418,
+        "dx": -0.12668794971117578
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9021790024842036,
+        "dx": 0.9204450927237423
+      },
+      "choice": "stock",
+      "oracle_choice": "stock",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_gu",
+        16384,
+        7392,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.08758451735673052,
+        "dx": -0.06290340672674366
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9205386492058386,
+        "dx": 0.9535463996216176
+      },
+      "choice": "stock",
+      "oracle_choice": "stock",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_gu",
+        32768,
+        7392,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.08900974524017563,
+        "dx": -0.010436406195887211
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9143887622296917,
+        "dx": 1.0068215989544504
+      },
+      "choice": "stock",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_up",
+        8192,
+        3696,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.09727675856676248,
+        "dx": -0.16730620967555615
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1854407736899928,
+        "dx": 0.7660479657905612
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.1854407736899928
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_up",
+        16384,
+        3696,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.059226805744757555,
+        "dx": -0.0990920108128314
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0446084834540303,
+        "dx": 0.9287906223930459
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.0446084834540303
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_up",
+        32768,
+        3696,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.058446055655661314,
+        "dx": -0.04166282908315483
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0458928574034299,
+        "dx": 0.9732931566792792
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.0458928574034299
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_gu",
+        8192,
+        2560,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.1899636044313434,
+        "dx": -0.19876766554407177
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1539142161678253,
+        "dx": 0.8368128503146911
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.1539142161678253
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_gu",
+        16384,
+        2560,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.16499912429503416,
+        "dx": -0.11951565265297844
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.123537466368318,
+        "dx": 0.8844497843841451
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.123537466368318
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_gu",
+        32768,
+        2560,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.1554649724680133,
+        "dx": -0.08982008519551214
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1412957242752115,
+        "dx": 1.0373284651416501
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.1412957242752115
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_up",
+        8192,
+        1280,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.3520600090788063,
+        "dx": -0.23985834049562774
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.3417220995233639,
+        "dx": 0.6742665614045268
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.3417220995233639
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_up",
+        16384,
+        1280,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.3648048288408171,
+        "dx": -0.1883891769530753
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.3463470019409673,
+        "dx": 0.8999467898111341
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.3463470019409673
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_up",
+        32768,
+        1280,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.36100156393105554,
+        "dx": -0.08323445607123703
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.5748923774830483,
+        "dx": 0.9366693917980121
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.5748923774830483
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_gu",
+        8192,
+        3072,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.16743074270585429,
+        "dx": -0.27009758928680133
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.312981900379087,
+        "dx": 0.8809848974544172
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.312981900379087
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_gu",
+        16384,
+        3072,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.1149136791591678,
+        "dx": -0.1614865205045098
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1307364747303033,
+        "dx": 0.9471588397028493
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.1307364747303033
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_gu",
+        32768,
+        3072,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.1113968571879494,
+        "dx": -0.08615817808155947
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.098915587651881,
+        "dx": 0.9690174805453373
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.098915587651881
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_up",
+        8192,
+        1536,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.29660625574443533,
+        "dx": -0.3100326832536411
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.4001728877630075,
+        "dx": 0.8314084993493183
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.4001728877630075
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_up",
+        16384,
+        1536,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.296651864695019,
+        "dx": -0.2609889066052661
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.5072505779434682,
+        "dx": 0.9823720513244747
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.5072505779434682
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_up",
+        32768,
+        1536,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.31589186473688685,
+        "dx": -0.13224039462602374
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.4948214484813864,
+        "dx": 1.02423197726912
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.4948214484813864
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "rs",
+        8192,
+        7168,
+        2304
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.060801753843070405,
+        "dx": 0.1281364583984076
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.932704805995417,
+        "dx": 1.0967691515066393
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0967691515066393
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "rs",
+        16384,
+        7168,
+        2304
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.05461278603320789,
+        "dx": 0.21080898554151214
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.069066964970357,
+        "dx": 1.2558779889048082
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2558779889048082
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "rs",
+        32768,
+        7168,
+        2304
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.062333700114579005,
+        "dx": 0.29429685671279654
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0716290199161458,
+        "dx": 1.3369933856899499
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.3369933856899499
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "rs",
+        8192,
+        5376,
+        2688
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.0014159090993869916,
+        "dx": 0.10096042502337985
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9463864812791853,
+        "dx": 1.1767682329658076
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1767682329658076
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "rs",
+        16384,
+        5376,
+        2688
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.027522983462984485,
+        "dx": 0.20598309324640507
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.032541013129679,
+        "dx": 1.1379613988768769
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1379613988768769
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "rs",
+        32768,
+        5376,
+        2688
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.048312258332854276,
+        "dx": 0.29246404945390825
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0343040653806646,
+        "dx": 1.2525634369800465
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2525634369800465
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "rs",
+        8192,
+        8192,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.05380659993203747,
+        "dx": 0.075880250088804
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9717530470626711,
+        "dx": 1.0674019139956035
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0674019139956035
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "rs",
+        16384,
+        8192,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.04116158393122821,
+        "dx": 0.17464112130130297
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9723893282278165,
+        "dx": 1.2039223017798184
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2039223017798184
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "rs",
+        32768,
+        8192,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.03422544311254862,
+        "dx": 0.22772713922278387
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9741827080469905,
+        "dx": 1.2255564075649172
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2255564075649172
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "rs",
+        8192,
+        4096,
+        1792
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.10979652121673175,
+        "dx": 0.07440340821206567
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1549680932781687,
+        "dx": 1.0034839428405469
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.1549680932781687
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "rs",
+        16384,
+        4096,
+        1792
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.12356012898851303,
+        "dx": 0.19622240656688125
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9662568836958053,
+        "dx": 1.1025227895551235
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1025227895551235
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "rs",
+        32768,
+        4096,
+        1792
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.128869569590065,
+        "dx": 0.32403236953269376
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1535251616712663,
+        "dx": 1.4650200241575788
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.4650200241575788
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "rs",
+        8192,
+        16384,
+        6656
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.1620550366913735,
+        "dx": 0.0655657745632298
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.8846993331047892,
+        "dx": 1.0902084715144058
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0902084715144058
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "rs",
+        16384,
+        16384,
+        6656
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.16056361856745463,
+        "dx": 0.14822046100214617
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.8772586794530317,
+        "dx": 1.1049791752889304
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1049791752889304
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "rs",
+        32768,
+        16384,
+        6656
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.15581469215265922,
+        "dx": 0.2043920743304614
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.8839065034733493,
+        "dx": 1.1467085639671972
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1467085639671972
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "rs",
+        8192,
+        5120,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.09216062379316736,
+        "dx": 0.09583690698263594
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9226253560101003,
+        "dx": 1.1834195830403558
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1834195830403558
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "rs",
+        16384,
+        5120,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.060537330326184205,
+        "dx": 0.1695847744404752
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9980683285391958,
+        "dx": 1.2958600662108826
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2958600662108826
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "rs",
+        32768,
+        5120,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.08966864199131541,
+        "dx": 0.2898628039577976
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1007346079809541,
+        "dx": 1.4449209885983698
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.4449209885983698
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "rs",
+        8192,
+        12288,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.04098430875635485,
+        "dx": 0.07648116208881246
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9823851957600208,
+        "dx": 1.1653154568800705
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1653154568800705
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "rs",
+        16384,
+        12288,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.03872574949837172,
+        "dx": 0.1696683765999752
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9738484129457221,
+        "dx": 1.1672066048262104
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1672066048262104
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "rs",
+        32768,
+        12288,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.03129432804912903,
+        "dx": 0.22281996604219784
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.968976260696925,
+        "dx": 1.221285811773033
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.221285811773033
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "rs",
+        8192,
+        7168,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.01635555839329808,
+        "dx": 0.12137125311304395
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.2482691301710602,
+        "dx": 1.1371287305780586
+      },
+      "choice": "dx",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.1371287305780586
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "rs",
+        16384,
+        7168,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.04986791064385952,
+        "dx": 0.20669435398977526
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1156792184417583,
+        "dx": 1.2991933508041906
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2991933508041906
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "rs",
+        32768,
+        7168,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.07414271940497728,
+        "dx": 0.2903927930209665
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0903556262242298,
+        "dx": 1.3825220671702176
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.3825220671702176
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "rs",
+        8192,
+        8192,
+        3696
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.04208961787108603,
+        "dx": 0.07489862375090565
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9377245382485204,
+        "dx": 1.0614179821305942
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0614179821305942
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "rs",
+        16384,
+        8192,
+        3696
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.026578165893153066,
+        "dx": 0.16869733296890213
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9292887620140988,
+        "dx": 1.2148594518238935
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2148594518238935
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "rs",
+        32768,
+        8192,
+        3696
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": -0.020983823403273698,
+        "dx": 0.22656832216739636
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 0.9352696006393635,
+        "dx": 1.2183005714696271
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2183005714696271
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "rs",
+        8192,
+        5120,
+        1280
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.1954415065116612,
+        "dx": 0.08239502949843058
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.112441039266895,
+        "dx": 1.175919061658666
+      },
+      "choice": "triton_dist",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.112441039266895
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "rs",
+        16384,
+        5120,
+        1280
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.18428321357690175,
+        "dx": 0.2117945976346312
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.0435179013791385,
+        "dx": 1.2549411175864644
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2549411175864644
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "rs",
+        32768,
+        5120,
+        1280
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.1986772184225163,
+        "dx": 0.3822220252483921
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.2232049535410943,
+        "dx": 1.2657829688651274
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2657829688651274
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "rs",
+        8192,
+        4096,
+        1536
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.08047986095029684,
+        "dx": 0.11374308213576118
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.324699410317165,
+        "dx": 0.9062573638918555
+      },
+      "choice": "dx",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 0.9062573638918555
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "rs",
+        16384,
+        4096,
+        1536
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.04911607317268382,
+        "dx": 0.19359418149672766
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.3474420308646808,
+        "dx": 1.1623695244176298
+      },
+      "choice": "dx",
+      "oracle_choice": "triton_dist",
+      "selected_speedup": 1.1623695244176298
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "rs",
+        32768,
+        4096,
+        1536
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "triton_dist": 0.1343100957194607,
+        "dx": 0.31110544124974937
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "triton_dist": 1.1663362829007589,
+        "dx": 1.5551031361551853
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.5551031361551853
+    }
+  ]
+}

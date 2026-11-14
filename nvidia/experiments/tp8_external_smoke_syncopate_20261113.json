@@ -1,0 +1,37 @@
+{
+  "schema": "stowaway-tp8-auto-plan-v1",
+  "workload": "operator_smoke",
+  "tp": 8,
+  "dtype": "float16",
+  "external_backend": "syncopate",
+  "default": "stock",
+  "entries": [
+    {
+      "site": "qkv",
+      "op": "ag",
+      "M": 8192,
+      "N": 1792,
+      "K": 4096,
+      "choice": "syncopate"
+    },
+    {
+      "site": "proj",
+      "op": "rs",
+      "M": 8192,
+      "N": 4096,
+      "K": 1792,
+      "choice": "dx"
+    },
+    {
+      "site": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "N": 4096,
+      "K": 1792,
+      "choice": "syncopate"
+    }
+  ],
+  "provenance": {
+    "classification": "manual dispatcher correctness test; not a predictor plan"
+  }
+}

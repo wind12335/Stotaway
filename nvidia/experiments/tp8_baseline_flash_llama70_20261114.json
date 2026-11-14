@@ -1,0 +1,254 @@
+{
+  "schema": "stowaway-tp8-auto-plan-v1",
+  "workload": "llama70_infer",
+  "tp": 8,
+  "dtype": "bfloat16",
+  "external_backend": "flashoverlap",
+  "default": "stock",
+  "entries": [
+    {
+      "site": "qkv",
+      "op": "ag",
+      "M": 16384,
+      "N": 1280,
+      "K": 8192,
+      "choice": "stock",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "dx": -0.10258311442181266
+      }
+    },
+    {
+      "site": "proj",
+      "op": "rs",
+      "M": 16384,
+      "N": 8192,
+      "K": 1024,
+      "choice": "flashoverlap",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "dx": 0.26546877796388024,
+        "flashoverlap": 0.19332323736131518
+      }
+    },
+    {
+      "site": "fc1",
+      "op": "ag",
+      "M": 16384,
+      "N": 7168,
+      "K": 8192,
+      "choice": "stock",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "dx": -0.059682463586868933
+      }
+    },
+    {
+      "site": "fc2",
+      "op": "rs",
+      "M": 16384,
+      "N": 8192,
+      "K": 3584,
+      "choice": "flashoverlap",
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "dx": 0.1723585127567825,
+        "flashoverlap": 0.09248254297407403
+      }
+    }
+  ],
+  "provenance": {
+    "sources": [
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/dsv3-d_16384_7168_2304.json",
+        "sha256": "6c1137c2d63e0b0376c51ee5b96243ec6c463221b0f4fa9870ac4c61bd3111fd"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/dsv3-d_32768_7168_2304.json",
+        "sha256": "fe64b1d584a51fb93426d6516130ed31741c6b835ea33f74754250e3f3a3bf16"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/dsv3-d_8192_7168_2304.json",
+        "sha256": "f726940fa279ab4e8b88f6cc6573afa27a04257147ddab398a1a2f2f466b188a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama3-70b_16384_8192_3584.json",
+        "sha256": "ee27b521f439c95215565b9cc8e140d29a83f90bab11dca8dda412a7eb0ae390"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama3-70b_32768_8192_3584.json",
+        "sha256": "1ff0aca51bd94a2e777335eba384a46280600ea50a1223aed1a48e5f3f47660e"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama3-70b_8192_8192_3584.json",
+        "sha256": "7fe38a6ffdafeadec152a86754056f1df3640cfb00cd32592e7e34aff9775eab"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama3-8b_16384_4096_1792.json",
+        "sha256": "bf00168fa6265cf699241414ddb4220418262d49f1e931b1fe964a7c792a0077"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama3-8b_32768_4096_1792.json",
+        "sha256": "02091d0459bc0b30e6cf54c4f9f72b735ab1d32bba07ed074b0aa1760d8b317d"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama31-405b_16384_16384_6656.json",
+        "sha256": "c41f96dac4678fbee2add3cf5a49e2703600a103117e311531b87aac4dc7dc72"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/llama31-405b_8192_16384_6656.json",
+        "sha256": "4f7dee8edaaed77af028e34f001de977571e311feb62f45881116f500e29ead3"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral-l-2407_16384_12288_3584.json",
+        "sha256": "94c1a025d58ed8a4dcd36a20ce1755e3b49db91b231c131e0a3cda839295242f"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral-l-2407_32768_12288_3584.json",
+        "sha256": "d4b4014322dea948548da1b646e7d6e32579a887c533867c5ce8f92dbe37723c"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral-l-2407_8192_12288_3584.json",
+        "sha256": "d3c6b038bb5c9811343027b9b224ea0b83117d1e347c1c65bbdb7edfbda7680e"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral3-d_16384_7168_2048.json",
+        "sha256": "d8fcb2c3d71269d32cd9a2192c5c3bf9fbe61f5c4dc7ffe2130777ab6433b003"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral3-d_32768_7168_2048.json",
+        "sha256": "990a8d69a153d27ddaa7e07b6108b9e2b0c9b5d2e2bf52bc6a92793b414c7f5d"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/mistral3-d_8192_7168_2048.json",
+        "sha256": "c36309fef261bd15fa8dc12bfb027b8bc4e7607e178eb92991f1ca12edd90d78"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen25-72b_16384_8192_3696.json",
+        "sha256": "dfa59ceace158e17bbbdd103abc05d01ab4abe2fb1b80c664d0fa9af6e66b4ca"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen25-72b_32768_8192_3696.json",
+        "sha256": "4488805714dbfa371267865249b0f32a0e2e93127a5ca9871a204877e008aac7"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen25-72b_8192_8192_3696.json",
+        "sha256": "57b67ae80402c324f670e244a1f6ad157396b3a929ebbc5ad2f78d49c4af23e7"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen3-8b_16384_4096_1536.json",
+        "sha256": "165ee79dfb676c5e59f8738f83d7ef344d1ed6a57a327aa4e7475b21798a8a57"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen3-8b_32768_4096_1536.json",
+        "sha256": "84c1234e538ce6e82afed5ebd1c1fd6cf101c1a1dfbcfe8185948f57d8e05352"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_matrix_20261113/qwen3-8b_8192_4096_1536.json",
+        "sha256": "2aa2d0bd386c8cfe40201fc2bd6d66e858c31e050cda36178441a03cc1ee338a"
+      },
+      {
+        "path": "/root/data/stowaway-nvidia/results/tp8_flash_b16_20261113.json",
+        "sha256": "0bdbe9f89474a7d725083f0e02ff5680786725a29244dc0334e2ea38a503b602"
+      },
+      {
+        "path": "/root/Stotaway/nvidia/planner/original_a800/data/cells.json",
+        "sha256": "5e1d1bfdfb810fb5a50ae0569db18d8b857b073ff8dfaa9ccb7007b635bc4b15"
+      }
+    ],
+    "method": "manual FlashOverlap on eligible RS, stock AG",
+    "limitation": "Flash measurements omit layout restoration and are FP16; model runs are BF16 and include layout restoration",
+    "routes": [
+      {
+        "method": "flashoverlap",
+        "compute": "cutlass",
+        "transport": "nccl",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "rs",
+        "actual_path": "flashoverlap_rs",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "float16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": 4,
+        "config_family": "measured_tp8"
+      },
+      {
+        "method": "dx",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "ag",
+        "actual_path": "direct_exchange8",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": null,
+        "config_family": "dx_existing"
+      },
+      {
+        "method": "dx",
+        "compute": "triton",
+        "transport": "nvshmem",
+        "memory": "symmetric_memory",
+        "synchronization": "stream",
+        "direction": "rs",
+        "actual_path": "direct_exchange8",
+        "gpu": "A800-SXM4-80GB",
+        "topology": "NV8",
+        "tp": 8,
+        "dtype": "bfloat16",
+        "versions": [
+          [
+            "cuda",
+            "12.6"
+          ],
+          [
+            "torch",
+            "2.7.0+cu126"
+          ],
+          [
+            "triton",
+            "3.4.0"
+          ]
+        ],
+        "timing_mode": "b2b16",
+        "warmup": null,
+        "config_family": "dx_existing"
+      }
+    ]
+  }
+}

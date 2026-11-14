@@ -16,7 +16,7 @@ if int(os.environ["WORLD_SIZE"]) != 2 or rank != int(os.environ["LOCAL_RANK"]):
     raise ValueError("exactly two local ranks required")
 torch.cuda.set_device(rank)
 arm = os.environ["E2E_ARM"]
-if arm not in ("stock", "dx"):
+if arm not in ("stock", "stock_sp", "dx", "plan"):
     raise ValueError("invalid arm")
 model = Path(os.environ["E2E_MODEL"])
 arch = os.environ["E2E_ARCH"]
@@ -28,9 +28,14 @@ warmups = int(os.environ.get("E2E_WARMUPS", "2"))
 if rows <= 0 or rows % 2 or min(batch, output_length, repeats, warmups) < 1:
     raise ValueError("invalid benchmark dimensions")
 adapter = None
-if arm == "dx":
+if arm in ("stock_sp", "dx", "plan"):
     from stowaway_nvidia.vllm_sp import LlamaSequenceParallel
-    adapter = LlamaSequenceParallel(None, rank, "dx", [rows], architecture=arch)
+    plan_args = {}
+    if arm == 'plan':
+        plan_args = {'forward_plan': os.environ['E2E_FORWARD_PLAN'],
+                     'plan_workload': {'seq_length': rows, 'micro_batch_size': 1}}
+    adapter = LlamaSequenceParallel(None, rank, "stock_sp" if arm == 'stock_sp' else 'dx',
+                                    [rows], architecture=arch, **plan_args)
     adapter.install()
 
 from vllm import LLM, SamplingParams
@@ -86,6 +91,14 @@ if adapter:
     print(f"BATCH_ADAPTER rank={rank} measured_hits={hits} fallbacks={adapter.fallbacks}", flush=True)
     if hits < repeats:
         raise RuntimeError("prefill adapter insufficiently exercised")
+rank_plan_decisions = None
+if adapter and adapter.lookup:
+    local = [{'site': k[0], 'M': k[1], 'K': k[2], 'N': k[3], 'choice': k[4], 'count': v}
+             for k, v in adapter.plan_decisions.items()]
+    rank_plan_decisions = [None] * 2
+    dist.all_gather_object(rank_plan_decisions, local, group=cpu_group)
+    if rank_plan_decisions[0] != rank_plan_decisions[1]:
+        raise RuntimeError(f'plan choices or counts differ across ranks: {rank_plan_decisions}')
 if rank == 0:
     median = statistics.median(item["elapsed_ms"] for item in measurements)
     result = {"arm": arm, "model": str(model), "arch": arch, "M": rows, "batch": batch,
@@ -94,7 +107,12 @@ if rank == 0:
               "prompt_hashes": hashes, "measurements": measurements, "median_ms": median,
               "generated_tokens_per_second": batch * output_length * 1000 / median,
               "measured_hits_rank0": hits, "components": sorted(adapter.dx_components) if adapter else [],
-              "row_exact": adapter.row_exact if adapter else None}
+              "row_exact": adapter.row_exact if adapter else None,
+              "plan_sha256": adapter.lookup.digest if adapter and adapter.lookup else None,
+              "plan_decisions_by_rank": rank_plan_decisions,
+              "plan_decisions": ([{'site': k[0], 'M': k[1], 'K': k[2], 'N': k[3],
+                                    'choice': k[4], 'count': v}
+                                   for k, v in adapter.plan_decisions.items()] if adapter else [])}
     dest = Path(os.environ["E2E_OUT"])
     with dest.open("x") as f:
         json.dump(result, f, indent=2)

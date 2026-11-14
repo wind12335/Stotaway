@@ -1,0 +1,29 @@
+{
+  "schema": "stowaway-tp8-auto-plan-v1",
+  "workload": "operator_smoke",
+  "tp": 8,
+  "dtype": "float16",
+  "external_backend": "flashoverlap",
+  "default": "stock",
+  "entries": [
+    {
+      "site": "proj",
+      "op": "rs",
+      "M": 8192,
+      "N": 4096,
+      "K": 1792,
+      "choice": "dx"
+    },
+    {
+      "site": "fc2",
+      "op": "rs",
+      "M": 8192,
+      "N": 4096,
+      "K": 1792,
+      "choice": "flashoverlap"
+    }
+  ],
+  "provenance": {
+    "classification": "manual dispatcher correctness test; not a predictor plan"
+  }
+}

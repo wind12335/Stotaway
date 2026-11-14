@@ -1,0 +1,1 @@
+{"schema": "stowaway-tp8-auto-plan-v1", "workload": "operator_smoke", "tp": 8, "dtype": "float16", "external_backend": "flashoverlap", "default": "stock", "entries": [{"site": "proj", "op": "rs", "M": 32768, "N": 5376, "K": 2688, "choice": "flashoverlap"}]}

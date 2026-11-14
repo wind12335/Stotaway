@@ -1,0 +1,46 @@
+{
+  "method": "flashoverlap",
+  "direction": "rs",
+  "M": 8192,
+  "N": 4096,
+  "K": 1536,
+  "tp": 8,
+  "dtype": "float16",
+  "batch": 16,
+  "repeats": 8,
+  "warmup": 4,
+  "gpu": "NVIDIA A800-SXM4-80GB",
+  "torch": "2.7.0+cu126",
+  "config": "/root/data/stowaway-nvidia/flashoverlap_tp8_work_20261113/configs/m8192n4096k1536_a800.json",
+  "config_sha256": "3543bd8b13e6e7633bf832788111cfd46a433d28c418274df474ffdbc21ca077",
+  "seed": 812,
+  "correctness": "must be checked separately using README example",
+  "measurements": {
+    "overlap": {
+      "samples_ms": [
+        1.0249099731445312,
+        1.0232160091400146,
+        1.022402048110962,
+        1.0145100355148315,
+        1.0852819681167603,
+        1.0152260065078735,
+        1.0085159540176392,
+        1.0096800327301025
+      ],
+      "median_ms": 1.0188140273094177
+    },
+    "stock": {
+      "samples_ms": [
+        0.9888499975204468,
+        0.9800040125846863,
+        0.9730799794197083,
+        0.973226010799408,
+        0.9699559807777405,
+        0.973143994808197,
+        0.970035970211029,
+        0.9676899909973145
+      ],
+      "median_ms": 0.9731119871139526
+    }
+  }
+}

@@ -23,8 +23,8 @@ if int(os.environ["WORLD_SIZE"]) != 2 or rank != int(os.environ["LOCAL_RANK"]):
     raise ValueError("exactly two local ranks required")
 torch.cuda.set_device(rank)
 arm = os.environ["E2E_ARM"]
-if arm not in ("stock", "stock_sp", "dx"):
-    raise ValueError("E2E_ARM must be stock, stock_sp, or dx")
+if arm not in ("stock", "stock_sp", "dx", "plan"):
+    raise ValueError("E2E_ARM must be stock, stock_sp, dx, or plan")
 model = Path(os.environ["E2E_MODEL"])
 arch = os.environ.get("E2E_ARCH", "llama")
 rows = int(os.environ.get("E2E_M", "1024"))
@@ -37,7 +37,9 @@ if rows <= 0 or rows % 2 or min(requests, warmups, generated) < 1:
 adapter = None
 if arm != "stock":
     from stowaway_nvidia.vllm_sp import LlamaSequenceParallel
-    adapter = LlamaSequenceParallel(None, rank, arm, [rows], architecture=arch)
+    kwargs = ({'forward_plan':os.environ['E2E_FORWARD_PLAN'],
+               'plan_workload':{'seq_length':rows,'micro_batch_size':1}} if arm=='plan' else {})
+    adapter = LlamaSequenceParallel(None, rank, 'dx' if arm=='plan' else arm, [rows], architecture=arch, **kwargs)
     adapter.install()
 
 from vllm import LLM, SamplingParams
@@ -101,6 +103,13 @@ if adapter:
         raise RuntimeError("measured requests did not all trigger the prefill adapter")
 else:
     hits = 0
+rank_plan_decisions = None
+if adapter and adapter.lookup:
+    local=[{'site':k[0],'M':k[1],'K':k[2],'N':k[3],'choice':k[4],'count':v}
+           for k,v in adapter.plan_decisions.items()]
+    rank_plan_decisions=[None]*2
+    dist.all_gather_object(rank_plan_decisions,local,group=cpu_group)
+    if rank_plan_decisions[0]!=rank_plan_decisions[1]:raise RuntimeError('plan decisions differ between ranks')
 if rank == 0:
     destination = Path(os.environ["E2E_OUT"])
     summary = {str(n): {"median_ms": statistics.median(x["elapsed_ms"] for x in results if x["generated"] == n),
@@ -112,6 +121,8 @@ if rank == 0:
                "torch": torch.__version__, "cuda": torch.version.cuda, "gpu": torch.cuda.get_device_name(),
                "enforce_eager": True, "prefix_caching": False, "components": sorted(adapter.dx_components) if adapter else [],
                "row_exact": adapter.row_exact if adapter else None, "measured_hits_rank0": hits,
+               "plan_sha256":adapter.lookup.digest if adapter and adapter.lookup else None,
+               "plan_decisions_by_rank":rank_plan_decisions,
                "schedule": schedule, "summary": summary, "results": results}
     destination.parent.mkdir(parents=True, exist_ok=True)
     with destination.open("x") as target:

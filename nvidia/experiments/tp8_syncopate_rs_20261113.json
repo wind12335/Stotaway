@@ -1,0 +1,13 @@
+{
+  "tp": 8,
+  "dtype": "float16",
+  "batch": 16,
+  "warmup": 4,
+  "repeats": 8,
+  "target": {
+    "op": "rs",
+    "M": 8192,
+    "N": 4096,
+    "K": 1792
+  }
+}

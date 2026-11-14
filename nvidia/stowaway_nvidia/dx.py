@@ -141,12 +141,14 @@ class ReduceScatter:
 
 
 class DirectExchange:
-    def __init__(self, cuda, rank, world_size, rows, inner, columns, dtype):
+    def __init__(self, cuda, rank, world_size, rows, inner, columns, dtype, *, reuse_rs_scratch=False):
         if (world_size != 2 or rank not in (0, 1) or rows <= 0 or inner <= 0
                 or columns <= 0 or rows % world_size):
             raise ValueError("requires two ranks and rows divisible by two")
         if dtype not in (torch.float16, torch.bfloat16):
             raise ValueError("only float16 and bfloat16 are supported")
+        if not isinstance(reuse_rs_scratch, bool):
+            raise ValueError('reuse_rs_scratch must be bool')
         self.cuda = cuda
         self.rank = rank
         self.peer = 1 - rank
@@ -172,6 +174,11 @@ class DirectExchange:
         self.tickets = torch.arange(1 << 22, dtype=torch.int32, device="cuda")
         self.closed = False
         self.caller_stream = None
+        # Opt-in experimental scratch: output remains independently allocated.
+        # Every call waits for its send before returning control to this stream,
+        # so the next call's writes are ordered after the preceding send.
+        self.reuse_rs_scratch = reuse_rs_scratch
+        self.rs_scratch = None
 
     def _next_round(self, field):
         if self.closed:
@@ -187,7 +194,9 @@ class DirectExchange:
         setattr(self, field, value)
         return value
 
-    def gemm_reduce_scatter(self, activation, weight):
+    def gemm_reduce_scatter(self, activation, weight, *, output_layout='contiguous'):
+        if output_layout not in ('contiguous', 'interleaved'):
+            raise ValueError('unknown reduce-scatter output layout')
         if (activation.shape != (self.rows, self.inner)
                 or weight.shape != (self.columns, self.inner)
                 or activation.dtype != self.dtype or weight.dtype != self.dtype
@@ -198,15 +207,27 @@ class DirectExchange:
             raise ValueError("invalid GEMM+RS input shape, dtype, device or layout")
         turn = self._next_round("rs_round")
         current = torch.cuda.current_stream()
-        partial = torch.empty((self.rows, self.columns), device=activation.device, dtype=self.dtype)
+        if self.reuse_rs_scratch:
+            if self.rs_scratch is None:
+                self.rs_scratch = torch.empty((self.rows, self.columns), device=activation.device, dtype=self.dtype)
+            partial = self.rs_scratch
+        else:
+            partial = torch.empty((self.rows, self.columns), device=activation.device, dtype=self.dtype)
         output = torch.empty((self.block_rows, self.columns), device=activation.device, dtype=self.dtype)
         remote_start = self.peer * self.block_rows
         own_start = self.rank * self.block_rows
-        torch.matmul(activation[remote_start:remote_start + self.block_rows], weight.t(),
+        # Compute the peer's logical shard first to expose its copy while the
+        # local shard computes. Interleaved mode produces rank::world rows
+        # directly, avoiding a subsequent cross-rank row redistribution.
+        remote_input = (activation[remote_start:remote_start + self.block_rows]
+                        if output_layout == 'contiguous' else activation[self.peer::2])
+        own_input = (activation[own_start:own_start + self.block_rows]
+                     if output_layout == 'contiguous' else activation[self.rank::2])
+        torch.matmul(remote_input, weight.t(),
                      out=partial[remote_start:remote_start + self.block_rows])
         ready = torch.cuda.Event()
         ready.record(current)
-        torch.matmul(activation[own_start:own_start + self.block_rows], weight.t(),
+        torch.matmul(own_input, weight.t(),
                      out=partial[own_start:own_start + self.block_rows])
         block_bytes = self.block_rows * self.columns * partial.element_size()
         with torch.cuda.stream(self.send):
@@ -218,7 +239,8 @@ class DirectExchange:
                            block_bytes, self.send)
             self.cuda.copy(self.rs_arrival[self.peer] + self.rank * 4,
                            self.tickets.data_ptr() + turn * 4, 4, self.send)
-        partial.record_stream(self.send)
+        if not self.reuse_rs_scratch:
+            partial.record_stream(self.send)
         self.cuda.wait(self.rs_arrival[self.rank].data_ptr() + self.peer * 4, turn, current)
         count = self.block_rows * self.columns
         _sum_pair[(triton.cdiv(count, 1024),)](
@@ -324,4 +346,5 @@ class DirectExchange:
     def close(self):
         if not self.closed:
             self.buffers.close()
+            self.rs_scratch = None
             self.closed = True

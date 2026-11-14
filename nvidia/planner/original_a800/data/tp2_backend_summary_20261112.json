@@ -1,0 +1,243 @@
+{
+  "classification": "exploratory summaries; source results remain on data volume; not independent final evaluation",
+  "sources": {
+    "dx_160": {
+      "path": "/root/data/stowaway-nvidia/results/tp2_orthogonal_dx_20261112.json",
+      "sha256": "76fe9346944b3672b2fc61c08cae698a57012ef2c74c928e383cba3ab23347ac",
+      "summary": {
+        "False": {
+          "count": 160,
+          "correct": 118,
+          "speedup_gmean": 1.0805063137994662,
+          "slower": 31,
+          "always_overlap_correct": 125,
+          "always_overlap_gmean": 1.087605444792904
+        },
+        "True": {
+          "count": 160,
+          "correct": 119,
+          "speedup_gmean": 1.0819981653321016,
+          "slower": 30,
+          "always_overlap_correct": 125,
+          "always_overlap_gmean": 1.087605444792904
+        }
+      }
+    },
+    "dx_repeat": {
+      "path": "/root/data/stowaway-nvidia/results/tp2_predictor_repeat_holdout_20261112.json",
+      "sha256": "9f7e906a9359437ecb6825b1ca0622c9268d9e1bb79df30db92e080fcec81cbb",
+      "summary": {
+        "relative_pick": {
+          "count": 40,
+          "correct": 15,
+          "speedup_gmean": 1.0121629084718156,
+          "slower": 0
+        },
+        "nested_pick": {
+          "count": 40,
+          "correct": 31,
+          "speedup_gmean": 1.0810310505479994,
+          "slower": 4
+        },
+        "always_dx": {
+          "count": 40,
+          "correct": 28,
+          "speedup_gmean": 1.090126754983465,
+          "slower": 12
+        },
+        "always_stock": {
+          "count": 40,
+          "correct": 12,
+          "speedup_gmean": 1.0,
+          "slower": 0
+        }
+      }
+    },
+    "triton_37": {
+      "path": "/root/data/stowaway-nvidia/results/tp2_orthogonal_triton_37_20261112.json",
+      "sha256": "991c0bd7267af283cd89906f8d23857ca81ece61ab8db561ed59d90fe525a672",
+      "summary": {
+        "False": {
+          "count": 37,
+          "correct": 22,
+          "speedup_gmean": 0.9941429270501646,
+          "slower": 5,
+          "always_overlap_correct": 11,
+          "always_overlap_gmean": 0.9118787024505483
+        },
+        "True": {
+          "count": 37,
+          "correct": 22,
+          "speedup_gmean": 0.9941429270501646,
+          "slower": 5,
+          "always_overlap_correct": 11,
+          "always_overlap_gmean": 0.9118787024505483
+        }
+      }
+    },
+    "triton_nested": {
+      "path": "/root/data/stowaway-nvidia/results/tp2_td_nested_37_20261112.json",
+      "sha256": "9048ad9f77e5d62b493efbbcc00372bd2f2ad29a83d235f858b3df9d525c753d",
+      "summary": {
+        "count": 37,
+        "correct": 25,
+        "speedup_gmean": 0.9995251935077157,
+        "slower": 2
+      }
+    },
+    "flash_warm32": {
+      "path": "/root/data/stowaway-nvidia/results/tp2_flash_warm32_predictor_20261112.json",
+      "sha256": "f7a4c4274bf075f5cc4fb6364753d990e5b47e92c077e0dd190eff76bd7afb65",
+      "summary": {
+        "count": 18,
+        "families": 6,
+        "correct": 13,
+        "speedup_gmean": 1.0160866748191084,
+        "slower": 3,
+        "always_stock_correct": 5,
+        "always_overlap_correct": 13,
+        "always_overlap_gmean": 1.0143728078473546,
+        "oracle_gmean": 1.0288231193774096
+      }
+    },
+    "triton_40": {
+      "path": "/root/data/stowaway-nvidia/results/tp2_orthogonal_triton_40_20261112.json",
+      "sha256": "e563352268beaca2ec1c8e3b03343e8e55e28c7ff858ccaaf13fc34e169e9a82",
+      "summary": {
+        "False": {
+          "count": 40,
+          "correct": 24,
+          "speedup_gmean": 0.9960429395235219,
+          "slower": 5,
+          "always_overlap_correct": 13,
+          "always_overlap_gmean": 0.9204042007119132
+        },
+        "True": {
+          "count": 40,
+          "correct": 24,
+          "speedup_gmean": 0.9960429395235219,
+          "slower": 5,
+          "always_overlap_correct": 13,
+          "always_overlap_gmean": 0.9204042007119132
+        }
+      }
+    },
+    "triton_nested_40": {
+      "path": "/root/data/stowaway-nvidia/results/tp2_td_nested_40_20261112.json",
+      "sha256": "52abb09e9d6d46c5592f2f39638e2daacd06afb5e2de5bc6d85c9a29d03152ff",
+      "summary": {
+        "count": 40,
+        "correct": 25,
+        "speedup_gmean": 0.9964002505911792,
+        "slower": 2
+      }
+    },
+    "flash_repeat32": {
+      "path": "/root/data/stowaway-nvidia/results/tp2_flash_repeat32_holdout_20261112.json",
+      "sha256": "546a225b1c8cfc132c1b2480081b5236b0c681dfebe2827484bda481bc7c8d0b",
+      "summary": {
+        "count": 5,
+        "correct": 1,
+        "speedup_gmean": 0.9803297240275816,
+        "slower": 4,
+        "always_overlap_correct": 1,
+        "always_overlap_gmean": 0.9803297240275816,
+        "always_stock_correct": 4
+      }
+    },
+    "qwen36_forward_holdout": {
+      "path": "/root/data/stowaway-nvidia/results/tp2_qwen36_forward_holdout_20261112.json",
+      "sha256": "d74ae78ba6441c2af2ce487333ce0654ca5e77fc894c0016229c8061b86612f8",
+      "summary": {
+        "relative_pick": {
+          "count": 18,
+          "correct": 8,
+          "gmean_speedup": 1.0093507076994523,
+          "slower": 0
+        },
+        "nested_pick": {
+          "count": 18,
+          "correct": 11,
+          "gmean_speedup": 1.039978782690351,
+          "slower": 4
+        },
+        "always_dx": {
+          "count": 18,
+          "correct": 13,
+          "gmean_speedup": 1.0565544666455162,
+          "slower": 5
+        },
+        "always_stock": {
+          "count": 18,
+          "correct": 5,
+          "gmean_speedup": 1.0,
+          "slower": 0
+        }
+      }
+    },
+    "qwen_training_holdout": {
+      "path": "/root/data/stowaway-nvidia/results/qwen36_tp2_training_conn1_holdout_20261112.json",
+      "sha256": "6be8793e812812a84865f731bce81930466581a9aecff20c7c9fa0e1b131a86c",
+      "summary": {
+        "count": 18,
+        "correct": 15,
+        "speedup_gmean": 1.0255325792892902,
+        "slower": 0,
+        "always_dx_correct": 7,
+        "always_dx_gmean": 1.0077498272550465,
+        "always_stock_correct": 11,
+        "oracle_gmean": 1.0282429725741573
+      }
+    },
+    "qwen_training_unseen_m3072": {
+      "path": "/root/data/stowaway-nvidia/results/qwen36_tp2_training_unseen_m3072_20261112.json",
+      "sha256": "2f7631c42818d0713232731199f51589b3765345d2aa0f69fee097b56723e27e",
+      "summary": {
+        "count": 12,
+        "correct": 6,
+        "speedup_gmean": 1.0120640368532006,
+        "slower": 0,
+        "always_dx_correct": 10,
+        "always_dx_gmean": 1.0221362804091703,
+        "always_stock_correct": 2,
+        "oracle_gmean": 1.0255675981677086
+      }
+    },
+    "qwen_e2e_m2048": {
+      "path": "/root/data/stowaway-nvidia/results/qwen36_tp2_e2e_plan_summary_20261112.json",
+      "sha256": "44dcf01d9aae249c8f389b499c80118ae64734a2d0c26811ec9caa2356e77f85",
+      "summary": {
+        "stock_median_ms": 368.5,
+        "plan_median_ms": 367.0,
+        "speedup": 1.0040871934604905
+      }
+    },
+    "qwen_e2e_m3072": {
+      "path": "/root/data/stowaway-nvidia/results/qwen36_tp2_e2e_m3072_summary_20261112.json",
+      "sha256": "0377c9fc0704bf67c9641d692c76b0eb2f468232b3e29e35a6acd7197bd1ec85",
+      "summary": {
+        "stock_median_ms": 472.2,
+        "plan_median_ms": 472.6,
+        "speedup": 0.999153618281845
+      }
+    },
+    "qwen_e2e_m4096": {
+      "path": "/root/data/stowaway-nvidia/results/qwen36_tp2_e2e_m4096_summary_20261112.json",
+      "sha256": "daab36ccaff8068878032f5f909ffbf3f3d483b289f6e164b4f9c39af1478487",
+      "summary": {
+        "stock_median_ms": 575.7,
+        "plan_median_ms": 572.0,
+        "speedup": 1.0064685314685315
+      }
+    },
+    "qwen_e2e_all": {
+      "path": "/root/data/stowaway-nvidia/results/qwen36_tp2_e2e_all_dx_summary_20261112.json",
+      "sha256": "64b9af9c69b890fb95bfa5894348ef48ad4463c4ffd163394fd0ff6e7aa4ff2f",
+      "summary": {
+        "stock_median_ms": 367.7,
+        "plan_median_ms": 368.8,
+        "speedup": 0.9970173535791756
+      }
+    }
+  }
+}

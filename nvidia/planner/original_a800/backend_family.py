@@ -4,7 +4,7 @@ Calibration values are supplied by the caller; this module does not train a
 cost model, check GPU kernel support, or establish end-to-end performance.
 Unknown interaction terms are never silently treated as measured zeros.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from itertools import combinations, product
 from typing import Mapping, Optional, Tuple
 import math
@@ -107,6 +107,7 @@ class StepCalibration:
     common_ms: float
     pairs_ms: Mapping[Tuple[str, str], float]
     provenance: str
+    site_residual_ms: Mapping[str, float] = field(default_factory=dict)
 
     def __post_init__(self):
         if not self.workload or not self.provenance or not math.isfinite(self.common_ms):
@@ -118,6 +119,9 @@ class StepCalibration:
         for pair, value in self.pairs_ms.items():
             if not isinstance(pair, tuple) or len(pair) != 2 or pair[0] >= pair[1] or not math.isfinite(value):
                 raise ValueError('interaction keys must be sorted distinct site pairs')
+        if any(not isinstance(site, str) or not site or not math.isfinite(value)
+               for site, value in self.site_residual_ms.items()):
+            raise ValueError('invalid site residual')
 
 
 def plan(environment: Environment, workload: str, occurrences, estimates,
@@ -150,6 +154,8 @@ def plan(environment: Environment, workload: str, occurrences, estimates,
     sites = tuple(sorted({o.site for o in occurrences}))
     if step is not None and any(not set(pair) <= set(sites) for pair in step.pairs_ms):
         raise ValueError('interaction references an unknown site')
+    if step is not None and any(site not in sites for site in step.site_residual_ms):
+        raise ValueError('site residual references an unknown site')
     missing = sorted({o.site for o in occurrences if o.key not in lookup or not lookup[o.key].supported})
     available = set(sites) - set(missing)
     candidates = []
@@ -163,14 +169,20 @@ def plan(environment: Environment, workload: str, occurrences, estimates,
             continue
         delta = sum(o.count * (lookup[o.key].overlap_ms - lookup[o.key].stock_ms)
                     for o in occurrences if o.site in selected)
+        operator_delta = delta
         penalty = sum(o.count * lookup[o.key].uncertainty_ms for o in occurrences if o.site in selected)
+        residual_delta = 0.0
         if selected:
-            delta += step.common_ms + sum(step.pairs_ms[p] for p in combinations(selected, 2))
-        candidates.append({'sites': list(selected), 'delta_ms': delta, 'conservative_delta_ms': delta + penalty})
+            residual_delta = (step.common_ms + sum(step.site_residual_ms.get(s, 0.) for s in selected)
+                              + sum(step.pairs_ms[p] for p in combinations(selected, 2)))
+            delta += residual_delta
+        candidates.append({'sites': list(selected), 'operator_delta_ms': operator_delta,
+                           'step_residual_ms': residual_delta, 'delta_ms': delta,
+                           'conservative_delta_ms': delta + penalty})
     best = min(candidates, key=lambda c: (c['conservative_delta_ms'], len(c['sites']), c['sites']))
     if best['conservative_delta_ms'] >= -margin_ms:
         best = next(c for c in candidates if not c['sites'])
     return {'method': environment.method, 'family': environment.family, 'workload': workload,
-            'best': best, 'candidates': candidates, 'unavailable_sites': missing,
+            'sites_order': list(sites), 'best': best, 'candidates': candidates, 'unavailable_sites': missing,
             'uncalibrated_masks': uncalibrated_masks,
             'status': 'experimental prediction; not a measured end-to-end result'}

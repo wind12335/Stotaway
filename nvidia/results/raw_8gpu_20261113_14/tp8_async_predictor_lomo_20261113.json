@@ -1,0 +1,1821 @@
+{
+  "classification": "TP8 operator leave-one-model-out development evaluation",
+  "source": [
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_async_matrix_m16384_32768_20261113.jsonl",
+      "sha256": "a9ace9a855f7347ec91155a6f0a85d38d77901fa2836ca0af036b30e363061d6"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_async_matrix_m8192_20261113.jsonl",
+      "sha256": "93ef41a76c31c47e6a2f365cf3ea7ed49566e762e023ba4ce389f9b6aabddb00"
+    }
+  ],
+  "note": "Stock vs Async-TP only; no DX replacement, unseen process, or E2E evaluation.",
+  "summary": {
+    "ag": {
+      "count": 66,
+      "correct": 65,
+      "accuracy": 0.9848484848484849,
+      "speedup_gmean": 1.3018066626520377,
+      "below_one": 0
+    },
+    "rs": {
+      "count": 33,
+      "correct": 31,
+      "accuracy": 0.9393939393939394,
+      "speedup_gmean": 0.998973452154123,
+      "below_one": 2
+    },
+    "all": {
+      "count": 99,
+      "correct": 96,
+      "accuracy": 0.9696969696969697,
+      "speedup_gmean": 1.1918336478682838,
+      "below_one": 2
+    }
+  },
+  "rows": [
+    {
+      "model": "dsv3-d",
+      "op": "ag",
+      "shape": [
+        16384,
+        4608,
+        7168
+      ],
+      "actual_speedup": 1.2264681193496159,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.20992845842271707,
+        "base_log_speedup": 0.21609192590207332,
+        "local_delta": -0.006163467479356261,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "dsv3-d",
+      "op": "ag",
+      "shape": [
+        16384,
+        2304,
+        7168
+      ],
+      "actual_speedup": 1.4365021035780923,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.36171811981762486,
+        "base_log_speedup": 0.34421058024041506,
+        "local_delta": 0.017507539577209814,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "dsv3-d",
+      "op": "ag",
+      "shape": [
+        32768,
+        4608,
+        7168
+      ],
+      "actual_speedup": 1.2317251832478258,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.23074740161981955,
+        "base_log_speedup": 0.2429207417396074,
+        "local_delta": -0.012173340119787856,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "dsv3-d",
+      "op": "ag",
+      "shape": [
+        32768,
+        2304,
+        7168
+      ],
+      "actual_speedup": 1.4987301422725339,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.3845065189769005,
+        "base_log_speedup": 0.3710393960779491,
+        "local_delta": 0.013467122898951417,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "dsv3-d",
+      "op": "ag",
+      "shape": [
+        8192,
+        4608,
+        7168
+      ],
+      "actual_speedup": 1.4006149283521367,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.19175695380615893,
+        "base_log_speedup": 0.18926311006453927,
+        "local_delta": 0.002493843741619656,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "dsv3-d",
+      "op": "ag",
+      "shape": [
+        8192,
+        2304,
+        7168
+      ],
+      "actual_speedup": 1.4798383605095888,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.31470154684491525,
+        "base_log_speedup": 0.31738176440288096,
+        "local_delta": -0.0026802175579657373,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "gemma3-27b",
+      "op": "ag",
+      "shape": [
+        16384,
+        5376,
+        5376
+      ],
+      "actual_speedup": 1.2167585248946475,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.18363006000058607,
+        "base_log_speedup": 0.1863510136520867,
+        "local_delta": -0.0027209536515006324,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "gemma3-27b",
+      "op": "ag",
+      "shape": [
+        16384,
+        2688,
+        5376
+      ],
+      "actual_speedup": 1.3732510635376187,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.3228714088360927,
+        "base_log_speedup": 0.316530859880936,
+        "local_delta": 0.006340548955156756,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "gemma3-27b",
+      "op": "ag",
+      "shape": [
+        32768,
+        5376,
+        5376
+      ],
+      "actual_speedup": 1.197600815946355,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.1972703630012091,
+        "base_log_speedup": 0.20891646345763143,
+        "local_delta": -0.011646100456422344,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "gemma3-27b",
+      "op": "ag",
+      "shape": [
+        32768,
+        2688,
+        5376
+      ],
+      "actual_speedup": 1.4353165394870966,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.34949294121680446,
+        "base_log_speedup": 0.33909630968648075,
+        "local_delta": 0.010396631530323695,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "gemma3-27b",
+      "op": "ag",
+      "shape": [
+        8192,
+        5376,
+        5376
+      ],
+      "actual_speedup": 1.1961299733715067,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.1808715531558343,
+        "base_log_speedup": 0.16378556384654194,
+        "local_delta": 0.01708598930929237,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "gemma3-27b",
+      "op": "ag",
+      "shape": [
+        8192,
+        2688,
+        5376
+      ],
+      "actual_speedup": 1.3528391812188574,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.27805975184024173,
+        "base_log_speedup": 0.2939654100753913,
+        "local_delta": -0.01590565823514958,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-70b",
+      "op": "ag",
+      "shape": [
+        16384,
+        7168,
+        8192
+      ],
+      "actual_speedup": 1.1447861187389654,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.13244178184437536,
+        "base_log_speedup": 0.1400748918642785,
+        "local_delta": -0.007633110019903141,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-70b",
+      "op": "ag",
+      "shape": [
+        16384,
+        3584,
+        8192
+      ],
+      "actual_speedup": 1.2727469644014135,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.2593282661229151,
+        "base_log_speedup": 0.269197606943397,
+        "local_delta": -0.009869340820481909,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-70b",
+      "op": "ag",
+      "shape": [
+        32768,
+        7168,
+        8192
+      ],
+      "actual_speedup": 1.1478298073994828,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.14760147131403312,
+        "base_log_speedup": 0.16217708435830872,
+        "local_delta": -0.01457561304427559,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-70b",
+      "op": "ag",
+      "shape": [
+        32768,
+        3584,
+        8192
+      ],
+      "actual_speedup": 1.315959613173397,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.2755314144899803,
+        "base_log_speedup": 0.29129979943742723,
+        "local_delta": -0.01576838494744694,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-70b",
+      "op": "ag",
+      "shape": [
+        8192,
+        7168,
+        8192
+      ],
+      "actual_speedup": 1.0865356382397493,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.12391968313721438,
+        "base_log_speedup": 0.11797269937024826,
+        "local_delta": 0.005946983766966122,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-70b",
+      "op": "ag",
+      "shape": [
+        8192,
+        3584,
+        8192
+      ],
+      "actual_speedup": 1.2838816752251236,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.2559729747587833,
+        "base_log_speedup": 0.24709541444936678,
+        "local_delta": 0.008877560309416497,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-8b",
+      "op": "ag",
+      "shape": [
+        16384,
+        3584,
+        4096
+      ],
+      "actual_speedup": 1.2971586090815177,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.27832726352502735,
+        "base_log_speedup": 0.2743126410411768,
+        "local_delta": 0.004014622483850558,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-8b",
+      "op": "ag",
+      "shape": [
+        16384,
+        1792,
+        4096
+      ],
+      "actual_speedup": 1.3325440270359892,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.427709180897524,
+        "base_log_speedup": 0.4018636953724791,
+        "local_delta": 0.025845485525044884,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-8b",
+      "op": "ag",
+      "shape": [
+        32768,
+        3584,
+        4096
+      ],
+      "actual_speedup": 1.2981130720598437,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.28987170787680394,
+        "base_log_speedup": 0.29350269140403545,
+        "local_delta": -0.003630983527231527,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-8b",
+      "op": "ag",
+      "shape": [
+        32768,
+        1792,
+        4096
+      ],
+      "actual_speedup": 1.5160753018870647,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.4526512586643779,
+        "base_log_speedup": 0.4210537457353377,
+        "local_delta": 0.03159751292904016,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-8b",
+      "op": "ag",
+      "shape": [
+        8192,
+        3584,
+        4096
+      ],
+      "actual_speedup": 1.1297654347822816,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.24069277419955845,
+        "base_log_speedup": 0.2551225906783182,
+        "local_delta": -0.014429816478759771,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-8b",
+      "op": "ag",
+      "shape": [
+        8192,
+        1792,
+        4096
+      ],
+      "actual_speedup": 1.426325136134661,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.37689067352394645,
+        "base_log_speedup": 0.3826736450096204,
+        "local_delta": -0.005782971485673967,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama31-405b",
+      "op": "ag",
+      "shape": [
+        16384,
+        13312,
+        16384
+      ],
+      "actual_speedup": 1.0782907255955265,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.002391326031895588,
+        "base_log_speedup": 0.003137731418975609,
+        "local_delta": -0.0007464053870800208,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama31-405b",
+      "op": "ag",
+      "shape": [
+        16384,
+        6656,
+        16384
+      ],
+      "actual_speedup": 1.1615563906378967,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.1402999132374784,
+        "base_log_speedup": 0.14205868904967867,
+        "local_delta": -0.0017587758122002814,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama31-405b",
+      "op": "ag",
+      "shape": [
+        32768,
+        13312,
+        16384
+      ],
+      "actual_speedup": 1.0739317477394101,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.02056434765795632,
+        "base_log_speedup": 0.027289312245184827,
+        "local_delta": -0.0067249645872285045,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama31-405b",
+      "op": "ag",
+      "shape": [
+        32768,
+        6656,
+        16384
+      ],
+      "actual_speedup": 1.1658715839463014,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.1591753934965957,
+        "base_log_speedup": 0.16621026987588788,
+        "local_delta": -0.007034876379292189,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama31-405b",
+      "op": "ag",
+      "shape": [
+        8192,
+        13312,
+        16384
+      ],
+      "actual_speedup": 1.0835571329756206,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.02466053529465332,
+        "base_log_speedup": -0.02101384940723361,
+        "local_delta": -0.00364668588741971,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama31-405b",
+      "op": "ag",
+      "shape": [
+        8192,
+        6656,
+        16384
+      ],
+      "actual_speedup": 1.1614826818748076,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.11406651602905882,
+        "base_log_speedup": 0.11790710822346948,
+        "local_delta": -0.0038405921944106554,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama4-mav-d",
+      "op": "ag",
+      "shape": [
+        16384,
+        4096,
+        5120
+      ],
+      "actual_speedup": 1.2675086890546314,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.24110624984199114,
+        "base_log_speedup": 0.23924692300744962,
+        "local_delta": 0.0018593268345415154,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama4-mav-d",
+      "op": "ag",
+      "shape": [
+        16384,
+        2048,
+        5120
+      ],
+      "actual_speedup": 1.3847976950638663,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.3574092141516106,
+        "base_log_speedup": 0.3690439981171336,
+        "local_delta": -0.011634783965523015,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama4-mav-d",
+      "op": "ag",
+      "shape": [
+        32768,
+        4096,
+        5120
+      ],
+      "actual_speedup": 1.2784412464620236,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.24865312189957134,
+        "base_log_speedup": 0.2595810488661147,
+        "local_delta": -0.010927926966543367,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama4-mav-d",
+      "op": "ag",
+      "shape": [
+        32768,
+        2048,
+        5120
+      ],
+      "actual_speedup": 1.5327357893515121,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.39513857781260225,
+        "base_log_speedup": 0.3893781239757987,
+        "local_delta": 0.005760453836803561,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama4-mav-d",
+      "op": "ag",
+      "shape": [
+        8192,
+        4096,
+        5120
+      ],
+      "actual_speedup": 1.2066758060656952,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.20035503264481117,
+        "base_log_speedup": 0.21891279714878456,
+        "local_delta": -0.0185577645039734,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama4-mav-d",
+      "op": "ag",
+      "shape": [
+        8192,
+        2048,
+        5120
+      ],
+      "actual_speedup": 1.3940171111603568,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.33092233798756576,
+        "base_log_speedup": 0.3487098722584685,
+        "local_delta": -0.017787534270902745,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral-l-2407",
+      "op": "ag",
+      "shape": [
+        16384,
+        7168,
+        12288
+      ],
+      "actual_speedup": 1.1273433393018601,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.1450122186656377,
+        "base_log_speedup": 0.14916501989689698,
+        "local_delta": -0.004152801231259272,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral-l-2407",
+      "op": "ag",
+      "shape": [
+        16384,
+        3584,
+        12288
+      ],
+      "actual_speedup": 1.2651055903544135,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.2695847105598796,
+        "base_log_speedup": 0.2824103497958888,
+        "local_delta": -0.012825639236009217,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral-l-2407",
+      "op": "ag",
+      "shape": [
+        32768,
+        7168,
+        12288
+      ],
+      "actual_speedup": 1.1532864364896347,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.1577705300743545,
+        "base_log_speedup": 0.17128791116009767,
+        "local_delta": -0.013517381085743196,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral-l-2407",
+      "op": "ag",
+      "shape": [
+        32768,
+        3584,
+        12288
+      ],
+      "actual_speedup": 1.3150030009658011,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.2898994504230746,
+        "base_log_speedup": 0.3045332410590895,
+        "local_delta": -0.014633790636014955,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral-l-2407",
+      "op": "ag",
+      "shape": [
+        8192,
+        7168,
+        12288
+      ],
+      "actual_speedup": 1.1067393576485403,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.12249543261376478,
+        "base_log_speedup": 0.1270421286336963,
+        "local_delta": -0.004546696019931512,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral-l-2407",
+      "op": "ag",
+      "shape": [
+        8192,
+        3584,
+        12288
+      ],
+      "actual_speedup": 1.2665987367424147,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.25750021386542327,
+        "base_log_speedup": 0.2602874585326881,
+        "local_delta": -0.0027872446672648175,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral3-d",
+      "op": "ag",
+      "shape": [
+        16384,
+        4096,
+        7168
+      ],
+      "actual_speedup": 1.2680074494674043,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.23050769052605008,
+        "base_log_speedup": 0.24068047204496956,
+        "local_delta": -0.010172781518919495,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral3-d",
+      "op": "ag",
+      "shape": [
+        16384,
+        2048,
+        7168
+      ],
+      "actual_speedup": 1.5058304396559181,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.36987907012977395,
+        "base_log_speedup": 0.3687305113804349,
+        "local_delta": 0.0011485587493390733,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral3-d",
+      "op": "ag",
+      "shape": [
+        32768,
+        4096,
+        7168
+      ],
+      "actual_speedup": 1.2716376177184743,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.24865755051695604,
+        "base_log_speedup": 0.2622567632012679,
+        "local_delta": -0.013599212684311855,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral3-d",
+      "op": "ag",
+      "shape": [
+        32768,
+        2048,
+        7168
+      ],
+      "actual_speedup": 1.526332750594297,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.4077726092567131,
+        "base_log_speedup": 0.3903068025367332,
+        "local_delta": 0.017465806719979892,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral3-d",
+      "op": "ag",
+      "shape": [
+        8192,
+        4096,
+        7168
+      ],
+      "actual_speedup": 1.247187245597544,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.24645204719700145,
+        "base_log_speedup": 0.21910418088867123,
+        "local_delta": 0.027347866308330228,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral3-d",
+      "op": "ag",
+      "shape": [
+        8192,
+        2048,
+        7168
+      ],
+      "actual_speedup": 1.406337234231285,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.3674134774882623,
+        "base_log_speedup": 0.34715422022413656,
+        "local_delta": 0.020259257264125734,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen25-72b",
+      "op": "ag",
+      "shape": [
+        16384,
+        7392,
+        8192
+      ],
+      "actual_speedup": 1.135811696950106,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.1268222736081606,
+        "base_log_speedup": 0.1337498342617029,
+        "local_delta": -0.006927560653542305,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen25-72b",
+      "op": "ag",
+      "shape": [
+        16384,
+        3696,
+        8192
+      ],
+      "actual_speedup": 1.267541158305927,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.2536948135280415,
+        "base_log_speedup": 0.2638581907237554,
+        "local_delta": -0.010163377195713886,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen25-72b",
+      "op": "ag",
+      "shape": [
+        32768,
+        7392,
+        8192
+      ],
+      "actual_speedup": 1.1445745031819832,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.14054820237665047,
+        "base_log_speedup": 0.15606890536993095,
+        "local_delta": -0.015520702993280474,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen25-72b",
+      "op": "ag",
+      "shape": [
+        32768,
+        3696,
+        8192
+      ],
+      "actual_speedup": 1.2913783105956447,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.273809058940017,
+        "base_log_speedup": 0.28617726183198344,
+        "local_delta": -0.012368202891966417,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen25-72b",
+      "op": "ag",
+      "shape": [
+        8192,
+        7392,
+        8192
+      ],
+      "actual_speedup": 1.1055209935940853,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.10930341954642138,
+        "base_log_speedup": 0.11143076315347483,
+        "local_delta": -0.0021273436070534477,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen25-72b",
+      "op": "ag",
+      "shape": [
+        8192,
+        3696,
+        8192
+      ],
+      "actual_speedup": 1.2458697191441042,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.25747953033365156,
+        "base_log_speedup": 0.24153911961552732,
+        "local_delta": 0.015940410718124257,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-32b",
+      "op": "ag",
+      "shape": [
+        16384,
+        2560,
+        5120
+      ],
+      "actual_speedup": 1.4334448685792993,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.3235305714875535,
+        "base_log_speedup": 0.32665960762021373,
+        "local_delta": -0.00312903613266027,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-32b",
+      "op": "ag",
+      "shape": [
+        16384,
+        1280,
+        5120
+      ],
+      "actual_speedup": 1.6016420696133689,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.4629646673496767,
+        "base_log_speedup": 0.4589395698183015,
+        "local_delta": 0.004025097531375209,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-32b",
+      "op": "ag",
+      "shape": [
+        32768,
+        2560,
+        5120
+      ],
+      "actual_speedup": 1.4355303806270912,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.3583612997863107,
+        "base_log_speedup": 0.3449853340671286,
+        "local_delta": 0.013375965719182073,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-32b",
+      "op": "ag",
+      "shape": [
+        32768,
+        1280,
+        5120
+      ],
+      "actual_speedup": 1.6536367267494385,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.5054225741794957,
+        "base_log_speedup": 0.47726529626521635,
+        "local_delta": 0.028157277914279338,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-32b",
+      "op": "ag",
+      "shape": [
+        8192,
+        2560,
+        5120
+      ],
+      "actual_speedup": 1.2719638191298792,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.3085929467502755,
+        "base_log_speedup": 0.30833388117329885,
+        "local_delta": 0.0002590655769766611,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-32b",
+      "op": "ag",
+      "shape": [
+        8192,
+        1280,
+        5120
+      ],
+      "actual_speedup": 1.4744699409257058,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.43903128757663173,
+        "base_log_speedup": 0.4406138433713866,
+        "local_delta": -0.0015825557947548832,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-8b",
+      "op": "ag",
+      "shape": [
+        16384,
+        3072,
+        4096
+      ],
+      "actual_speedup": 1.3590551073699,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.2846861846279125,
+        "base_log_speedup": 0.2774842958958458,
+        "local_delta": 0.00720188873206671,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-8b",
+      "op": "ag",
+      "shape": [
+        16384,
+        1536,
+        4096
+      ],
+      "actual_speedup": 1.7392028177366485,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.38072662052907574,
+        "base_log_speedup": 0.4031950497197615,
+        "local_delta": -0.022468429190685757,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-8b",
+      "op": "ag",
+      "shape": [
+        32768,
+        3072,
+        4096
+      ],
+      "actual_speedup": 1.3554519849185642,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.30229043865242006,
+        "base_log_speedup": 0.29823764099048583,
+        "local_delta": 0.004052797661934242,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-8b",
+      "op": "ag",
+      "shape": [
+        32768,
+        1536,
+        4096
+      ],
+      "actual_speedup": 1.7082376347713144,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.44022978947430585,
+        "base_log_speedup": 0.42394839481440155,
+        "local_delta": 0.016281394659904327,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-8b",
+      "op": "ag",
+      "shape": [
+        8192,
+        3072,
+        4096
+      ],
+      "actual_speedup": 1.3265159885909892,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.22227522660453713,
+        "base_log_speedup": 0.2567309508012057,
+        "local_delta": -0.0344557241966686,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-8b",
+      "op": "ag",
+      "shape": [
+        8192,
+        1536,
+        4096
+      ],
+      "actual_speedup": 1.524599978019737,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.37421700144442127,
+        "base_log_speedup": 0.38244170462512145,
+        "local_delta": -0.008224703180700175,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "dsv3-d",
+      "op": "rs",
+      "shape": [
+        16384,
+        7168,
+        2304
+      ],
+      "actual_speedup": 0.8715601476924133,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.12447740812394084,
+        "base_log_speedup": -0.13180927651416405,
+        "local_delta": 0.007331868390223212,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "dsv3-d",
+      "op": "rs",
+      "shape": [
+        32768,
+        7168,
+        2304
+      ],
+      "actual_speedup": 0.9477782563818941,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.037624955979681074,
+        "base_log_speedup": -0.03652142536585458,
+        "local_delta": -0.001103530613826495,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "dsv3-d",
+      "op": "rs",
+      "shape": [
+        8192,
+        7168,
+        2304
+      ],
+      "actual_speedup": 0.7469589557384063,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.24253418645522234,
+        "base_log_speedup": -0.22709712766247353,
+        "local_delta": -0.015437058792748806,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "gemma3-27b",
+      "op": "rs",
+      "shape": [
+        16384,
+        5376,
+        2688
+      ],
+      "actual_speedup": 0.8273800670347947,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.13863051447200084,
+        "base_log_speedup": -0.15904972651985563,
+        "local_delta": 0.0204192120478548,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "gemma3-27b",
+      "op": "rs",
+      "shape": [
+        32768,
+        5376,
+        2688
+      ],
+      "actual_speedup": 0.9205706347049767,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.05441435625620955,
+        "base_log_speedup": -0.05931379128712079,
+        "local_delta": 0.004899435030911239,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "gemma3-27b",
+      "op": "rs",
+      "shape": [
+        8192,
+        5376,
+        2688
+      ],
+      "actual_speedup": 0.7977345223823433,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.2803657954185611,
+        "base_log_speedup": -0.2587856617525905,
+        "local_delta": -0.021580133665970638,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-70b",
+      "op": "rs",
+      "shape": [
+        16384,
+        8192,
+        3584
+      ],
+      "actual_speedup": 0.9446599434981652,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.0967180949263453,
+        "base_log_speedup": -0.11467787712688327,
+        "local_delta": 0.01795978220053797,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-70b",
+      "op": "rs",
+      "shape": [
+        32768,
+        8192,
+        3584
+      ],
+      "actual_speedup": 0.9669296584269459,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.028721767955164137,
+        "base_log_speedup": -0.016034619475679343,
+        "local_delta": -0.012687148479484796,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-70b",
+      "op": "rs",
+      "shape": [
+        8192,
+        8192,
+        3584
+      ],
+      "actual_speedup": 0.8186015243312454,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.20338637226924425,
+        "base_log_speedup": -0.2133211347780872,
+        "local_delta": 0.009934762508842957,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-8b",
+      "op": "rs",
+      "shape": [
+        16384,
+        4096,
+        1792
+      ],
+      "actual_speedup": 0.8082053175341838,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.16372359767946268,
+        "base_log_speedup": -0.18511890726654553,
+        "local_delta": 0.02139530958708285,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-8b",
+      "op": "rs",
+      "shape": [
+        32768,
+        4096,
+        1792
+      ],
+      "actual_speedup": 0.9348493917333981,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.07054223205367528,
+        "base_log_speedup": -0.09549857114014387,
+        "local_delta": 0.02495633908646859,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama3-8b",
+      "op": "rs",
+      "shape": [
+        8192,
+        4096,
+        1792
+      ],
+      "actual_speedup": 0.6528635317628116,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.31483321833985434,
+        "base_log_speedup": -0.2747392433929472,
+        "local_delta": -0.04009397494690711,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama31-405b",
+      "op": "rs",
+      "shape": [
+        16384,
+        16384,
+        6656
+      ],
+      "actual_speedup": 0.9627646746440865,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.011148204970793444,
+        "base_log_speedup": -0.023784791264499228,
+        "local_delta": 0.012636586293705784,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama31-405b",
+      "op": "rs",
+      "shape": [
+        32768,
+        16384,
+        6656
+      ],
+      "actual_speedup": 0.9986944701011807,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.05593288035813279,
+        "base_log_speedup": 0.08017928715859785,
+        "local_delta": -0.024246406800465053,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama31-405b",
+      "op": "rs",
+      "shape": [
+        8192,
+        16384,
+        6656
+      ],
+      "actual_speedup": 0.9471253167649155,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.10426669391153198,
+        "base_log_speedup": -0.12774886968759633,
+        "local_delta": 0.023482175776064353,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama4-mav-d",
+      "op": "rs",
+      "shape": [
+        16384,
+        5120,
+        2048
+      ],
+      "actual_speedup": 0.9342222564873164,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.18472329564391446,
+        "base_log_speedup": -0.17816585300212437,
+        "local_delta": -0.006557442641790086,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama4-mav-d",
+      "op": "rs",
+      "shape": [
+        32768,
+        5120,
+        2048
+      ],
+      "actual_speedup": 0.9746993343750023,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.08017158319099701,
+        "base_log_speedup": -0.08432195950301252,
+        "local_delta": 0.004150376312015504,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "llama4-mav-d",
+      "op": "rs",
+      "shape": [
+        8192,
+        5120,
+        2048
+      ],
+      "actual_speedup": 0.74487341308921,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.2992491014431756,
+        "base_log_speedup": -0.2720097465012362,
+        "local_delta": -0.027239354941939426,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral-l-2407",
+      "op": "rs",
+      "shape": [
+        16384,
+        12288,
+        3584
+      ],
+      "actual_speedup": 0.9206545929587633,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.0530044830417259,
+        "base_log_speedup": -0.07123903515362026,
+        "local_delta": 0.018234552111894363,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral-l-2407",
+      "op": "rs",
+      "shape": [
+        32768,
+        12288,
+        3584
+      ],
+      "actual_speedup": 0.967938142924238,
+      "prediction": {
+        "choice": "async_tp",
+        "predicted_log_speedup": 0.010810230004851807,
+        "base_log_speedup": 0.03253199517547403,
+        "local_delta": -0.021721765170622225,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral-l-2407",
+      "op": "rs",
+      "shape": [
+        8192,
+        12288,
+        3584
+      ],
+      "actual_speedup": 0.9141844373623902,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.156666127148116,
+        "base_log_speedup": -0.17501006548271456,
+        "local_delta": 0.018343938334598534,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral3-d",
+      "op": "rs",
+      "shape": [
+        16384,
+        7168,
+        2048
+      ],
+      "actual_speedup": 0.8747608443211813,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.12589650156524065,
+        "base_log_speedup": -0.133531936222734,
+        "local_delta": 0.007635434657493344,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral3-d",
+      "op": "rs",
+      "shape": [
+        32768,
+        7168,
+        2048
+      ],
+      "actual_speedup": 0.9460802751324008,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.03791108025658234,
+        "base_log_speedup": -0.037820542780179434,
+        "local_delta": -9.053747640290232e-05,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "mistral3-d",
+      "op": "rs",
+      "shape": [
+        8192,
+        7168,
+        2048
+      ],
+      "actual_speedup": 0.752388386372334,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.24738266715501445,
+        "base_log_speedup": -0.22924332966528851,
+        "local_delta": -0.01813933748972592,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen25-72b",
+      "op": "rs",
+      "shape": [
+        16384,
+        8192,
+        3696
+      ],
+      "actual_speedup": 0.9416719167138885,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.09485848586722004,
+        "base_log_speedup": -0.1141330643439096,
+        "local_delta": 0.019274578476689567,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen25-72b",
+      "op": "rs",
+      "shape": [
+        32768,
+        8192,
+        3696
+      ],
+      "actual_speedup": 0.9659341620610434,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.02761578022540528,
+        "base_log_speedup": -0.015288053451976702,
+        "local_delta": -0.012327726773428579,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen25-72b",
+      "op": "rs",
+      "shape": [
+        8192,
+        8192,
+        3696
+      ],
+      "actual_speedup": 0.8212860137848984,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.20365828363756436,
+        "base_log_speedup": -0.2129780752358425,
+        "local_delta": 0.009319791598278147,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-32b",
+      "op": "rs",
+      "shape": [
+        16384,
+        5120,
+        1280
+      ],
+      "actual_speedup": 0.9184522077850933,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.19605733979865023,
+        "base_log_speedup": -0.209439698238674,
+        "local_delta": 0.013382358440023787,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-32b",
+      "op": "rs",
+      "shape": [
+        32768,
+        5120,
+        1280
+      ],
+      "actual_speedup": 0.9654774595998309,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.08729738966012439,
+        "base_log_speedup": -0.11508577513745177,
+        "local_delta": 0.027788385477327388,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-32b",
+      "op": "rs",
+      "shape": [
+        8192,
+        5120,
+        1280
+      ],
+      "actual_speedup": 0.7458978253321589,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.3509521193100554,
+        "base_log_speedup": -0.30379362133989624,
+        "local_delta": -0.04715849797015914,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-8b",
+      "op": "rs",
+      "shape": [
+        16384,
+        4096,
+        1536
+      ],
+      "actual_speedup": 0.8109242479913293,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.17206749396192705,
+        "base_log_speedup": -0.1931110617630436,
+        "local_delta": 0.021043567801116558,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-8b",
+      "op": "rs",
+      "shape": [
+        32768,
+        4096,
+        1536
+      ],
+      "actual_speedup": 0.9358918140146432,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.07747519318031051,
+        "base_log_speedup": -0.10239504295445545,
+        "local_delta": 0.024919849774144937,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    },
+    {
+      "model": "qwen3-8b",
+      "op": "rs",
+      "shape": [
+        8192,
+        4096,
+        1536
+      ],
+      "actual_speedup": 0.6690488877160832,
+      "prediction": {
+        "choice": "stock",
+        "predicted_log_speedup": -0.3282428799109988,
+        "base_log_speedup": -0.28382708057163175,
+        "local_delta": -0.044415799339367054,
+        "status": "experimental route-local residual",
+        "estimate_valid": true
+      }
+    }
+  ]
+}

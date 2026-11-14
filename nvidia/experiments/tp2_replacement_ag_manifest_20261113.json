@@ -1,0 +1,16 @@
+{
+  "tp": 2,
+  "dtype": "bfloat16",
+  "batch": 16,
+  "repeats": 8,
+  "warmup": 32,
+  "runs_per_arm": 3,
+  "targets": [
+    {"model":"llama3_8b", "site":"fc1", "M":1024, "N":14336, "K":4096},
+    {"model":"qwen3_14b", "site":"fc1", "M":1024, "N":17408, "K":5120},
+    {"model":"llama3_70b", "site":"fc1", "M":1024, "N":28672, "K":8192}
+  ],
+  "orders": [["stock","triton_dist","dx"],["dx","stock","triton_dist"],["triton_dist","dx","stock"]],
+  "selection": "targets chosen from previously inspected external-backend results with speedup below 0.95; no predictor trained on targets",
+  "warning": "exploratory already-inspected shapes, independent processes; chosen path only; shared reference inputs and software signature"
+}

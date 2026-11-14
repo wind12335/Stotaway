@@ -1,0 +1,2221 @@
+{
+  "classification": "development leave-one-model-out, normalized independently per backend",
+  "limitation": "DX and Async measured in different batches; normalized oracle is approximate, not paired latency ground truth",
+  "sources": [
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_async_matrix_m16384_32768_20261113.jsonl",
+      "sha256": "a9ace9a855f7347ec91155a6f0a85d38d77901fa2836ca0af036b30e363061d6"
+    },
+    {
+      "path": "/root/data/stowaway-nvidia/results/tp8_async_matrix_m8192_20261113.jsonl",
+      "sha256": "93ef41a76c31c47e6a2f365cf3ea7ed49566e762e023ba4ce389f9b6aabddb00"
+    },
+    {
+      "path": "/root/Stotaway/nvidia/planner/original_a800/data/cells.json",
+      "sha256": "5e1d1bfdfb810fb5a50ae0569db18d8b857b073ff8dfaa9ccb7007b635bc4b15"
+    }
+  ],
+  "summary": {
+    "ag": {
+      "count": 66,
+      "correct": 64,
+      "selected_gmean_speedup": 1.3014242152100632,
+      "selected_below_stock": 0,
+      "accuracy": 0.9696969696969697
+    },
+    "rs": {
+      "count": 33,
+      "correct": 32,
+      "selected_gmean_speedup": 1.198505000180688,
+      "selected_below_stock": 1,
+      "accuracy": 0.9696969696969697
+    },
+    "all": {
+      "count": 99,
+      "correct": 96,
+      "selected_gmean_speedup": 1.2661715148030783,
+      "selected_below_stock": 1,
+      "accuracy": 0.9696969696969697
+    }
+  },
+  "rows": [
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_gu",
+        8192,
+        4608,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.1917569538061587,
+        "dx": -0.17498705220615404
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.4006149283521367,
+        "dx": 0.8118950741169106
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.4006149283521367
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_gu",
+        16384,
+        4608,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.2099284584227169,
+        "dx": -0.10391619564524868
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2264681193496159,
+        "dx": 0.9568963824583674
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2264681193496159
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_gu",
+        32768,
+        4608,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.23074740161981938,
+        "dx": -0.031344422959637276
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2317251832478258,
+        "dx": 0.9382452312648941
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2317251832478258
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_up",
+        8192,
+        2304,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.314701546844915,
+        "dx": -0.1765577637370106
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.4798383605095888,
+        "dx": 0.8102682916035867
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.4798383605095888
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_up",
+        16384,
+        2304,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.36171811981762464,
+        "dx": -0.09966026433925594
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.4365021035780923,
+        "dx": 0.9727023054912457
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.4365021035780923
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "ag_up",
+        32768,
+        2304,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.38450651897690036,
+        "dx": -0.05084137847223528
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.4987301422725339,
+        "dx": 1.0113366954184309
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.4987301422725339
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_gu",
+        8192,
+        5376,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.1808715531558338,
+        "dx": -0.21701662947134454
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1961299733715067,
+        "dx": 0.8827878447820792
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1961299733715067
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_gu",
+        16384,
+        5376,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.18363006000058557,
+        "dx": -0.1050809369333434
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2167585248946475,
+        "dx": 0.876794630099404
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2167585248946475
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_gu",
+        32768,
+        5376,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.1972703630012086,
+        "dx": -0.03406848769120004
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.197600815946355,
+        "dx": 0.9459314423644131
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.197600815946355
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_up",
+        8192,
+        2688,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.27805975184024123,
+        "dx": -0.19780739317112292
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.3528391812188574,
+        "dx": 0.8386123293628445
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.3528391812188574
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_up",
+        16384,
+        2688,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.32287140883609233,
+        "dx": -0.12701874898728457
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.3732510635376187,
+        "dx": 0.9455697283023894
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.3732510635376187
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "ag_up",
+        32768,
+        2688,
+        5376
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.34949294121680397,
+        "dx": -0.03187411294806263
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.4353165394870966,
+        "dx": 0.8775330081992402
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.4353165394870966
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_gu",
+        8192,
+        7168,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.12391968313721427,
+        "dx": -0.11960576682320993
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.0865356382397493,
+        "dx": 0.8957259084111642
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.0865356382397493
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_gu",
+        16384,
+        7168,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.13244178184437522,
+        "dx": -0.05366032005555524
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1447861187389654,
+        "dx": 0.9308588104057882
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1447861187389654
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_gu",
+        32768,
+        7168,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.14760147131403295,
+        "dx": 0.0009934816228522915
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1478298073994828,
+        "dx": 0.9838216257871519
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1478298073994828
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_up",
+        8192,
+        3584,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.2559729747587832,
+        "dx": -0.19606164519840735
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2838816752251236,
+        "dx": 0.8414695408409252
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2838816752251236
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_up",
+        16384,
+        3584,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.259328266122915,
+        "dx": -0.08939494354210317
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2727469644014135,
+        "dx": 0.8914364457709716
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2727469644014135
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "ag_up",
+        32768,
+        3584,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.2755314144899802,
+        "dx": -0.027108553729966747
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.315959613173397,
+        "dx": 0.9257245794267065
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.315959613173397
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_gu",
+        8192,
+        3584,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.24069277419955798,
+        "dx": -0.18712032281803706
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1297654347822816,
+        "dx": 0.6843551841377663
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1297654347822816
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_gu",
+        16384,
+        3584,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.27832726352502696,
+        "dx": -0.09581190519093948
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2971586090815177,
+        "dx": 0.8445929203496041
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2971586090815177
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_gu",
+        32768,
+        3584,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.28987170787680344,
+        "dx": -0.023703528116005675
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2981130720598437,
+        "dx": 0.9457054276863573
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2981130720598437
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_up",
+        8192,
+        1792,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.37689067352394623,
+        "dx": -0.2355451754058615
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.426325136134661,
+        "dx": 0.7601072467662797
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.426325136134661
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_up",
+        16384,
+        1792,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.42770918089752374,
+        "dx": -0.11745237857971119
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.3325440270359892,
+        "dx": 0.6492175396692642
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.3325440270359892
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "ag_up",
+        32768,
+        1792,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.4526512586643776,
+        "dx": -0.054837111224741636
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.5160753018870647,
+        "dx": 0.8876341638212945
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.5160753018870647
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_gu",
+        8192,
+        13312,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.024660535294653743,
+        "dx": -0.061287992073200834
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.0835571329756206,
+        "dx": 1.0249277488052198
+      },
+      "choice": "stock",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.0
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_gu",
+        16384,
+        13312,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.0023913260318951636,
+        "dx": -0.005932753652767781
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.0782907255955265,
+        "dx": 1.0423808656130242
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.0782907255955265
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_gu",
+        32768,
+        13312,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.02056434765795584,
+        "dx": 0.052980493180639424
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.0739317477394101,
+        "dx": 1.0533062007883114
+      },
+      "choice": "dx",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.0533062007883114
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_up",
+        8192,
+        6656,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.11406651602905842,
+        "dx": -0.08824930064869127
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1614826818748076,
+        "dx": 1.016135068573231
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1614826818748076
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_up",
+        16384,
+        6656,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.14029991323747798,
+        "dx": -0.03297590444956926
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1615563906378967,
+        "dx": 1.0020877838916094
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1615563906378967
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "ag_up",
+        32768,
+        6656,
+        16384
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.15917539349659526,
+        "dx": 0.024844081605767187
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1658715839463014,
+        "dx": 1.0189587904567596
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1658715839463014
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_gu",
+        8192,
+        4096,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.20035503264481108,
+        "dx": -0.1925842559697413
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2066758060656952,
+        "dx": 0.7164425379595817
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2066758060656952
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_gu",
+        16384,
+        4096,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.24110624984199105,
+        "dx": -0.11525510591627905
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2675086890546314,
+        "dx": 0.8997904780681082
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2675086890546314
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_gu",
+        32768,
+        4096,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.24865312189957128,
+        "dx": -0.04574359194471129
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2784412464620236,
+        "dx": 0.9875420900543503
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2784412464620236
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_up",
+        8192,
+        2048,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.33092233798756576,
+        "dx": -0.21383378441267498
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.3940171111603568,
+        "dx": 0.7494639598458764
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.3940171111603568
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_up",
+        16384,
+        2048,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.3574092141516106,
+        "dx": -0.17257737150590344
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.3847976950638663,
+        "dx": 0.8034264808513222
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.3847976950638663
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "ag_up",
+        32768,
+        2048,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.3951385778126022,
+        "dx": -0.07476853971102543
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.5327357893515121,
+        "dx": 0.8815754739290244
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.5327357893515121
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_gu",
+        8192,
+        7168,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.12249543261376487,
+        "dx": -0.06366289468518953
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1067393576485403,
+        "dx": 0.929486765099849
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1067393576485403
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_gu",
+        16384,
+        7168,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.14501221866563777,
+        "dx": -0.019676286992138255
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1273433393018601,
+        "dx": 0.9668746804237776
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1273433393018601
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_gu",
+        32768,
+        7168,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.15777053007435454,
+        "dx": 0.03576907009108506
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1532864364896347,
+        "dx": 0.9984684254595038
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1532864364896347
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_up",
+        8192,
+        3584,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.2575002138654234,
+        "dx": -0.12784694672421876
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2665987367424147,
+        "dx": 0.8893141348206489
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2665987367424147
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_up",
+        16384,
+        3584,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.26958471055987965,
+        "dx": -0.04979634701339986
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2651055903544135,
+        "dx": 0.8955103938429848
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2651055903544135
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "ag_up",
+        32768,
+        3584,
+        12288
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.2898994504230746,
+        "dx": 0.0034102635655867165
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.3150030009658011,
+        "dx": 0.9046956321615276
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.3150030009658011
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_gu",
+        8192,
+        4096,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.24645204719700167,
+        "dx": -0.19441269798838512
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.247187245597544,
+        "dx": 0.849481190807691
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.247187245597544
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_gu",
+        16384,
+        4096,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.2305076905260503,
+        "dx": -0.08774062851580156
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2680074494674043,
+        "dx": 0.8603131567993669
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2680074494674043
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_gu",
+        32768,
+        4096,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.24865755051695626,
+        "dx": -0.043446867557119837
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2716376177184743,
+        "dx": 0.9704390718854567
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2716376177184743
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_up",
+        8192,
+        2048,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.3674134774882626,
+        "dx": -0.2085645088318436
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.406337234231285,
+        "dx": 0.846350081261346
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.406337234231285
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_up",
+        16384,
+        2048,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.3698790701297743,
+        "dx": -0.10168472413102815
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.5058304396559181,
+        "dx": 0.9196414754492593
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.5058304396559181
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "ag_up",
+        32768,
+        2048,
+        7168
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.40777260925671344,
+        "dx": -0.05269701416191751
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.526332750594297,
+        "dx": 0.9406573955956351
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.526332750594297
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_gu",
+        8192,
+        7392,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.10930341954642159,
+        "dx": -0.12668794971117578
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1055209935940853,
+        "dx": 0.9204450927237423
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1055209935940853
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_gu",
+        16384,
+        7392,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.12682227360816084,
+        "dx": -0.06290340672674366
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.135811696950106,
+        "dx": 0.9535463996216176
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.135811696950106
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_gu",
+        32768,
+        7392,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.14054820237665072,
+        "dx": -0.010436406195887211
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.1445745031819832,
+        "dx": 1.0068215989544504
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.1445745031819832
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_up",
+        8192,
+        3696,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.25747953033365184,
+        "dx": -0.16730620967555615
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2458697191441042,
+        "dx": 0.7660479657905612
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2458697191441042
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_up",
+        16384,
+        3696,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.25369481352804174,
+        "dx": -0.0990920108128314
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.267541158305927,
+        "dx": 0.9287906223930459
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.267541158305927
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "ag_up",
+        32768,
+        3696,
+        8192
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.2738090589400173,
+        "dx": -0.04166282908315483
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2913783105956447,
+        "dx": 0.9732931566792792
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2913783105956447
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_gu",
+        8192,
+        2560,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.30859294675027593,
+        "dx": -0.19876766554407177
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.2719638191298792,
+        "dx": 0.8368128503146911
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.2719638191298792
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_gu",
+        16384,
+        2560,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.3235305714875539,
+        "dx": -0.11951565265297844
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.4334448685792993,
+        "dx": 0.8844497843841451
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.4334448685792993
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_gu",
+        32768,
+        2560,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.3583612997863111,
+        "dx": -0.08982008519551214
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.4355303806270912,
+        "dx": 1.0373284651416501
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.4355303806270912
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_up",
+        8192,
+        1280,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.4390312875766323,
+        "dx": -0.23985834049562774
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.4744699409257058,
+        "dx": 0.6742665614045268
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.4744699409257058
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_up",
+        16384,
+        1280,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.4629646673496773,
+        "dx": -0.1883891769530753
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.6016420696133689,
+        "dx": 0.8999467898111341
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.6016420696133689
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "ag_up",
+        32768,
+        1280,
+        5120
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.5054225741794963,
+        "dx": -0.08323445607123703
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.6536367267494385,
+        "dx": 0.9366693917980121
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.6536367267494385
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_gu",
+        8192,
+        3072,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.22227522660453725,
+        "dx": -0.27009758928680133
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.3265159885909892,
+        "dx": 0.8809848974544172
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.3265159885909892
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_gu",
+        16384,
+        3072,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.2846861846279126,
+        "dx": -0.1614865205045098
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.3590551073699,
+        "dx": 0.9471588397028493
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.3590551073699
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_gu",
+        32768,
+        3072,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.30229043865242017,
+        "dx": -0.08615817808155947
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.3554519849185642,
+        "dx": 0.9690174805453373
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.3554519849185642
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_up",
+        8192,
+        1536,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.3742170014444213,
+        "dx": -0.3100326832536411
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.524599978019737,
+        "dx": 0.8314084993493183
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.524599978019737
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_up",
+        16384,
+        1536,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.3807266205290758,
+        "dx": -0.2609889066052661
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.7392028177366485,
+        "dx": 0.9823720513244747
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.7392028177366485
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "ag_up",
+        32768,
+        1536,
+        4096
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.4402297894743059,
+        "dx": -0.13224039462602374
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 1.7082376347713144,
+        "dx": 1.02423197726912
+      },
+      "choice": "async_tp",
+      "oracle_choice": "async_tp",
+      "selected_speedup": 1.7082376347713144
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "rs",
+        8192,
+        7168,
+        2304
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.24253418645522212,
+        "dx": 0.1281364583984076
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.7469589557384063,
+        "dx": 1.0967691515066393
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0967691515066393
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "rs",
+        16384,
+        7168,
+        2304
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.12447740812394067,
+        "dx": 0.21080898554151214
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.8715601476924133,
+        "dx": 1.2558779889048082
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2558779889048082
+    },
+    {
+      "identity": [
+        "dsv3-d",
+        "rs",
+        32768,
+        7168,
+        2304
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.03762495597968094,
+        "dx": 0.29429685671279654
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9477782563818941,
+        "dx": 1.3369933856899499
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.3369933856899499
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "rs",
+        8192,
+        5376,
+        2688
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.2803657954185611,
+        "dx": 0.10096042502337985
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.7977345223823433,
+        "dx": 1.1767682329658076
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1767682329658076
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "rs",
+        16384,
+        5376,
+        2688
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.13863051447200084,
+        "dx": 0.20598309324640507
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.8273800670347947,
+        "dx": 1.1379613988768769
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1379613988768769
+    },
+    {
+      "identity": [
+        "gemma3-27b",
+        "rs",
+        32768,
+        5376,
+        2688
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.0544143562562095,
+        "dx": 0.29246404945390825
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9205706347049767,
+        "dx": 1.2525634369800465
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2525634369800465
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "rs",
+        8192,
+        8192,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.20338637226924408,
+        "dx": 0.075880250088804
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.8186015243312454,
+        "dx": 1.0674019139956035
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0674019139956035
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "rs",
+        16384,
+        8192,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.0967180949263452,
+        "dx": 0.17464112130130297
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9446599434981652,
+        "dx": 1.2039223017798184
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2039223017798184
+    },
+    {
+      "identity": [
+        "llama3-70b",
+        "rs",
+        32768,
+        8192,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.028721767955164075,
+        "dx": 0.22772713922278387
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9669296584269459,
+        "dx": 1.2255564075649172
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2255564075649172
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "rs",
+        8192,
+        4096,
+        1792
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.3148332183398541,
+        "dx": 0.07440340821206567
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.6528635317628116,
+        "dx": 1.0034839428405469
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0034839428405469
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "rs",
+        16384,
+        4096,
+        1792
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.1637235976794625,
+        "dx": 0.19622240656688125
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.8082053175341838,
+        "dx": 1.1025227895551235
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1025227895551235
+    },
+    {
+      "identity": [
+        "llama3-8b",
+        "rs",
+        32768,
+        4096,
+        1792
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.07054223205367512,
+        "dx": 0.32403236953269376
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9348493917333981,
+        "dx": 1.4650200241575788
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.4650200241575788
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "rs",
+        8192,
+        16384,
+        6656
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.10426669391153157,
+        "dx": 0.0655657745632298
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9471253167649155,
+        "dx": 1.0902084715144058
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0902084715144058
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "rs",
+        16384,
+        16384,
+        6656
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.011148204970793076,
+        "dx": 0.14822046100214617
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9627646746440865,
+        "dx": 1.1049791752889304
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1049791752889304
+    },
+    {
+      "identity": [
+        "llama31-405b",
+        "rs",
+        32768,
+        16384,
+        6656
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.05593288035813314,
+        "dx": 0.2043920743304614
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9986944701011807,
+        "dx": 1.1467085639671972
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1467085639671972
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "rs",
+        8192,
+        5120,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.2992491014431754,
+        "dx": 0.09583690698263594
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.74487341308921,
+        "dx": 1.1834195830403558
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1834195830403558
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "rs",
+        16384,
+        5120,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.18472329564391415,
+        "dx": 0.1695847744404752
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9342222564873164,
+        "dx": 1.2958600662108826
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2958600662108826
+    },
+    {
+      "identity": [
+        "llama4-mav-d",
+        "rs",
+        32768,
+        5120,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.08017158319099668,
+        "dx": 0.2898628039577976
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9746993343750023,
+        "dx": 1.4449209885983698
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.4449209885983698
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "rs",
+        8192,
+        12288,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.15666612714811565,
+        "dx": 0.07648116208881246
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9141844373623902,
+        "dx": 1.1653154568800705
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1653154568800705
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "rs",
+        16384,
+        12288,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.05300448304172552,
+        "dx": 0.1696683765999752
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9206545929587633,
+        "dx": 1.1672066048262104
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1672066048262104
+    },
+    {
+      "identity": [
+        "mistral-l-2407",
+        "rs",
+        32768,
+        12288,
+        3584
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": 0.01081023000485213,
+        "dx": 0.22281996604219784
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.967938142924238,
+        "dx": 1.221285811773033
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.221285811773033
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "rs",
+        8192,
+        7168,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.2473826671550143,
+        "dx": 0.12137125311304395
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.752388386372334,
+        "dx": 1.1371287305780586
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1371287305780586
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "rs",
+        16384,
+        7168,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.12589650156524052,
+        "dx": 0.20669435398977526
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.8747608443211813,
+        "dx": 1.2991933508041906
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2991933508041906
+    },
+    {
+      "identity": [
+        "mistral3-d",
+        "rs",
+        32768,
+        7168,
+        2048
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.03791108025658224,
+        "dx": 0.2903927930209665
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9460802751324008,
+        "dx": 1.3825220671702176
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.3825220671702176
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "rs",
+        8192,
+        8192,
+        3696
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.2036582836375642,
+        "dx": 0.07489862375090565
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.8212860137848984,
+        "dx": 1.0614179821305942
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.0614179821305942
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "rs",
+        16384,
+        8192,
+        3696
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.09485848586721991,
+        "dx": 0.16869733296890213
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9416719167138885,
+        "dx": 1.2148594518238935
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2148594518238935
+    },
+    {
+      "identity": [
+        "qwen25-72b",
+        "rs",
+        32768,
+        8192,
+        3696
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.02761578022540516,
+        "dx": 0.22656832216739636
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9659341620610434,
+        "dx": 1.2183005714696271
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2183005714696271
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "rs",
+        8192,
+        5120,
+        1280
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.3509521193100551,
+        "dx": 0.08239502949843058
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.7458978253321589,
+        "dx": 1.175919061658666
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.175919061658666
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "rs",
+        16384,
+        5120,
+        1280
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.19605733979865003,
+        "dx": 0.2117945976346312
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9184522077850933,
+        "dx": 1.2549411175864644
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2549411175864644
+    },
+    {
+      "identity": [
+        "qwen3-32b",
+        "rs",
+        32768,
+        5120,
+        1280
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.08729738966012421,
+        "dx": 0.3822220252483921
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9654774595998309,
+        "dx": 1.2657829688651274
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.2657829688651274
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "rs",
+        8192,
+        4096,
+        1536
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.3282428799109986,
+        "dx": 0.11374308213576118
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.6690488877160832,
+        "dx": 0.9062573638918555
+      },
+      "choice": "dx",
+      "oracle_choice": "stock",
+      "selected_speedup": 0.9062573638918555
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "rs",
+        16384,
+        4096,
+        1536
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.1720674939619268,
+        "dx": 0.19359418149672766
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.8109242479913293,
+        "dx": 1.1623695244176298
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.1623695244176298
+    },
+    {
+      "identity": [
+        "qwen3-8b",
+        "rs",
+        32768,
+        4096,
+        1536
+      ],
+      "predicted_log_speedup": {
+        "stock": 0.0,
+        "async_tp": -0.07747519318031026,
+        "dx": 0.31110544124974937
+      },
+      "actual_normalized_speedup": {
+        "stock": 1.0,
+        "async_tp": 0.9358918140146432,
+        "dx": 1.5551031361551853
+      },
+      "choice": "dx",
+      "oracle_choice": "dx",
+      "selected_speedup": 1.5551031361551853
+    }
+  ]
+}

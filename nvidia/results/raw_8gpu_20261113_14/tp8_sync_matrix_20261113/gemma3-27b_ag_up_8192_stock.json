@@ -1,0 +1,33 @@
+{
+  "arm": "stock",
+  "target": {
+    "op": "ag",
+    "M": 8192,
+    "N": 2688,
+    "K": 5376
+  },
+  "manifest_sha256": "76545aa58208b3d3cc6da062d045c704fdf0df49be8c272c72da656572204392",
+  "tp": 8,
+  "dtype": "float16",
+  "warmup": 4,
+  "batch": 16,
+  "repeats": 8,
+  "checks": 2,
+  "gpu": "NVIDIA A800-SXM4-80GB",
+  "torch": "2.7.0+cu126",
+  "triton": "3.4.0",
+  "cuda_build": "12.6",
+  "cuda_device_max_connections": "8",
+  "samples_ms": [
+    1.7912299633026123,
+    1.7913600206375122,
+    1.7811779975891113,
+    1.7798160314559937,
+    1.790004014968872,
+    1.7813160419464111,
+    1.7792140245437622,
+    1.7791680097579956
+  ],
+  "median_ms": 1.7812470197677612,
+  "warning": "exploratory independent process; Syncopate adapted imports and 108 SM; no E2E"
+}

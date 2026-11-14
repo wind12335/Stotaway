@@ -13,6 +13,31 @@ from pathlib import Path
 SITES = {"qkv": "qkv", "o_proj": "proj", "fc1": "fc1", "fc2": "fc2"}
 SCHEMA = "stowaway-tp2-forward-lookup-v1"
 TRAIN_SCHEMA = "stowaway-tp2-training-lookup-v1"
+QWEN_SITES = {'full_qkv': 'qkv', 'full_proj': 'proj', 'gdn_in': 'fc1',
+              'gdn_out': 'fc2', 'mlp_fc1': 'fc1', 'mlp_fc2': 'fc2'}
+WORKLOAD_FIELDS = ('num_layers', 'hidden_size', 'ffn_hidden_size', 'num_attention_heads',
+                   'num_query_groups', 'kv_channels', 'seq_length', 'micro_batch_size',
+                   'global_batch_size', 'tensor_model_parallel_size', 'pipeline_model_parallel_size',
+                   'experimental_attention_variant', 'linear_attention_freq', 'transformer_impl',
+                   'recompute_granularity', 'recompute_method', 'mock_data', 'seed',
+                   'sequence_parallel', 'bf16', 'optimizer', 'use_distributed_optimizer',
+                   'optimizer_cpu_offload')
+
+
+def workload_signature(args, *, local_spec):
+    """Selected Megatron arguments plus adapter spec; not a complete workload fingerprint."""
+    values = {}
+    for field in WORKLOAD_FIELDS:
+        if not hasattr(args, field):
+            raise ValueError(f'missing workload field: {field}')
+        value = getattr(args, field)
+        if value is not None and not isinstance(value, (str, int, float, bool)):
+            raise ValueError(f'unsupported workload field: {field}')
+        values[field] = value
+    if not isinstance(local_spec, bool):
+        raise ValueError('local spec must be explicit')
+    values['stowaway_qwen36_local_spec'] = local_spec
+    return values
 
 
 def _quantile(values, fraction):
@@ -35,6 +60,7 @@ def build(paths, margin=0.03, lower=0.2, upper=0.8, objective="forward"):
     if objective not in ("forward", "training"):
         raise ValueError("objective must be forward or training")
     signature = None
+    protocol = None
     samples = {}
     sources = []
     for path in paths:
@@ -51,10 +77,16 @@ def build(paths, margin=0.03, lower=0.2, upper=0.8, objective="forward"):
             raise ValueError("training measurements cannot populate forward profile")
         if signature is not None and current != signature:
             raise ValueError("cannot mix runtime signatures")
+        timing = (md.get('batch'), md.get('warmup'))
+        if protocol is not None and timing != protocol:
+            raise ValueError('cannot mix benchmark batch or warmup settings')
+        protocol = timing
         signature = current
         sources.append({"path": str(path), "sha256": hashlib.sha256(raw).hexdigest()})
         for row in report["results"]:
-            site = SITES[row["site"]]
+            site = SITES.get(row["site"], QWEN_SITES.get(row["site"]))
+            if site is None:
+                raise ValueError(f'unknown logical site {row["site"]}')
             if row["op"] != ("ag" if site in ("qkv", "fc1") else "rs"):
                 raise ValueError("site and collective do not match")
             k = key(site, row["M"], row["K"], row["N"])
@@ -74,6 +106,7 @@ def build(paths, margin=0.03, lower=0.2, upper=0.8, objective="forward"):
             "classification": "diagnostic-forward-only" if objective == "forward" else "diagnostic-forward-backward",
             "runtime": signature, "guard": {"margin": margin, "stock_quantile": lower,
                                                "dx_quantile": upper},
+            "timing_protocol": {"batch": protocol[0], "warmup": protocol[1]},
             "sources": sources, "entries": entries}
 
 
@@ -90,6 +123,11 @@ class Lookup:
         if not isinstance(self.profile.get("entries"), dict):
             raise ValueError("invalid calibration entries")
         self.interpolate = interpolate
+
+    def validate_workload(self, actual):
+        expected = self.profile.get('workload_requirements')
+        if expected is not None and (not isinstance(expected, dict) or not expected or expected != actual):
+            raise ValueError(f'calibration workload mismatch: expected {expected}, got {actual}')
 
     def choose(self, site, m, k, n):
         entry = self.profile["entries"].get(key(site, m, k, n))

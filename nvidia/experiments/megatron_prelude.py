@@ -213,10 +213,14 @@ if os.environ.get("STOWAWAY_DX") == "1":
         layer_class.__init__ = constructor
     print(f"STOWAWAY_DX_SITES rank={os.environ.get('RANK')} sites={sorted(allowed_sites)}", flush=True)
     planner_path = os.environ.get("STOWAWAY_TP2_LOOKUP")
+    online_path = os.environ.get("STOWAWAY_TP2_ONLINE_BUNDLE")
     shape_plan_path = os.environ.get("STOWAWAY_DX_SHAPE_PLAN")
+    reuse_rs_scratch = os.environ.get('STOWAWAY_REUSE_RS_SCRATCH', '0') == '1'
+    if online_path and (planner_path or shape_plan_path or dx_world != 2):
+        raise ValueError('online TP2 bundle cannot be combined with lookup/shape plan or TP8')
     if shape_plan_path and (planner_path or dx_world != 8):
         raise ValueError("shape plan requires TP8 and cannot be combined with TP2 lookup")
-    planner_state = {"lookup": None, "shape_plan": None, "decisions": {}}
+    planner_state = {"lookup": None, "online": None, "shape_plan": None, "decisions": {}}
     column_max = int(os.environ.get("STOWAWAY_COLUMN_MAX_N", "8192"))
     column_min = int(os.environ.get("STOWAWAY_COLUMN_MIN_N", "0"))
     column_widths_env = os.environ.get("STOWAWAY_COLUMN_WIDTHS", "")
@@ -232,17 +236,64 @@ if os.environ.get("STOWAWAY_DX") == "1":
         group = parallel_state.get_tensor_model_parallel_group()
         if dist.get_world_size() != dx_world or group.size() != dx_world:
             raise RuntimeError("diagnostic DX adapter requires one world TP group")
+        configurations = [None] * dx_world
+        dist.all_gather_object(configurations, (reuse_rs_scratch, bool(planner_path), bool(online_path), bool(shape_plan_path)), group=group)
+        if len(set(configurations)) != 1:
+            raise RuntimeError(f'inconsistent scratch/plan configuration across ranks: {configurations}')
+        if reuse_rs_scratch and (dx_world != 2 or planner_path or online_path or shape_plan_path):
+            raise ValueError('RS scratch requires TP2 and cannot use plans calibrated for the original DX path')
         if planner_path:
-            from planner.tp2_lookup import Lookup, runtime_signature
+            from planner.tp2_lookup import Lookup, runtime_signature, workload_signature
             interpolate = os.environ.get("STOWAWAY_TP2_INTERPOLATE") == "1"
-            lookup = Lookup(planner_path, runtime_signature(torch, triton), interpolate=interpolate)
+            # Every rank participates even when its local profile cannot be
+            # read or validated, avoiding a peer stuck in all_gather_object.
+            lookup, error = None, None
+            try:
+                lookup = Lookup(planner_path, runtime_signature(torch, triton), interpolate=interpolate)
+                if lookup.profile.get('plan_source') == 'reduced-probe-model':
+                    raise ValueError('reduced-probe model covers forward only and cannot drive training')
+                if lookup.profile.get('workload_requirements') is not None:
+                    from megatron.training import get_args
+                    lookup.validate_workload(workload_signature(
+                        get_args(), local_spec=os.environ.get('STOWAWAY_QWEN36_LOCAL_SPEC') == '1'))
+            except Exception as exc:
+                error = f'{type(exc).__name__}: {exc}'
             configs = [None] * dist.get_world_size()
-            dist.all_gather_object(configs, (lookup.digest, interpolate))
-            if len(set(configs)) != 1:
-                raise RuntimeError("TP2 lookup profile or interpolation setting differs across ranks")
+            dist.all_gather_object(configs, (lookup.digest if lookup else None, interpolate, error))
+            if any(item[2] for item in configs) or len({(item[0], item[1]) for item in configs}) != 1:
+                raise RuntimeError(f"TP2 lookup invalid or inconsistent across ranks: {configs}")
             planner_state["lookup"] = lookup
             print(f"STOWAWAY_TP2_LOOKUP rank={dist.get_rank()} sha256={lookup.digest} "
                   f"mode={lookup.profile['classification']} interpolate={interpolate}", flush=True)
+        if online_path:
+            from planner.tp2_lookup import runtime_signature, workload_signature
+            from planner.original_a800.tp2_online_bundle import OnlineBundle
+            from planner.original_a800.distributed_inference import prepare_collectively
+            from megatron.training import get_args
+            import time
+            bundle,error=None,None
+            try:
+                bundle=OnlineBundle(online_path,runtime_signature(torch,triton),workload_signature(
+                    get_args(),local_spec=os.environ.get('STOWAWAY_QWEN36_LOCAL_SPEC')=='1'))
+            except Exception as exc:
+                error=f'{type(exc).__name__}: {exc}'
+            checks=[None]*dist.get_world_size(group)
+            dist.all_gather_object(checks,(bundle.digest if bundle else None,error),group=group)
+            if any(e for _,e in checks) or len({d for d,_ in checks})!=1:
+                raise RuntimeError(f'online bundle invalid or inconsistent across ranks: {checks}')
+            start=time.perf_counter()
+            result=prepare_collectively(bundle.selector,bundle.queries,group=group)
+            choices,error=None,None
+            try:choices=bundle.choices(result['decisions'])
+            except Exception as exc:error=f'{type(exc).__name__}: {exc}'
+            reports=[None]*dist.get_world_size(group)
+            dist.all_gather_object(reports,(choices,error),group=group)
+            if any(e for _,e in reports) or any(c!=reports[0][0] for c,_ in reports):
+                raise RuntimeError(f'online decisions invalid or inconsistent across ranks: {reports}')
+            planner_state['online']=choices
+            print(f'STOWAWAY_TP2_ONLINE rank={dist.get_rank()} sha256={bundle.digest} '
+                  f'queries={len(bundle.queries)} decision_ms={(time.perf_counter()-start)*1000:.3f} '
+                  f'choices={planner_state["online"]}',flush=True)
         if shape_plan_path:
             from stowaway_nvidia.shape_plan import ShapePlan
             # Gather load errors as well as digests before any rank raises: a
@@ -268,6 +319,7 @@ if os.environ.get("STOWAWAY_DX") == "1":
             planner_state['shape_plan'] = plan
             print(f'STOWAWAY_DX_SHAPE_PLAN rank={dist.get_rank()} sha256={plan.digest}', flush=True)
         state["cuda"] = initialize(expected_world_size=dx_world)
+        print(f'STOWAWAY_RS_SCRATCH rank={dist.get_rank()} enabled={reuse_rs_scratch}', flush=True)
         if os.environ.get("STOWAWAY_BRS") == "1":
             from stowaway_nvidia.megatron_brs import TensorParallelBRS
             state["brs"] = TensorParallelBRS(state["cuda"],
@@ -280,8 +332,11 @@ if os.environ.get("STOWAWAY_DX") == "1":
         key = (purpose, rows, inner, columns, dtype)
         if key not in state["contexts"]:
             exchange_type = DirectExchange8 if dx_world == 8 else DirectExchange
+            options = {'reuse_rs_scratch': reuse_rs_scratch and purpose == 'row'} if dx_world == 2 else {}
             state["contexts"][key] = exchange_type(state["cuda"], dist.get_rank(), dx_world,
-                                                     rows, inner, columns, dtype)
+                                                     rows, inner, columns, dtype, **options)
+            if options.get('reuse_rs_scratch'):
+                print(f'STOWAWAY_RS_SCRATCH_CONTEXT rank={dist.get_rank()} M={rows} K={inner} N={columns}', flush=True)
         return state["contexts"][key]
 
     def check_tp_group(group):
@@ -289,6 +344,17 @@ if os.environ.get("STOWAWAY_DX") == "1":
             raise RuntimeError("diagnostic adapter requires the world TP group")
 
     def use_dx(site, rows, inner, columns, dtype):
+        online=planner_state['online']
+        if online is not None:
+            from planner.tp2_lookup import key
+            decision=online.get(key(site,rows,inner,columns),'stock') if dtype==torch.bfloat16 else 'stock'
+            item=(site,rows,inner,columns,decision)
+            if item not in planner_state['decisions']:
+                planner_state['decisions'][item]=0
+                print(f'STOWAWAY_TP2_CHOICE rank={dist.get_rank()} site={site} '
+                      f'M={rows} K={inner} N={columns} choice={decision}',flush=True)
+            planner_state['decisions'][item]+=1
+            return decision=='dx'
         shape_plan = planner_state['shape_plan']
         if shape_plan is not None:
             decision = shape_plan.choose(site, rows, inner, columns,
@@ -372,8 +438,12 @@ if os.environ.get("STOWAWAY_DX") == "1":
         print(f"STOWAWAY_DIAGNOSTIC_COUNTS rank={os.environ.get('RANK')} "
               f"row={state['row']} column={state['column']} row_skip={state['row_skip']} "
               f"column_skip={state['column_skip']}", flush=True)
+        if os.environ.get('STOWAWAY_LOG_SHAPE_COUNTS') == '1':
+            for (site, rows, inner, columns, decision), count in sorted(planner_state['decisions'].items()):
+                print(f'STOWAWAY_TP2_SHAPE_COUNTS rank={os.environ.get("RANK")} site={site} '
+                      f'M={rows} K={inner} N={columns} choice={decision} count={count}', flush=True)
 
-elif os.environ.get("STOWAWAY_TP2_LOOKUP") or os.environ.get("STOWAWAY_DX_SHAPE_PLAN"):
+elif os.environ.get("STOWAWAY_TP2_LOOKUP") or os.environ.get("STOWAWAY_DX_SHAPE_PLAN") or os.environ.get('STOWAWAY_TP2_ONLINE_BUNDLE'):
     raise RuntimeError("lookup or shape plan requires STOWAWAY_DX=1")
 
 if os.environ.get("STOWAWAY_CAPTURE_DIR"):
