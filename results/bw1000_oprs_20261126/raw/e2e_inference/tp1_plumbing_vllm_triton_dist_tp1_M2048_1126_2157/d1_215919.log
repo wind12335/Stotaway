@@ -1,0 +1,38 @@
+[oprs] OPRS_VLLM installed plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_vllm_triton_dist/always_deo.json workload=hf_infer methods=['async_tp', 'deo', 'triton_dist'] buckets=[2048] tp=1
+[voprs] arm=d1 kind=all_deo plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_vllm_triton_dist/always_deo.json workload=hf_infer M=2048 TP=1 model=/tmp/oprs_tiny_llama gate=False
+`torch_dtype` is deprecated! Use `dtype` instead!
+The tokenizer you are loading from '/tmp/oprs_tiny_llama' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+WARNING 11-26 21:59:46 [worker_base.py:40] VLLM_RANK0_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK0_NUMA = -1
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[oprs] OPRS_READY rank=0 tp=1 workload=hf_infer plan=dce7031f0e8e backend=triton_dist entries=4 deo_bwd=stock contexts=4 {'deo/ag': 2, 'deo/rs': 2} heap_need_mb=16 heap_mb=1044 load_ms=180.5 prepare_ms=17.1
+[oprs] OPRS_VLLM first SP forward M=2048 plan=dce7031f0e8e backend=triton_dist taken={fc1:deo, fc2:deo, proj:deo, qkv:deo}
+WARNING 11-26 21:59:53 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+The tokenizer you are loading from '/tmp/oprs_tiny_llama' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[voprs] seeded weights of 18 matrices (seed 20261126)
+[voprs] d1 warmup r0 n1 isl2048: 0.017s 117596 tok/s (prefilled 2048)
+[voprs] d1 warmup_ttft r0 n1 isl2048: 0.010s 214481 tok/s (prefilled 2048) [warm-up, not a sample]
+[voprs] d1 ttft r0 n1 isl2048: 0.008s 250096 tok/s (prefilled 2048)
+[voprs] d1 ttft r1 n1 isl2048: 0.008s 255226 tok/s (prefilled 2048)
+[voprs] d1 ttft r2 n1 isl2048: 0.008s 250774 tok/s (prefilled 2048)
+[voprs] d1 warmup_ttft2 r0 n1 isl4096: 0.016s 262742 tok/s (prefilled 4096) [warm-up, not a sample]
+[voprs] d1 ttft2 r0 n1 isl4096: 0.017s 236775 tok/s (prefilled 4096)
+[voprs] d1 ttft2 r1 n1 isl4096: 0.016s 254341 tok/s (prefilled 4096)
+[voprs] d1 ttft2 r2 n1 isl4096: 0.016s 263557 tok/s (prefilled 4096)
+[voprs] d1 warmup_thru r0 n16 isl2048: 0.133s 246126 tok/s (prefilled 32768) [warm-up, not a sample]
+[voprs] d1 thru r0 n16 isl2048: 0.133s 247268 tok/s (prefilled 32768)
+[voprs] d1 thru r1 n16 isl2048: 0.128s 256779 tok/s (prefilled 32768)
+[oprs] OPRS_SUMMARY rank=0 tp=1 workload=hf_infer plan=dce7031f0e8e backend=triton_dist deo_bwd=stock entries=4 contexts=4
+[oprs] OPRS_RUN rank=0 site=fc1 op=ag M=2048 N=7168 K=1024 choice=deo reason=plan count=252
+[oprs] OPRS_RUN rank=0 site=fc2 op=rs M=2048 N=1024 K=3584 choice=deo reason=plan count=252
+[oprs] OPRS_RUN rank=0 site=proj op=rs M=2048 N=1024 K=512 choice=deo reason=plan count=252
+[oprs] OPRS_RUN rank=0 site=qkv op=ag M=2048 N=1536 K=1024 choice=deo reason=plan count=252
+[oprs] OPRS_VLLM rank=0 tp=1 sp_forwards=63 stock_forwards=36 sp_host_s=3.78 k_contiguous_copies=0 plan=dce7031f0e8e backend=triton_dist contexts=4 load_ms=180.5 prepare_ms=17.1
+[voprs] d1 done status=ok -> /root/private_data/stowaway/results/bw1000_oprs_20261126/raw/e2e_inference/tp1_plumbing_vllm_triton_dist_tp1_M2048_1126_2157/voprs.csv
+[voprs] [oprs] OPRS_VLLM rank=0 tp=1 sp_forwards=63 stock_forwards=36 sp_host_s=3.78 k_contiguous_copies=0 plan=dce7031f0e8e backend=triton_dist contexts=4 load_ms=180.5 prepare_ms=17.1
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1126 22:00:09.622344 448006 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())

@@ -1,0 +1,35 @@
+== oprs -> oprs_triton_dist.json
+[export_plan] fit_s=0.0874 export_s=0.0014
+ qkv qkv       ag M=2048 N=1536 K=1024 -> triton_dist  {"serial": 0.0, "deo": -0.046456527860031384, "triton_dist": 0.07348969973198519}
+proj proj      rs M=2048 N=1024 K=512 -> serial       {"serial": 0.0, "deo": -0.02185023308922219, "triton_dist": -1.5450450257707666}
+ fc1 fc1       ag M=2048 N=7168 K=1024 -> triton_dist  {"serial": 0.0, "deo": -0.06178053845104367, "triton_dist": 0.27439118037831645}
+ fc2 fc2       rs M=2048 N=1024 K=3584 -> deo          {"serial": 0.0, "deo": 0.018575359155045178, "triton_dist": -1.1350269625379668}
+allocate=[['deo', 'rs', 2048, 1024, 3584], ['triton_dist', 'ag', 2048, 1536, 1024], ['triton_dist', 'ag', 2048, 7168, 1024]] arm=oprs data_class=b2b16 -> results/bw1000_oprs_20261126/plans/tp1_plumbing_vllm_triton_dist/oprs_triton_dist.json
+== oprs_deo_only -> oprs_deo_only.json
+[export_plan] fit_s=0.0118 export_s=0.0009
+ qkv qkv       ag M=2048 N=1536 K=1024 -> serial       {"serial": 0.0, "deo": -0.046456527860031384}
+proj proj      rs M=2048 N=1024 K=512 -> serial       {"serial": 0.0, "deo": -0.02185023308922219}
+ fc1 fc1       ag M=2048 N=7168 K=1024 -> serial       {"serial": 0.0, "deo": -0.06178053845104367}
+ fc2 fc2       rs M=2048 N=1024 K=3584 -> deo          {"serial": 0.0, "deo": 0.018575359155045178}
+allocate=[['deo', 'rs', 2048, 1024, 3584]] arm=oprs data_class=b2b16 -> results/bw1000_oprs_20261126/plans/tp1_plumbing_vllm_triton_dist/oprs_deo_only.json
+== always_deo -> always_deo.json
+[export_plan] fit_s=0.0128 export_s=0.0012
+ qkv qkv       ag M=2048 N=1536 K=1024 -> deo          {"serial": 0.0, "deo": -0.046456527860031384, "triton_dist": 0.07348969973198519}
+proj proj      rs M=2048 N=1024 K=512 -> deo          {"serial": 0.0, "deo": -0.02185023308922219, "triton_dist": -1.5450450257707666}
+ fc1 fc1       ag M=2048 N=7168 K=1024 -> deo          {"serial": 0.0, "deo": -0.06178053845104367, "triton_dist": 0.27439118037831645}
+ fc2 fc2       rs M=2048 N=1024 K=3584 -> deo          {"serial": 0.0, "deo": 0.018575359155045178, "triton_dist": -1.1350269625379668}
+allocate=[['deo', 'ag', 2048, 1536, 1024], ['deo', 'ag', 2048, 7168, 1024], ['deo', 'rs', 2048, 1024, 512], ['deo', 'rs', 2048, 1024, 3584]] arm=always_deo data_class=b2b16 -> results/bw1000_oprs_20261126/plans/tp1_plumbing_vllm_triton_dist/always_deo.json
+== always_triton_dist -> always_triton_dist.json
+[export_plan] fit_s=0.1126 export_s=0.0012
+ qkv qkv       ag M=2048 N=1536 K=1024 -> triton_dist  {"serial": 0.0, "deo": -0.046456527860031384, "triton_dist": 0.07348969973198519}
+proj proj      rs M=2048 N=1024 K=512 -> triton_dist  {"serial": 0.0, "deo": -0.02185023308922219, "triton_dist": -1.5450450257707666}
+ fc1 fc1       ag M=2048 N=7168 K=1024 -> triton_dist  {"serial": 0.0, "deo": -0.06178053845104367, "triton_dist": 0.27439118037831645}
+ fc2 fc2       rs M=2048 N=1024 K=3584 -> triton_dist  {"serial": 0.0, "deo": 0.018575359155045178, "triton_dist": -1.1350269625379668}
+allocate=[['triton_dist', 'ag', 2048, 1536, 1024], ['triton_dist', 'ag', 2048, 7168, 1024], ['triton_dist', 'rs', 2048, 1024, 512], ['triton_dist', 'rs', 2048, 1024, 3584]] arm=always_triton_dist data_class=b2b16 -> results/bw1000_oprs_20261126/plans/tp1_plumbing_vllm_triton_dist/always_triton_dist.json
+== null -> null.json
+[export_plan] fit_s=0.0116 export_s=0.0022
+ qkv qkv       ag M=2048 N=1536 K=1024 -> serial       {"serial": 0.0, "deo": -0.046456527860031384, "triton_dist": 0.07348969973198519}
+proj proj      rs M=2048 N=1024 K=512 -> serial       {"serial": 0.0, "deo": -0.02185023308922219, "triton_dist": -1.5450450257707666}
+ fc1 fc1       ag M=2048 N=7168 K=1024 -> serial       {"serial": 0.0, "deo": -0.06178053845104367, "triton_dist": 0.27439118037831645}
+ fc2 fc2       rs M=2048 N=1024 K=3584 -> serial       {"serial": 0.0, "deo": 0.018575359155045178, "triton_dist": -1.1350269625379668}
+allocate=[['deo', 'rs', 2048, 1024, 3584], ['triton_dist', 'ag', 2048, 1536, 1024], ['triton_dist', 'ag', 2048, 7168, 1024]] arm=null data_class=b2b16 -> results/bw1000_oprs_20261126/plans/tp1_plumbing_vllm_triton_dist/null.json

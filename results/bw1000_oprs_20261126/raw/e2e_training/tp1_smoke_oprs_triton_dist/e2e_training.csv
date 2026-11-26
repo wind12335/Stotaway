@@ -1,0 +1,5 @@
+arm,kind,plan,plan_digest,plan_on_ranks,ranks_with_hits,backend,rc,mpirun_rc,steps,step_ms_median,step_ms_all,train_loss,grad_norm,nan_iters,skipped_iters,val_loss,max_alloc_mb,hits,fallbacks,status,wall_s
+n1,null,null.json,5e52bf616a0f,1/1,0/1,triton_dist,0,1,8,406.9,"[5670.7, 3051.1, 406.5, 404.6, 406.4, 407.3, 408.7, 412.7]",1.182455E+01,5.067,0,0,1.161879E+01,15855.44,{},"{""plan"": 640}",ok,39
+t1,always_triton_dist,always_triton_dist.json,d3db8d6f157c,1/1,1/1,triton_dist,0,1,8,430.1,"[12426.4, 6441.5, 430.3, 433.5, 428.6, 429.9, 429.6, 430.6]",1.182467E+01,5.068,0,0,1.161868E+01,15831.44,"{""fc1=triton_dist"": 160, ""fc2=triton_dist"": 160, ""proj=triton_dist"": 160, ""qkv=triton_dist"": 160}",{},ok,46
+o1,oprs,oprs_triton_dist.json,e1a98f5051ae,1/1,1/1,triton_dist,0,1,8,442.85,"[7118.3, 3794.9, 442.5, 444.7, 442.6, 441.2, 449.6, 443.1]",1.182465E+01,5.068,0,0,1.161868E+01,15855.44,"{""fc1=triton_dist"": 160, ""fc2=deo"": 160, ""qkv=triton_dist"": 160}","{""plan"": 160}",ok,41
+s1,serial,,,0/1,0/1,,0,0,8,400.3,"[5588.3, 3005.5, 401.7, 399.4, 400.5, 399.7, 400.1, 400.8]",1.182455E+01,5.067,0,0,1.161879E+01,15815.44,{},{},ok,53

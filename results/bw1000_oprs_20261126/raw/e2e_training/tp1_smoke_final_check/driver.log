@@ -1,0 +1,11 @@
+[e2e] heap from results/bw1000_oprs_20261126/plans/tp1_plumbing_triton_dist: 1136656464 bytes
+[e2e] ROOT=results/bw1000_oprs_20261126/raw/e2e_training/tp1_smoke_final_check plans=results/bw1000_oprs_20261126/plans/tp1_plumbing_triton_dist heap=1136656464
+[e2e] s1 kind=serial plan=none model=custom tp=1 MBS=1 NL=4 start 22:22:07
+[e2e] s1 kind=serial rc=0 py_rc=0 iters=8 med(it3+)=404.5 hit_lines_r0=0 fallback_lines_r0=0 end 22:23:04 wall=57s
+[e2e] n1 kind=null plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_triton_dist/null.json model=custom tp=1 MBS=1 NL=4 start 22:23:07
+[e2e] n1 kind=null rc=1 py_rc=0 iters=8 med(it3+)=407.2 hit_lines_r0=0 fallback_lines_r0=2 end 22:23:46 wall=39s
+[e2e] o1 kind=oprs plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_triton_dist/oprs_triton_dist.json model=custom tp=1 MBS=1 NL=4 start 22:23:49
+[e2e] o1 kind=oprs rc=1 py_rc=0 iters=8 med(it3+)=456.8 hit_lines_r0=6 fallback_lines_r0=2 end 22:24:31 wall=42s
+[e2e] t1 kind=always_triton_dist plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_triton_dist/always_triton_dist.json model=custom tp=1 MBS=1 NL=4 start 22:24:34
+[e2e] t1 kind=always_triton_dist rc=1 py_rc=0 iters=8 med(it3+)=429.4 hit_lines_r0=8 fallback_lines_r0=0 end 22:25:14 wall=40s
+E2E DONE

@@ -1,0 +1,22 @@
+[voprs] arm=s2 kind=stock plan=<none: stock> workload=hf_infer M=2048 TP=1 model=/tmp/oprs_tiny_llama gate=False
+`torch_dtype` is deprecated! Use `dtype` instead!
+The tokenizer you are loading from '/tmp/oprs_tiny_llama' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+WARNING 11-26 21:23:51 [worker_base.py:40] VLLM_RANK0_NUMA is unset or set incorrectly, vllm will not bind to numa! VLLM_RANK0_NUMA = -1
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+WARNING 11-26 21:23:57 [cudagraph_dispatcher.py:106] cudagraph dispatching keys are not initialized. No cudagraph will be used.
+The tokenizer you are loading from '/tmp/oprs_tiny_llama' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[voprs] s2 warmup r0 n1 isl2048: 0.013s 160044 tok/s (prefilled 2048)
+[voprs] s2 ttft r0 n1 isl2048: 0.005s 439566 tok/s (prefilled 2048)
+[voprs] s2 ttft r1 n1 isl2048: 0.005s 452496 tok/s (prefilled 2048)
+[voprs] s2 ttft2 r0 n1 isl4096: 0.009s 458085 tok/s (prefilled 4096)
+[voprs] s2 ttft2 r1 n1 isl4096: 0.009s 455678 tok/s (prefilled 4096)
+[voprs] s2 thru r0 n16 isl2048: 0.070s 469612 tok/s (prefilled 32768)
+[voprs] s2 done status=ok -> /root/private_data/stowaway/results/bw1000_oprs_20261126/raw/e2e_inference/tp1_plumbing_vllm_triton_dist_tp1_M2048_1126_2118/voprs.csv
+[voprs] stock vLLM: no hook, no heap
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1126 21:24:10.975992 366343 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())

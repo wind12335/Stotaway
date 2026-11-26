@@ -1,0 +1,12 @@
+[e2e] ROOT=/root/private_data/stowaway/results/bw1000_oprs_20261126/raw/e2e_inference/tp1_plumbing_vllm_async_tp_tp1_M2048_1126_2114 model=/tmp/oprs_tiny_llama tp=1 M=2048 workload=hf_infer plans=results/bw1000_oprs_20261126/plans/tp1_plumbing_vllm_async_tp backend=async_tp heap=1094713424 gate=0 reps=2 load=dummy
+[e2e] s1 kind=stock start 21:14:06
+[e2e] s1 kind=stock rc=0 end 21:14:59 wall=53s
+[e2e] r1 kind=sp_rccl start 21:15:07
+[e2e] r1 kind=sp_rccl rc=1 end 21:15:07 wall=0s
+[e2e] d1 kind=all_deo start 21:15:15
+[e2e] d1 kind=all_deo rc=1 end 21:15:16 wall=1s
+[e2e] b1 kind=always_async_tp start 21:15:24
+[e2e] b1 kind=always_async_tp rc=0 end 21:16:20 wall=56s
+[e2e] o1 kind=oprs start 21:16:28
+[e2e] o1 kind=oprs rc=0 end 21:17:21 wall=53s
+E2E DONE

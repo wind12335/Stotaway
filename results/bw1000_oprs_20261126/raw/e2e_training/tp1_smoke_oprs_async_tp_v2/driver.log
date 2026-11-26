@@ -1,0 +1,7 @@
+[e2e] heap from results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp: 1136656464 bytes
+[e2e] ROOT=results/bw1000_oprs_20261126/raw/e2e_training/tp1_smoke_oprs_async_tp_v2 plans=results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp heap=1136656464
+[e2e] s1 kind=serial plan=none model=custom tp=1 MBS=1 NL=4 start 20:50:50
+[e2e] s1 kind=serial rc=0 iters=8 med(it3+)=399.2 hit_lines_r0=0 fallback_lines_r0=0 end 20:51:44 wall=54s
+[e2e] n1 kind=null plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp/null.json model=custom tp=1 MBS=1 NL=4 start 20:51:49
+[e2e] n1 kind=null rc=1 iters=0 med(it3+)=none hit_lines_r0=0 fallback_lines_r0=0 end 20:52:56 wall=67s
+[e2e] d1 kind=always_deo plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp/always_deo.json model=custom tp=1 MBS=1 NL=4 start 20:53:01

@@ -1,0 +1,9 @@
+[oprs-matrix] tp=1 dtype=bfloat16 methods=['deo', 'async_tp', 'triton_dist'] heap_mb=12288 topology=BW1 batch_id=20261126T141255Z-crdnotebook-2110675621851545601-liqsh2-74795-69a7d113 commit=b63d7e00f1 src_dirty=True out=results/bw1000_oprs_20261126/raw/operators/tp1_plan_dispatch_async_tp/samples_tp1_bfloat16.jsonl
+[oprs] OPRS_READY rank=0 tp=1 workload=custom_train plan=fa3599e4151c backend=async_tp entries=4 deo_bwd=stock contexts=1 {'deo/rs': 1} heap_need_mb=8 heap_mb=12288 load_ms=3.4 prepare_ms=19.0
+[oprs-matrix] plan results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp/oprs_async_tp.json digest=fa3599e4151c workload=custom_train backend=async_tp load_ms=3.4 prepare_ms=19.0 contexts=1
+[oprs-matrix] custom_train/fc2/M4096 [deo] serial=0.142 ms dispatched=0.215 ms speedup=0.663 plan_predicted=1.007 runs=132 correctness_rel=0.00e+00
+[oprs] OPRS_SUMMARY rank=0 tp=1 workload=custom_train plan=fa3599e4151c backend=async_tp deo_bwd=stock entries=4 contexts=1
+[oprs] OPRS_RUN rank=0 site=fc2 op=rs M=4096 N=1024 K=2048 choice=deo reason=plan count=132
+[oprs-matrix] done -> results/bw1000_oprs_20261126/raw/operators/tp1_plan_dispatch_async_tp/samples_tp1_bfloat16.jsonl
+[run_oprs_matrix] rc=0
+[run_oprs_matrix] rows: 1 {('deo', 'ok'): 1}

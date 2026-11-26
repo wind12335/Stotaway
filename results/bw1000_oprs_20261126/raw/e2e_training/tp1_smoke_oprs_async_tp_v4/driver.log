@@ -1,0 +1,17 @@
+[e2e] heap from results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp: 1136656464 bytes
+[e2e] ROOT=results/bw1000_oprs_20261126/raw/e2e_training/tp1_smoke_oprs_async_tp_v4 plans=results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp heap=1136656464
+[e2e] n1 kind=null plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp/null.json model=custom tp=1 MBS=1 NL=4 start 21:00:58
+[e2e] n1 kind=null rc=1 iters=8 med(it3+)=406.0 hit_lines_r0=0 fallback_lines_r0=1 end 21:01:39 wall=41s
+[e2e] o1 kind=oprs plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp/oprs_async_tp.json model=custom tp=1 MBS=1 NL=4 start 21:01:44
+[e2e] o1 kind=oprs rc=1 iters=8 med(it3+)=417.2 hit_lines_r0=1 fallback_lines_r0=1 end 21:02:23 wall=39s
+[e2e] d1 kind=always_deo plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp/always_deo.json model=custom tp=1 MBS=1 NL=4 start 21:02:28
+[e2e] d1 kind=always_deo rc=1 iters=8 med(it3+)=435.2 hit_lines_r0=4 fallback_lines_r0=0 end 21:03:08 wall=40s
+[e2e] a1 kind=always_async_tp plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp/always_async_tp.json model=custom tp=1 MBS=1 NL=4 start 21:03:13
+[e2e] a1 kind=always_async_tp rc=1 iters=8 med(it3+)=408.0 hit_lines_r0=4 fallback_lines_r0=0 end 21:03:54 wall=41s
+[e2e] s1 kind=serial plan=none model=custom tp=1 MBS=1 NL=4 start 21:03:59
+[e2e] s1 kind=serial rc=0 iters=8 med(it3+)=396.8 hit_lines_r0=0 fallback_lines_r0=0 end 21:04:52 wall=53s
+[e2e] o2 kind=oprs plan=results/bw1000_oprs_20261126/plans/tp1_plumbing_async_tp/oprs_async_tp.json model=custom tp=1 MBS=1 NL=4 start 21:04:57
+[e2e] o2 kind=oprs rc=1 iters=8 med(it3+)=418.3 hit_lines_r0=1 fallback_lines_r0=1 end 21:05:37 wall=40s
+[e2e] s2 kind=serial plan=none model=custom tp=1 MBS=1 NL=4 start 21:05:42
+[e2e] s2 kind=serial rc=0 iters=8 med(it3+)=397.4 hit_lines_r0=0 fallback_lines_r0=0 end 21:06:34 wall=52s
+E2E DONE

@@ -1,0 +1,51 @@
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I1126 22:26:15.635627 521058 ProcessGroupNCCL.cpp:1671] [PG ID 0 PG GUID 0 Rank 0] HeartbeatMonitor environments: TORCH_NCCL_ENABLE_MONITORING (Whether to kill program when no watchdog heartbeat detected): 1, TORCH_NCCL_DUMP_ON_TIMEOUT: 1, TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC: 15000, TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC: 480, TORCH_NCCL_COORD_CHECK_MILSEC: 1000, TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN: 1
+I1126 22:26:15.635675 521058 ProcessGroupNCCL.cpp:2000] [PG ID 0 PG GUID 0 Rank 0] PGNCCL Watchdog environments: TORCH_NCCL_RETHROW_CUDA_ERRORS: 1, TORCH_NCCL_PROPAGATE_ERROR: 0, TORCH_NCCL_DESYNC_DEBUG: 0
+I1126 22:26:15.635795 521058 ProcessGroupNCCL.cpp:980] [PG ID 0 PG GUID 0 Rank 0] ProcessGroupNCCL initialization options: size: 1, global rank: 0, TIMEOUT(ms): 600000, USE_HIGH_PRIORITY_STREAM: 0, SPLIT_FROM: 0, SPLIT_COLOR: -2, PG Name: 0
+I1126 22:26:15.635805 521058 ProcessGroupNCCL.cpp:990] [PG ID 0 PG GUID 0 Rank 0] ProcessGroupNCCL environments: NCCL version: 2.22.3, TORCH_NCCL_ASYNC_ERROR_HANDLING: 3, TORCH_NCCL_ENABLE_TIMING: 0, TORCH_NCCL_BLOCKING_WAIT: 0, TORCH_DISTRIBUTED_DEBUG: OFF, TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK: 0, TORCH_NCCL_TRACE_BUFFER_SIZE: 2000, TORCH_NCCL_NAN_CHECK: 0, TORCH_NCCL_CUDA_EVENT_CACHE: 1
+I1126 22:26:15.636029 521058 ProcessGroupNCCL.cpp:1021] [PG ID 0 PG GUID 0 Rank 0] Eagerly connecting nccl backend with device cuda:0
+I1126 22:26:15.636148 521058 ProcessGroupNCCL.cpp:1058] [PG ID 0 PG GUID 0(default_pg) Rank 0] Using non-blocking mode: 0
+I1126 22:26:15.637106 521058 ProcessGroupNCCL.cpp:3083] [PG ID 0 PG GUID 0(default_pg) Rank 0] ProcessGroupNCCL broadcast unique ID through store took 0.045231 ms
+I1126 22:26:15.637137 521058 NCCLUtils.cpp:92] Rank 0: creating NCCL communicator with mode: blocking
+I1126 22:26:15.846861 521058 ProcessGroupNCCL.cpp:3117] [PG ID 0 PG GUID 0(default_pg) Rank 0] NCCL_DEBUG: N/A
+[oprs] OPRS_READY rank=0 tp=1 workload=smoke plan=7d8df6c79386 backend=none entries=1 deo_bwd=ag contexts=1 {'deo/ag': 1} heap_need_mb=8 heap_mb=4096 load_ms=3.2 prepare_ms=21.0
+[deo/ag] rank=0 M=4096 N=2048 K=1024 PASS fwd=0.00e+00 grad_a=0.00e+00 grad_w=0.00e+00 (bwd=stock) fallback=0.00e+00 finite=True runs={('qkv', 'ag', 4096, 2048, 1024, 'deo', 'plan'): 1, ('qkv', 'ag', 2048, 1024, 1024, 'serial', 'unknown_shape'): 1}
+[deo/ag] rank=0 host overhead per call: peek(hit) 1.62 us, peek(unknown shape) 1.52 us
+[oprs] OPRS_SUMMARY rank=0 tp=1 workload=smoke plan=7d8df6c79386 backend=none deo_bwd=ag entries=1 contexts=1
+[oprs] OPRS_RUN rank=0 site=qkv op=ag M=2048 N=1024 K=1024 choice=serial reason=unknown_shape count=1
+[oprs] OPRS_RUN rank=0 site=qkv op=ag M=4096 N=2048 K=1024 choice=deo reason=plan count=1
+[oprs] OPRS_READY rank=0 tp=1 workload=smoke plan=188c88f7238d backend=none entries=1 deo_bwd=ag contexts=1 {'deo/rs': 1} heap_need_mb=16 heap_mb=4096 load_ms=1.6 prepare_ms=1.7
+[deo/rs] rank=0 M=4096 N=1024 K=2048 PASS fwd=0.00e+00 grad_a=0.00e+00 grad_w=0.00e+00 (bwd=ag) fallback=0.00e+00 finite=True runs={('proj', 'rs', 4096, 1024, 2048, 'deo', 'plan'): 1, ('proj', 'rs', 2048, 512, 2048, 'serial', 'unknown_shape'): 1}
+[deo/rs] rank=0 host overhead per call: peek(hit) 1.66 us, peek(unknown shape) 1.57 us
+[oprs] OPRS_SUMMARY rank=0 tp=1 workload=smoke plan=188c88f7238d backend=none deo_bwd=ag entries=1 contexts=1
+[oprs] OPRS_RUN rank=0 site=proj op=rs M=2048 N=512 K=2048 choice=serial reason=unknown_shape count=1
+[oprs] OPRS_RUN rank=0 site=proj op=rs M=4096 N=1024 K=2048 choice=deo reason=plan count=1
+[oprs] OPRS_READY rank=0 tp=1 workload=smoke plan=b85b7594edfe backend=async_tp entries=1 deo_bwd=ag contexts=1 {'async_tp/ag': 1} heap_need_mb=0 heap_mb=4096 load_ms=1.4 prepare_ms=7.5
+I1126 22:26:21.800993 521058 CUDASymmetricMemory.cu:608] using posix fd to import symmetric memory handles.
+[async_tp/ag] rank=0 M=4096 N=2048 K=1024 PASS fwd=0.00e+00 grad_a=0.00e+00 grad_w=0.00e+00 (bwd=stock) fallback=0.00e+00 finite=True runs={('qkv', 'ag', 4096, 2048, 1024, 'async_tp', 'plan'): 1, ('qkv', 'ag', 2048, 1024, 1024, 'serial', 'unknown_shape'): 1}
+[async_tp/ag] rank=0 host overhead per call: peek(hit) 1.68 us, peek(unknown shape) 1.59 us
+[oprs] OPRS_SUMMARY rank=0 tp=1 workload=smoke plan=b85b7594edfe backend=async_tp deo_bwd=ag entries=1 contexts=1
+[oprs] OPRS_RUN rank=0 site=qkv op=ag M=2048 N=1024 K=1024 choice=serial reason=unknown_shape count=1
+[oprs] OPRS_RUN rank=0 site=qkv op=ag M=4096 N=2048 K=1024 choice=async_tp reason=plan count=1
+[oprs] OPRS_READY rank=0 tp=1 workload=smoke plan=f1301dadfd0b backend=async_tp entries=1 deo_bwd=ag contexts=1 {'async_tp/rs': 1} heap_need_mb=0 heap_mb=4096 load_ms=1.1 prepare_ms=0.7
+I1126 22:26:21.897430 521058 CUDASymmetricMemory.cu:608] using posix fd to import symmetric memory handles.
+[async_tp/rs] rank=0 M=4096 N=1024 K=2048 PASS fwd=0.00e+00 grad_a=0.00e+00 grad_w=0.00e+00 (bwd=stock) fallback=0.00e+00 finite=True runs={('proj', 'rs', 4096, 1024, 2048, 'async_tp', 'plan'): 1, ('proj', 'rs', 2048, 512, 2048, 'serial', 'unknown_shape'): 1}
+[async_tp/rs] rank=0 host overhead per call: peek(hit) 1.61 us, peek(unknown shape) 1.51 us
+[oprs] OPRS_SUMMARY rank=0 tp=1 workload=smoke plan=f1301dadfd0b backend=async_tp deo_bwd=ag entries=1 contexts=1
+[oprs] OPRS_RUN rank=0 site=proj op=rs M=2048 N=512 K=2048 choice=serial reason=unknown_shape count=1
+[oprs] OPRS_RUN rank=0 site=proj op=rs M=4096 N=1024 K=2048 choice=async_tp reason=plan count=1
+[oprs] OPRS_READY rank=0 tp=1 workload=smoke plan=48534030f5e9 backend=triton_dist entries=1 deo_bwd=ag contexts=1 {'triton_dist/ag': 1} heap_need_mb=8 heap_mb=4096 load_ms=1.2 prepare_ms=47.9
+[triton_dist/ag] rank=0 M=4096 N=2048 K=1024 PASS fwd=2.34e-03 grad_a=0.00e+00 grad_w=0.00e+00 (bwd=stock) fallback=0.00e+00 finite=True runs={('qkv', 'ag', 4096, 2048, 1024, 'triton_dist', 'plan'): 1, ('qkv', 'ag', 2048, 1024, 1024, 'serial', 'unknown_shape'): 1}
+[triton_dist/ag] rank=0 host overhead per call: peek(hit) 1.64 us, peek(unknown shape) 1.54 us
+[oprs] OPRS_SUMMARY rank=0 tp=1 workload=smoke plan=48534030f5e9 backend=triton_dist deo_bwd=ag entries=1 contexts=1
+[oprs] OPRS_RUN rank=0 site=qkv op=ag M=2048 N=1024 K=1024 choice=serial reason=unknown_shape count=1
+[oprs] OPRS_RUN rank=0 site=qkv op=ag M=4096 N=2048 K=1024 choice=triton_dist reason=plan count=1
+[oprs] OPRS_READY rank=0 tp=1 workload=smoke plan=f7dc8788a7dd backend=triton_dist entries=1 deo_bwd=ag contexts=1 {'triton_dist/rs': 1} heap_need_mb=8 heap_mb=4096 load_ms=1.3 prepare_ms=0.8
+[triton_dist/rs] rank=0 M=4096 N=1024 K=2048 PASS fwd=3.27e-03 grad_a=0.00e+00 grad_w=0.00e+00 (bwd=stock) fallback=0.00e+00 finite=True runs={('proj', 'rs', 4096, 1024, 2048, 'triton_dist', 'plan'): 1, ('proj', 'rs', 2048, 512, 2048, 'serial', 'unknown_shape'): 1}
+[triton_dist/rs] rank=0 host overhead per call: peek(hit) 1.64 us, peek(unknown shape) 1.56 us
+[oprs] OPRS_SUMMARY rank=0 tp=1 workload=smoke plan=f7dc8788a7dd backend=triton_dist deo_bwd=ag entries=1 contexts=1
+[oprs] OPRS_RUN rank=0 site=proj op=rs M=2048 N=512 K=2048 choice=serial reason=unknown_shape count=1
+[oprs] OPRS_RUN rank=0 site=proj op=rs M=4096 N=1024 K=2048 choice=triton_dist reason=plan count=1
+[oprs] OPRS_READY rank=0 tp=1 workload=smoke plan=188c88f7238d backend=none entries=1 deo_bwd=ag contexts=1 {'deo/rs': 1} heap_need_mb=16 heap_mb=4096 load_ms=1.2 prepare_ms=1.7
+[deo/rs-again] rank=0 after close(): rel=0.00e+00 heap_need_mb=16 PASS
+OPRS_SMOKE PASS failures=0 tp=1 dtype=bfloat16 deo_bwd=ag

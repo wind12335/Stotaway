@@ -1,0 +1,126 @@
+{
+  "schema": "stowaway-oprs-plan-set-v1",
+  "created_utc": "2026-11-26T12:55:26Z",
+  "tp": 1,
+  "backend": "triton_dist",
+  "workload": "custom_train",
+  "dtype": "bfloat16",
+  "workload_args": {
+    "seq": 4096,
+    "mbs": 1,
+    "rows": null,
+    "config": "{\"hidden\":1024,\"ffn\":2048,\"heads\":16,\"kv_groups\":4}"
+  },
+  "topology": "BW1",
+  "exclude_anomaly": false,
+  "note": "single-card plumbing plan (TP=1 smoke data, 4 families, M=8192 only): not a measurement",
+  "generator": "tools/oprs_plans.py",
+  "plans": {
+    "oprs": {
+      "path": "oprs_triton_dist.json",
+      "sha256": "e1a98f5051aea873307f896b107fb6b9a5ce9dbb4aeef0757f14de7d914248d9",
+      "arm": "oprs",
+      "external_backend": "triton_dist",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0818,
+        "export_s": 0.0013
+      },
+      "allocate": 3,
+      "choices": {
+        "qkv": "triton_dist",
+        "proj": "serial",
+        "fc1": "triton_dist",
+        "fc2": "deo"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "oprs_deo_only": {
+      "path": "oprs_deo_only.json",
+      "sha256": "5034868034fc452ae4d3efe48862e179c1f78ba5e8f5a59c1560cdb1b7bcadc6",
+      "arm": "oprs",
+      "external_backend": "none",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0123,
+        "export_s": 0.0009
+      },
+      "allocate": 1,
+      "choices": {
+        "qkv": "serial",
+        "proj": "serial",
+        "fc1": "serial",
+        "fc2": "deo"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "always_deo": {
+      "path": "always_deo.json",
+      "sha256": "d7c66b4708c9d9b9e40ebad2d16982d4cd0e679efd0181f196741decff6c5f13",
+      "arm": "always_deo",
+      "external_backend": "triton_dist",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0115,
+        "export_s": 0.0011
+      },
+      "allocate": 4,
+      "choices": {
+        "qkv": "deo",
+        "proj": "deo",
+        "fc1": "deo",
+        "fc2": "deo"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "always_triton_dist": {
+      "path": "always_triton_dist.json",
+      "sha256": "d3db8d6f157cf05812a4f4a69778d04608029b7e28be168da5b538bdd29d5c3b",
+      "arm": "always_triton_dist",
+      "external_backend": "triton_dist",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0833,
+        "export_s": 0.0012
+      },
+      "allocate": 4,
+      "choices": {
+        "qkv": "triton_dist",
+        "proj": "triton_dist",
+        "fc1": "triton_dist",
+        "fc2": "triton_dist"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "null": {
+      "path": "null.json",
+      "sha256": "5e52bf616a0f40921484696ce0d901fbe196cfc3ee95042d805197b5a0791ea3",
+      "arm": "null",
+      "external_backend": "triton_dist",
+      "data_class": "derived",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0154,
+        "export_s": 0.0045
+      },
+      "allocate": 3,
+      "choices": {
+        "qkv": "serial",
+        "proj": "serial",
+        "fc1": "serial",
+        "fc2": "serial"
+      },
+      "limitation": "Null arm derived from another plan: the same contexts are allocated, no call site is replaced; measures the hook + heap cost of the OPRS arm it accompanies"
+    }
+  },
+  "data_class": "b2b16"
+}

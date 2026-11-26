@@ -1,0 +1,12 @@
+[e2e] ROOT=/root/private_data/stowaway/results/bw1000_oprs_20261126/raw/e2e_inference/tp1_plumbing_vllm_triton_dist_tp1_M2048_gate_1126_2144 model=/tmp/oprs_tiny_llama tp=1 M=2048 workload=hf_infer plans=results/bw1000_oprs_20261126/plans/tp1_plumbing_vllm_triton_dist backend=triton_dist heap=1094733864 gate=1 reps=3 load=dummy
+[e2e] stock kind=stock start 21:44:56
+[e2e] stock kind=stock rc=0 end 21:45:52 wall=56s
+[e2e] sp_rccl kind=sp_rccl start 21:45:57
+[e2e] sp_rccl kind=sp_rccl rc=0 end 21:46:54 wall=57s
+[e2e] all_deo kind=all_deo start 21:46:59
+[e2e] all_deo kind=all_deo rc=0 end 21:47:59 wall=60s
+[e2e] always_triton_dist kind=always_triton_dist start 21:48:04
+[e2e] always_triton_dist kind=always_triton_dist rc=0 end 21:49:03 wall=59s
+[e2e] oprs kind=oprs start 21:49:08
+[e2e] oprs kind=oprs rc=0 end 21:50:08 wall=60s
+E2E DONE

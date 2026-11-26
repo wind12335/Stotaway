@@ -42,6 +42,17 @@ _ENGINE = (os.environ.get("MGD_FUSED", "") == "1"
            or os.environ.get("MGD_AG_TIMING", "") == "2"
            or os.environ.get("MGD_BRS", "") == "1")
 
+# OPRS runtime (src/stowaway/oprs: plan-driven dispatcher, serial / DEO / one external backend per
+# call site). Its own arm family: the engine world is brought up at train() entry from the TP group,
+# so none of the old control-plane switches (MGD_* / OPUS_*) may be set in an OPRS process.
+_OPRS = bool(os.environ.get("OPRS_PLAN", ""))
+if _OPRS:
+    _OLD = sorted(k for k in os.environ if k.startswith(("MGD_", "OPUS_")))
+    if _OLD:
+        raise SystemExit(f"OPRS_PLAN is set and so are old control-plane switches {_OLD}: "
+                         f"they are mutually exclusive (unset them)")
+    _ENGINE = True
+
 # torch-MPI interposition order law (see mgd_prelude.py): preload the real
 # MPI RTLD_GLOBAL before anything imports torch.
 if _ENGINE:
@@ -89,6 +100,13 @@ _gls.get_gpt_layer_local_spec = _local_spec_no_hc
 # mgd_ag_patch.install).
 if _ENGINE:
     import hcu_megatron.megatron_adaptor  # noqa: F401  (idempotent later)
+    if _OPRS:
+        # after the das adaptor: it is what replaces megatron.training.training.train, and the OPRS
+        # hook must wrap THAT train() (the one pretrain_gpt.py runs)
+        import stowaway.oprs.megatron_hook as _oh
+        _oh.arm(plan_path=os.environ["OPRS_PLAN"], workload=os.environ.get("OPRS_WORKLOAD", "") or None,
+                methods=[m for m in os.environ.get("OPRS_METHODS", "").split(",") if m] or None,
+                deo_bwd=os.environ.get("OPRS_DEO_BWD", "ag"))
     if os.environ.get("MGD_FUSED", "") == "1" \
             or os.environ.get("MGD_DRY", "") == "1" \
             or os.environ.get("MGD_TP_TIMING", "") == "2":

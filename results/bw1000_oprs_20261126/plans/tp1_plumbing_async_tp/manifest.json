@@ -1,0 +1,126 @@
+{
+  "schema": "stowaway-oprs-plan-set-v1",
+  "created_utc": "2026-11-26T12:55:19Z",
+  "tp": 1,
+  "backend": "async_tp",
+  "workload": "custom_train",
+  "dtype": "bfloat16",
+  "workload_args": {
+    "seq": 4096,
+    "mbs": 1,
+    "rows": null,
+    "config": "{\"hidden\":1024,\"ffn\":2048,\"heads\":16,\"kv_groups\":4}"
+  },
+  "topology": "BW1",
+  "exclude_anomaly": false,
+  "note": "single-card plumbing plan (TP=1 smoke data, 4 families, M=8192 only): not a measurement",
+  "generator": "tools/oprs_plans.py",
+  "plans": {
+    "oprs": {
+      "path": "oprs_async_tp.json",
+      "sha256": "fa3599e4151ca5cdbb1edf7a115c794dd399ac12148cd5922af1f8b561cc2c7c",
+      "arm": "oprs",
+      "external_backend": "async_tp",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.2463,
+        "export_s": 0.0014
+      },
+      "allocate": 1,
+      "choices": {
+        "qkv": "serial",
+        "proj": "serial",
+        "fc1": "serial",
+        "fc2": "deo"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "oprs_deo_only": {
+      "path": "oprs_deo_only.json",
+      "sha256": "5034868034fc452ae4d3efe48862e179c1f78ba5e8f5a59c1560cdb1b7bcadc6",
+      "arm": "oprs",
+      "external_backend": "none",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0123,
+        "export_s": 0.0009
+      },
+      "allocate": 1,
+      "choices": {
+        "qkv": "serial",
+        "proj": "serial",
+        "fc1": "serial",
+        "fc2": "deo"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "always_deo": {
+      "path": "always_deo.json",
+      "sha256": "3a4a6b015eda91b0b31838ae8685de0a12e3b84e0a8d7a09626cd9d0b907abf8",
+      "arm": "always_deo",
+      "external_backend": "async_tp",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.013,
+        "export_s": 0.0012
+      },
+      "allocate": 4,
+      "choices": {
+        "qkv": "deo",
+        "proj": "deo",
+        "fc1": "deo",
+        "fc2": "deo"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "always_async_tp": {
+      "path": "always_async_tp.json",
+      "sha256": "a54551e9934f584d25dc81348af4b7d3dfc11cc05d67ee8a43f3809d7d16b864",
+      "arm": "always_async_tp",
+      "external_backend": "async_tp",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.2811,
+        "export_s": 0.0013
+      },
+      "allocate": 4,
+      "choices": {
+        "qkv": "async_tp",
+        "proj": "async_tp",
+        "fc1": "async_tp",
+        "fc2": "async_tp"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "null": {
+      "path": "null.json",
+      "sha256": "23b9c76ee5da311445531be2f0fe0e6bc73890e737c01340f4c6d181f58f82f5",
+      "arm": "null",
+      "external_backend": "async_tp",
+      "data_class": "derived",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0121,
+        "export_s": 0.0023
+      },
+      "allocate": 1,
+      "choices": {
+        "qkv": "serial",
+        "proj": "serial",
+        "fc1": "serial",
+        "fc2": "serial"
+      },
+      "limitation": "Null arm derived from another plan: the same contexts are allocated, no call site is replaced; measures the hook + heap cost of the OPRS arm it accompanies"
+    }
+  },
+  "data_class": "b2b16"
+}

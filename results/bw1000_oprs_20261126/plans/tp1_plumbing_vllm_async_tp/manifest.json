@@ -1,0 +1,126 @@
+{
+  "schema": "stowaway-oprs-plan-set-v1",
+  "created_utc": "2026-11-26T13:13:29Z",
+  "tp": 1,
+  "backend": "async_tp",
+  "workload": "hf_infer",
+  "dtype": "bfloat16",
+  "workload_args": {
+    "seq": 4096,
+    "mbs": 8,
+    "rows": "2048",
+    "config": "/tmp/oprs_tiny_llama/config.json"
+  },
+  "topology": "BW1",
+  "exclude_anomaly": false,
+  "note": "single-card plumbing plan for the vLLM entry (tiny model, TP=1 smoke data): not a measurement",
+  "generator": "tools/oprs_plans.py",
+  "plans": {
+    "oprs": {
+      "path": "oprs_async_tp.json",
+      "sha256": "58186d9fc17e079760a556edacee577b23c58649da47e89e721c4950783e92b5",
+      "arm": "oprs",
+      "external_backend": "async_tp",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0892,
+        "export_s": 0.0013
+      },
+      "allocate": 1,
+      "choices": {
+        "qkv": "serial",
+        "proj": "serial",
+        "fc1": "serial",
+        "fc2": "deo"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "oprs_deo_only": {
+      "path": "oprs_deo_only.json",
+      "sha256": "3b078d2ebeb7a879d7844ba7ab530dd845bac43f8e02269b8871e70feecbb288",
+      "arm": "oprs",
+      "external_backend": "none",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0136,
+        "export_s": 0.0009
+      },
+      "allocate": 1,
+      "choices": {
+        "qkv": "serial",
+        "proj": "serial",
+        "fc1": "serial",
+        "fc2": "deo"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "always_deo": {
+      "path": "always_deo.json",
+      "sha256": "b063f0059dc955b03f79bdf3fdf8ba9453733fdb87087cc4699934795a7dba62",
+      "arm": "always_deo",
+      "external_backend": "async_tp",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.012,
+        "export_s": 0.0011
+      },
+      "allocate": 4,
+      "choices": {
+        "qkv": "deo",
+        "proj": "deo",
+        "fc1": "deo",
+        "fc2": "deo"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "always_async_tp": {
+      "path": "always_async_tp.json",
+      "sha256": "2fcca8734b9930acbd417cd5b4c2f882797bd1bb5e70a8707f3e6b30a3721e49",
+      "arm": "always_async_tp",
+      "external_backend": "async_tp",
+      "data_class": "b2b16",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0875,
+        "export_s": 0.0013
+      },
+      "allocate": 4,
+      "choices": {
+        "qkv": "async_tp",
+        "proj": "async_tp",
+        "fc1": "async_tp",
+        "fc2": "async_tp"
+      },
+      "limitation": "operator-level estimates under the b2b16 protocol; the plan needs in-framework (end-to-end) validation on the same workload"
+    },
+    "null": {
+      "path": "null.json",
+      "sha256": "4f88a669622136c21648cf51e565d9a9df08ba7d51289eb64c6a058ca7eb2607",
+      "arm": "null",
+      "external_backend": "async_tp",
+      "data_class": "derived",
+      "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+      "src_dirty": true,
+      "overheads": {
+        "fit_s": 0.0126,
+        "export_s": 0.004
+      },
+      "allocate": 1,
+      "choices": {
+        "qkv": "serial",
+        "proj": "serial",
+        "fc1": "serial",
+        "fc2": "serial"
+      },
+      "limitation": "Null arm derived from another plan: the same contexts are allocated, no call site is replaced; measures the hook + heap cost of the OPRS arm it accompanies"
+    }
+  },
+  "data_class": "b2b16"
+}

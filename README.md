@@ -46,11 +46,13 @@ env/env.sh            all paths and env vars (source this first)
 src/stowaway/         the runtime (python package)
   kernels/              DX overlap ops (gemm_rs_dx.py), rings/relays, MoE sync-free path (moe_*.py)
   integrations/         Megatron / vLLM hooks; every hook default OFF, switched by MGD_* / OPUS_* env
+  oprs/                 OPRS (2026-11): per-call-site choice of serial / DEO / one external backend, plan-driven
 src/pydushmem/        ctypes bindings for DTK dushmem (symmetric heap, bootstrap)
 src/csrc/             hipBLASLt grouped-GEMM shim for MoE (build.sh)
 planner/              the predictor (CPU): planner.py, costmodel.py, step_planner_v3.py, moe_plan.py
   data/                 measured cells, GEMM probes, fitted step points
-bench/                operator-level benches + drivers (AG+GEMM, GEMM+RS, AG+dgrad, MoE layer, smoke)
+bench/                operator-level benches + drivers (AG+GEMM, GEMM+RS, AG+dgrad, MoE layer, smoke; oprs_* = OPRS)
+tests/                CPU unit tests of the OPRS port (no card needed)
 probes/               micro-probes behind the laws the planner uses (host-block, permutation bandwidth, graph tax)
 e2e/megatron/         Megatron vehicles: dense TP8+SP (run.sh) and MoE EP8 (run_moe.sh)
 e2e/dual16/           2-node / 16-card job (TP8 x DP2, RDMA)
@@ -149,6 +151,23 @@ between days. Each arm is its own process, and the median is taken from iteratio
   (~6 card-hours), then `bash e2e/vllm/run_gate.sh` (natural-text output check, ~1.5 card-hours).
   Results: `results/vLLM结果表.md`. This needs the shims in `3rdparty/README.md` §3.
 - vLLM, 16 cards (TP8 x PP2): `e2e/dual16/vllm16_vcjob.sh`, see `e2e/dual16/README.md` (~24 card-hours).
+
+---
+
+## OPRS (2026-11): per-call-site choice of serial / DEO / one external backend
+
+Everything above is the first system and its predictor (`planner/`, the `plan` arm). **OPRS** is the
+second one, ported from the NVIDIA side of this repository to the Hygon stack. It fixes ONE external
+overlap backend B (Async-TP or Triton-distributed), predicts for each of the four TP call sites
+whether the serial path, DEO (our own overlap method, called DX on the NVIDIA side) or B is faster,
+writes a JSON plan, and a runtime dispatcher executes it inside Megatron or vLLM. The old entry
+points and plans are untouched; the two plan formats do not load in each other's runtime.
+
+- Code: `src/stowaway/oprs/`, `bench/oprs_*`, `e2e/megatron/run_oprs.sh`, `e2e/vllm/run_oprs.sh`, `tools/oprs_*.py`.
+- How to run it on 8 cards, what the port changed, what was verified on one card:
+  `docs/BW1000_OPRS移植说明_20261126.md`. Single-card records: `results/bw1000_oprs_20261126/` (`report.md`).
+- Status: the whole chain runs on one card (plumbing only, no performance number); every TP>=2
+  measurement under the new protocol is still to be done.
 
 ---
 

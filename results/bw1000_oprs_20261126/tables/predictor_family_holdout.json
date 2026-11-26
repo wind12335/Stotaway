@@ -1,0 +1,6622 @@
+{
+ "legacy_deo": {
+  "schema": "stowaway-oprs-family-holdout-v1",
+  "classification": "historical_replay_legacy",
+  "data_class": "legacy",
+  "methods": [
+   "deo"
+  ],
+  "exclude_anomaly": false,
+  "denominators": {
+   "operator_records": 99,
+   "usable_records": 99,
+   "points_with_all_candidates": 99,
+   "points_missing_a_candidate": [],
+   "anomalies_included": [
+    "legacy-anomaly:llama4-mav-d/ag_gu/M32768",
+    "legacy-anomaly:qwen3-8b/rs/M32768"
+   ],
+   "anomalies_excluded": []
+  },
+  "policies": {
+   "always": "fixed candidate (serial reference = 1.0)",
+   "base_ridge": "ridge on (log M, log N, log K) only",
+   "route_policy": "RoutePolicy: per-route threshold chosen by nested leave-one-family-out on the training families",
+   "oprs": "ridge + family-holdout local residual (plan producer)",
+   "oracle": "fastest measured candidate"
+  },
+  "summary": {
+   "always_deo": {
+    "ag": {
+     "count": 66,
+     "correct": 42,
+     "selected_gmean_speedup": 1.0283371331987825,
+     "selected_below_stock": 24,
+     "regret_gmean_ratio": 1.0626721877605152,
+     "oracle_gmean_speedup": 1.0927852710917265,
+     "accuracy": 0.6363636363636364
+    },
+    "rs": {
+     "count": 33,
+     "correct": 31,
+     "selected_gmean_speedup": 1.3189589052871245,
+     "selected_below_stock": 2,
+     "regret_gmean_ratio": 1.0125337103425505,
+     "oracle_gmean_speedup": 1.3354903541597207,
+     "accuracy": 0.9393939393939394
+    },
+    "all": {
+     "count": 99,
+     "correct": 73,
+     "selected_gmean_speedup": 1.117293915676711,
+     "selected_below_stock": 26,
+     "regret_gmean_ratio": 1.045689402320812,
+     "oracle_gmean_speedup": 1.1683424069006596,
+     "accuracy": 0.7373737373737373
+    }
+   },
+   "oracle": {
+    "ag": {
+     "count": 66,
+     "correct": 66,
+     "selected_gmean_speedup": 1.0927852710917265,
+     "selected_below_stock": 0,
+     "regret_gmean_ratio": 1.0,
+     "oracle_gmean_speedup": 1.0927852710917265,
+     "accuracy": 1.0
+    },
+    "rs": {
+     "count": 33,
+     "correct": 33,
+     "selected_gmean_speedup": 1.3354903541597207,
+     "selected_below_stock": 0,
+     "regret_gmean_ratio": 1.0,
+     "oracle_gmean_speedup": 1.3354903541597207,
+     "accuracy": 1.0
+    },
+    "all": {
+     "count": 99,
+     "correct": 99,
+     "selected_gmean_speedup": 1.1683424069006596,
+     "selected_below_stock": 0,
+     "regret_gmean_ratio": 1.0,
+     "oracle_gmean_speedup": 1.1683424069006596,
+     "accuracy": 1.0
+    }
+   },
+   "base_ridge": {
+    "ag": {
+     "count": 66,
+     "correct": 48,
+     "selected_gmean_speedup": 1.067343499176393,
+     "selected_below_stock": 10,
+     "regret_gmean_ratio": 1.0238365361619435,
+     "oracle_gmean_speedup": 1.0927852710917265,
+     "accuracy": 0.7272727272727273
+    },
+    "rs": {
+     "count": 33,
+     "correct": 31,
+     "selected_gmean_speedup": 1.3189589052871245,
+     "selected_below_stock": 2,
+     "regret_gmean_ratio": 1.0125337103425505,
+     "oracle_gmean_speedup": 1.3354903541597207,
+     "accuracy": 0.9393939393939394
+    },
+    "all": {
+     "count": 99,
+     "correct": 79,
+     "selected_gmean_speedup": 1.1453719972701477,
+     "selected_below_stock": 12,
+     "regret_gmean_ratio": 1.0200549774966203,
+     "oracle_gmean_speedup": 1.1683424069006596,
+     "accuracy": 0.797979797979798
+    }
+   },
+   "oprs": {
+    "ag": {
+     "count": 66,
+     "correct": 52,
+     "selected_gmean_speedup": 1.074714460684065,
+     "selected_below_stock": 10,
+     "regret_gmean_ratio": 1.01681452243246,
+     "oracle_gmean_speedup": 1.0927852710917265,
+     "accuracy": 0.7878787878787878
+    },
+    "rs": {
+     "count": 33,
+     "correct": 32,
+     "selected_gmean_speedup": 1.33341159032932,
+     "selected_below_stock": 0,
+     "regret_gmean_ratio": 1.0015589813719015,
+     "oracle_gmean_speedup": 1.3354903541597207,
+     "accuracy": 0.9696969696969697
+    },
+    "all": {
+     "count": 99,
+     "correct": 84,
+     "selected_gmean_speedup": 1.154826666069409,
+     "selected_below_stock": 10,
+     "regret_gmean_ratio": 1.0117036965185893,
+     "oracle_gmean_speedup": 1.1683424069006596,
+     "accuracy": 0.8484848484848485
+    }
+   },
+   "route_policy": {
+    "ag": {
+     "count": 66,
+     "correct": 42,
+     "selected_gmean_speedup": 1.0505334469644825,
+     "selected_below_stock": 10,
+     "regret_gmean_ratio": 1.0402193992483826,
+     "oracle_gmean_speedup": 1.0927852710917265,
+     "accuracy": 0.6363636363636364
+    },
+    "rs": {
+     "count": 33,
+     "correct": 27,
+     "selected_gmean_speedup": 1.3056681396209324,
+     "selected_below_stock": 2,
+     "regret_gmean_ratio": 1.0228405776581533,
+     "oracle_gmean_speedup": 1.3354903541597207,
+     "accuracy": 0.8181818181818182
+    },
+    "all": {
+     "count": 99,
+     "correct": 69,
+     "selected_gmean_speedup": 1.1294946850126166,
+     "selected_below_stock": 12,
+     "regret_gmean_ratio": 1.0343938952555665,
+     "oracle_gmean_speedup": 1.1683424069006596,
+     "accuracy": 0.696969696969697
+    }
+   }
+  },
+  "rows": [
+   {
+    "model": "dsv3-d",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 2304,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.14179873244183042
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.14179873244183042
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.15955226966789984
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.8341209829867674
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.8341209829867674,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.18137682361079288,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "dsv3-d",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 4608,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.11741538610419897
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.11741538610419897
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.014397336296034041
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2457786116322702
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "serial",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2457786116322702,
+     "oracle": 1.2457786116322702,
+     "base_ridge": 1.0,
+     "oprs": 1.2457786116322702,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.21976072531058935,
+     "oprs": 0.0,
+     "route_policy": 0.21976072531058935
+    }
+   },
+   {
+    "model": "dsv3-d",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 2304,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.004033968416608051
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.004033968416608051
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.053825223422016275
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2608074312254376
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2608074312254376,
+     "oracle": 1.2608074312254376,
+     "base_ridge": 1.2608074312254376,
+     "oprs": 1.2608074312254376,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.2317523341598165
+    }
+   },
+   {
+    "model": "dsv3-d",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 4608,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.02841731475423949
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.02841731475423949
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.07388069875521068
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1590808661069378
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1590808661069378,
+     "oracle": 1.1590808661069378,
+     "base_ridge": 1.1590808661069378,
+     "oprs": 1.1590808661069378,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.14762733423333643
+    }
+   },
+   {
+    "model": "dsv3-d",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 2304,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.14986666927504652
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.14986666927504652
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.13572233270999076
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.162446898895497
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.162446898895497,
+     "oracle": 1.162446898895497,
+     "base_ridge": 1.162446898895497,
+     "oprs": 1.162446898895497,
+     "route_policy": 1.162446898895497
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "dsv3-d",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 4608,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.17425001561267797
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.17425001561267797
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.17916047376748967
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2026315789473685
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2026315789473685,
+     "oracle": 1.2026315789473685,
+     "base_ridge": 1.2026315789473685,
+     "oprs": 1.2026315789473685,
+     "route_policy": 1.2026315789473685
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "gemma3-27b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 2688,
+    "K": 5376,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.12171857633571906
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.12171857633571906
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.199099974607663
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.8877849210987726
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.8877849210987726,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.11902577129642072,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "gemma3-27b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 5376,
+    "K": 5376,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.07937948401125101
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.07937948401125101
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.04819624187192924
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.7684433462760324
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.7684433462760324,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 0.7684433462760324,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": false,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": true,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.2633884385959693,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.2633884385959693,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "gemma3-27b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 2688,
+    "K": 5376,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.017911782842928544
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.017911782842928544
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.0513392226564901
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.8995348837209302
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.8995348837209302,
+     "oracle": 1.0,
+     "base_ridge": 0.8995348837209302,
+     "oprs": 0.8995348837209302,
+     "route_policy": 0.8995348837209302
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.10587744510846898,
+     "oracle": 0.0,
+     "base_ridge": 0.10587744510846898,
+     "oprs": 0.10587744510846898,
+     "route_policy": 0.10587744510846898
+    }
+   },
+   {
+    "model": "gemma3-27b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 5376,
+    "K": 5376,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.06025087516739658
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.06025087516739658
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.09654340428788363
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.9250944654367638
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.9250944654367638,
+     "oracle": 1.0,
+     "base_ridge": 0.9250944654367638,
+     "oprs": 0.9250944654367638,
+     "route_policy": 0.9250944654367638
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.07785942188759243,
+     "oracle": 0.0,
+     "base_ridge": 0.07785942188759243,
+     "oprs": 0.07785942188759243,
+     "route_policy": 0.07785942188759243
+    }
+   },
+   {
+    "model": "gemma3-27b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 2688,
+    "K": 5376,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.15754214202157613
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.15754214202157613
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.15508740431346865
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.152831652443755
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.152831652443755,
+     "oracle": 1.152831652443755,
+     "base_ridge": 1.152831652443755,
+     "oprs": 1.152831652443755,
+     "route_policy": 1.152831652443755
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "gemma3-27b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 5376,
+    "K": 5376,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.19988123434604416
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.19988123434604416
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.3651804070444987
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.028790087463557
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.028790087463557,
+     "oracle": 1.028790087463557,
+     "base_ridge": 1.028790087463557,
+     "oprs": 1.028790087463557,
+     "route_policy": 1.028790087463557
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-70b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 3584,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.1108617140395742
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.1108617140395742
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.03433771184792944
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0754633715798763
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "serial",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0754633715798763,
+     "oracle": 1.0754633715798763,
+     "base_ridge": 1.0,
+     "oprs": 1.0754633715798763,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.07275161203725444,
+     "oprs": 0.0,
+     "route_policy": 0.07275161203725444
+    }
+   },
+   {
+    "model": "llama3-70b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 7168,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.07874572837821914
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.07874572837821914
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.04980743058766514
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.8991441128845709
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.8991441128845709,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.10631195381540862,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-70b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 3584,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.036159789463853814
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.036159789463853814
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.10346850930586309
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.013302364864865
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.013302364864865,
+     "oracle": 1.013302364864865,
+     "base_ridge": 1.013302364864865,
+     "oprs": 1.013302364864865,
+     "route_policy": 1.013302364864865
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-70b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 7168,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.06827577512520891
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.06827577512520891
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.10546985399356695
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.97821884263436
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.97821884263436,
+     "oracle": 1.0,
+     "base_ridge": 0.97821884263436,
+     "oprs": 0.97821884263436,
+     "route_policy": 0.97821884263436
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.02202186850427382,
+     "oracle": 0.0,
+     "base_ridge": 0.02202186850427382,
+     "oprs": 0.02202186850427382,
+     "route_policy": 0.02202186850427382
+    }
+   },
+   {
+    "model": "llama3-70b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 3584,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.1831812929672819
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.1831812929672819
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.22296008104463608
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1003301108229193
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1003301108229193,
+     "oracle": 1.1003301108229193,
+     "base_ridge": 1.1003301108229193,
+     "oprs": 1.1003301108229193,
+     "route_policy": 1.1003301108229193
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-70b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 7168,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.21529727862863696
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.21529727862863696
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.1780455253926633
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1256353842652302
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1256353842652302,
+     "oracle": 1.1256353842652302,
+     "base_ridge": 1.1256353842652302,
+     "oprs": 1.1256353842652302,
+     "route_policy": 1.1256353842652302
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-8b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 1792,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.12694918862267782
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.12694918862267782
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.304679703430624
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.5891677675033025
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.5891677675033025,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.5290443014173848,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-8b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 3584,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.1044780804076498
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.1044780804076498
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.1490527165816589
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.8119205298013245
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.8119205298013245,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.2083528133128133,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-8b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 1792,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.0025031830869242724
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.0025031830869242724
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.014857450889742033
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.981260647359455
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.981260647359455,
+     "oracle": 1.0,
+     "base_ridge": 0.981260647359455,
+     "oprs": 0.981260647359455,
+     "route_policy": 0.981260647359455
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.018917159132205087,
+     "oracle": 0.0,
+     "base_ridge": 0.018917159132205087,
+     "oprs": 0.018917159132205087,
+     "route_policy": 0.018917159132205087
+    }
+   },
+   {
+    "model": "llama3-8b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 3584,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.024974291301952296
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.024974291301952296
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.01084699766649498
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0341843357853744
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0341843357853744,
+     "oracle": 1.0341843357853744,
+     "base_ridge": 1.0341843357853744,
+     "oprs": 1.0341843357853744,
+     "route_policy": 1.0341843357853744
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-8b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 1792,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.13195555479652638
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.13195555479652638
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.0938135360762039
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1142951251646904
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1142951251646904,
+     "oracle": 1.1142951251646904,
+     "base_ridge": 1.1142951251646904,
+     "oprs": 1.1142951251646904,
+     "route_policy": 1.1142951251646904
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-8b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 3584,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.1544266630115544
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.1544266630115544
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.268103798088885
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1366551554020718
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1366551554020718,
+     "oracle": 1.1366551554020718,
+     "base_ridge": 1.1366551554020718,
+     "oprs": 1.1366551554020718,
+     "route_policy": 1.1366551554020718
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama31-405b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 6656,
+    "K": 16384,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.03467053554838034
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.03467053554838034
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.008955043061654386
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.8803479316273896
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "serial",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.8803479316273896,
+     "oracle": 1.0,
+     "base_ridge": 0.8803479316273896,
+     "oprs": 1.0,
+     "route_policy": 0.8803479316273896
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": false,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.12743807280140895,
+     "oracle": 0.0,
+     "base_ridge": 0.12743807280140895,
+     "oprs": 0.0,
+     "route_policy": 0.12743807280140895
+    }
+   },
+   {
+    "model": "llama31-405b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 13312,
+    "K": 16384,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.07337608607945052
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.07337608607945052
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.031229262169060926
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.9890139516074677
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.9890139516074677,
+     "oracle": 1.0,
+     "base_ridge": 0.9890139516074677,
+     "oprs": 0.9890139516074677,
+     "route_policy": 0.9890139516074677
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.01104684067685411,
+     "oracle": 0.0,
+     "base_ridge": 0.01104684067685411,
+     "oprs": 0.01104684067685411,
+     "route_policy": 0.01104684067685411
+    }
+   },
+   {
+    "model": "llama31-405b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 6656,
+    "K": 16384,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.18212867704014107
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.18212867704014107
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.11367066490464396
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0666197363368746
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0666197363368746,
+     "oracle": 1.0666197363368746,
+     "base_ridge": 1.0666197363368746,
+     "oprs": 1.0666197363368746,
+     "route_policy": 1.0666197363368746
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama31-405b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 13312,
+    "K": 16384,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.22083422757121127
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.22083422757121127
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.15979656090862654
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.9545156424214599
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.9545156424214599,
+     "oracle": 1.0,
+     "base_ridge": 0.9545156424214599,
+     "oprs": 0.9545156424214599,
+     "route_policy": 0.9545156424214599
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.04655124787156092,
+     "oracle": 0.0,
+     "base_ridge": 0.04655124787156092,
+     "oprs": 0.04655124787156092,
+     "route_policy": 0.04655124787156092
+    }
+   },
+   {
+    "model": "llama31-405b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 6656,
+    "K": 16384,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.32958681853190186
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.32958681853190186
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.19149328737592763
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.062891868428668
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.062891868428668,
+     "oracle": 1.062891868428668,
+     "base_ridge": 1.062891868428668,
+     "oprs": 1.062891868428668,
+     "route_policy": 1.062891868428668
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama31-405b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 13312,
+    "K": 16384,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.368292369062972
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.368292369062972
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.24204524237857347
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.030446549391069
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.030446549391069,
+     "oracle": 1.030446549391069,
+     "base_ridge": 1.030446549391069,
+     "oprs": 1.030446549391069,
+     "route_policy": 1.030446549391069
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama4-mav-d",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 2048,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.14724232594450049
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.14724232594450049
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.22714604754920298
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.7823170731707317
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.7823170731707317,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.24549515620260765,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama4-mav-d",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 4096,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.1471961308405446
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.1471961308405446
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.2025130800310997
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0796515245799627
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0796515245799627,
+     "oracle": 1.0796515245799627,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.07663832664344702,
+     "oprs": 0.07663832664344702,
+     "route_policy": 0.07663832664344702
+    }
+   },
+   {
+    "model": "llama4-mav-d",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 2048,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.02412006852038284
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.02412006852038284
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.020596381263789237
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2478858350951376
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2478858350951376,
+     "oracle": 1.2478858350951376,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.2214507874736895,
+     "oprs": 0.2214507874736895,
+     "route_policy": 0.2214507874736895
+    }
+   },
+   {
+    "model": "llama4-mav-d",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 4096,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.024073873416426927
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.024073873416426927
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.02843668877089763
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0411483253588516
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0411483253588516,
+     "oracle": 1.0411483253588516,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.04032426301697649,
+     "oprs": 0.04032426301697649,
+     "route_policy": 0.04032426301697649
+    }
+   },
+   {
+    "model": "llama4-mav-d",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 2048,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.09900218890373483
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.09900218890373483
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.12456056139018612
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1047455126628964
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1047455126628964,
+     "oracle": 1.1047455126628964,
+     "base_ridge": 1.1047455126628964,
+     "oprs": 1.1047455126628964,
+     "route_policy": 1.1047455126628964
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama4-mav-d",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 4096,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.09904838400769075
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.09904838400769075
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.09671544661735605
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 2.629731925264013
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 2.629731925264013,
+     "oracle": 2.629731925264013,
+     "base_ridge": 2.629731925264013,
+     "oprs": 2.629731925264013,
+     "route_policy": 2.629731925264013
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral-l-2407",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 3584,
+    "K": 12288,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.10488997642628274
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.10488997642628274
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.05493008483929368
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1194717444717446
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1194717444717446,
+     "oracle": 1.1194717444717446,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.1128569173203277,
+     "oprs": 0.1128569173203277,
+     "route_policy": 0.1128569173203277
+    }
+   },
+   {
+    "model": "mistral-l-2407",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 7168,
+    "K": 12288,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.06822104705926409
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.06822104705926409
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.12319753948989481
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.9642916736192224
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.9642916736192224,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.036361464140407224,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral-l-2407",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 3584,
+    "K": 12288,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.044683912877828094
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.044683912877828094
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.0401937040033198
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0643114635904831
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0643114635904831,
+     "oracle": 1.0643114635904831,
+     "base_ridge": 1.0643114635904831,
+     "oprs": 1.0643114635904831,
+     "route_policy": 1.0643114635904831
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral-l-2407",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 7168,
+    "K": 12288,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.08135284224484675
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.08135284224484675
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.039212097356449316
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0029330726157677
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0029330726157677,
+     "oracle": 1.0029330726157677,
+     "base_ridge": 1.0029330726157677,
+     "oprs": 1.0029330726157677,
+     "route_policy": 1.0029330726157677
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral-l-2407",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 3584,
+    "K": 12288,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.1942578021819389
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.1942578021819389
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.15415424124771474
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2856681730148485
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2856681730148485,
+     "oracle": 1.2856681730148485,
+     "base_ridge": 1.2856681730148485,
+     "oprs": 1.2856681730148485,
+     "route_policy": 1.2856681730148485
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral-l-2407",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 7168,
+    "K": 12288,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.23092673154895754
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.23092673154895754
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.13141839192234964
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.9677674263849608
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.9677674263849608,
+     "oracle": 1.0,
+     "base_ridge": 0.9677674263849608,
+     "oprs": 0.9677674263849608,
+     "route_policy": 0.9677674263849608
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.03276348257210544,
+     "oracle": 0.0,
+     "base_ridge": 0.03276348257210544,
+     "oprs": 0.03276348257210544,
+     "route_policy": 0.03276348257210544
+    }
+   },
+   {
+    "model": "mistral3-d",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 2048,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.14470886141367967
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.14470886141367967
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.15815986738488216
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.8304843304843306
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.8304843304843306,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.18574621767531865,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral3-d",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 4096,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.11836823304929346
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.11836823304929346
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.02625580322659203
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.154168607359106
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "serial",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.154168607359106,
+     "oracle": 1.154168607359106,
+     "base_ridge": 1.0,
+     "oprs": 1.154168607359106,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.14338026431030695,
+     "oprs": 0.0,
+     "route_policy": 0.14338026431030695
+    }
+   },
+   {
+    "model": "mistral3-d",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 2048,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.002380634147908598
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.002380634147908598
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.08243579079998073
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2244138444361743
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2244138444361743,
+     "oracle": 1.2244138444361743,
+     "base_ridge": 1.2244138444361743,
+     "oprs": 1.2244138444361743,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.20246223514392644
+    }
+   },
+   {
+    "model": "mistral3-d",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 4096,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.028721262512294787
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.028721262512294787
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.07877910898043589
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1190036900369003
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1190036900369003,
+     "oracle": 1.1190036900369003,
+     "base_ridge": 1.1190036900369003,
+     "oprs": 1.1190036900369003,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.11243872694445851
+    }
+   },
+   {
+    "model": "mistral3-d",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 2048,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.14947012970949686
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.14947012970949686
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.14808804306255
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0828840970350404
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0828840970350404,
+     "oracle": 1.0828840970350404,
+     "base_ridge": 1.0828840970350404,
+     "oprs": 1.0828840970350404,
+     "route_policy": 1.0828840970350404
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral3-d",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 4096,
+    "K": 7168,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.17581075807388308
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.17581075807388308
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.19316794752099894
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1305610407712858
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1305610407712858,
+     "oracle": 1.1305610407712858,
+     "base_ridge": 1.1305610407712858,
+     "oprs": 1.1305610407712858,
+     "route_policy": 1.1305610407712858
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen25-72b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 3696,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.11788301898757579
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.11788301898757579
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.008781769468440156
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1668177697189483
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "serial",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1668177697189483,
+     "oracle": 1.1668177697189483,
+     "base_ridge": 1.0,
+     "oprs": 1.1668177697189483,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.15428018834262422,
+     "oprs": 0.0,
+     "route_policy": 0.15428018834262422
+    }
+   },
+   {
+    "model": "qwen25-72b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 7392,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.09033589232253118
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.09033589232253118
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.058881057294122296
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.897680763983629
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.897680763983629,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.10794077056133432,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen25-72b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 3696,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.02365546325257894
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.02365546325257894
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.04804952379399471
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2106491302503182
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2106491302503182,
+     "oracle": 1.2106491302503182,
+     "base_ridge": 1.2106491302503182,
+     "oprs": 1.2106491302503182,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.19115668704063163
+    }
+   },
+   {
+    "model": "qwen25-72b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 7392,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.05120258991762357
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.05120258991762357
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.03206274364184182
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1762101534828808
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1762101534828808,
+     "oracle": 1.1762101534828808,
+     "base_ridge": 1.1762101534828808,
+     "oprs": 1.1762101534828808,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.16229753545237047
+    }
+   },
+   {
+    "model": "qwen25-72b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 3696,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.16519394549273367
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.16519394549273367
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.1415400217316793
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.4247460757156047
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.4247460757156047,
+     "oracle": 1.4247460757156047,
+     "base_ridge": 1.4247460757156047,
+     "oprs": 1.4247460757156047,
+     "route_policy": 1.4247460757156047
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen25-72b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 7392,
+    "K": 8192,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.1927410721577783
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.1927410721577783
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.14469838128181503
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1811583358275966
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1811583358275966,
+     "oracle": 1.1811583358275966,
+     "base_ridge": 1.1811583358275966,
+     "oprs": 1.1811583358275966,
+     "route_policy": 1.1811583358275966
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-32b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 1280,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.12736784311980295
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.12736784311980295
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.31226373826576775
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.6655428186109238
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.6655428186109238,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.4071523027044505,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-32b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 2560,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.11783052511047024
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.11783052511047024
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.1612448813859197
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.7673846153846154
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.7673846153846154,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.2647671490838013,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-32b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 1280,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.0036384530783549543
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.0036384530783549543
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.016196925517516756
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0181236673773988
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0181236673773988,
+     "oracle": 1.0181236673773988,
+     "base_ridge": 1.0181236673773988,
+     "oprs": 1.0181236673773988,
+     "route_policy": 1.0181236673773988
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-32b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 2560,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.013175771087687686
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.013175771087687686
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.004884175976549129
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0754070265638387
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0754070265638387,
+     "oracle": 1.0754070265638387,
+     "base_ridge": 1.0754070265638387,
+     "oprs": 1.0754070265638387,
+     "route_policy": 1.0754070265638387
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-32b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 1280,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.13464474927651288
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.13464474927651288
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.10684933835753618
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0611957134799774
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0611957134799774,
+     "oracle": 1.0611957134799774,
+     "base_ridge": 1.0611957134799774,
+     "oprs": 1.0611957134799774,
+     "route_policy": 1.0611957134799774
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-32b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 2560,
+    "K": 5120,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.14418206728584562
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.14418206728584562
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.13548715071461168
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1950217496375062
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1950217496375062,
+     "oracle": 1.1950217496375062,
+     "base_ridge": 1.1950217496375062,
+     "oprs": 1.1950217496375062,
+     "route_policy": 1.1950217496375062
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-8b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 8192,
+    "N": 1536,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.11719609574489848
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.11719609574489848
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.2938694440723659
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.5624603677869372
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.5624603677869372,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.5754346046534589,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-8b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 8192,
+    "N": 3072,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": -0.09979688718633892
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": -0.09979688718633892
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.17133457989732626
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.7647462277091907
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "serial",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.7647462277091907,
+     "oracle": 1.0,
+     "base_ridge": 1.0,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.26821122867438435,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-8b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 16384,
+    "N": 1536,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.011176886871237073
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.011176886871237073
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.014984298705351628
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.9718225419664269
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.9718225419664269,
+     "oracle": 1.0,
+     "base_ridge": 0.9718225419664269,
+     "oprs": 0.9718225419664269,
+     "route_policy": 0.9718225419664269
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.028582061183015966,
+     "oracle": 0.0,
+     "base_ridge": 0.028582061183015966,
+     "oprs": 0.028582061183015966,
+     "route_policy": 0.028582061183015966
+    }
+   },
+   {
+    "model": "qwen3-8b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 16384,
+    "N": 3072,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.02857609542979665
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.02857609542979665
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.00234247257041105
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.9586267605633804
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.9586267605633804,
+     "oracle": 1.0,
+     "base_ridge": 0.9586267605633804,
+     "oprs": 0.9586267605633804,
+     "route_policy": 0.9586267605633804
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.04225347634813614,
+     "oracle": 0.0,
+     "base_ridge": 0.04225347634813614,
+     "oprs": 0.04225347634813614,
+     "route_policy": 0.04225347634813614
+    }
+   },
+   {
+    "model": "qwen3-8b",
+    "op": "ag",
+    "table_op": "ag_up",
+    "M": 32768,
+    "N": 1536,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.13954986948737264
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.13954986948737264
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.10677983965489639
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0563521173724575
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0563521173724575,
+     "oracle": 1.0563521173724575,
+     "base_ridge": 1.0563521173724575,
+     "oprs": 1.0563521173724575,
+     "route_policy": 1.0563521173724575
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-8b",
+    "op": "ag",
+    "table_op": "ag_gu",
+    "M": 32768,
+    "N": 3072,
+    "K": 4096,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.15694907804593222
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.15694907804593222
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.1393492552359128
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1273349118652987
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1273349118652987,
+     "oracle": 1.1273349118652987,
+     "base_ridge": 1.1273349118652987,
+     "oprs": 1.1273349118652987,
+     "route_policy": 1.1273349118652987
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "dsv3-d",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 7168,
+    "K": 2304,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.11449543855780486
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.11449543855780486
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.109409946532738
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1549225387306348
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1549225387306348,
+     "oracle": 1.1549225387306348,
+     "base_ridge": 1.1549225387306348,
+     "oprs": 1.1549225387306348,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.1440332756906474
+    }
+   },
+   {
+    "model": "dsv3-d",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 7168,
+    "K": 2304,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.25881316707435315
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.25881316707435315
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.2812348691113378
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.5523316062176165
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.5523316062176165,
+     "oracle": 1.5523316062176165,
+     "base_ridge": 1.5523316062176165,
+     "oprs": 1.5523316062176165,
+     "route_policy": 1.5523316062176165
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "dsv3-d",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 7168,
+    "K": 2304,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.40313089559090143
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.40313089559090143
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.4066378908548397
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.8448239950010412
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.8448239950010412,
+     "oracle": 1.8448239950010412,
+     "base_ridge": 1.8448239950010412,
+     "oprs": 1.8448239950010412,
+     "route_policy": 1.8448239950010412
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "gemma3-27b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 5376,
+    "K": 2688,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.08549606357776118
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.08549606357776118
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.07496396585599924
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1421598535692497
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1421598535692497,
+     "oracle": 1.1421598535692497,
+     "base_ridge": 1.1421598535692497,
+     "oprs": 1.1421598535692497,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.13292107829370778
+    }
+   },
+   {
+    "model": "gemma3-27b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 5376,
+    "K": 2688,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.23529471272411814
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.23529471272411814
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.2854778423931755
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.3839388145315488
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.3839388145315488,
+     "oracle": 1.3839388145315488,
+     "base_ridge": 1.3839388145315488,
+     "oprs": 1.3839388145315488,
+     "route_policy": 1.3839388145315488
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "gemma3-27b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 5376,
+    "K": 2688,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.3850933618704751
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.3850933618704751
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.4421228093655913
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.6231121281464531
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.6231121281464531,
+     "oracle": 1.6231121281464531,
+     "base_ridge": 1.6231121281464531,
+     "oprs": 1.6231121281464531,
+     "route_policy": 1.6231121281464531
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-70b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 8192,
+    "K": 3584,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.14554595398329634
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.14554595398329634
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.20317266321754307
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.3943345323741005
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.3943345323741005,
+     "oracle": 1.3943345323741005,
+     "base_ridge": 1.3943345323741005,
+     "oprs": 1.3943345323741005,
+     "route_policy": 1.3943345323741005
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-70b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 8192,
+    "K": 3584,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.3052616183118223
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.3052616183118223
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.3207256405710553
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.430335507921715
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.430335507921715,
+     "oracle": 1.430335507921715,
+     "base_ridge": 1.430335507921715,
+     "oprs": 1.430335507921715,
+     "route_policy": 1.430335507921715
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-70b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 8192,
+    "K": 3584,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.46497728264034827
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.46497728264034827
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.44486374332501416
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.6036440454185372
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.6036440454185372,
+     "oracle": 1.6036440454185372,
+     "base_ridge": 1.6036440454185372,
+     "oprs": 1.6036440454185372,
+     "route_policy": 1.6036440454185372
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-8b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 4096,
+    "K": 1792,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.09385646930009
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.09385646930009
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.0148772904313057
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.839202657807309
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "serial",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.839202657807309,
+     "oracle": 1.0,
+     "base_ridge": 0.839202657807309,
+     "oprs": 1.0,
+     "route_policy": 0.839202657807309
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": false,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.17530305483248504,
+     "oracle": 0.0,
+     "base_ridge": 0.17530305483248504,
+     "oprs": 0.0,
+     "route_policy": 0.17530305483248504
+    }
+   },
+   {
+    "model": "llama3-8b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 4096,
+    "K": 1792,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.24185016052132596
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.24185016052132596
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.2144954660061761
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1361904761904762
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1361904761904762,
+     "oracle": 1.1361904761904762,
+     "base_ridge": 1.1361904761904762,
+     "oprs": 1.1361904761904762,
+     "route_policy": 1.1361904761904762
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama3-8b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 4096,
+    "K": 1792,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.389843851742562
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.389843851742562
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.4675505098858419
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.239399525941533
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.239399525941533,
+     "oracle": 1.239399525941533,
+     "base_ridge": 1.239399525941533,
+     "oprs": 1.239399525941533,
+     "route_policy": 1.239399525941533
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama31-405b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 16384,
+    "K": 6656,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.41365766650634306
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.41365766650634306
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.45474976804661665
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2337380745880313
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2337380745880313,
+     "oracle": 1.2337380745880313,
+     "base_ridge": 1.2337380745880313,
+     "oprs": 1.2337380745880313,
+     "route_policy": 1.2337380745880313
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama31-405b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 16384,
+    "K": 6656,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.5728363974241515
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.5728363974241515
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.5705723233093478
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.4006538618716797
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.4006538618716797,
+     "oracle": 1.4006538618716797,
+     "base_ridge": 1.4006538618716797,
+     "oprs": 1.4006538618716797,
+     "route_policy": 1.4006538618716797
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama31-405b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 16384,
+    "K": 6656,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.7320151283419598
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.7320151283419598
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.6740804734499649
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.4352865697177075
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.4352865697177075,
+     "oracle": 1.4352865697177075,
+     "base_ridge": 1.4352865697177075,
+     "oprs": 1.4352865697177075,
+     "route_policy": 1.4352865697177075
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama4-mav-d",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 5120,
+    "K": 2048,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.0786476052722824
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.0786476052722824
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.03574619324148902
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.0058746736292428
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.0058746736292428,
+     "oracle": 1.0058746736292428,
+     "base_ridge": 1.0058746736292428,
+     "oprs": 1.0058746736292428,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.005857485019579088
+    }
+   },
+   {
+    "model": "llama4-mav-d",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 5120,
+    "K": 2048,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.21744326867688046
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.21744326867688046
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.21387882352193552
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.4021091242549288
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.4021091242549288,
+     "oracle": 1.4021091242549288,
+     "base_ridge": 1.4021091242549288,
+     "oprs": 1.4021091242549288,
+     "route_policy": 1.4021091242549288
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "llama4-mav-d",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 5120,
+    "K": 2048,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.35623893208147855
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.35623893208147855
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.3290444094298126
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.8076219512195124
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.8076219512195124,
+     "oracle": 1.8076219512195124,
+     "base_ridge": 1.8076219512195124,
+     "oprs": 1.8076219512195124,
+     "route_policy": 1.8076219512195124
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral-l-2407",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 12288,
+    "K": 3584,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.15620103431632326
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.15620103431632326
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.19343344367034648
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.4354278497000317
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.4354278497000317,
+     "oracle": 1.4354278497000317,
+     "base_ridge": 1.4354278497000317,
+     "oprs": 1.4354278497000317,
+     "route_policy": 1.4354278497000317
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral-l-2407",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 12288,
+    "K": 3584,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.31499371073945087
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.31499371073945087
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.2898441927458091
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.7251506024096384
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.7251506024096384,
+     "oracle": 1.7251506024096384,
+     "base_ridge": 1.7251506024096384,
+     "oprs": 1.7251506024096384,
+     "route_policy": 1.7251506024096384
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral-l-2407",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 12288,
+    "K": 3584,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.47378638716257854
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.47378638716257854
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.4086899715721095
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.6837352201843405
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.6837352201843405,
+     "oracle": 1.6837352201843405,
+     "base_ridge": 1.6837352201843405,
+     "oprs": 1.6837352201843405,
+     "route_policy": 1.6837352201843405
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral3-d",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 7168,
+    "K": 2048,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.12380563454611682
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.12380563454611682
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.12773122099443346
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1048593350383633
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1048593350383633,
+     "oracle": 1.1048593350383633,
+     "base_ridge": 1.1048593350383633,
+     "oprs": 1.1048593350383633,
+     "route_policy": 1.1048593350383633
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral3-d",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 7168,
+    "K": 2048,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.2831804673776886
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.2831804673776886
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.35193984774867026
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2693236714975846
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2693236714975846,
+     "oracle": 1.2693236714975846,
+     "base_ridge": 1.2693236714975846,
+     "oprs": 1.2693236714975846,
+     "route_policy": 1.2693236714975846
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "mistral3-d",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 7168,
+    "K": 2048,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.4425553002092604
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.4425553002092604
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.5307172733499879
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.279987618015787
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.279987618015787,
+     "oracle": 1.279987618015787,
+     "base_ridge": 1.279987618015787,
+     "oprs": 1.279987618015787,
+     "route_policy": 1.279987618015787
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen25-72b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 8192,
+    "K": 3696,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.1662378221792728
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.1662378221792728
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.25167747707811694
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2779456193353473
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2779456193353473,
+     "oracle": 1.2779456193353473,
+     "base_ridge": 1.2779456193353473,
+     "oprs": 1.2779456193353473,
+     "route_policy": 1.2779456193353473
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen25-72b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 8192,
+    "K": 3696,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.3273283003623341
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.3273283003623341
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.3772123190282475
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.2803017315275158
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.2803017315275158,
+     "oracle": 1.2803017315275158,
+     "base_ridge": 1.2803017315275158,
+     "oprs": 1.2803017315275158,
+     "route_policy": 1.2803017315275158
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen25-72b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 8192,
+    "K": 3696,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.4884187785453954
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.4884187785453954
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.503970224678587
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.4273017099797118
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.4273017099797118,
+     "oracle": 1.4273017099797118,
+     "base_ridge": 1.4273017099797118,
+     "oprs": 1.4273017099797118,
+     "route_policy": 1.4273017099797118
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-32b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 5120,
+    "K": 1280,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.08216733186336658
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.08216733186336658
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.03813909155944473
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.052750565184627
+    },
+    "route_policy_enabled": {
+     "deo": false
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "serial",
+     "route_policy": "serial"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.052750565184627,
+     "oracle": 1.052750565184627,
+     "base_ridge": 1.052750565184627,
+     "oprs": 1.0,
+     "route_policy": 1.0
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": false,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.05140632492475428,
+     "route_policy": 0.05140632492475428
+    }
+   },
+   {
+    "model": "qwen3-32b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 5120,
+    "K": 1280,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.24287882489381202
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.24287882489381202
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.21732607174909882
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1836292767431789
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1836292767431789,
+     "oracle": 1.1836292767431789,
+     "base_ridge": 1.1836292767431789,
+     "oprs": 1.1836292767431789,
+     "route_policy": 1.1836292767431789
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-32b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 5120,
+    "K": 1280,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.4035903179242575
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.4035903179242575
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.4716308814079296
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1853324497459685
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1853324497459685,
+     "oracle": 1.1853324497459685,
+     "base_ridge": 1.1853324497459685,
+     "oprs": 1.1853324497459685,
+     "route_policy": 1.1853324497459685
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-8b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 8192,
+    "N": 4096,
+    "K": 1536,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.06319222390122436
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.06319222390122436
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": -0.03234090329424007
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 0.7899869960988297
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "serial",
+     "base_ridge": "deo",
+     "oprs": "serial",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "serial",
+    "selected_speedup": {
+     "always_deo": 0.7899869960988297,
+     "oracle": 1.0,
+     "base_ridge": 0.7899869960988297,
+     "oprs": 1.0,
+     "route_policy": 0.7899869960988297
+    },
+    "correct": {
+     "always_deo": false,
+     "oracle": true,
+     "base_ridge": false,
+     "oprs": true,
+     "route_policy": false
+    },
+    "below_stock": {
+     "always_deo": true,
+     "oracle": false,
+     "base_ridge": true,
+     "oprs": false,
+     "route_policy": true
+    },
+    "regret": {
+     "always_deo": 0.23573879429094036,
+     "oracle": 0.0,
+     "base_ridge": 0.23573879429094036,
+     "oprs": 0.0,
+     "route_policy": 0.23573879429094036
+    }
+   },
+   {
+    "model": "qwen3-8b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 16384,
+    "N": 4096,
+    "K": 1536,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.18613924555780026
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.18613924555780026
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.16005648267379788
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.1273261508325172
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.1273261508325172,
+     "oracle": 1.1273261508325172,
+     "base_ridge": 1.1273261508325172,
+     "oprs": 1.1273261508325172,
+     "route_policy": 1.1273261508325172
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   },
+   {
+    "model": "qwen3-8b",
+    "op": "rs",
+    "table_op": "rs",
+    "M": 32768,
+    "N": 4096,
+    "K": 1536,
+    "predicted_log_speedup": {
+     "base_ridge": {
+      "serial": 0.0,
+      "deo": 0.30908626721437615
+     },
+     "route_policy": {
+      "serial": 0.0,
+      "deo": 0.30908626721437615
+     },
+     "oprs": {
+      "serial": 0.0,
+      "deo": 0.27624564091552434
+     }
+    },
+    "actual_speedup": {
+     "serial": 1.0,
+     "deo": 1.9907674552798615
+    },
+    "route_policy_enabled": {
+     "deo": true
+    },
+    "choices": {
+     "always_deo": "deo",
+     "oracle": "deo",
+     "base_ridge": "deo",
+     "oprs": "deo",
+     "route_policy": "deo"
+    },
+    "oracle_choice": "deo",
+    "selected_speedup": {
+     "always_deo": 1.9907674552798615,
+     "oracle": 1.9907674552798615,
+     "base_ridge": 1.9907674552798615,
+     "oprs": 1.9907674552798615,
+     "route_policy": 1.9907674552798615
+    },
+    "correct": {
+     "always_deo": true,
+     "oracle": true,
+     "base_ridge": true,
+     "oprs": true,
+     "route_policy": true
+    },
+    "below_stock": {
+     "always_deo": false,
+     "oracle": false,
+     "base_ridge": false,
+     "oprs": false,
+     "route_policy": false
+    },
+    "regret": {
+     "always_deo": 0.0,
+     "oracle": 0.0,
+     "base_ridge": 0.0,
+     "oprs": 0.0,
+     "route_policy": 0.0
+    }
+   }
+  ],
+  "sources": [
+   {
+    "path": "/root/private_data/stowaway/planner/data/cells.json",
+    "sha256": "a145e41c924f0384bafdf50f9953096793b3b7b7b89f05f01ddb991cb76d46fe"
+   }
+  ],
+  "limitation": "historical BW1000 8-card operator table (planner/data/cells.json): per-op event timing inside bursts of 16, warm-up and environment knobs unrecorded, forward-only fused DEO operators, software versions assumed to be the current stack. A plan fitted on it is an interim artifact for getting the pipeline through; re-measure under the b2b16 protocol (bench/oprs_matrix.py) and regenerate before any publication claim",
+  "commit": "b63d7e00f15d9b1e67115d6af38b87328116e381",
+  "src_dirty": true
+ }
+}

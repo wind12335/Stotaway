@@ -1,0 +1,11 @@
+[oprs-matrix] tp=1 dtype=bfloat16 methods=['deo', 'async_tp', 'triton_dist'] heap_mb=12288 topology=BW1 batch_id=20261126T141327Z-crdnotebook-2110675621851545601-liqsh2-74795-e10a06de commit=b63d7e00f1 src_dirty=True out=results/bw1000_oprs_20261126/raw/operators/tp1_plan_dispatch_triton_dist/samples_tp1_bfloat16.jsonl
+[oprs] OPRS_READY rank=0 tp=1 workload=custom_train plan=e1a98f5051ae backend=triton_dist entries=4 deo_bwd=stock contexts=3 {'deo/rs': 1, 'triton_dist/ag': 2} heap_need_mb=24 heap_mb=12288 load_ms=3.3 prepare_ms=44.3
+[oprs-matrix] plan results/bw1000_oprs_20261126/plans/tp1_plumbing_triton_dist/oprs_triton_dist.json digest=e1a98f5051ae workload=custom_train backend=triton_dist load_ms=3.3 prepare_ms=44.3 contexts=3
+[oprs-matrix] custom_train/qkv/M4096 [triton_dist] serial=0.136 ms dispatched=0.414 ms speedup=0.330 plan_predicted=1.076 runs=132 correctness_rel=9.77e-04
+[oprs-matrix] custom_train/fc1/M4096 [triton_dist] serial=0.187 ms dispatched=0.454 ms speedup=0.411 plan_predicted=1.223 runs=132 correctness_rel=1.95e-03
+[oprs-matrix] custom_train/fc2/M4096 [deo] serial=0.144 ms dispatched=0.218 ms speedup=0.659 plan_predicted=1.007 runs=132 correctness_rel=0.00e+00
+[oprs] OPRS_SUMMARY rank=0 tp=1 workload=custom_train plan=e1a98f5051ae backend=triton_dist deo_bwd=stock entries=4 contexts=3
+[oprs] OPRS_RUN rank=0 site=fc2 op=rs M=4096 N=1024 K=2048 choice=deo reason=plan count=132
+[oprs-matrix] done -> results/bw1000_oprs_20261126/raw/operators/tp1_plan_dispatch_triton_dist/samples_tp1_bfloat16.jsonl
+[run_oprs_matrix] rc=0
+[run_oprs_matrix] rows: 3 {('deo', 'ok'): 1, ('triton_dist', 'ok'): 2}

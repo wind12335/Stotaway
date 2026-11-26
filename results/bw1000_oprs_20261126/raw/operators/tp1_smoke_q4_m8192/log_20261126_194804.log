@@ -1,0 +1,53 @@
+[oprs-matrix] tp=1 dtype=bfloat16 methods=['deo', 'async_tp', 'triton_dist'] heap_mb=4096 topology=BW1 batch_id=20261126T114821Z-crdnotebook-2110675621851545601-liqsh2-74795-bc6d7473 commit=b63d7e00f1 src_dirty=True out=results/bw1000_oprs_20261126/raw/operators/tp1_smoke_q4_m8192/samples_tp1_bfloat16.jsonl
+[oprs-matrix] points=12 todo=12
+[oprs-matrix] qwen3-8b/rs/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=128 
+[oprs-matrix] qwen3-8b/rs/M8192 [deo] serial=2.561 ms candidate=2.566 ms speedup=0.998 [0.990, 1.002] gemm_only=2.424 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-8b/rs/M8192 [async_tp] serial=2.561 ms candidate=3.502 ms speedup=0.731 [0.729, 0.734] gemm_only=2.424 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-8b/rs/M8192 [triton_dist] serial=2.561 ms candidate=4.921 ms speedup=0.520 [0.520, 0.521] gemm_only=2.424 comm_only=0.114 ms correctness=PASS rel=7.41e-03
+[oprs-matrix] qwen3-8b/ag_up/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=128 
+[oprs-matrix] qwen3-8b/ag_up/M8192 [deo] serial=2.351 ms candidate=2.260 ms speedup=1.040 [1.036, 1.042] gemm_only=2.239 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-8b/ag_up/M8192 [async_tp] serial=2.351 ms candidate=2.488 ms speedup=0.945 [0.942, 0.946] gemm_only=2.239 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-8b/ag_up/M8192 [triton_dist] serial=2.351 ms candidate=6.946 ms speedup=0.338 [0.307, 0.346] gemm_only=2.239 comm_only=0.114 ms correctness=PASS rel=3.91e-03
+[oprs-matrix] qwen3-8b/ag_gu/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=128 
+[oprs-matrix] qwen3-8b/ag_gu/M8192 [deo] serial=7.696 ms candidate=7.649 ms speedup=1.006 [1.006, 1.007] gemm_only=7.581 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-8b/ag_gu/M8192 [async_tp] serial=7.696 ms candidate=7.828 ms speedup=0.983 [0.981, 0.984] gemm_only=7.581 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-8b/ag_gu/M8192 [triton_dist] serial=7.696 ms candidate=12.442 ms speedup=0.619 [0.606, 0.620] gemm_only=7.581 comm_only=0.114 ms correctness=PASS rel=3.91e-03
+[oprs-matrix] llama3-8b/rs/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=128 
+[oprs-matrix] llama3-8b/rs/M8192 [deo] serial=3.160 ms candidate=3.176 ms speedup=0.995 [0.991, 1.000] gemm_only=3.040 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama3-8b/rs/M8192 [async_tp] serial=3.160 ms candidate=4.127 ms speedup=0.766 [0.763, 0.768] gemm_only=3.040 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama3-8b/rs/M8192 [triton_dist] serial=3.160 ms candidate=5.779 ms speedup=0.547 [0.545, 0.548] gemm_only=3.040 comm_only=0.114 ms correctness=PASS rel=7.58e-03
+[oprs-matrix] llama3-8b/ag_up/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=128 
+[oprs-matrix] llama3-8b/ag_up/M8192 [deo] serial=2.684 ms candidate=2.646 ms speedup=1.014 [1.014, 1.016] gemm_only=2.572 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama3-8b/ag_up/M8192 [async_tp] serial=2.684 ms candidate=2.824 ms speedup=0.950 [0.949, 0.952] gemm_only=2.572 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama3-8b/ag_up/M8192 [triton_dist] serial=2.684 ms candidate=7.983 ms speedup=0.336 [0.328, 0.340] gemm_only=2.572 comm_only=0.114 ms correctness=PASS rel=3.91e-03
+[oprs-matrix] llama3-8b/ag_gu/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=128 
+[oprs-matrix] llama3-8b/ag_gu/M8192 [deo] serial=5.151 ms candidate=5.049 ms speedup=1.020 [1.019, 1.021] gemm_only=5.016 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama3-8b/ag_gu/M8192 [async_tp] serial=5.151 ms candidate=5.309 ms speedup=0.970 [0.967, 0.972] gemm_only=5.016 comm_only=0.114 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama3-8b/ag_gu/M8192 [triton_dist] serial=5.151 ms candidate=14.450 ms speedup=0.356 [0.354, 0.364] gemm_only=5.016 comm_only=0.114 ms correctness=PASS rel=3.91e-03
+[oprs-matrix] qwen3-32b/rs/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=160 
+[oprs-matrix] qwen3-32b/rs/M8192 [deo] serial=2.609 ms candidate=2.676 ms speedup=0.975 [0.969, 0.985] gemm_only=2.509 comm_only=0.139 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-32b/rs/M8192 [async_tp] serial=2.609 ms candidate=3.838 ms speedup=0.680 [0.677, 0.683] gemm_only=2.509 comm_only=0.139 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-32b/rs/M8192 [triton_dist] serial=2.609 ms candidate=5.013 ms speedup=0.520 [0.520, 0.522] gemm_only=2.509 comm_only=0.139 ms correctness=PASS rel=7.81e-03
+[oprs-matrix] qwen3-32b/ag_up/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=160 
+[oprs-matrix] qwen3-32b/ag_up/M8192 [deo] serial=2.661 ms candidate=2.539 ms speedup=1.048 [1.044, 1.050] gemm_only=2.520 comm_only=0.139 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-32b/ag_up/M8192 [async_tp] serial=2.661 ms candidate=2.748 ms speedup=0.968 [0.964, 0.971] gemm_only=2.520 comm_only=0.139 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-32b/ag_up/M8192 [triton_dist] serial=2.661 ms candidate=8.963 ms speedup=0.297 [0.293, 0.302] gemm_only=2.520 comm_only=0.139 ms correctness=PASS rel=3.91e-03
+[oprs-matrix] qwen3-32b/ag_gu/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=160 
+[oprs-matrix] qwen3-32b/ag_gu/M8192 [deo] serial=5.199 ms candidate=5.131 ms speedup=1.013 [1.009, 1.018] gemm_only=5.097 comm_only=0.138 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-32b/ag_gu/M8192 [async_tp] serial=5.199 ms candidate=5.263 ms speedup=0.988 [0.985, 0.993] gemm_only=5.097 comm_only=0.138 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] qwen3-32b/ag_gu/M8192 [triton_dist] serial=5.199 ms candidate=17.419 ms speedup=0.298 [0.293, 0.311] gemm_only=5.097 comm_only=0.138 ms correctness=PASS rel=3.91e-03
+[oprs-matrix] llama4-mav-d/rs/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=160 
+[oprs-matrix] llama4-mav-d/rs/M8192 [deo] serial=4.913 ms candidate=4.956 ms speedup=0.991 [0.990, 0.992] gemm_only=4.785 comm_only=0.139 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama4-mav-d/rs/M8192 [async_tp] serial=4.913 ms candidate=6.122 ms speedup=0.803 [0.801, 0.803] gemm_only=4.785 comm_only=0.139 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama4-mav-d/rs/M8192 [triton_dist] serial=4.913 ms candidate=8.123 ms speedup=0.605 [0.602, 0.606] gemm_only=4.785 comm_only=0.139 ms correctness=PASS rel=7.75e-03
+[oprs-matrix] llama4-mav-d/ag_up/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=160 
+[oprs-matrix] llama4-mav-d/ag_up/M8192 [deo] serial=7.028 ms candidate=6.688 ms speedup=1.051 [0.936, 1.086] gemm_only=6.787 comm_only=0.139 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama4-mav-d/ag_up/M8192 [async_tp] serial=7.028 ms candidate=6.914 ms speedup=1.017 [0.960, 1.164] gemm_only=6.787 comm_only=0.139 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama4-mav-d/ag_up/M8192 [triton_dist] serial=7.028 ms candidate=22.960 ms speedup=0.306 [0.300, 0.311] gemm_only=6.787 comm_only=0.139 ms correctness=PASS rel=3.91e-03
+[oprs-matrix] llama4-mav-d/ag_gu/M8192 candidates=['deo', 'async_tp', 'triton_dist'] heap_mb=160 
+[oprs-matrix] llama4-mav-d/ag_gu/M8192 [deo] serial=14.086 ms candidate=13.452 ms speedup=1.047 [0.997, 1.103] gemm_only=13.284 comm_only=0.139 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama4-mav-d/ag_gu/M8192 [async_tp] serial=14.086 ms candidate=13.528 ms speedup=1.041 [1.012, 1.088] gemm_only=13.284 comm_only=0.139 ms correctness=PASS rel=0.00e+00
+[oprs-matrix] llama4-mav-d/ag_gu/M8192 [triton_dist] serial=14.086 ms candidate=46.580 ms speedup=0.302 [0.298, 0.305] gemm_only=13.284 comm_only=0.139 ms correctness=PASS rel=3.91e-03
+[oprs-matrix] done -> results/bw1000_oprs_20261126/raw/operators/tp1_smoke_q4_m8192/samples_tp1_bfloat16.jsonl
+[run_oprs_matrix] rc=0
+[run_oprs_matrix] rows: 36 {('async_tp', 'ok'): 12, ('deo', 'ok'): 12, ('triton_dist', 'ok'): 12}

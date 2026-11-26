@@ -1,0 +1,4 @@
+arm,kind,plan,plan_digest,plan_on_ranks,ranks_with_hits,backend,rc,mpirun_rc,steps,step_ms_median,step_ms_all,train_loss,grad_norm,nan_iters,skipped_iters,val_loss,max_alloc_mb,hits,fallbacks,status,wall_s
+s1,serial,,,0/1,0/1,,1,1,0,,[],,,,,,,{},{},failed,50
+n1,null,null.json,,0/1,0/1,,1,1,0,,[],,,,,,,{},{},failed,48
+d1,always_deo,always_deo.json,,0/1,0/1,,,,0,,[],,,,,,,{},{},failed,

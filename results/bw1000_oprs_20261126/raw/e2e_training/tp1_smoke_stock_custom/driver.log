@@ -1,0 +1,4 @@
+[e2e] ROOT=results/bw1000_oprs_20261126/raw/e2e_training/tp1_smoke_stock_custom plans=<none> heap=<none>
+[e2e] stock kind=serial plan=none model=custom tp=1 MBS=1 NL=4 start 20:16:36
+[e2e] stock kind=serial rc=0 iters=0 med(it3+)=none hit_lines_r0=0 fallback_lines_r0=0 end 20:17:06 wall=30s
+E2E DONE
